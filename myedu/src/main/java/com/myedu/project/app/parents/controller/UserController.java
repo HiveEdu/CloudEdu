@@ -1,4 +1,4 @@
-package com.myedu.project.app.controller;
+package com.myedu.project.app.parents.controller;
 
 import com.myedu.common.constant.UserConstants;
 import com.myedu.common.utils.SecurityUtils;
