@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
@@ -18,60 +21,75 @@ import com.myedu.framework.web.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@ApiModel("用户实体")
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 用户ID */
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
+    @ApiModelProperty("用户ID")
     private Long userId;
 
     /** 部门ID */
     @Excel(name = "部门编号", type = Type.IMPORT)
+    @ApiModelProperty("部门ID")
     private Long deptId;
 
     /** 用户账号 */
     @Excel(name = "登录名称")
+    @ApiModelProperty("用户账号")
     private String userName;
 
     /** 用户昵称 */
     @Excel(name = "用户名称")
+    @ApiModelProperty("用户昵称")
     private String nickName;
 
     /** 用户邮箱 */
     @Excel(name = "用户邮箱")
+    @ApiModelProperty("用户邮箱")
     private String email;
 
     /** 手机号码 */
     @Excel(name = "手机号码")
+    @ApiModelProperty("手机号码")
     private String phonenumber;
 
     /** 用户性别 */
     @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
+    @ApiModelProperty("用户性别")
     private String sex;
 
     /** 用户头像 */
+    @ApiModelProperty("用户头像")
     private String avatar;
 
     /** 密码 */
+    @ApiModelProperty("用户ID")
     private String password;
 
     /** 盐加密 */
+    @ApiModelProperty("盐加密")
     private String salt;
 
     /** 帐号状态（0正常 1停用） */
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
+    @ApiModelProperty("帐号状态")
     private String status;
 
     /** 删除标志（0代表存在 2代表删除） */
+    @ApiModelProperty("删除标志")
     private String delFlag;
 
     /** 最后登陆IP */
     @Excel(name = "最后登陆IP", type = Type.EXPORT)
+    @ApiModelProperty("最后登陆IP")
     private String loginIp;
 
     /** 最后登陆时间 */
     @Excel(name = "最后登陆时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
+    @ApiModelProperty("最后登陆时间")
     private Date loginDate;
 
     /** 部门对象 */
@@ -79,6 +97,7 @@ public class SysUser extends BaseEntity
         @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
         @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
     })
+    @ApiModelProperty("部门对象")
     private SysDept dept;
 
     /** 角色对象 */
