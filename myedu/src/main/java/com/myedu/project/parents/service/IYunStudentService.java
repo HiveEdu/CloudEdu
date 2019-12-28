@@ -1,6 +1,8 @@
 package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStudent;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface IYunStudentService
      * @param id 学生数据ID
      * @return 学生数据
      */
-    public YunStudent selectYunStudentById(Long id);
+    public YunStudentVo selectYunStudentById(Long id);
 
     /**
      * 查询学生数据列表
@@ -25,7 +27,7 @@ public interface IYunStudentService
      * @param yunStudent 学生数据
      * @return 学生数据集合
      */
-    public List<YunStudent> selectYunStudentList(YunStudent yunStudent);
+    public List<YunStudentVo> selectYunStudentList(YunStudent yunStudent);
 
     /**
      * 新增学生数据

@@ -3,6 +3,7 @@ package com.myedu.project.parents.controller;
 import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public class YunStudentController extends BaseController
     public TableDataInfo list(YunStudent yunStudent)
     {
         startPage();
-        List<YunStudent> list = yunStudentService.selectYunStudentList(yunStudent);
+        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudent);
         return getDataTable(list);
     }
 
@@ -55,8 +56,8 @@ public class YunStudentController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(YunStudent yunStudent)
     {
-        List<YunStudent> list = yunStudentService.selectYunStudentList(yunStudent);
-        ExcelUtil<YunStudent> util = new ExcelUtil<YunStudent>(YunStudent.class);
+        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudent);
+        ExcelUtil<YunStudentVo> util = new ExcelUtil<YunStudentVo>(YunStudentVo.class);
         return util.exportExcel(list, "student");
     }
 

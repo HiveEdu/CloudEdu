@@ -2,6 +2,8 @@ package com.myedu.project.parents.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,42 +13,52 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁少鹏
  * @date 2019-12-28
  */
+@ApiModel("学生实体")
 public class YunStudent extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("学生Id")
     private Long id;
 
     /** 学生名称 */
     @Excel(name = "学生名称")
+    @ApiModelProperty("学生名称")
     private String name;
 
     /** 学生性别（1：男2：女） */
     @Excel(name = "学生性别", readConverterExp = "1=：男2：女")
+    @ApiModelProperty("学生性别")
     private String gendel;
 
     /** 学生头像地址 */
     @Excel(name = "学生头像地址")
+    @ApiModelProperty("学生头像地址")
     private String avatar;
 
     /** 学生就读所在学校 */
     @Excel(name = "学生就读所在学校")
+    @ApiModelProperty("学生就读所在学校")
     private String school;
 
     /** 关联年级Id */
     @Excel(name = "关联年级Id")
+    @ApiModelProperty("关联年级Id")
     private Long gradeId;
 
     /** 关联家长Id */
     @Excel(name = "关联家长Id")
+    @ApiModelProperty("关联家长Id")
     private Long parentId;
 
     /** 创建人Id */
     @Excel(name = "创建人Id")
+    @ApiModelProperty("创建人Id")
     private Long createById;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志")
     private String delFlag;
 
     public void setId(Long id) 

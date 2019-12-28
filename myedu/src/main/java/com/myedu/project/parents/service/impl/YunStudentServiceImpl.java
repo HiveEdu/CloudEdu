@@ -2,6 +2,7 @@ package com.myedu.project.parents.service.impl;
 
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.parents.mapper.YunStudentMapper;
@@ -27,7 +28,7 @@ public class YunStudentServiceImpl implements IYunStudentService
      * @return 学生数据
      */
     @Override
-    public YunStudent selectYunStudentById(Long id)
+    public YunStudentVo selectYunStudentById(Long id)
     {
         return yunStudentMapper.selectYunStudentById(id);
     }
@@ -39,7 +40,7 @@ public class YunStudentServiceImpl implements IYunStudentService
      * @return 学生数据
      */
     @Override
-    public List<YunStudent> selectYunStudentList(YunStudent yunStudent)
+    public List<YunStudentVo> selectYunStudentList(YunStudent yunStudent)
     {
         return yunStudentMapper.selectYunStudentList(yunStudent);
     }
