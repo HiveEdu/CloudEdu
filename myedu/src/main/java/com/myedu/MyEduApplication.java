@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class MyEduApplication
 {
     public static void main(String[] args)
-    {
+    {    System.setProperty("es.set.netty.runtime.available.processors", "false");
         // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(MyEduApplication.class, args);
         System.out.println("(♥◠‿◠)ﾉﾞ  微托管   ლ(´ڡ`ლ)ﾞ  \n" +
