@@ -29,6 +29,20 @@ public class SecurityUtils
         }
     }
     /**
+     * 获取用户昵称
+     **/
+    public static String getUseNickName()
+    {
+        try
+        {
+            return getLoginUser().getUser().getNickName();
+        }
+        catch (Exception e)
+        {
+            throw new CustomException("获取用户账户异常", HttpStatus.UNAUTHORIZED);
+        }
+    }
+    /**
      * 获取登录用户id
      **/
     public static Long getUserId()
