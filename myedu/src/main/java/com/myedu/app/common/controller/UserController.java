@@ -1,7 +1,9 @@
-package com.myedu.project.app.parents.controller;
+package com.myedu.app.common.controller;
 
+import com.myedu.common.constant.Constants;
 import com.myedu.common.constant.UserConstants;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.framework.security.service.SysLoginService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.project.system.domain.SysUser;
@@ -11,7 +13,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,29 +30,24 @@ public class UserController extends BaseController {
 
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private SysLoginService loginService;
   /*
    * @Description :
    * @Author : 梁少鹏
    * @Date : 2019/12/21 7:48
    */
-    @ApiOperation("新增用户")
-    @ApiImplicitParam(name = "SysUser", value = "新增用户信息", dataType = "SysUser")
-    @PostMapping("/saveUser")
+    @ApiOperation("用户注册")
+    @ApiImplicitParam(name = "SysUser", value = "用户注册", dataType = "SysUser")
+    @PostMapping("/userRegister")
     public AjaxResult saveUser(SysUser user)
     {
-        if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
-        {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
-        }
-        else if(UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+        if(UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-//        else if (UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
-//        {
-//            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
-//        }
-        user.setCreateBy(SecurityUtils.getUsername());
+        user.setUserName(user.getPhonenumber());
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
         return toAjax(userService.insertUser(user));
     }
@@ -63,7 +59,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation("修改用户")
     @ApiImplicitParam(name = "SysUser", value = "修改用户信息", dataType = "SysUser")
-    @PutMapping("/editUser")
+    @PostMapping("/editUser")
     public AjaxResult editUser(SysUser user)
     {
         userService.checkUserAllowed(user);
@@ -71,12 +67,26 @@ public class UserController extends BaseController {
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-//        else if (UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
-//        {
-//            return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
-//        }
+        user.setUserName(user.getPhonenumber());
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.updateUser(user));
+    }
+
+   /*
+    * @Description :App登录方法
+    * @Author : 梁少鹏
+    * @Date : 2019/12/28 18:42
+    */
+    @ApiOperation("APP用户登录")
+    @ApiImplicitParam(name = "SysUser", value = "APP用户登录", dataType = "String")
+    @PostMapping("/appLogin")
+    public AjaxResult appLogin(String username, String password, String code, String uuid)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        // 生成令牌
+        String token = loginService.login(username, password, code, uuid);
+        ajax.put(Constants.TOKEN, token);
+        return ajax;
     }
 
 }
