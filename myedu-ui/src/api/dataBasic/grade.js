@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询年级基础列表
 export function listGrade(query) {
   return request({
-    url: '/system/grade/list',
+    url: '/dataBasic/grade/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listGrade(query) {
 // 查询年级基础详细
 export function getGrade(id) {
   return request({
-    url: '/system/grade/' + id,
+    url: '/dataBasic/grade/' + id,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getGrade(id) {
 // 新增年级基础
 export function addGrade(data) {
   return request({
-    url: '/system/grade',
+    url: '/dataBasic/grade',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addGrade(data) {
 // 修改年级基础
 export function updateGrade(data) {
   return request({
-    url: '/system/grade',
+    url: '/dataBasic/grade',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateGrade(data) {
 // 删除年级基础
 export function delGrade(id) {
   return request({
-    url: '/system/grade/' + id,
+    url: '/dataBasic/grade/' + id,
     method: 'delete'
   })
 }
@@ -46,7 +46,7 @@ export function delGrade(id) {
 // 导出年级基础
 export function exportGrade(query) {
   return request({
-    url: '/system/grade/export',
+    url: '/dataBasic/grade/export',
     method: 'get',
     params: query
   })

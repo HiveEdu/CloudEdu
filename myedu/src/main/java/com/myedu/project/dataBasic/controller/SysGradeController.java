@@ -1,6 +1,8 @@
 package com.myedu.project.dataBasic.controller;
 
 import java.util.List;
+
+import com.myedu.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +29,7 @@ import com.myedu.framework.web.page.TableDataInfo;
  * @date 2019-12-26
  */
 @RestController
-@RequestMapping("/system/grade")
+@RequestMapping("/dataBasic/grade")
 public class SysGradeController extends BaseController
 {
     @Autowired
@@ -36,7 +38,7 @@ public class SysGradeController extends BaseController
     /**
      * 查询年级基础列表
      */
-    @PreAuthorize("@ss.hasPermi('system:grade:list')")
+    @PreAuthorize("@ss.hasPermi('dataBasic:grade:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysGrade sysGrade)
     {
@@ -48,7 +50,7 @@ public class SysGradeController extends BaseController
     /**
      * 导出年级基础列表
      */
-    @PreAuthorize("@ss.hasPermi('system:grade:export')")
+    @PreAuthorize("@ss.hasPermi('dataBasic:grade:export')")
     @Log(title = "年级基础", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(SysGrade sysGrade)
@@ -61,7 +63,7 @@ public class SysGradeController extends BaseController
     /**
      * 获取年级基础详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:grade:query')")
+    @PreAuthorize("@ss.hasPermi('dataBasic:grade:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -71,29 +73,31 @@ public class SysGradeController extends BaseController
     /**
      * 新增年级基础
      */
-    @PreAuthorize("@ss.hasPermi('system:grade:add')")
+    @PreAuthorize("@ss.hasPermi('dataBasic:grade:add')")
     @Log(title = "年级基础", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysGrade sysGrade)
     {
+        sysGrade.setCreateBy(SecurityUtils.getUsername());
         return toAjax(sysGradeService.insertSysGrade(sysGrade));
     }
 
     /**
      * 修改年级基础
      */
-    @PreAuthorize("@ss.hasPermi('system:grade:edit')")
+    @PreAuthorize("@ss.hasPermi('dataBasic:grade:edit')")
     @Log(title = "年级基础", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysGrade sysGrade)
     {
+        sysGrade.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(sysGradeService.updateSysGrade(sysGrade));
     }
 
     /**
      * 删除年级基础
      */
-    @PreAuthorize("@ss.hasPermi('system:grade:remove')")
+    @PreAuthorize("@ss.hasPermi('dataBasic:grade:remove')")
     @Log(title = "年级基础", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
