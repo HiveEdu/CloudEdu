@@ -50,6 +50,15 @@ spring:
        max-file-size:  10MB
        # 设置总上传的文件大小
        max-request-size:  20MB
+  data:
+    elasticsearch:
+      http.cors.enabled: true
+      http.cors.allow-origin: "*"
+      cluster-nodes: 127.0.0.1:9300
+      # 节点名称，默认为elasticsearch，如果docker安装的，这里是docker-cluster
+      # http://localhost:9200/_cluster/state 查看节点名称
+      cluster-name: docker-cluster
+
   # 服务模块
   devtools:
     restart:
