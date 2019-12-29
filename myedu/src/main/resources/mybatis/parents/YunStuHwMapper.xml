@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.parents.mapper.YunStuHwMapper">
+    
+    <resultMap type="YunStuHw" id="YunStuHwResult">
+        <result property="id"    column="id"    />
+        <result property="height"    column="height"    />
+        <result property="weight"    column="weight"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunStuHwVo">
+        select id, height, weight, student_id, remark, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_stu_hw
+    </sql>
+
+    <select id="selectYunStuHwList" parameterType="YunStuHw" resultMap="YunStuHwResult">
+        <include refid="selectYunStuHwVo"/>
+        <where>  
+            <if test="height != null "> and height = #{height}</if>
+            <if test="weight != null "> and weight = #{weight}</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStuHwById" parameterType="Long" resultMap="YunStuHwResult">
+        <include refid="selectYunStuHwVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStuHw" parameterType="YunStuHw" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_stu_hw
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="height != null ">height,</if>
+            <if test="weight != null ">weight,</if>
+            <if test="studentId != null ">student_id,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="height != null ">#{height},</if>
+            <if test="weight != null ">#{weight},</if>
+            <if test="studentId != null ">#{studentId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStuHw" parameterType="YunStuHw">
+        update yun_stu_hw
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="height != null ">height = #{height},</if>
+            <if test="weight != null ">weight = #{weight},</if>
+            <if test="studentId != null ">student_id = #{studentId},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStuHwById" parameterType="Long">
+        delete from yun_stu_hw where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStuHwByIds" parameterType="String">
+        delete from yun_stu_hw where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
