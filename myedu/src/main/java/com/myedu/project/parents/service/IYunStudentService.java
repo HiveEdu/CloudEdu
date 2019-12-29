@@ -27,7 +27,7 @@ public interface IYunStudentService
      * @param yunStudent 学生数据
      * @return 学生数据集合
      */
-    public List<YunStudentVo> selectYunStudentList(YunStudent yunStudent);
+    public List<YunStudentVo> selectYunStudentList(YunStudentVo yunStudent);
 
     /**
      * 新增学生数据

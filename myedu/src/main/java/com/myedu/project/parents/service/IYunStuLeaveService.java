@@ -1,6 +1,7 @@
 package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStuLeave;
+import com.myedu.project.parents.domain.vo.YunStuLeaveVo;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface IYunStuLeaveService
      * @param id 学生请假ID
      * @return 学生请假
      */
-    public YunStuLeave selectYunStuLeaveById(Long id);
+    public YunStuLeaveVo selectYunStuLeaveById(Long id);
 
     /**
      * 查询学生请假列表
@@ -25,7 +26,7 @@ public interface IYunStuLeaveService
      * @param yunStuLeave 学生请假
      * @return 学生请假集合
      */
-    public List<YunStuLeave> selectYunStuLeaveList(YunStuLeave yunStuLeave);
+    public List<YunStuLeaveVo> selectYunStuLeaveList(YunStuLeaveVo yunStuLeave);
 
     /**
      * 新增学生请假

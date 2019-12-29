@@ -4,11 +4,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.parents.mapper.YunStuLeaveMapper">
     
-    <resultMap type="YunStuLeave" id="YunStuLeaveResult">
+    <resultMap type="YunStuLeaveVo" id="YunStuLeaveResult">
         <result property="id"    column="id"    />
         <result property="reason"    column="reason"    />
-        <result property="LeaveStartTime"    column="leave_start_time"    />
-        <result property="LeaveEndTime"    column="leave_end_time"    />
+        <result property="leaveStartTime"    column="leave_start_time"    />
+        <result property="leaveEndTime"    column="leave_end_time"    />
         <result property="studentId"    column="student_id"    />
         <result property="remark"    column="remark"    />
         <result property="createBy"    column="create_by"    />
@@ -20,24 +20,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStuLeaveVo">
-        select id, reason, leave_start_time, leave_end_time, student_id, remark, create_by, create_time, update_by, update_time, del_flag,create_by_id from yun_stu_leave
+        select ysl.*,ys.name as studentName
+        from yun_stu_leave ysl LEFT  JOIN yun_student ys  ON  ysl.student_id = ys.id
     </sql>
 
     <select id="selectYunStuLeaveList" parameterType="YunStuLeave" resultMap="YunStuLeaveResult">
         <include refid="selectYunStuLeaveVo"/>
         <where>  
-            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
-            <if test="leaveStartTime != null "> and leave_start_time = #{leaveStartTime}</if>
-            <if test="leaveEndTime != null "> and leave_end_time = #{leaveEndTime}</if>
-            <if test="studentId != null "> and student_id = #{studentId}</if>
-            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
-        </where>
+            <if test="reason != null  and reason != ''"> and ysl.reason = #{reason}</if>
+            <if test="leaveStartTime != null "> and ysl.leave_start_time = #{leaveStartTime}</if>
+            <if test="leaveEndTime != null "> and ysl.leave_end_time = #{leaveEndTime}</if>
+            <if test="studentId != null "> and ysl.student_id = #{studentId}</if>
+            <if test="remark != null  and remark != ''"> and ysl.remark = #{remark}</if>
+            <if test="createById != null "> and ysl.create_by_id = #{createById}</if>
+            <if test="createBy!= null "> and ysl.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="studentName!= null ">and ys.name like concat('%', #{studentName}, '%')</if>
+       </where>
     </select>
     
     <select id="selectYunStuLeaveById" parameterType="Long" resultMap="YunStuLeaveResult">
         <include refid="selectYunStuLeaveVo"/>
-        where id = #{id}
+        where ysl.id = #{id}
     </select>
         
     <insert id="insertYunStuLeave" parameterType="YunStuLeave" useGeneratedKeys="true" keyProperty="id">
@@ -53,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
-            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createById != null  and createById != ''">create_by_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="reason != null  and reason != ''">#{reason},</if>

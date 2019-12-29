@@ -29,18 +29,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="年级" prop="gradeId">
+      <el-form-item label="年级" prop="gradeName">
         <el-input
-          v-model="queryParams.gradeId"
+          v-model="queryParams.gradeName"
           placeholder="请选择年级"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="家长" prop="parentId">
+      <el-form-item label="创建人" prop="createBy">
         <el-input
-          v-model="queryParams.parentId"
+          v-model="queryParams.createBy"
           placeholder="请输入家长姓名"
           clearable
           size="small"
@@ -193,8 +193,8 @@ export default {
         gendel: undefined,
         avatar: undefined,
         school: undefined,
-        gradeId: undefined,
-        parentId: undefined,
+        gradeName: undefined,
+        createBy: undefined,
         createById: undefined,
       },
       // 表单参数
@@ -235,7 +235,8 @@ export default {
         name: undefined,
         gendel: undefined,
         school: undefined,
-        gradeId: undefined
+        gradeId: undefined,
+        createBy: undefined
       };
       this.resetForm("form");
     },

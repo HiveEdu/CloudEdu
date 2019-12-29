@@ -1,44 +1,35 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="请假原因" prop="reason">
-        <el-input
-          v-model="queryParams.reason"
-          placeholder="请输入请假原因"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="开始时间" prop="startTime">
+      <el-form-item label="开始时间" prop="leaveStartTime">
         <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.startTime"
+          v-model="queryParams.leaveStartTime"
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="选择开始时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="结束时间" prop="endTime">
+      <el-form-item label="结束时间" prop="leaveEndTime">
         <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.endTime"
+          v-model="queryParams.leaveEndTime"
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="选择结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="关联学生ID" prop="studentId">
+      <el-form-item label="学生" prop="studentName">
         <el-input
-          v-model="queryParams.studentId"
-          placeholder="请输入关联学生ID"
+          v-model="queryParams.studentName"
+          placeholder="请输入学生姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="备注" prop="remark">
+      <el-form-item label="创建人" prop="createBy">
         <el-input
-          v-model="queryParams.remark"
-          placeholder="请输入备注"
+          v-model="queryParams.createBy"
+          placeholder="请输入创建人名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -93,20 +84,20 @@
 
     <el-table v-loading="loading" :data="leaveList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="备注" align="center" prop="id" />
+      <el-table-column label="学生" align="center" prop="studentName" />
       <el-table-column label="请假原因" align="center" prop="reason" />
-      <el-table-column label="开始时间" align="center" prop="startTime" width="180">
+      <el-table-column label="开始时间" align="center" prop="leaveStartTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime) }}</span>
+          <span>{{ parseTime(scope.row.leaveStartTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束时间" align="center" prop="endTime" width="180">
+      <el-table-column label="结束时间" align="center" prop="leaveEndTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.endTime) }}</span>
+          <span>{{ parseTime(scope.row.leaveEndTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="关联学生ID" align="center" prop="studentId" />
       <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -141,17 +132,17 @@
         <el-form-item label="请假原因" prop="reason">
           <el-input v-model="form.reason" placeholder="请输入请假原因" />
         </el-form-item>
-        <el-form-item label="开始时间" prop="startTime">
+        <el-form-item label="开始时间" prop="leaveStartTime">
           <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.startTime"
+            v-model="form.leaveStartTime"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择开始时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="结束时间" prop="endTime">
+        <el-form-item label="结束时间" prop="leaveEndTime">
           <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.endTime"
+            v-model="form.leaveEndTime"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择结束时间">
@@ -160,8 +151,8 @@
         <el-form-item label="关联学生ID" prop="studentId">
           <el-input v-model="form.studentId" placeholder="请输入关联学生ID" />
         </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -199,10 +190,11 @@ export default {
         pageNum: 1,
         pageSize: 10,
         reason: undefined,
-        startTime: undefined,
-        endTime: undefined,
-        studentId: undefined,
+        leaveStartTime: undefined,
+        leaveEndTime: undefined,
+        studentName: undefined,
         remark: undefined,
+        createBy: undefined,
       },
       // 表单参数
       form: {},
@@ -234,8 +226,8 @@ export default {
       this.form = {
         id: undefined,
         reason: undefined,
-        startTime: undefined,
-        endTime: undefined,
+        leaveStartTime: undefined,
+        leaveEndTime: undefined,
         studentId: undefined,
         remark: undefined,
         createBy: undefined,

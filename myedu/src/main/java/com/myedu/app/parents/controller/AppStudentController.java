@@ -39,12 +39,13 @@ public class AppStudentController extends BaseController {
      * @Date : 2019/12/28 20:28
      */
     @ApiOperation("查询当前用户下的学生")
-    @ApiImplicitParam(name = "yunStudent", value = "查询当前用户下的学生", dataType = "YunStudent")
+    @ApiImplicitParam(name = "yunStudentVo", value = "查询当前用户下的学生",
+            dataType = "YunStudentVo")
     @GetMapping("/getMyStudent")
-    public TableDataInfo getMyStudent(YunStudent yunStudent)
+    public TableDataInfo getMyStudent(YunStudentVo yunStudentVo)
     {
         startPage();
-        List<YunStudentVo> list = (List<YunStudentVo>) yunStudentService.selectYunStudentList(yunStudent).
+        List<YunStudentVo> list = (List<YunStudentVo>) yunStudentService.selectYunStudentList(yunStudentVo).
                 stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
         return getDataTable(list);
     }

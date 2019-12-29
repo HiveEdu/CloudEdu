@@ -40,7 +40,7 @@ public class YunStudentServiceImpl implements IYunStudentService
      * @return 学生数据
      */
     @Override
-    public List<YunStudentVo> selectYunStudentList(YunStudent yunStudent)
+    public List<YunStudentVo> selectYunStudentList(YunStudentVo yunStudent)
     {
         return yunStudentMapper.selectYunStudentList(yunStudent);
     }

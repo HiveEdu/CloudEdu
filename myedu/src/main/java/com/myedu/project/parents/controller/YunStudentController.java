@@ -41,7 +41,7 @@ public class YunStudentController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('parents:student:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunStudent yunStudent)
+    public TableDataInfo list(YunStudentVo yunStudent)
     {
         startPage();
         List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudent);
@@ -54,7 +54,7 @@ public class YunStudentController extends BaseController
     @PreAuthorize("@ss.hasPermi('parents:student:export')")
     @Log(title = "学生数据", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunStudent yunStudent)
+    public AjaxResult export(YunStudentVo yunStudent)
     {
         List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudent);
         ExcelUtil<YunStudentVo> util = new ExcelUtil<YunStudentVo>(YunStudentVo.class);

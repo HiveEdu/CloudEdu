@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from yun_student  ys LEFT  JOIN sys_grade sg  ON  ys.grade_id = sg.id
     </sql>
 
-    <select id="selectYunStudentList" parameterType="YunStudent" resultMap="YunStudentResult">
+    <select id="selectYunStudentList" parameterType="YunStudentVo" resultMap="YunStudentResult">
         <include refid="selectYunStudentVo"/>
         <where>  
             <if test="name != null  and name != ''"> and ys.name like concat('%', #{name}, '%')</if>
@@ -33,7 +33,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="school != null  and school != ''"> and ys.school = #{school}</if>
             <if test="gradeId != null "> and ys.grade_id = #{gradeId}</if>
             <if test="parentId != null "> and ys.parent_id = #{parentId}</if>
+            <if test="createBy != null "> and ys.create_by like concat('%', #{createBy}, '%')</if>
             <if test="createById != null "> and ys.create_by_id = #{createById}</if>
+            <if test="gradeName != null "> and sg.name like concat('%', #{gradeName}, '%')</if>
         </where>
     </select>
     

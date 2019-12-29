@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.parents.domain.YunStudent;
+import com.myedu.project.parents.domain.vo.YunStuLeaveVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,10 +42,10 @@ public class YunStuLeaveController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('parents:leave:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunStuLeave yunStuLeave)
+    public TableDataInfo list(YunStuLeaveVo yunStuLeave)
     {
         startPage();
-        List<YunStuLeave> list = yunStuLeaveService.selectYunStuLeaveList(yunStuLeave);
+        List<YunStuLeaveVo> list = yunStuLeaveService.selectYunStuLeaveList(yunStuLeave);
         return getDataTable(list);
     }
 
@@ -54,10 +55,10 @@ public class YunStuLeaveController extends BaseController
     @PreAuthorize("@ss.hasPermi('parents:leave:export')")
     @Log(title = "学生请假", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunStuLeave yunStuLeave)
+    public AjaxResult export(YunStuLeaveVo yunStuLeave)
     {
-        List<YunStuLeave> list = yunStuLeaveService.selectYunStuLeaveList(yunStuLeave);
-        ExcelUtil<YunStuLeave> util = new ExcelUtil<YunStuLeave>(YunStuLeave.class);
+        List<YunStuLeaveVo> list = yunStuLeaveService.selectYunStuLeaveList(yunStuLeave);
+        ExcelUtil<YunStuLeaveVo> util = new ExcelUtil<YunStuLeaveVo>(YunStuLeaveVo.class);
         return util.exportExcel(list, "leave");
     }
 
@@ -79,6 +80,8 @@ public class YunStuLeaveController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunStuLeave yunStuLeave)
     {
+        yunStuLeave.setCreateById(SecurityUtils.getUserId());
+        yunStuLeave.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStuLeaveService.insertYunStuLeave(yunStuLeave));
     }
 
@@ -90,6 +93,7 @@ public class YunStuLeaveController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuLeave yunStuLeave)
     {
+        yunStuLeave.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(yunStuLeaveService.updateYunStuLeave(yunStuLeave));
     }
 

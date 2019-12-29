@@ -2,6 +2,7 @@ package com.myedu.project.parents.service.impl;
 
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.project.parents.domain.vo.YunStuLeaveVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.parents.mapper.YunStuLeaveMapper;
@@ -27,7 +28,7 @@ public class YunStuLeaveServiceImpl implements IYunStuLeaveService
      * @return 学生请假
      */
     @Override
-    public YunStuLeave selectYunStuLeaveById(Long id)
+    public YunStuLeaveVo selectYunStuLeaveById(Long id)
     {
         return yunStuLeaveMapper.selectYunStuLeaveById(id);
     }
@@ -39,7 +40,7 @@ public class YunStuLeaveServiceImpl implements IYunStuLeaveService
      * @return 学生请假
      */
     @Override
-    public List<YunStuLeave> selectYunStuLeaveList(YunStuLeave yunStuLeave)
+    public List<YunStuLeaveVo> selectYunStuLeaveList(YunStuLeaveVo yunStuLeave)
     {
         return yunStuLeaveMapper.selectYunStuLeaveList(yunStuLeave);
     }
