@@ -1,6 +1,8 @@
 package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStuHw;
+import com.myedu.project.parents.domain.vo.YunStuHwVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface IYunStuHwService
      * @param id 学生身高体重记录ID
      * @return 学生身高体重记录
      */
-    public YunStuHw selectYunStuHwById(Long id);
+    public YunStuHwVo selectYunStuHwById(Long id);
 
     /**
      * 查询学生身高体重记录列表
@@ -25,7 +27,7 @@ public interface IYunStuHwService
      * @param yunStuHw 学生身高体重记录
      * @return 学生身高体重记录集合
      */
-    public List<YunStuHw> selectYunStuHwList(YunStuHw yunStuHw);
+    public List<YunStuHwVo> selectYunStuHwList(YunStuHwVo yunStuHw);
 
     /**
      * 新增学生身高体重记录

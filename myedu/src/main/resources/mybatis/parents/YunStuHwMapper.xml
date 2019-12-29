@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.parents.mapper.YunStuHwMapper">
     
-    <resultMap type="YunStuHw" id="YunStuHwResult">
+    <resultMap type="YunStuHwVo" id="YunStuHwResult">
         <result property="id"    column="id"    />
         <result property="height"    column="height"    />
         <result property="weight"    column="weight"    />
@@ -19,22 +19,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStuHwVo">
-        select id, height, weight, student_id, remark, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_stu_hw
+        select yh.*,ys.name as studentName
+        from yun_stu_hw yh  LEFT  JOIN yun_student ys ON yh.student_id=ys.id
     </sql>
 
-    <select id="selectYunStuHwList" parameterType="YunStuHw" resultMap="YunStuHwResult">
+    <select id="selectYunStuHwList" parameterType="YunStuHwVo" resultMap="YunStuHwResult">
         <include refid="selectYunStuHwVo"/>
         <where>  
-            <if test="height != null "> and height = #{height}</if>
-            <if test="weight != null "> and weight = #{weight}</if>
-            <if test="studentId != null "> and student_id = #{studentId}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="height != null "> and yh.height = #{height}</if>
+            <if test="weight != null "> and yh.weight = #{weight}</if>
+            <if test="studentId != null "> and yh.student_id = #{studentId}</if>
+            <if test="createById != null "> and yh.create_by_id = #{createById}</if>
+            <if test="createBy!= null "> and yh.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="studentName!= null ">and ys.name like concat('%', #{studentName}, '%')</if>
         </where>
     </select>
     
     <select id="selectYunStuHwById" parameterType="Long" resultMap="YunStuHwResult">
         <include refid="selectYunStuHwVo"/>
-        where id = #{id}
+        where yh.id = #{id}
     </select>
         
     <insert id="insertYunStuHw" parameterType="YunStuHw" useGeneratedKeys="true" keyProperty="id">

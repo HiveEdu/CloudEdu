@@ -2,6 +2,7 @@ package com.myedu.project.parents.service.impl;
 
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.project.parents.domain.vo.YunStuHwVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.parents.mapper.YunStuHwMapper;
@@ -27,7 +28,7 @@ public class YunStuHwServiceImpl implements IYunStuHwService
      * @return 学生身高体重记录
      */
     @Override
-    public YunStuHw selectYunStuHwById(Long id)
+    public YunStuHwVo selectYunStuHwById(Long id)
     {
         return yunStuHwMapper.selectYunStuHwById(id);
     }
@@ -39,7 +40,7 @@ public class YunStuHwServiceImpl implements IYunStuHwService
      * @return 学生身高体重记录
      */
     @Override
-    public List<YunStuHw> selectYunStuHwList(YunStuHw yunStuHw)
+    public List<YunStuHwVo> selectYunStuHwList(YunStuHwVo yunStuHw)
     {
         return yunStuHwMapper.selectYunStuHwList(yunStuHw);
     }
