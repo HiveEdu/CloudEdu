@@ -1,54 +1,25 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="姓名" prop="name">
+      <el-form-item label="学生" prop="studentName">
         <el-input
-          v-model="queryParams.name"
+          v-model="queryParams.studentName"
           placeholder="请输入学生姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-        <el-form-item label="性别" prop="gendel">
-        <el-select v-model="queryParams.gendel" placeholder="请选择学生性别" clearable size="small">
-          <el-option
-            v-for="dict in gendelOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="学校" prop="school">
-        <el-input
-          v-model="queryParams.school"
-          placeholder="请输入学生就读所在学校"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="年级" prop="gradeName">
-        <el-input
-          v-model="queryParams.gradeName"
-          placeholder="请选择年级"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建人" prop="createBy">
+      <el-form-item label="创建者" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
-          placeholder="请输入家长姓名"
+          placeholder="请输入创建者姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
@@ -61,7 +32,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['parents:student:add']"
+          v-hasPermi="['parents:mistake:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -71,7 +42,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['parents:student:edit']"
+          v-hasPermi="['parents:mistake:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -81,7 +52,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['parents:student:remove']"
+          v-hasPermi="['parents:mistake:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -90,18 +61,19 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['parents:student:export']"
+          v-hasPermi="['parents:mistake:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="studentList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="mistakeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="性别" align="center" prop="gendel" :formatter="gendelFormat" />
-      <el-table-column label="所在学校" align="center" prop="school" />
-      <el-table-column label="年级" align="center" prop="gradeName" />
-      <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="学生" align="center" prop="studentName" />
+      <el-table-column label="错题来源" align="center" prop="source" />
+      <el-table-column label="错题类型" align="center" prop="type" />
+      <el-table-column label="错题原因" align="center" prop="reason" />
+      <el-table-column label="解决思路" align="center" prop="solutions" />
+      <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -114,14 +86,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['parents:student:edit']"
+            v-hasPermi="['parents:mistake:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['parents:student:remove']"
+            v-hasPermi="['parents:mistake:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -135,27 +107,23 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改学生数据对话框 -->
+    <!-- 添加或修改学生错题记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="学生名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入学生名称" />
+        <el-form-item label="错题来源" prop="source">
+          <el-input v-model="form.source" type="text" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="学生性别">
-          <el-select v-model="form.gendel" placeholder="请选择学生性别">
-            <el-option
-              v-for="dict in gendelOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
+        <el-form-item label="错题类型" prop="type">
+          <el-input v-model="form.type" placeholder="请输入错题类型" />
         </el-form-item>
-        <el-form-item label="所在学校" prop="school">
-          <el-input v-model="form.school" placeholder="请输入学生就读所在学校" />
+        <el-form-item label="错题原因" prop="reason">
+          <el-input v-model="form.reason" placeholder="请输入错题原因" />
         </el-form-item>
-        <el-form-item label="年级" prop="gradeId">
-          <el-input v-model="form.gradeId" placeholder="请输入关联年级Id" />
+        <el-form-item label="解决思路" prop="solutions">
+          <el-input v-model="form.solutions" placeholder="请输入解决思路" />
+        </el-form-item>
+        <el-form-item label="关联学生id" prop="studentId">
+          <el-input v-model="form.studentId" placeholder="请输入关联学生id" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -167,7 +135,7 @@
 </template>
 
 <script>
-import { listStudent, getStudent, delStudent, addStudent, updateStudent, exportStudent } from "@/api/parents/student";
+import { listMistake, getMistake, delMistake, addMistake, updateMistake, exportMistake } from "@/api/parents/mistake";
 
 export default {
   data() {
@@ -182,25 +150,24 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 学生数据表格数据
-      studentList: [],
+      // 学生错题记录表格数据
+      mistakeList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
-      // 学生性别字典
-      gendelOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: undefined,
-        gendel: undefined,
-        avatar: undefined,
-        school: undefined,
-        gradeName: undefined,
+        source: undefined,
+        type: undefined,
+        reason: undefined,
+        solutions: undefined,
+        studentName: undefined,
         createBy: undefined,
-        createById: undefined,
+        createTime: undefined,
+        createById: undefined
       },
       // 表单参数
       form: {},
@@ -211,23 +178,16 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_user_sex").then(response => {
-      this.gendelOptions = response.data;
-    });
   },
   methods: {
-    /** 查询学生数据列表 */
+    /** 查询学生错题记录列表 */
     getList() {
       this.loading = true;
-      listStudent(this.queryParams).then(response => {
-        this.studentList = response.rows;
+      listMistake(this.queryParams).then(response => {
+        this.mistakeList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
-    },
-    // 学生性别字典翻译
-    gendelFormat(row, column) {
-      return this.selectDictLabel(this.gendelOptions, row.gendel);
     },
     // 取消按钮
     cancel() {
@@ -237,11 +197,19 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        name: undefined,
-        gendel: undefined,
-        school: undefined,
-        gradeId: undefined,
-        createBy: undefined
+        id: undefined,
+        source: undefined,
+        type: undefined,
+        reason: undefined,
+        images: undefined,
+        solutions: undefined,
+        studentId: undefined,
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined,
+        delFlag: undefined,
+        createById: undefined
       };
       this.resetForm("form");
     },
@@ -265,16 +233,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加学生数据";
+      this.title = "添加学生错题记录";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getStudent(id).then(response => {
+      getMistake(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改学生数据";
+        this.title = "修改学生错题记录";
       });
     },
     /** 提交按钮 */
@@ -282,7 +250,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateStudent(this.form).then(response => {
+            updateMistake(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -292,7 +260,7 @@ export default {
               }
             });
           } else {
-            addStudent(this.form).then(response => {
+            addMistake(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -308,12 +276,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除学生数据编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除学生错题记录编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delStudent(ids);
+          return delMistake(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
@@ -322,12 +290,12 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有学生数据数据项?', "警告", {
+      this.$confirm('是否确认导出所有学生错题记录数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return exportStudent(queryParams);
+          return exportMistake(queryParams);
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});

@@ -1,22 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="开始时间" prop="leaveStartTime">
-        <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.leaveStartTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择开始时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间" prop="leaveEndTime">
-        <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.leaveEndTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择结束时间">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item label="学生" prop="studentName">
         <el-input
           v-model="queryParams.studentName"
@@ -98,6 +82,11 @@
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

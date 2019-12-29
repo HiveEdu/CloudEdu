@@ -50,8 +50,8 @@ public class AppStLeaveController extends BaseController {
     @ApiOperation("查询当前用户下的学生请假详情")
     @ApiImplicitParam(name = "id", value = "查询当前用户下的学生请假详情",
             dataType = "Long")
-    @GetMapping("/getMyStudentLeaveDetail")
-    public AjaxResult getMyStudentLeaveDetail(@PathVariable("id") Long id)
+    @GetMapping("/getMyStudentLeaveById/{id}")
+    public AjaxResult getMyStudentLeaveById(@PathVariable("id") Long id)
     {
         return AjaxResult.success(yunStuLeaveService.selectYunStuLeaveById(id));
     }
@@ -93,8 +93,8 @@ public class AppStLeaveController extends BaseController {
     @ApiOperation("删除学生请假")
     @ApiImplicitParam(name = "ids", value = "删除学生请假",
             dataType = "Long[]")
-    @DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    @DeleteMapping("/deletStudentLeaveByIds/{ids}")
+    public AjaxResult deletStudentLeaveByIds(@PathVariable Long[] ids)
     {
         return toAjax(yunStuLeaveService.deleteYunStuLeaveByIds(ids));
     }

@@ -56,8 +56,8 @@ public class AppStudentController extends BaseController {
      */
     @ApiOperation("获取学生详情")
     @ApiImplicitParam(name = "id", value = "获取学生详情", dataType = "Long")
-    @GetMapping(value = "/getStudnetDetail/{id}")
-    public AjaxResult getStudnetDetail(@PathVariable("id") Long id)
+    @GetMapping(value = "/getStudnetById/{id}")
+    public AjaxResult getStudnetById(@PathVariable("id") Long id)
     {
         return AjaxResult.success(yunStudentService.selectYunStudentById(id));
     }
@@ -98,7 +98,7 @@ public class AppStudentController extends BaseController {
     @ApiOperation("删除学生")
     @ApiImplicitParam(name = "ids", value = "删除学生", dataType = "Long[]")
     @Log(title = "学生数据", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
+    @DeleteMapping("/deletStudentByIds/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(yunStudentService.deleteYunStudentByIds(ids));
