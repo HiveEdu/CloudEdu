@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.parents.mapper.YunStuHworkMapper">
+    
+    <resultMap type="YunStuHwork" id="YunStuHworkResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="hworkType"    column="hwork_type"    />
+        <result property="hworkName"    column="hwork_name"    />
+        <result property="hworkStatus"    column="hwork_status"    />
+        <result property="hworkTime"    column="hwork_time"    />
+        <result property="hworkContent"    column="hwork_content"    />
+        <result property="hworkImage"    column="hwork_image"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunStuHworkVo">
+        select id, student_id, hwork_type, hwork_name, hwork_status, hwork_time, hwork_content, hwork_image, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_stu_hwork
+    </sql>
+
+    <select id="selectYunStuHworkList" parameterType="YunStuHwork" resultMap="YunStuHworkResult">
+        <include refid="selectYunStuHworkVo"/>
+        <where>  
+            <if test="hworkType != null  and hworkType != ''"> and hwork_type = #{hworkType}</if>
+            <if test="hworkName != null  and hworkName != ''"> and hwork_name like concat('%', #{hworkName}, '%')</if>
+            <if test="hworkStatus != null  and hworkStatus != ''"> and hwork_status = #{hworkStatus}</if>
+            <if test="hworkTime != null "> and hwork_time = #{hworkTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStuHworkById" parameterType="Long" resultMap="YunStuHworkResult">
+        <include refid="selectYunStuHworkVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStuHwork" parameterType="YunStuHwork" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_stu_hwork
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null ">student_id,</if>
+            <if test="hworkType != null  and hworkType != ''">hwork_type,</if>
+            <if test="hworkName != null  and hworkName != ''">hwork_name,</if>
+            <if test="hworkStatus != null  and hworkStatus != ''">hwork_status,</if>
+            <if test="hworkTime != null ">hwork_time,</if>
+            <if test="hworkContent != null  and hworkContent != ''">hwork_content,</if>
+            <if test="hworkImage != null  and hworkImage != ''">hwork_image,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null ">#{studentId},</if>
+            <if test="hworkType != null  and hworkType != ''">#{hworkType},</if>
+            <if test="hworkName != null  and hworkName != ''">#{hworkName},</if>
+            <if test="hworkStatus != null  and hworkStatus != ''">#{hworkStatus},</if>
+            <if test="hworkTime != null ">#{hworkTime},</if>
+            <if test="hworkContent != null  and hworkContent != ''">#{hworkContent},</if>
+            <if test="hworkImage != null  and hworkImage != ''">#{hworkImage},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStuHwork" parameterType="YunStuHwork">
+        update yun_stu_hwork
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null ">student_id = #{studentId},</if>
+            <if test="hworkType != null  and hworkType != ''">hwork_type = #{hworkType},</if>
+            <if test="hworkName != null  and hworkName != ''">hwork_name = #{hworkName},</if>
+            <if test="hworkStatus != null  and hworkStatus != ''">hwork_status = #{hworkStatus},</if>
+            <if test="hworkTime != null ">hwork_time = #{hworkTime},</if>
+            <if test="hworkContent != null  and hworkContent != ''">hwork_content = #{hworkContent},</if>
+            <if test="hworkImage != null  and hworkImage != ''">hwork_image = #{hworkImage},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStuHworkById" parameterType="Long">
+        delete from yun_stu_hwork where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStuHworkByIds" parameterType="String">
+        delete from yun_stu_hwork where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
