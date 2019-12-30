@@ -2,93 +2,107 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.myedu.project.parents.mapper.YunScoreMapper">
+<mapper namespace="com.myedu.project.parents.mapper.YunStuScoreMapper">
     
-    <resultMap type="YunScore" id="YunScoreResult">
+    <resultMap type="YunStuScore" id="YunStuScoreResult">
         <result property="scoreId"    column="score_id"    />
         <result property="mark"    column="mark"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="courseId"    column="course_id"    />
         <result property="examtname"    column="examtname"    />
-        <result property="examtime"    column="examtime"    />
         <result property="remark"    column="remark"    />
         <result property="examimage"    column="examimage"    />
         <result property="createById"    column="create_by_id"    />
         <result property="createBy"    column="create_by"    />
         <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="examtime"    column="examtime"    />
+        <result property="updateTime"    column="update_time"    />
     </resultMap>
 
-    <sql id="selectYunScoreVo">
-        select score_id, mark, examtname, examtime, remark, examimage, create_by_id, create_by, update_by, update_time, del_flag from yun_score
+    <sql id="selectYunStuScoreVo">
+        select  yss.*,ys.name as studentName,sc.name as courseName from yun_stu_score yss
+         left join  yun_student ys  on  ys.id=yss.student_id
+         left join sys_course sc on sc.id=yss.course_id
     </sql>
 
-    <select id="selectYunScoreList" parameterType="YunScore" resultMap="YunScoreResult">
-        <include refid="selectYunScoreVo"/>
+    <select id="selectYunStuScoreList" parameterType="YunStuScore" resultMap="YunStuScoreResult">
+        <include refid="selectYunStuScoreVo"/>
         <where>  
             <if test="mark != null "> and mark = #{mark}</if>
             <if test="examtname != null  and examtname != ''"> and examtname like concat('%', #{examtname}, '%')</if>
-            <if test="examtime != null "> and examtime = #{examtime}</if>
             <if test="examimage != null  and examimage != ''"> and examimage = #{examimage}</if>
             <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="examtime != null "> and examtime = #{examtime}</if>
         </where>
     </select>
     
-    <select id="selectYunScoreById" parameterType="Long" resultMap="YunScoreResult">
-        <include refid="selectYunScoreVo"/>
+    <select id="selectYunStuScoreById" parameterType="Long" resultMap="YunStuScoreResult">
+        <include refid="selectYunStuScoreVo"/>
         where score_id = #{scoreId}
     </select>
         
-    <insert id="insertYunScore" parameterType="YunScore" useGeneratedKeys="true" keyProperty="scoreId">
-        insert into yun_score
+    <insert id="insertYunStuScore" parameterType="YunStuScore" useGeneratedKeys="true" keyProperty="scoreId">
+        insert into yun_stu_score
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="mark != null ">mark,</if>
             <if test="examtname != null  and examtname != ''">examtname,</if>
-            <if test="examtime != null ">examtime,</if>
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="examimage != null  and examimage != ''">examimage,</if>
+            <if test="student_id != null  and student_id != ''">studentId,</if>
+            <if test="course_id != null  and course_id != ''">courseId,</if>
             <if test="createById != null ">create_by_id,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
-            <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="examtime != null ">examtime,</if>
+            <if test="updateTime != null ">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="mark != null ">#{mark},</if>
             <if test="examtname != null  and examtname != ''">#{examtname},</if>
-            <if test="examtime != null ">#{examtime},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="student_id != null  and student_id != ''">#{studentId},</if>
+            <if test="course_id != null  and course_id != ''">courseId,</if>
             <if test="examimage != null  and examimage != ''">#{examimage},</if>
             <if test="createById != null ">#{createById},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
-            <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="examtime != null ">#{examtime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
          </trim>
     </insert>
 
-    <update id="updateYunScore" parameterType="YunScore">
-        update yun_score
+    <update id="updateYunStuScore" parameterType="YunStuScore">
+        update yun_stu_score
         <trim prefix="SET" suffixOverrides=",">
             <if test="mark != null ">mark = #{mark},</if>
             <if test="examtname != null  and examtname != ''">examtname = #{examtname},</if>
-            <if test="examtime != null ">examtime = #{examtime},</if>
             <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="student_id != null  and student_id != ''">student_id = #{studentId},</if>
+            <if test="course_id != null  and course_id != ''">courseId,</if>
             <if test="examimage != null  and examimage != ''">examimage = #{examimage},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
-            <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="examtime != null ">examtime = #{examtime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
         </trim>
         where score_id = #{scoreId}
     </update>
 
-    <delete id="deleteYunScoreById" parameterType="Long">
-        delete from yun_score where score_id = #{scoreId}
+    <delete id="deleteYunStuScoreById" parameterType="Long">
+        delete from yun_stu_score where score_id = #{scoreId}
     </delete>
 
-    <delete id="deleteYunScoreByIds" parameterType="String">
-        delete from yun_score where score_id in 
+    <delete id="deleteYunStuScoreByIds" parameterType="String">
+        delete from yun_stu_score where score_id in 
         <foreach item="scoreId" collection="array" open="(" separator="," close=")">
             #{scoreId}
         </foreach>
