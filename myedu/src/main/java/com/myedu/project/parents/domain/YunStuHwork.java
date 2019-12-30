@@ -1,5 +1,6 @@
 package com.myedu.project.parents.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
@@ -34,7 +35,8 @@ public class YunStuHwork extends BaseEntity
     private String hworkStatus;
 
     /** 完成时间 */
-    @Excel(name = "完成时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "完成时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date hworkTime;
 
     /** 作业内容 */

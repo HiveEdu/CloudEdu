@@ -71,12 +71,12 @@
       <el-table-column label="学生" align="center" prop="studentName" />
       <el-table-column label="请假原因" align="center" prop="reason" />
       <el-table-column label="开始时间" align="center" prop="leaveStartTime" width="180">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.leaveStartTime!=null">
           <span>{{ parseTime(scope.row.leaveStartTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="结束时间" align="center" prop="leaveEndTime" width="180">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.leaveEndTime!=null">
           <span>{{ parseTime(scope.row.leaveEndTime) }}</span>
         </template>
       </el-table-column>
@@ -124,16 +124,16 @@
         <el-form-item label="开始时间" prop="leaveStartTime">
           <el-date-picker clearable size="small" style="width: 200px"
             v-model="form.leaveStartTime"
-            type="date"
-            value-format="yyyy-MM-dd"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择开始时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="结束时间" prop="leaveEndTime">
           <el-date-picker clearable size="small" style="width: 200px"
             v-model="form.leaveEndTime"
-            type="date"
-            value-format="yyyy-MM-dd"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择结束时间">
           </el-date-picker>
         </el-form-item>

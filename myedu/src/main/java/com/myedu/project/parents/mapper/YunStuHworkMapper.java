@@ -1,6 +1,8 @@
 package com.myedu.project.parents.mapper;
 
 import com.myedu.project.parents.domain.YunStuHwork;
+import com.myedu.project.parents.domain.vo.YunStuHworkVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface YunStuHworkMapper
      * @param id 学生作业ID
      * @return 学生作业
      */
-    public YunStuHwork selectYunStuHworkById(Long id);
+    public YunStuHworkVo selectYunStuHworkById(Long id);
 
     /**
      * 查询学生作业列表
@@ -25,7 +27,7 @@ public interface YunStuHworkMapper
      * @param yunStuHwork 学生作业
      * @return 学生作业集合
      */
-    public List<YunStuHwork> selectYunStuHworkList(YunStuHwork yunStuHwork);
+    public List<YunStuHworkVo> selectYunStuHworkList(YunStuHworkVo yunStuHwork);
 
     /**
      * 新增学生作业

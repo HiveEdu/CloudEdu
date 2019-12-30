@@ -1,6 +1,8 @@
 package com.myedu.project.parents.controller;
 
 import java.util.List;
+
+import com.myedu.project.parents.domain.vo.YunStuHworkVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,10 +40,10 @@ public class YunStuHworkController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('parents:hwork:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunStuHwork yunStuHwork)
+    public TableDataInfo list(YunStuHworkVo yunStuHwork)
     {
         startPage();
-        List<YunStuHwork> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
+        List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
         return getDataTable(list);
     }
 
@@ -51,10 +53,10 @@ public class YunStuHworkController extends BaseController
     @PreAuthorize("@ss.hasPermi('parents:hwork:export')")
     @Log(title = "学生作业", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunStuHwork yunStuHwork)
+    public AjaxResult export(YunStuHworkVo yunStuHwork)
     {
-        List<YunStuHwork> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
-        ExcelUtil<YunStuHwork> util = new ExcelUtil<YunStuHwork>(YunStuHwork.class);
+        List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
+        ExcelUtil<YunStuHworkVo> util = new ExcelUtil<YunStuHworkVo>(YunStuHworkVo.class);
         return util.exportExcel(list, "hwork");
     }
 

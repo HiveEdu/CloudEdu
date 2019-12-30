@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.parents.mapper.YunStuHworkMapper">
     
-    <resultMap type="YunStuHwork" id="YunStuHworkResult">
+    <resultMap type="YunStuHworkVo" id="YunStuHworkResult">
         <result property="id"    column="id"    />
         <result property="studentId"    column="student_id"    />
         <result property="hworkType"    column="hwork_type"    />
@@ -22,22 +22,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStuHworkVo">
-        select id, student_id, hwork_type, hwork_name, hwork_status, hwork_time, hwork_content, hwork_image, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_stu_hwork
+        select  ysh.*,ys.name as studentName
+        from yun_stu_hwork ysh LEFT  JOIN yun_student ys  ON  ysh.student_id = ys.id
     </sql>
 
-    <select id="selectYunStuHworkList" parameterType="YunStuHwork" resultMap="YunStuHworkResult">
+    <select id="selectYunStuHworkList" parameterType="YunStuHworkVo" resultMap="YunStuHworkResult">
         <include refid="selectYunStuHworkVo"/>
         <where>  
-            <if test="hworkType != null  and hworkType != ''"> and hwork_type = #{hworkType}</if>
-            <if test="hworkName != null  and hworkName != ''"> and hwork_name like concat('%', #{hworkName}, '%')</if>
-            <if test="hworkStatus != null  and hworkStatus != ''"> and hwork_status = #{hworkStatus}</if>
-            <if test="hworkTime != null "> and hwork_time = #{hworkTime}</if>
+            <if test="hworkType != null  and hworkType != ''"> and ysh.hwork_type = #{hworkType}</if>
+            <if test="hworkName != null  and hworkName != ''"> and ysh.hwork_name like concat('%', #{hworkName}, '%')</if>
+            <if test="hworkStatus != null  and hworkStatus != ''"> and ysh.hwork_status = #{hworkStatus}</if>
+            <if test="hworkTime != null "> and ysh.hwork_time = #{hworkTime}</if>
+            <if test="studentName!= null ">and ys.name like concat('%', #{studentName}, '%')</if>
         </where>
     </select>
     
     <select id="selectYunStuHworkById" parameterType="Long" resultMap="YunStuHworkResult">
         <include refid="selectYunStuHworkVo"/>
-        where id = #{id}
+        where ysh.id = #{id}
     </select>
         
     <insert id="insertYunStuHwork" parameterType="YunStuHwork" useGeneratedKeys="true" keyProperty="id">

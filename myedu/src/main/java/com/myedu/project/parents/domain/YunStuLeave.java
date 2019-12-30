@@ -1,5 +1,6 @@
 package com.myedu.project.parents.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
@@ -24,10 +25,12 @@ public class YunStuLeave extends BaseEntity
     private String reason;
 
     /** 开始时间 */
-    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date leaveStartTime;
     /** 结束时间 */
-    @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date leaveEndTime;
 
     /** 关联学生ID */

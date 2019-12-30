@@ -2,6 +2,7 @@ package com.myedu.project.parents.service.impl;
 
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.project.parents.domain.vo.YunStuHworkVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.parents.mapper.YunStuHworkMapper;
@@ -27,7 +28,7 @@ public class YunStuHworkServiceImpl implements IYunStuHworkService
      * @return 学生作业
      */
     @Override
-    public YunStuHwork selectYunStuHworkById(Long id)
+    public YunStuHworkVo selectYunStuHworkById(Long id)
     {
         return yunStuHworkMapper.selectYunStuHworkById(id);
     }
@@ -39,7 +40,7 @@ public class YunStuHworkServiceImpl implements IYunStuHworkService
      * @return 学生作业
      */
     @Override
-    public List<YunStuHwork> selectYunStuHworkList(YunStuHwork yunStuHwork)
+    public List<YunStuHworkVo> selectYunStuHworkList(YunStuHworkVo yunStuHwork)
     {
         return yunStuHworkMapper.selectYunStuHworkList(yunStuHwork);
     }
