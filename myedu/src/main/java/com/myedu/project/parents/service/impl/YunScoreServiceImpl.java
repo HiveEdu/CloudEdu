@@ -9,10 +9,10 @@ import com.myedu.project.parents.domain.YunScore;
 import com.myedu.project.parents.service.IYunScoreService;
 
 /**
- * 学生成绩Service业务层处理
+ * scoreService业务层处理
  * 
  * @author 梁龙飞
- * @date 2019-12-29
+ * @date 2019-12-30
  */
 @Service
 public class YunScoreServiceImpl implements IYunScoreService 
@@ -21,10 +21,10 @@ public class YunScoreServiceImpl implements IYunScoreService
     private YunScoreMapper yunScoreMapper;
 
     /**
-     * 查询学生成绩
+     * 查询score
      * 
-     * @param scoreId 学生成绩ID
-     * @return 学生成绩
+     * @param scoreId scoreID
+     * @return score
      */
     @Override
     public YunScore selectYunScoreById(Long scoreId)
@@ -33,10 +33,10 @@ public class YunScoreServiceImpl implements IYunScoreService
     }
 
     /**
-     * 查询学生成绩列表
+     * 查询score列表
      * 
-     * @param yunScore 学生成绩
-     * @return 学生成绩
+     * @param yunScore score
+     * @return score
      */
     @Override
     public List<YunScore> selectYunScoreList(YunScore yunScore)
@@ -45,9 +45,9 @@ public class YunScoreServiceImpl implements IYunScoreService
     }
 
     /**
-     * 新增学生成绩
+     * 新增score
      * 
-     * @param yunScore 学生成绩
+     * @param yunScore score
      * @return 结果
      */
     @Override
@@ -57,9 +57,9 @@ public class YunScoreServiceImpl implements IYunScoreService
     }
 
     /**
-     * 修改学生成绩
+     * 修改score
      * 
-     * @param yunScore 学生成绩
+     * @param yunScore score
      * @return 结果
      */
     @Override
@@ -70,9 +70,9 @@ public class YunScoreServiceImpl implements IYunScoreService
     }
 
     /**
-     * 批量删除学生成绩
+     * 批量删除score
      * 
-     * @param scoreIds 需要删除的学生成绩ID
+     * @param scoreIds 需要删除的scoreID
      * @return 结果
      */
     @Override
@@ -82,9 +82,9 @@ public class YunScoreServiceImpl implements IYunScoreService
     }
 
     /**
-     * 删除学生成绩信息
+     * 删除score信息
      * 
-     * @param scoreId 学生成绩ID
+     * @param scoreId scoreID
      * @return 结果
      */
     @Override

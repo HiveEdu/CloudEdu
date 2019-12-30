@@ -1,17 +1,19 @@
 package com.myedu.project.parents.domain;
 
-
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.Date;
 
 /**
- * 学生成绩对象 yun_score
+ * score对象 yun_score
  * 
  * @author 梁龙飞
- * @date 2019-12-29
+ * @date 2019-12-30
  */
 public class YunScore extends BaseEntity
 {

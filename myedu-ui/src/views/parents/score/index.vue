@@ -133,7 +133,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改学生成绩对话框 -->
+    <!-- 添加或修改score对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="考试分数" prop="mark">
@@ -184,7 +184,7 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 学生成绩表格数据
+      // score表格数据
       scoreList: [],
       // 弹出层标题
       title: "",
@@ -211,7 +211,7 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询学生成绩列表 */
+    /** 查询score列表 */
     getList() {
       this.loading = true;
       listScore(this.queryParams).then(response => {
@@ -262,7 +262,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加学生成绩";
+      this.title = "添加score";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -271,7 +271,7 @@ export default {
       getScore(scoreId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改学生成绩";
+        this.title = "修改score";
       });
     },
     /** 提交按钮 */
@@ -305,7 +305,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const scoreIds = row.scoreId || this.ids;
-      this.$confirm('是否确认删除学生成绩编号为"' + scoreIds + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除score编号为"' + scoreIds + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -319,7 +319,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有学生成绩数据项?', "警告", {
+      this.$confirm('是否确认导出所有score数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

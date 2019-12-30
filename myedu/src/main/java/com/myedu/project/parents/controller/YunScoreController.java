@@ -21,10 +21,10 @@ import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.web.page.TableDataInfo;
 
 /**
- * 学生成绩Controller
+ * scoreController
  * 
  * @author 梁龙飞
- * @date 2019-12-29
+ * @date 2019-12-30
  */
 @RestController
 @RequestMapping("/score/score")
@@ -34,7 +34,7 @@ public class YunScoreController extends BaseController
     private IYunScoreService yunScoreService;
 
     /**
-     * 查询学生成绩列表
+     * 查询score列表
      */
     @PreAuthorize("@ss.hasPermi('score:score:list')")
     @GetMapping("/list")
@@ -46,10 +46,10 @@ public class YunScoreController extends BaseController
     }
 
     /**
-     * 导出学生成绩列表
+     * 导出score列表
      */
     @PreAuthorize("@ss.hasPermi('score:score:export')")
-    @Log(title = "学生成绩", businessType = BusinessType.EXPORT)
+    @Log(title = "score", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(YunScore yunScore)
     {
@@ -59,7 +59,7 @@ public class YunScoreController extends BaseController
     }
 
     /**
-     * 获取学生成绩详细信息
+     * 获取score详细信息
      */
     @PreAuthorize("@ss.hasPermi('score:score:query')")
     @GetMapping(value = "/{scoreId}")
@@ -69,10 +69,10 @@ public class YunScoreController extends BaseController
     }
 
     /**
-     * 新增学生成绩
+     * 新增score
      */
     @PreAuthorize("@ss.hasPermi('score:score:add')")
-    @Log(title = "学生成绩", businessType = BusinessType.INSERT)
+    @Log(title = "score", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunScore yunScore)
     {
@@ -80,10 +80,10 @@ public class YunScoreController extends BaseController
     }
 
     /**
-     * 修改学生成绩
+     * 修改score
      */
     @PreAuthorize("@ss.hasPermi('score:score:edit')")
-    @Log(title = "学生成绩", businessType = BusinessType.UPDATE)
+    @Log(title = "score", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunScore yunScore)
     {
@@ -91,10 +91,10 @@ public class YunScoreController extends BaseController
     }
 
     /**
-     * 删除学生成绩
+     * 删除score
      */
     @PreAuthorize("@ss.hasPermi('score:score:remove')")
-    @Log(title = "学生成绩", businessType = BusinessType.DELETE)
+    @Log(title = "score", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{scoreIds}")
     public AjaxResult remove(@PathVariable Long[] scoreIds)
     {
