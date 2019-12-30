@@ -19,19 +19,19 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="关联学生id" prop="studentId">
+      <el-form-item label="被测学生姓名" prop="studentName">
         <el-input
-          v-model="queryParams.studentId"
-          placeholder="请输入关联学生id"
+          v-model="queryParams.studentName"
+          placeholder="请输入被测学生姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="创建人Id" prop="createById">
+      <el-form-item label="创建人" prop="createBy">
         <el-input
           v-model="queryParams.createById"
-          placeholder="请输入创建人Id"
+          placeholder="请输入创建人"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -86,12 +86,11 @@
 
     <el-table v-loading="loading" :data="hwList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="创建人Id" align="center" prop="id" />
+      <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="身高" align="center" prop="height" />
       <el-table-column label="体重" align="center" prop="weight" />
-      <el-table-column label="关联学生id" align="center" prop="studentId" />
+      <el-table-column label="被测学生姓名" align="center" prop="studentName" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="创建人Id" align="center" prop="createById" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -124,19 +123,19 @@
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="身高" prop="height">
-          <el-input v-model="form.height" placeholder="请输入身高" />
+          <el-input v-model="form.height" placeholder="请输入身高(cm)" />
         </el-form-item>
         <el-form-item label="体重" prop="weight">
-          <el-input v-model="form.weight" placeholder="请输入体重" />
+          <el-input v-model="form.weight" placeholder="请输入体重(kg)" />
         </el-form-item>
-        <el-form-item label="关联学生id" prop="studentId">
-          <el-input v-model="form.studentId" placeholder="请输入关联学生id" />
+        <el-form-item label="被测学生姓名" prop="studentId">
+          <el-input v-model="form.studentId" placeholder="请输入被测学生姓名" />
         </el-form-item>
         <el-form-item label="删除标志" prop="delFlag">
           <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
         </el-form-item>
-        <el-form-item label="创建人Id" prop="createById">
-          <el-input v-model="form.createById" placeholder="请输入创建人Id" />
+        <el-form-item label="创建人" prop="createBy">
+          <el-input v-model="form.createById" placeholder="请输入创建人" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -175,8 +174,8 @@ export default {
         pageSize: 10,
         height: undefined,
         weight: undefined,
-        studentId: undefined,
-        createById: undefined
+        studentName: undefined,
+        createBy: undefined
       },
       // 表单参数
       form: {},
@@ -215,8 +214,8 @@ export default {
         createTime: undefined,
         updateBy: undefined,
         updateTime: undefined,
-        delFlag: undefined,
-        createById: undefined
+        delFlag: undefined
+       
       };
       this.resetForm("form");
     },
