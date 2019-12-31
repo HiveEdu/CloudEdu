@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.parents.mapper.YunStuScoreMapper">
     
-    <resultMap type="YunStuScore" id="YunStuScoreResult">
+    <resultMap type="YunStuScoreVo" id="YunStuScoreResult">
         <result property="scoreId"    column="score_id"    />
         <result property="mark"    column="mark"    />
         <result property="studentId"    column="student_id"    />
@@ -31,10 +31,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectYunStuScoreVo"/>
         <where>  
             <if test="mark != null "> and mark = #{mark}</if>
-            <if test="examtname != null  and examtname != ''"> and examtname like concat('%', #{examtname}, '%')</if>
-            <if test="examimage != null  and examimage != ''"> and examimage = #{examimage}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
-            <if test="examtime != null "> and examtime = #{examtime}</if>
+            <if test="examtname != null  and examtname != ''"> and yss.examtname like concat('%', #{examtname}, '%')</if>
+            <if test="studentId != null "> and yss.student_id = #{studentId}</if>
+            <if test="examimage != null  and examimage != ''"> and yss.examimage = #{examimage}</if>
+            <if test="createById != null "> and yss.create_by_id = #{createById}</if>
+            <if test="examtime != null "> and yss.examtime = #{examtime}</if>
+            <if test="studentName!= null ">and ys.name like concat('%', #{studentName}, '%')</if>
+            <if test="courseName!= null ">and sc.name like concat('%', #{courseName}, '%')</if>
         </where>
     </select>
     

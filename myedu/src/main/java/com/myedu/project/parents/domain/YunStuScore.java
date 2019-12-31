@@ -40,11 +40,6 @@ public class YunStuScore extends BaseEntity
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public Long getStudentId() {
         return studentId;
     }
