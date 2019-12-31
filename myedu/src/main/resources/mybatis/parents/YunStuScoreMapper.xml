@@ -50,8 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="examtname != null  and examtname != ''">examtname,</if>
             <if test="remark != null  and remark != ''">remark,</if>
             <if test="examimage != null  and examimage != ''">examimage,</if>
-            <if test="student_id != null  and student_id != ''">studentId,</if>
-            <if test="course_id != null  and course_id != ''">courseId,</if>
+            <if test="studentId != null and studentId != ''">student_id,</if>
+            <if test="courseId != null  and courseId != ''">course_id,</if>
             <if test="createById != null ">create_by_id,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
@@ -64,8 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mark != null ">#{mark},</if>
             <if test="examtname != null  and examtname != ''">#{examtname},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="student_id != null  and student_id != ''">#{studentId},</if>
-            <if test="course_id != null  and course_id != ''">courseId,</if>
+            <if test="studentId != null and studentId != ''">#{studentId},</if>
+            <if test="courseId != null  and course_id != ''">courseId,</if>
             <if test="examimage != null  and examimage != ''">#{examimage},</if>
             <if test="createById != null ">#{createById},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
@@ -83,8 +83,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mark != null ">mark = #{mark},</if>
             <if test="examtname != null  and examtname != ''">examtname = #{examtname},</if>
             <if test="remark != null  and remark != ''">remark = #{remark},</if>
-            <if test="student_id != null  and student_id != ''">student_id = #{studentId},</if>
-            <if test="course_id != null  and course_id != ''">courseId,</if>
+            <if test="studentId != null  and studentId != ''">student_id = #{studentId},</if>
+            <if test="courseId != null  and courseId != ''">course_id = #{courseId},</if>
             <if test="examimage != null  and examimage != ''">examimage = #{examimage},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>

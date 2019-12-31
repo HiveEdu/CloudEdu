@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f1ce9d0e-2647-4edf-a9f3-efad86f505cd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/myedu/src/main/resources/application-druid.yml" beforeDir="false" afterPath="$PROJECT_DIR$/myedu/src/main/resources/application-druid.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myedu/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/myedu/src/main/resources/logback.xml" afterDir="false" />
-    </list>
+    <list default="true" id="f1ce9d0e-2647-4edf-a9f3-efad86f505cd" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +52,15 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="755374406">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -88,13 +94,6 @@
             <state relative-caret-position="315">
               <caret line="21" column="81" selection-start-line="21" selection-start-column="81" selection-end-line="21" selection-end-column="81" />
             </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/project/app/controller/UserController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-228" />
           </provider>
         </entry>
       </file>
@@ -160,9 +159,6 @@
       <select />
     </treeState>
   </component>
-  <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/myedu-ui/node_modules" />
-  </component>
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
       <path value="$PROJECT_DIR$/myedu-ui/package.json" />
@@ -178,8 +174,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -272,6 +266,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -328,11 +324,12 @@
       <workItem from="1577357471761" duration="1171000" />
       <workItem from="1577358819009" duration="216000" />
       <workItem from="1577359516174" duration="2194000" />
+      <workItem from="1577509997647" duration="8000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6973000" />
+    <option name="totallyTimeSpent" value="6981000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -346,7 +343,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="697" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49421486" visible="true" weight="0.26171243" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49421486" visible="true" weight="0.2657512" />
       <window_info id="Structure" order="1" sideWeight="0.5057851" side_tool="true" weight="0.30371568" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -391,15 +388,6 @@
     <entry file="file://$PROJECT_DIR$/myedu/ry.sh">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/framework/aspectj/DataScopeAspect.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/framework/redis/RedisCache.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/project/tool/swagger/TestController.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/myedu/src/main/resources/application-druid.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -407,17 +395,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/MyEduServletInitializer.java">
+    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/project/app/controller/UserController.java" />
+    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/framework/aspectj/DataScopeAspect.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/myedu/sql/ry_20191202.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1245">
-          <caret line="83" column="24" selection-start-line="83" selection-start-column="16" selection-end-line="83" selection-end-column="24" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/framework/redis/RedisCache.java">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/project/system/controller/SysConfigController.java">
+    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/project/tool/swagger/TestController.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/myedu/src/main/resources/application.yml">
@@ -434,10 +419,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/project/app/controller/UserController.java">
+    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/MyEduServletInitializer.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myedu/sql/ry_20191202.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-228" />
+        <state relative-caret-position="1245">
+          <caret line="83" column="24" selection-start-line="83" selection-start-column="16" selection-end-line="83" selection-end-column="24" />
+        </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/project/system/controller/SysConfigController.java">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/myedu/src/main/java/com/myedu/MyEduApplication.java">
       <provider selected="true" editor-type-id="text-editor">

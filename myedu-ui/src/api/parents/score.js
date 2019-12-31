@@ -1,52 +1,52 @@
 import request from '@/utils/request'
 
-// 查询score列表
+// 查询学生成绩列表
 export function listScore(query) {
   return request({
-    url: '/score/score/list',
+    url: '/parents/score/list',
     method: 'get',
     params: query
   })
 }
 
-// 查询score详细
+// 查询学生成绩详细
 export function getScore(scoreId) {
   return request({
-    url: '/score/score/' + scoreId,
+    url: '/parents/score/' + scoreId,
     method: 'get'
   })
 }
 
-// 新增score
+// 新增学生成绩
 export function addScore(data) {
   return request({
-    url: '/score/score',
+    url: '/parents/score',
     method: 'post',
     data: data
   })
 }
 
-// 修改score
+// 修改学生成绩
 export function updateScore(data) {
   return request({
-    url: '/score/score',
+    url: '/parents/score',
     method: 'put',
     data: data
   })
 }
 
-// 删除score
+// 删除学生成绩
 export function delScore(scoreId) {
   return request({
-    url: '/score/score/' + scoreId,
+    url: '/parents/score/' + scoreId,
     method: 'delete'
   })
 }
 
-// 导出score
+// 导出学生成绩
 export function exportScore(query) {
   return request({
-    url: '/score/score/export',
+    url: '/parents/score/export',
     method: 'get',
     params: query
   })
