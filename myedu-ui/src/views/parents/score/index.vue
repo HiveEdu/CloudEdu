@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="考试分数" prop="mark">
+      <el-form-item label="学生姓名" prop="studentName">
         <el-input
-          v-model="queryParams.mark"
-          placeholder="请输入考试分数"
+          v-model="queryParams.studentName"
+          placeholder="请输入学生姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -14,24 +14,6 @@
         <el-input
           v-model="queryParams.examtname"
           placeholder="请输入考试科目"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="照片地址" prop="examimage">
-        <el-input
-          v-model="queryParams.examimage"
-          placeholder="请输入照片地址"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label=" 创建id" prop="createById">
-        <el-input
-          v-model="queryParams.createById"
-          placeholder="请输入 创建id"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -94,17 +76,15 @@
 
     <el-table v-loading="loading" :data="scoreList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="成绩id" align="center" prop="scoreId" />
-      <el-table-column label="考试分数" align="center" prop="mark" />
+      <el-table-column label="学生姓名" align="center" prop="studentName" />
       <el-table-column label="考试科目" align="center" prop="examtname" />
-      <el-table-column label="评论" align="center" prop="remark" />
-      <el-table-column label="照片地址" align="center" prop="examimage" />
-      <el-table-column label=" 创建id" align="center" prop="createById" />
       <el-table-column label="考试时间" align="center" prop="examtime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.examtime) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="考试分数" align="center" prop="mark" />
+      <el-table-column label="评论" align="center" prop="remark" />    
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -136,20 +116,11 @@
     <!-- 添加或修改学生成绩对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="考试分数" prop="mark">
-          <el-input v-model="form.mark" placeholder="请输入考试分数" />
+       <el-form-item label="学生ID" prop="studentId">
+          <el-input v-model="form.studentId" placeholder="学生ID" />
         </el-form-item>
         <el-form-item label="考试科目" prop="examtname">
           <el-input v-model="form.examtname" placeholder="请输入考试科目" />
-        </el-form-item>
-        <el-form-item label="照片地址" prop="examimage">
-          <el-input v-model="form.examimage" placeholder="请输入照片地址" />
-        </el-form-item>
-        <el-form-item label=" 创建id" prop="createById">
-          <el-input v-model="form.createById" placeholder="请输入 创建id" />
-        </el-form-item>
-        <el-form-item label="更新标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入更新标志" />
         </el-form-item>
         <el-form-item label="考试时间" prop="examtime">
           <el-date-picker clearable size="small" style="width: 200px"
@@ -158,6 +129,12 @@
             value-format="yyyy-MM-dd"
             placeholder="选择考试时间">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="考试分数" prop="mark">
+          <el-input v-model="form.mark" placeholder="请输入考试分数" />
+        </el-form-item>
+        <el-form-item label="评论" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入您对宝贝本次考试成绩的评论" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -196,8 +173,8 @@ export default {
         pageSize: 10,
         mark: undefined,
         examtname: undefined,
-        examimage: undefined,
-        createById: undefined,
+        studentName: undefined,
+        remark: undefined,
         examtime: undefined,
       },
       // 表单参数
@@ -236,7 +213,7 @@ export default {
         createById: undefined,
         createBy: undefined,
         updateBy: undefined,
-        delFlag: undefined,
+        studentName: undefined,
         createTime: undefined,
         examtime: undefined,
         updateTime: undefined

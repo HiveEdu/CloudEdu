@@ -1,25 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="身高" prop="height">
-        <el-input
-          v-model="queryParams.height"
-          placeholder="请输入身高"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="体重" prop="weight">
-        <el-input
-          v-model="queryParams.weight"
-          placeholder="请输入体重"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="被测学生姓名" prop="studentName">
+      <el-form-item label="被测学生" prop="studentName">
         <el-input
           v-model="queryParams.studentName"
           placeholder="请输入被测学生姓名"
