@@ -137,7 +137,7 @@ public class dongtaiContoller {
         //删除数据库中的记录
         CityImg cityImg = urdi.findCityImgByUrl(url);
         if (cityImg != null) {
-            Long number = urdi.DeleteCityImg(cityImg.getId());
+            int number = urdi.DeleteCityImg(cityImg.getId());
         }
         String[] fileArr=url.split("/");
         String fileName = fileArr[fileArr.length-1];
