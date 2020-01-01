@@ -2,8 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Arrays;
 
 /**
  * 门店对象 yun_store
@@ -68,6 +68,9 @@ public class YunStore extends BaseEntity
     /** 创建人Id */
     @Excel(name = "创建人Id")
     private Long createById;
+
+    /** 类型组 */
+    private Long[] typeIds;
 
     public void setId(Long id) 
     {
@@ -159,7 +162,37 @@ public class YunStore extends BaseEntity
     {
         return mapX;
     }
-    public void setMapY(Double mapY) 
+
+    @Override
+    public String toString() {
+        return "YunStore{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", logo='" + logo + '\'' +
+                ", manager='" + manager + '\'' +
+                ", managerPhone='" + managerPhone + '\'' +
+                ", photos='" + photos + '\'' +
+                ", video='" + video + '\'' +
+                ", license='" + license + '\'' +
+                ", address='" + address + '\'' +
+                ", mapX=" + mapX +
+                ", mapY=" + mapY +
+                ", type='" + type + '\'' +
+                ", delFlag='" + delFlag + '\'' +
+                ", createById=" + createById +
+                ", typeIds=" + Arrays.toString(typeIds) +
+                '}';
+    }
+
+    public Long[] getTypeIds() {
+        return typeIds;
+    }
+
+    public void setTypeIds(Long[] typeIds) {
+        this.typeIds = typeIds;
+    }
+
+    public void setMapY(Double mapY)
     {
         this.mapY = mapY;
     }
@@ -196,27 +229,5 @@ public class YunStore extends BaseEntity
         return createById;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("name", getName())
-            .append("logo", getLogo())
-            .append("manager", getManager())
-            .append("managerPhone", getManagerPhone())
-            .append("photos", getPhotos())
-            .append("video", getVideo())
-            .append("license", getLicense())
-            .append("address", getAddress())
-            .append("mapX", getMapX())
-            .append("mapY", getMapY())
-            .append("type", getType())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("delFlag", getDelFlag())
-            .append("createById", getCreateById())
-            .toString();
-    }
+
 }

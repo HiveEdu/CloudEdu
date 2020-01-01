@@ -23,10 +23,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createById"    column="create_by_id"    />
+        <collection  property="types"   javaType="java.util.List"        resultMap="TypeResult" />
     </resultMap>
 
+    <resultMap id="TypeResult" type="SysStoreType">
+        <id     property="Id"       column="id"        />
+        <result property="Name"     column="name"      />
+        <result property="Remark"      column="remark"       />
+        <result property="Type"     column="type"      />
+    </resultMap>
+
+
     <sql id="selectYunStoreVo">
-        select id, name, logo, manager, manager_phone, photos, video, license, address, map_x, map_y, type, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_store
+        select y.*, yt.*,sst.*
+        from yun_store y
+		    left join yun_store_type yt on yt.store_id = y.id
+		    left join sys_store_type sst on sst.id = yt.type_id
     </sql>
 
     <select id="selectYunStoreList" parameterType="YunStore" resultMap="YunStoreResult">

@@ -28,6 +28,14 @@ public interface IYunStoreService
     public List<YunStore> selectYunStoreList(YunStore yunStore);
 
     /**
+     * 根据用户ID查询用户所属角色组
+     *
+     * @param storeName 用户名
+     * @return 结果
+     */
+    public String selectStoreTypeGroup(String storeName);
+
+    /**
      * 新增门店
      * 
      * @param yunStore 门店
