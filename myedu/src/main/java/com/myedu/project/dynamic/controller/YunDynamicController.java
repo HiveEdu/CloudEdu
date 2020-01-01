@@ -1,18 +1,20 @@
 package com.myedu.project.dynamic.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
+import com.myedu.common.utils.file.FileUploadUtils;
+import com.myedu.framework.config.MyEduConfig;
+import com.myedu.framework.security.LoginUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.*;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.project.dynamic.domain.YunDynamic;
@@ -21,6 +23,11 @@ import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 云托管动态管理Controller
@@ -104,5 +111,20 @@ public class YunDynamicController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(yunDynamicService.deleteYunDynamicByIds(ids));
+    }
+
+    @PostMapping("/upload")
+    public AjaxResult upload(@RequestParam("imagefile") MultipartFile file) throws IOException
+    {
+//        List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("imagefiles");
+//        for (int i =0; i< files.length; ++i) {
+//            if (!files[i].isEmpty())
+//            {
+//                String avatar = FileUploadUtils.upload(MyEduConfig.getAvatarPath(), files[i]);
+//            }
+//
+//        }
+        String avatar = FileUploadUtils.upload(MyEduConfig.getAvatarPath(), file);
+        return AjaxResult.error("上传图片异常，请联系管理员");
     }
 }

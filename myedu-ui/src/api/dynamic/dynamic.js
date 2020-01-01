@@ -51,3 +51,13 @@ export function exportDynamic(query) {
     params: query
   })
 }
+
+//上傳照片动态
+export function uploadImage(data) {
+  alert("88");
+  return request({
+    url: '/dynamic/dynamic/upload',
+    method: 'post',
+    data: data
+  })
+}

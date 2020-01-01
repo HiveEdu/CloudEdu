@@ -124,12 +124,57 @@
           ></el-option>
          </el-select>
         </el-form-item>
+        <!--            :action="uploadAction" :fileList="fileList"-->、
         <el-form-item label="照片上传">
+<!--          <el-upload-->
+<!--            action="#"-->
+<!--            list-type="picture-card"-->
+<!--            :auto-upload="false">-->
+<!--            <i slot="default" class="el-icon-plus"></i>-->
+<!--            <div slot="file" slot-scope="{file}">-->
+<!--              <img-->
+<!--                class="el-upload-list__item-thumbnail"-->
+<!--                :src="file.url" alt=""-->
+<!--              >-->
+<!--              <span class="el-upload-list__item-actions">-->
+<!--        <span-->
+<!--          class="el-upload-list__item-preview"-->
+<!--          @click="handlePictureCardPreview(file)"-->
+<!--        >-->
+<!--          <i class="el-icon-zoom-in"></i>-->
+<!--        </span>-->
+<!--        <span-->
+<!--          v-if="!disabled"-->
+<!--          class="el-upload-list__item-delete"-->
+<!--          @click="handleDownload(file)"-->
+<!--        >-->
+<!--          <i class="el-icon-download"></i>-->
+<!--        </span>-->
+<!--        <span-->
+<!--          v-if="!disabled"-->
+<!--          class="el-upload-list__item-delete"-->
+<!--          @click="handleRemove(file)"-->
+<!--        >-->
+<!--          <i class="el-icon-delete"></i>-->
+<!--        </span>-->
+<!--      </span>-->
+<!--            </div>-->
+<!--          </el-upload>-->
+<!--          <el-dialog :visible.sync="dialogVisible">-->
+<!--            <img width="100%" :src="dialogImageUrl" alt="">-->
+<!--          </el-dialog>-->
+
+
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="#"
             list-type="picture-card"
+            :auto-upload="false"
+            :show-file-list="true"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
+            :on-remove="handleRemove"
+            :on-change="uploadImg"
+            :before-upload="beforeUpload"
+            :on-success="successUpload">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -146,7 +191,8 @@
 </template>
 
 <script>
-import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic } from "@/api/dynamic/dynamic";
+import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic ,
+  uploadImage} from "@/api/dynamic/dynamic";
 
 export default {
   data() {
@@ -184,7 +230,11 @@ export default {
       rules: {
       },
       dialogImageUrl: '',
-      dialogVisible: false
+      dialogVisible: false,
+      fileList: null,
+      dialogImageUrl: '',
+      dialogVisible: false,
+      disabled: false
     };
   },
   created() {
@@ -192,6 +242,11 @@ export default {
     this.getDicts("dynamic_type").then(response => {
       this.typeOptions = response.data;
     });
+  },
+  computed:{
+    uploadAction:function () {
+      return "/dynamic/dynamic/upload";
+    }
   },
   methods: {
     /** 查询云托管动态管理列表 */
@@ -280,6 +335,15 @@ export default {
             addDynamic(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
+                // let formData = new FormData();
+                // formData.append("imagefiles", this.fileList);
+                // uploadImage(formData).then(response => {
+                //   if (response.code === 200) {
+                //     this.msgSuccess("修改成功");
+                //   } else {
+                //     this.msgError(response.msg);
+                //   }
+                // });
                 this.open = false;
                 this.getList();
               } else {
@@ -317,6 +381,39 @@ export default {
           this.download(response.msg);
         }).catch(function() {});
     },
+    // 上传预处理
+    beforeUpload(file) {
+      if (file.type.indexOf("image/") == -1) {
+        this.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
+      } else {
+        alert("图片预处理")
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          alert("onload--"+file.name);
+          //this.options.img = reader.result;
+        };
+      }
+    },
+
+    /** 上传图片 */
+    uploadImg (file, fileList) {
+      // this.fileList=fileList;
+      // alert(this.fileList);
+      let formData = new FormData();
+      formData.append("imagefile", file);
+      uploadImage(formData).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess("修改成功");
+        } else {
+          this.msgError(response.msg);
+        }
+      });
+    },
+    /** 上传成功 */
+    successUpload(res,file, fileList) {
+      alert("successUpload--"+file.name);
+    },
     /** 移除照片 */
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -325,6 +422,10 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    /** 下载照片 */
+    handleDownload(file) {
+      console.log(file);
     }
   }
 };
