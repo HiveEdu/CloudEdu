@@ -18,7 +18,7 @@ public class UrdiServiceImpl implements UrdiService {
     }
 
     @Override
-    public Long DeleteCityImg(Long id) {
+    public int  DeleteCityImg(Long id) {
         return urdiMapper.DeleteCityImg(id);
     }
 }
