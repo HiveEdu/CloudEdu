@@ -24,7 +24,7 @@ import com.myedu.framework.web.page.TableDataInfo;
  * 门店Controller
  * 
  * @author 梁龙飞
- * @date 2019-12-29
+ * @date 2020-01-01
  */
 @RestController
 @RequestMapping("/store/store")

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 门店对象 yun_store
  * 
  * @author 梁龙飞
- * @date 2019-12-29
+ * @date 2020-01-01
  */
 public class YunStore extends BaseEntity
 {
@@ -52,11 +52,11 @@ public class YunStore extends BaseEntity
 
     /** 门店地图坐标经纬度详情x */
     @Excel(name = "门店地图坐标经纬度详情x")
-    private Double lat;
+    private Double mapX;
 
     /** 门店地图坐标经纬度详情y */
     @Excel(name = "门店地图坐标经纬度详情y")
-    private Double lon;
+    private Double mapY;
 
     /** 门店类型（1托管班2培训机构3早教机构4家教5幼儿园） */
     @Excel(name = "门店类型", readConverterExp = "1=托管班2培训机构3早教机构4家教5幼儿园")
@@ -150,23 +150,23 @@ public class YunStore extends BaseEntity
     {
         return address;
     }
-    public void setLat(Double lat) 
+    public void setMapX(Double mapX) 
     {
-        this.lat = lat;
+        this.mapX = mapX;
     }
 
-    public Double getLat() 
+    public Double getMapX() 
     {
-        return lat;
+        return mapX;
     }
-    public void setLon(Double lon) 
+    public void setMapY(Double mapY) 
     {
-        this.lon = lon;
+        this.mapY = mapY;
     }
 
-    public Double getLon() 
+    public Double getMapY() 
     {
-        return lon;
+        return mapY;
     }
     public void setType(String type) 
     {
@@ -208,8 +208,8 @@ public class YunStore extends BaseEntity
             .append("video", getVideo())
             .append("license", getLicense())
             .append("address", getAddress())
-            .append("lat", getLat())
-            .append("lon", getLon())
+            .append("mapX", getMapX())
+            .append("mapY", getMapY())
             .append("type", getType())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

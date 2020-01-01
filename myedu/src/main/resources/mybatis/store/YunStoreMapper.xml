@@ -14,8 +14,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="video"    column="video"    />
         <result property="license"    column="license"    />
         <result property="address"    column="address"    />
-        <result property="lat"    column="lat"    />
-        <result property="lon"    column="lon"    />
+        <result property="mapX"    column="map_x"    />
+        <result property="mapY"    column="map_y"    />
         <result property="type"    column="type"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStoreVo">
-        select id, name, logo, manager, manager_phone, photos, video, license, address, lat, lon, type, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_store
+        select id, name, logo, manager, manager_phone, photos, video, license, address, map_x, map_y, type, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_store
     </sql>
 
     <select id="selectYunStoreList" parameterType="YunStore" resultMap="YunStoreResult">
@@ -40,8 +40,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="video != null  and video != ''"> and video = #{video}</if>
             <if test="license != null  and license != ''"> and license = #{license}</if>
             <if test="address != null  and address != ''"> and address = #{address}</if>
-            <if test="lat != null "> and lat = #{lat}</if>
-            <if test="lon != null "> and lon = #{lon}</if>
+            <if test="mapX != null "> and map_x = #{mapX}</if>
+            <if test="mapY != null "> and map_y = #{mapY}</if>
             <if test="type != null  and type != ''"> and type = #{type}</if>
             <if test="createById != null "> and create_by_id = #{createById}</if>
         </where>
@@ -63,8 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="video != null  and video != ''">video,</if>
             <if test="license != null  and license != ''">license,</if>
             <if test="address != null  and address != ''">address,</if>
-            <if test="lat != null ">lat,</if>
-            <if test="lon != null ">lon,</if>
+            <if test="mapX != null ">map_x,</if>
+            <if test="mapY != null ">map_y,</if>
             <if test="type != null  and type != ''">type,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
@@ -82,8 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="video != null  and video != ''">#{video},</if>
             <if test="license != null  and license != ''">#{license},</if>
             <if test="address != null  and address != ''">#{address},</if>
-            <if test="lat != null ">#{lat},</if>
-            <if test="lon != null ">#{lon},</if>
+            <if test="mapX != null ">#{mapX},</if>
+            <if test="mapY != null ">#{mapY},</if>
             <if test="type != null  and type != ''">#{type},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
@@ -105,8 +105,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="video != null  and video != ''">video = #{video},</if>
             <if test="license != null  and license != ''">license = #{license},</if>
             <if test="address != null  and address != ''">address = #{address},</if>
-            <if test="lat != null ">lat = #{lat},</if>
-            <if test="lon != null ">lon = #{lon},</if>
+            <if test="mapX != null ">map_x = #{mapX},</if>
+            <if test="mapY != null ">map_y = #{mapY},</if>
             <if test="type != null  and type != ''">type = #{type},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>

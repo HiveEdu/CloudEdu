@@ -7,7 +7,7 @@ import java.util.List;
  * 门店Mapper接口
  * 
  * @author 梁龙飞
- * @date 2019-12-29
+ * @date 2020-01-01
  */
 public interface YunStoreMapper 
 {
