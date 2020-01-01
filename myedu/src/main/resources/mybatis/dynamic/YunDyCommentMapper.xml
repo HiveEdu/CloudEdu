@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.dynamic.mapper.YunDyCommentMapper">
+    
+    <resultMap type="YunDyComment" id="YunDyCommentResult">
+        <result property="id"    column="id"    />
+        <result property="dyId"    column="dy_id"    />
+        <result property="content"    column="content"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectYunDyCommentVo">
+        select id, dy_id, content, create_by_id, create_by, create_time, update_by, update_time, del_flag from yun_dy_comment
+    </sql>
+
+    <select id="selectYunDyCommentList" parameterType="YunDyComment" resultMap="YunDyCommentResult">
+        <include refid="selectYunDyCommentVo"/>
+        <where>  
+            <if test="dyId != null "> and dy_id = #{dyId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunDyCommentById" parameterType="Long" resultMap="YunDyCommentResult">
+        <include refid="selectYunDyCommentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunDyComment" parameterType="YunDyComment" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_dy_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dyId != null ">dy_id,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dyId != null ">#{dyId},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunDyComment" parameterType="YunDyComment">
+        update yun_dy_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dyId != null ">dy_id = #{dyId},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunDyCommentById" parameterType="Long">
+        delete from yun_dy_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteYunDyCommentByIds" parameterType="String">
+        delete from yun_dy_comment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

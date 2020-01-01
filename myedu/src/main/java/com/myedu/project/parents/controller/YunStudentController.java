@@ -48,6 +48,18 @@ public class YunStudentController extends BaseController
         return getDataTable(list);
     }
 
+    /*
+     * @Description :学生基础数据选择
+     * @Author : 梁少鹏
+     * @Date : 2019/12/30 21:55
+     */
+    @GetMapping(value = "/baseStudent")
+    public AjaxResult baseStudent(@PathVariable YunStudentVo yunStudentVo)
+    {
+        List<YunStudentVo> list = (List<YunStudentVo>) yunStudentService.selectYunStudentList(yunStudentVo).
+                stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
+        return AjaxResult.success(list);
+    }
     /**
      * 导出学生数据列表
      */
