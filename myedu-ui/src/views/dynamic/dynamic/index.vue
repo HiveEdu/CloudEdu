@@ -193,8 +193,9 @@
 <script>
 import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic ,
   uploadImage} from "@/api/dynamic/dynamic";
-
+import { VueCropper } from "vue-cropper";
 export default {
+  components: { VueCropper },
   data() {
     return {
       // 遮罩层
@@ -245,7 +246,7 @@ export default {
   },
   computed:{
     uploadAction:function () {
-      return "/dynamic/dynamic/upload";
+      return process.env.VUE_APP_BASE_API + "/common/upload"
     }
   },
   methods: {
@@ -386,12 +387,19 @@ export default {
       if (file.type.indexOf("image/") == -1) {
         this.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
       } else {
-        alert("图片预处理")
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
+          formData.append("avatarfile", reader);
+          uploadImage(formData).then(response => {
+            if (response.code === 200) {
+              this.msgSuccess("修改成功");
+            } else {
+              this.msgError(response.msg);
+            }
+          });
           alert("onload--"+file.name);
-          //this.options.img = reader.result;
         };
       }
     },
@@ -400,16 +408,26 @@ export default {
     uploadImg (file, fileList) {
       // this.fileList=fileList;
       // alert(this.fileList);
-      let formData = new FormData();
-      formData.append("imagefile", file);
-      uploadImage(formData).then(response => {
-        if (response.code === 200) {
-          this.msgSuccess("修改成功");
-        } else {
-          this.msgError(response.msg);
-        }
+      // let formData = new FormData();
+      // formData.append("avatarfile", file);
+      // uploadImage(formData).then(response => {
+      //   if (response.code === 200) {
+      //     this.msgSuccess("修改成功");
+      //   } else {
+      //     this.msgError(response.msg);
+      //   }
+      // });
+    },
+    getCropBlob(cb) {
+      this.getCropChecked(data => {
+        data.toBlob(
+          blob => cb(blob),
+          "image/" + this.outputType,
+          this.outputSize
+        );
       });
     },
+
     /** 上传成功 */
     successUpload(res,file, fileList) {
       alert("successUpload--"+file.name);
