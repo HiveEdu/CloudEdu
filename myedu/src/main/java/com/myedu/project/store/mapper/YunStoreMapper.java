@@ -1,6 +1,9 @@
 package com.myedu.project.store.mapper;
 
+import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.system.domain.SysRole;
+
 import java.util.List;
 
 /**

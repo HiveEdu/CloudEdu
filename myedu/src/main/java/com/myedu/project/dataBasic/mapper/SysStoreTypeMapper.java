@@ -9,7 +9,7 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2019-12-29
  */
-public interface SysStoreTypeMapper 
+public interface SysStoreTypeMapper
 {
     /**
      * 查询门店类型
@@ -18,6 +18,16 @@ public interface SysStoreTypeMapper
      * @return 门店类型
      */
     public SysStoreType selectSysStoreTypeById(Long id);
+
+    /**
+     * 通过类型查询门店
+     *
+     * @param Name 门店ID
+     * @return 门店
+     */
+
+    public List<SysStoreType> selectTypesByStoreName(String Name);
+
 
     /**
      * 查询门店类型列表

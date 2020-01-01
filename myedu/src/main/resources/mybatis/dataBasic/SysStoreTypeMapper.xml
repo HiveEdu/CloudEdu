@@ -31,6 +31,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysStoreTypeVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectTypesByStoreName" parameterType="String" resultMap="SysStoreTypeResult">
+        <include refid="selectSysStoreTypeVo"/>
+        where name = #{name}
+    </select>
         
     <insert id="insertSysStoreType" parameterType="SysStoreType" useGeneratedKeys="true" keyProperty="id">
         insert into sys_store_type
