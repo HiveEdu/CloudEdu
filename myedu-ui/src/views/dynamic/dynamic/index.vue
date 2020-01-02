@@ -11,6 +11,15 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="创建人Id" prop="createById">
+        <el-input
+          v-model="queryParams.createById"
+          placeholder="请输入创建人Id"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="创建者" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
@@ -19,6 +28,14 @@
           size="small"
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="创建时间" prop="createTime">
+        <el-date-picker clearable size="small" style="width: 200px"
+          v-model="queryParams.createTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="选择创建时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -69,11 +86,8 @@
 
     <el-table v-loading="loading" :data="dynamicList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="动态类型" align="center" prop="type" :formatter="typeFormat" />
-      <el-table-column label="动态内容" align="center" prop="content" />
-      <el-table-column label="点赞数量" align="center" prop="likes" />
-      <el-table-column label="评论数量" align="center" prop="comments" />
-      <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -111,70 +125,25 @@
     <el-dialog :title="title" :visible.sync="open" width="60%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="动态内容" prop="content">
-          <el-input v-model="form.content"  type="textarea"
-                    :rows="4" placeholder="请输入动态内容" />
+          <el-input v-model="form.content" placeholder="请输入动态内容" />
         </el-form-item>
         <el-form-item label="动态类型">
-        <el-select v-model="form.type" placeholder="请选择动态类型">
-          <el-option
-            v-for="dict in typeOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          ></el-option>
-         </el-select>
+          <el-select v-model="form.type" placeholder="请选择动态类型">
+            <el-option
+              v-for="dict in typeOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <!--            :action="uploadAction" :fileList="fileList"-->、
-        <el-form-item label="照片上传">
-<!--          <el-upload-->
-<!--            action="#"-->
-<!--            list-type="picture-card"-->
-<!--            :auto-upload="false">-->
-<!--            <i slot="default" class="el-icon-plus"></i>-->
-<!--            <div slot="file" slot-scope="{file}">-->
-<!--              <img-->
-<!--                class="el-upload-list__item-thumbnail"-->
-<!--                :src="file.url" alt=""-->
-<!--              >-->
-<!--              <span class="el-upload-list__item-actions">-->
-<!--        <span-->
-<!--          class="el-upload-list__item-preview"-->
-<!--          @click="handlePictureCardPreview(file)"-->
-<!--        >-->
-<!--          <i class="el-icon-zoom-in"></i>-->
-<!--        </span>-->
-<!--        <span-->
-<!--          v-if="!disabled"-->
-<!--          class="el-upload-list__item-delete"-->
-<!--          @click="handleDownload(file)"-->
-<!--        >-->
-<!--          <i class="el-icon-download"></i>-->
-<!--        </span>-->
-<!--        <span-->
-<!--          v-if="!disabled"-->
-<!--          class="el-upload-list__item-delete"-->
-<!--          @click="handleRemove(file)"-->
-<!--        >-->
-<!--          <i class="el-icon-delete"></i>-->
-<!--        </span>-->
-<!--      </span>-->
-<!--            </div>-->
-<!--          </el-upload>-->
-<!--          <el-dialog :visible.sync="dialogVisible">-->
-<!--            <img width="100%" :src="dialogImageUrl" alt="">-->
-<!--          </el-dialog>-->
-
-
+        <el-form-item label="图片上传">
           <el-upload
-            action="#"
+            :action="uploadImgUrl"
             list-type="picture-card"
-            :auto-upload="false"
-            :show-file-list="true"
+            :headers="headers"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :on-change="uploadImg"
-            :before-upload="beforeUpload"
-            :on-success="successUpload">
+            :on-remove="handleRemove">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -191,11 +160,9 @@
 </template>
 
 <script>
-import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic ,
-  uploadImage} from "@/api/dynamic/dynamic";
-import { VueCropper } from "vue-cropper";
+import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic } from "@/api/dynamic/dynamic";
+import { getToken } from '@/utils/auth'
 export default {
-  components: { VueCropper },
   data() {
     return {
       // 遮罩层
@@ -232,22 +199,18 @@ export default {
       },
       dialogImageUrl: '',
       dialogVisible: false,
-      fileList: null,
-      dialogImageUrl: '',
-      dialogVisible: false,
-      disabled: false
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      }
     };
   },
   created() {
+    alert(getToken());
     this.getList();
     this.getDicts("dynamic_type").then(response => {
       this.typeOptions = response.data;
     });
-  },
-  computed:{
-    uploadAction:function () {
-      return process.env.VUE_APP_BASE_API + "/common/upload"
-    }
   },
   methods: {
     /** 查询云托管动态管理列表 */
@@ -306,7 +269,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加动态";
+      this.title = "添加云托管动态管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -315,7 +278,7 @@ export default {
       getDynamic(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改动态";
+        this.title = "修改云托管动态管理";
       });
     },
     /** 提交按钮 */
@@ -336,15 +299,6 @@ export default {
             addDynamic(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
-                // let formData = new FormData();
-                // formData.append("imagefiles", this.fileList);
-                // uploadImage(formData).then(response => {
-                //   if (response.code === 200) {
-                //     this.msgSuccess("修改成功");
-                //   } else {
-                //     this.msgError(response.msg);
-                //   }
-                // });
                 this.open = false;
                 this.getList();
               } else {
@@ -382,68 +336,12 @@ export default {
           this.download(response.msg);
         }).catch(function() {});
     },
-    // 上传预处理
-    beforeUpload(file) {
-      if (file.type.indexOf("image/") == -1) {
-        this.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
-      } else {
-
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          formData.append("avatarfile", reader);
-          uploadImage(formData).then(response => {
-            if (response.code === 200) {
-              this.msgSuccess("修改成功");
-            } else {
-              this.msgError(response.msg);
-            }
-          });
-          alert("onload--"+file.name);
-        };
-      }
-    },
-
-    /** 上传图片 */
-    uploadImg (file, fileList) {
-      // this.fileList=fileList;
-      // alert(this.fileList);
-      // let formData = new FormData();
-      // formData.append("avatarfile", file);
-      // uploadImage(formData).then(response => {
-      //   if (response.code === 200) {
-      //     this.msgSuccess("修改成功");
-      //   } else {
-      //     this.msgError(response.msg);
-      //   }
-      // });
-    },
-    getCropBlob(cb) {
-      this.getCropChecked(data => {
-        data.toBlob(
-          blob => cb(blob),
-          "image/" + this.outputType,
-          this.outputSize
-        );
-      });
-    },
-
-    /** 上传成功 */
-    successUpload(res,file, fileList) {
-      alert("successUpload--"+file.name);
-    },
-    /** 移除照片 */
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
-    /** 预览照片 */
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
-    },
-    /** 下载照片 */
-    handleDownload(file) {
-      console.log(file);
     }
   }
 };
