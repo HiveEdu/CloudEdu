@@ -1,17 +1,17 @@
 package com.myedu.project.system.controller;
 
 import java.util.List;
+
+import com.myedu.project.thumbsup.service.LikedService;
+import com.myedu.project.thumbsup.service.RedisService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.myedu.common.constant.UserConstants;
 import com.myedu.common.utils.SecurityUtils;
@@ -50,6 +50,15 @@ public class SysUserController extends BaseController
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    LikedService likedService;
+
+    @Autowired
+    RedisService redisService;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     /**
      * 获取用户列表
@@ -194,5 +203,33 @@ public class SysUserController extends BaseController
         userService.checkUserAllowed(user);
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.updateUserStatus(user));
+    }
+
+    @PostMapping("/like")
+    @ApiOperation("点赞")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "likedUserId", value = "被点赞的用户id"),
+            @ApiImplicitParam(name = "likedPostId", value = "点赞的用户id")
+    })
+    public AjaxResult like(@RequestParam("likedUserId") String likedUserId,
+                         @RequestParam("likedPostId") String likedPostId) {
+        //先把数据存到Redis里,再定时存回数据库
+        redisService.saveLiked2Redis(likedUserId, likedPostId);
+        redisService.incrementLikedCount(likedUserId);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/unlike")
+    @ApiOperation("取消点赞")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "likedUserId", value = "被点赞的用户id"),
+            @ApiImplicitParam(name = "likedPostId", value = "点赞的用户id")
+    })
+    public AjaxResult unlike(@RequestParam("likedUserId") String likedUserId,
+                           @RequestParam("likedPostId") String likedPostId) {
+        //取消点赞,先存到Redis里面，再定时写到数据库里
+        redisService.unlikeFromRedis(likedUserId, likedPostId);
+        redisService.decrementLikedCount(likedUserId);
+        return AjaxResult.success();
     }
 }
