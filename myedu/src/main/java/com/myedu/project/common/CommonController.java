@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.myedu.common.utils.StringUtils;
@@ -67,7 +68,7 @@ public class CommonController
      * 通用上传请求
      */
     @PostMapping("/common/upload")
-    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    public AjaxResult uploadFile(@RequestParam(value = "file", required=false) MultipartFile file) throws Exception
     {
         try
         {
@@ -86,4 +87,32 @@ public class CommonController
             return AjaxResult.error(e.getMessage());
         }
     }
+
+    /**
+     * 通用上传请求
+     */
+    @PostMapping("/common/uploads")
+    public AjaxResult uploadFiles(@RequestParam(value = "files", required=false) MultipartFile[] files) throws Exception
+    {
+        try
+        {
+            // 上传文件路径
+            String filePath = MyEduConfig.getUploadPath();
+            AjaxResult ajax = AjaxResult.success();
+            String url="";
+            for (int i = 0; i < files.length; i++) {
+                if(files[i]!=null){
+                    String fileName= FileUploadUtils.upload(filePath, files[i]);
+                    url=url+serverConfig.getUrl()+fileName+",";
+                }
+            }
+            ajax.put("url", url);
+            return ajax;
+        }
+        catch (Exception e)
+        {
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
 }

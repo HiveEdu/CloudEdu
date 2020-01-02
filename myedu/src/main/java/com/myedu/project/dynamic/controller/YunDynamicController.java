@@ -113,18 +113,4 @@ public class YunDynamicController extends BaseController
         return toAjax(yunDynamicService.deleteYunDynamicByIds(ids));
     }
 
-    @PostMapping("/upload")
-    public AjaxResult upload(@RequestParam("imagefile") MultipartFile file) throws IOException
-    {
-//        List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("imagefiles");
-//        for (int i =0; i< files.length; ++i) {
-//            if (!files[i].isEmpty())
-//            {
-//                String avatar = FileUploadUtils.upload(MyEduConfig.getAvatarPath(), files[i]);
-//            }
-//
-//        }
-        String avatar = FileUploadUtils.upload(MyEduConfig.getAvatarPath(), file);
-        return AjaxResult.error("上传图片异常，请联系管理员");
-    }
 }

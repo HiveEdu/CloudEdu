@@ -114,7 +114,6 @@ export default {
       this.$refs.cropper.getCropBlob(data => {
         let formData = new FormData();
         formData.append("avatarfile", data);
-        alert(formData)
         uploadAvatar(formData).then(response => {
           if (response.code === 200) {
             this.open = false;

@@ -141,9 +141,17 @@
           <el-upload
             :action="uploadImgUrl"
             list-type="picture-card"
+            content-type="false"
             :headers="headers"
+            :file-list="fileList"
+            :show-file-list="true"
+            :before-upload="beforeUpload"
+            :on-change="onChange"
+            :on-success="onSuccess"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
+            :on-remove="handleRemove"
+            accept='.jpg,.jpeg,.png,.gif'
+            >
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -202,11 +210,13 @@ export default {
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
         Authorization: 'Bearer ' + getToken()
-      }
+      },
+      fileListJson:null,
+      fileList:null,
     };
   },
   created() {
-    alert(getToken());
+    this.fileList=null,
     this.getList();
     this.getDicts("dynamic_type").then(response => {
       this.typeOptions = response.data;
@@ -277,6 +287,7 @@ export default {
       const id = row.id || this.ids
       getDynamic(id).then(response => {
         this.form = response.data;
+        this.fileList=JSON.parse(this.form.picture);
         this.open = true;
         this.title = "修改云托管动态管理";
       });
@@ -286,6 +297,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
+            this.form.picture=this.fileListJson;
             updateDynamic(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -296,6 +308,7 @@ export default {
               }
             });
           } else {
+            this.form.picture=this.fileListJson;
             addDynamic(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -336,8 +349,22 @@ export default {
           this.download(response.msg);
         }).catch(function() {});
     },
+    beforeUpload(file){
+    },
+    onChange(file, fileList){
+    },
+    onSuccess(res,file, fileList){
+      debugger
+      if(res.code=="200"){
+        this.fileListJson=JSON.stringify(fileList);
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.fileListJson=JSON.stringify(fileList);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;

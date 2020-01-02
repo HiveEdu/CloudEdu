@@ -53,10 +53,9 @@ export function exportDynamic(query) {
 }
 
 //上傳照片动态
-export function uploadImage(data) {
+export function uploads(data) {
   return request({
-    // url: '/dynamic/dynamic/upload',
-    url: '/system/user/profile/avatar',
+    url: data.url,
     method: 'post',
     data: data
   })
