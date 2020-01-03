@@ -139,6 +139,7 @@
         </el-form-item>
         <el-form-item label="图片上传">
           <el-upload
+            ref="upload"
             :action="uploadImgUrl"
             list-type="picture-card"
             content-type="false"
@@ -211,12 +212,11 @@ export default {
       headers: {
         Authorization: 'Bearer ' + getToken()
       },
-      fileListJson:null,
       fileList:null,
+      fileListnew:[],
     };
   },
   created() {
-    this.fileList=null,
     this.getList();
     this.getDicts("dynamic_type").then(response => {
       this.typeOptions = response.data;
@@ -239,6 +239,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.$refs.upload.clearFiles();
       this.reset();
     },
     // 表单重置
@@ -280,14 +281,20 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加云托管动态管理";
+      this.fileList=null;
+      this.fileListnew=[];
+      this.$refs.upload.clearFiles();
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
+      this.fileList=null;
+      this.fileListnew=[];
       const id = row.id || this.ids
       getDynamic(id).then(response => {
         this.form = response.data;
         this.fileList=JSON.parse(this.form.picture);
+        this.fileListnew=JSON.parse(this.form.picture);
         this.open = true;
         this.title = "修改云托管动态管理";
       });
@@ -297,7 +304,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            this.form.picture=this.fileListJson;
+            this.form.picture=JSON.stringify(this.fileListnew);
             updateDynamic(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -308,7 +315,7 @@ export default {
               }
             });
           } else {
-            this.form.picture=this.fileListJson;
+            this.form.picture=JSON.stringify(this.fileListnew);
             addDynamic(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -321,6 +328,7 @@ export default {
           }
         }
       });
+      this.$refs.upload.clearFiles();
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -354,9 +362,9 @@ export default {
     onChange(file, fileList){
     },
     onSuccess(res,file, fileList){
-      debugger
       if(res.code=="200"){
-        this.fileListJson=JSON.stringify(fileList);
+        this.fileList=fileList
+        this.fileListnew.push({uid:file.uid,name:file.name,status:file.status,url:res.url})
         this.msgSuccess("上传成功");
       }else{
         this.msgError("上传失败");
@@ -364,7 +372,12 @@ export default {
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
-      this.fileListJson=JSON.stringify(fileList);
+      this.fileList=fileList;
+      for(let i=0;i<this.fileListnew.length;i++) {
+        if (this.fileListnew[i].uid === file.uid) {
+          this.fileListnew.splice(i);
+        }
+      }
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
