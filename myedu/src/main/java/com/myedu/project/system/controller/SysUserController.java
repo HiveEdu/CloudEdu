@@ -205,6 +205,11 @@ public class SysUserController extends BaseController
         return toAjax(userService.updateUserStatus(user));
     }
 
+
+    /**
+     * 点赞
+     */
+    @PreAuthorize("@ss.hasPermi('system:user:like')")
     @PostMapping("/like")
     @ApiOperation("点赞")
     @ApiImplicitParams({
@@ -219,6 +224,8 @@ public class SysUserController extends BaseController
         return AjaxResult.success();
     }
 
+
+    @PreAuthorize("@ss.hasPermi('system:user:unlike')")
     @PostMapping("/unlike")
     @ApiOperation("取消点赞")
     @ApiImplicitParams({
