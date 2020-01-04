@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询学生请假列表
 export function listLeave(query) {
   return request({
@@ -12,7 +12,7 @@ export function listLeave(query) {
 // 查询学生请假详细
 export function getLeave(id) {
   return request({
-    url: '/parents/leave/' + id,
+    url: '/parents/leave/' + praseStrEmpty(id),
     method: 'get'
   })
 }

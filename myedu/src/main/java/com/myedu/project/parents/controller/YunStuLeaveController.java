@@ -3,8 +3,11 @@ package com.myedu.project.parents.controller;
 import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.StringUtils;
 import com.myedu.project.parents.domain.YunStudent;
 import com.myedu.project.parents.domain.vo.YunStuLeaveVo;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+import com.myedu.project.parents.service.IYunStudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +39,8 @@ public class YunStuLeaveController extends BaseController
 {
     @Autowired
     private IYunStuLeaveService yunStuLeaveService;
-
+    @Autowired
+    private IYunStudentService yunStudentService;
     /**
      * 查询学生请假列表
      */
@@ -66,10 +70,19 @@ public class YunStuLeaveController extends BaseController
      * 获取学生请假详细信息
      */
     @PreAuthorize("@ss.hasPermi('parents:leave:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value ="id", required = false) Long id)
     {
-        return AjaxResult.success(yunStuLeaveService.selectYunStuLeaveById(id));
+        AjaxResult ajax = AjaxResult.success();
+        YunStudentVo yunStudentVo=new YunStudentVo();
+        yunStudentVo.setCreateById(SecurityUtils.getUserId());
+        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+        ajax.put("studentLists", list);
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG, yunStuLeaveService.selectYunStuLeaveById(id));
+        }
+        return ajax;
     }
 
     /**

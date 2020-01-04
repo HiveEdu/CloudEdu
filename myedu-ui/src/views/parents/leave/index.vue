@@ -137,8 +137,15 @@
             placeholder="选择结束时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="关联学生ID" prop="studentId">
-          <el-input v-model="form.studentId" placeholder="请输入关联学生ID" />
+        <el-form-item label="学生" prop="studentId">
+          <el-select v-model="form.studentId"  placeholder="请选择">
+            <el-option
+              v-for="item in studentList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
@@ -174,6 +181,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 学生选项
+      studentList: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -248,12 +257,18 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生请假";
+      getLeave().then(response => {
+        this.studentList= response.studentLists;
+        this.open = true;
+        this.title = "修改学生请假";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
       getLeave(id).then(response => {
+        this.studentList= response.studentLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生请假";
