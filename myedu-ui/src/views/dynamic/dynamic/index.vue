@@ -354,7 +354,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加云托管动态管理";
+      this.title = "添加动态";
       this.fileListnew=[];
       this.fileList=[];
       // this.$refs.upload.clearFiles();
@@ -366,7 +366,7 @@ export default {
       getDynamic(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改云托管动态管理";
+        this.title = "修改动态";
         this.fileList=JSON.parse(this.form.picture);
         this.fileListnew=JSON.parse(this.form.picture);
         // this.$refs.upload.clearFiles();
