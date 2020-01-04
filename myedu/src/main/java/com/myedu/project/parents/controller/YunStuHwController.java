@@ -2,6 +2,7 @@ package com.myedu.project.parents.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.parents.domain.vo.YunStuHwVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,9 @@ public class YunStuHwController extends BaseController
     @Log(title = "学生身高体重记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuHw yunStuHw)
-    {
+
+    {   yunStuHw.setCreateById(SecurityUtils.getUserId());
+        yunStuHw.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStuHwService.insertYunStuHw(yunStuHw));
     }
 

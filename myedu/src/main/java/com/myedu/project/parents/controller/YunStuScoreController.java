@@ -2,6 +2,7 @@ package com.myedu.project.parents.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.parents.domain.vo.YunStuScoreVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,8 @@ public class YunStuScoreController extends BaseController
     @Log(title = "学生成绩", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuScore yunStuScore)
-    {
+    {   yunStuScore.setCreateById(SecurityUtils.getUserId());
+        yunStuScore.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStuScoreService.insertYunStuScore(yunStuScore));
     }
 
@@ -88,7 +90,7 @@ public class YunStuScoreController extends BaseController
     @Log(title = "学生成绩", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuScore yunStuScore)
-    {
+    {   yunStuScore.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(yunStuScoreService.updateYunStuScore(yunStuScore));
     }
 
