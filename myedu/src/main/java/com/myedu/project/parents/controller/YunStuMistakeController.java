@@ -3,7 +3,10 @@ package com.myedu.project.parents.controller;
 import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.StringUtils;
 import com.myedu.project.parents.domain.vo.YunStuMistakeVo;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+import com.myedu.project.parents.service.IYunStudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +38,8 @@ public class YunStuMistakeController extends BaseController
 {
     @Autowired
     private IYunStuMistakeService yunStuMistakeService;
+    @Autowired
+    private IYunStudentService yunStudentService;
 
     /**
      * 查询学生错题记录列表
@@ -65,10 +70,19 @@ public class YunStuMistakeController extends BaseController
      * 获取学生错题记录详细信息
      */
     @PreAuthorize("@ss.hasPermi('parents:mistake:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value ="id", required = false) Long id)
     {
-        return AjaxResult.success(yunStuMistakeService.selectYunStuMistakeById(id));
+        AjaxResult ajax = AjaxResult.success();
+        YunStudentVo yunStudentVo=new YunStudentVo();
+        yunStudentVo.setCreateById(SecurityUtils.getUserId());
+        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+        ajax.put("studentLists", list);
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG, yunStuMistakeService.selectYunStuMistakeById(id));
+        }
+        return ajax;
     }
 
     /**

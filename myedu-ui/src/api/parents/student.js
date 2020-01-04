@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询学生数据列表
 export function listStudent(query) {
   return request({
@@ -12,7 +12,7 @@ export function listStudent(query) {
 // 查询学生数据详细
 export function getStudent(id) {
   return request({
-    url: '/parents/student/' + id,
+    url: '/parents/student/' + praseStrEmpty(id),
     method: 'get'
   })
 }

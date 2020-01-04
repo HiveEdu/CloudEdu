@@ -155,7 +155,14 @@
           <el-input v-model="form.school" placeholder="请输入学生就读所在学校" />
         </el-form-item>
         <el-form-item label="年级" prop="gradeId">
-          <el-input v-model="form.gradeId" placeholder="请输入关联年级Id" />
+          <el-select v-model="form.gradeId"  placeholder="请选择">
+            <el-option
+              v-for="item in gradeLists"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -172,6 +179,8 @@ import { listStudent, getStudent, delStudent, addStudent, updateStudent, exportS
 export default {
   data() {
     return {
+      //年级列表
+      gradeLists:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -266,12 +275,16 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生数据";
+      getStudent().then(response => {
+        this.gradeLists=response.gradeLists;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
       getStudent(id).then(response => {
+        this.gradeLists=response.gradeLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生数据";

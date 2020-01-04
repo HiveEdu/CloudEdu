@@ -110,6 +110,16 @@
     <!-- 添加或修改学生作业对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="学生" prop="studentId">
+          <el-select v-model="form.studentId"  placeholder="请选择">
+            <el-option
+              v-for="item in studentList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="作业名称" prop="hworkName">
           <el-input v-model="form.hworkName" placeholder="请输入作业名称" />
         </el-form-item>
@@ -136,9 +146,7 @@
             placeholder="选择完成时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="关联学生Id" prop="studentId">
-          <el-input v-model="form.studentId" placeholder="请输入关联学生Id" />
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -154,6 +162,8 @@ import { listHwork, getHwork, delHwork, addHwork, updateHwork, exportHwork } fro
 export default {
   data() {
     return {
+      // 学生选项
+      studentList: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -254,12 +264,16 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生作业";
+      getHwork().then(response => {
+        this.studentList= response.studentLists;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
       getHwork(id).then(response => {
+        this.studentList= response.studentLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生作业";

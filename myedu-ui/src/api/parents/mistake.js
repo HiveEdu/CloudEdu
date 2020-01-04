@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询学生错题记录列表
 export function listMistake(query) {
   return request({
@@ -12,7 +12,7 @@ export function listMistake(query) {
 // 查询学生错题记录详细
 export function getMistake(id) {
   return request({
-    url: '/parents/mistake/' + id,
+    url: '/parents/mistake/' + praseStrEmpty(id),
     method: 'get'
   })
 }

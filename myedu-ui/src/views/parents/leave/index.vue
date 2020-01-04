@@ -259,8 +259,6 @@ export default {
       this.title = "添加学生请假";
       getLeave().then(response => {
         this.studentList= response.studentLists;
-        this.open = true;
-        this.title = "修改学生请假";
       });
     },
     /** 修改按钮操作 */

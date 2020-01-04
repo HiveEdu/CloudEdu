@@ -3,6 +3,9 @@ package com.myedu.project.parents.controller;
 import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.StringUtils;
+import com.myedu.project.dataBasic.domain.SysGrade;
+import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,8 @@ public class YunStudentController extends BaseController
 {
     @Autowired
     private IYunStudentService yunStudentService;
-
+    @Autowired
+    private ISysGradeService sysGradeService;
     /**
      * 查询学生数据列表
      */
@@ -65,10 +69,18 @@ public class YunStudentController extends BaseController
      * 获取学生数据详细信息
      */
     @PreAuthorize("@ss.hasPermi('parents:student:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value ="id", required = false) Long id)
     {
-        return AjaxResult.success(yunStudentService.selectYunStudentById(id));
+        AjaxResult ajax = AjaxResult.success();
+        SysGrade sysGrade=new SysGrade();
+        List<SysGrade> list = sysGradeService.selectSysGradeList(sysGrade);
+        ajax.put("gradeLists", list);
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG, yunStudentService.selectYunStudentById(id));
+        }
+        return ajax;
     }
 
     /**

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询学生作业列表
 export function listHwork(query) {
   return request({
@@ -12,7 +12,7 @@ export function listHwork(query) {
 // 查询学生作业详细
 export function getHwork(id) {
   return request({
-    url: '/parents/hwork/' + id,
+    url: '/parents/hwork/' + praseStrEmpty(id),
     method: 'get'
   })
 }

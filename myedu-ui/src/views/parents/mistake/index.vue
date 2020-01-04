@@ -110,6 +110,16 @@
     <!-- 添加或修改学生错题记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="学生" prop="studentId">
+          <el-select v-model="form.studentId"  placeholder="请选择">
+            <el-option
+              v-for="item in studentList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="错题来源" prop="source">
           <el-input v-model="form.source" type="text" placeholder="请输入内容" />
         </el-form-item>
@@ -121,9 +131,6 @@
         </el-form-item>
         <el-form-item label="解决思路" prop="solutions">
           <el-input v-model="form.solutions" placeholder="请输入解决思路" />
-        </el-form-item>
-        <el-form-item label="关联学生id" prop="studentId">
-          <el-input v-model="form.studentId" placeholder="请输入关联学生id" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -140,6 +147,8 @@ import { listMistake, getMistake, delMistake, addMistake, updateMistake, exportM
 export default {
   data() {
     return {
+      // 学生选项
+      studentList: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -234,12 +243,16 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生错题记录";
+      getMistake().then(response => {
+        this.studentList= response.studentLists;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
       getMistake(id).then(response => {
+        this.studentList= response.studentLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生错题记录";
