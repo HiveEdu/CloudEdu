@@ -281,14 +281,12 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加云托管动态管理";
-      this.fileList=null;
       this.fileListnew=[];
       this.$refs.upload.clearFiles();
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      this.fileList=null;
       this.fileListnew=[];
       const id = row.id || this.ids
       getDynamic(id).then(response => {
