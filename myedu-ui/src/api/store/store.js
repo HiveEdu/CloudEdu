@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询门店列表
 export function listStore(query) {
   return request({
-    url: '/parents/store/list',
+    url: '/store/store/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listStore(query) {
 // 查询门店详细
 export function getStore(id) {
   return request({
-    url: '/parents/store/' + id,
+    url: '/store/store/' + id,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getStore(id) {
 // 新增门店
 export function addStore(data) {
   return request({
-    url: '/parents/store',
+    url: '/store/store',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addStore(data) {
 // 修改门店
 export function updateStore(data) {
   return request({
-    url: '/parents/store',
+    url: '/store/store',
     method: 'put',
     data: data
   })

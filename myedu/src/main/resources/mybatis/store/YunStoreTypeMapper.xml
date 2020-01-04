@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreTypeMapper">
+    
+    <resultMap type="YunStoreType" id="YunStoreTypeResult">
+        <result property="storeId"    column="store_id"    />
+        <result property="typeId"    column="type_id"    />
+    </resultMap>
+
+    <sql id="selectYunStoreTypeVo">
+        select store_id, type_id from yun_store_type
+    </sql>
+
+    <select id="selectYunStoreTypeList" parameterType="YunStoreType" resultMap="YunStoreTypeResult">
+        <include refid="selectYunStoreTypeVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectYunStoreTypeById" parameterType="Long" resultMap="YunStoreTypeResult">
+        <include refid="selectYunStoreTypeVo"/>
+        where store_id = #{storeId}
+    </select>
+        
+    <insert id="insertYunStoreType" parameterType="YunStoreType">
+        insert into yun_store_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">store_id,</if>
+            <if test="typeId != null ">type_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="typeId != null ">#{typeId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreType" parameterType="YunStoreType">
+        update yun_store_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeId != null ">type_id = #{typeId},</if>
+        </trim>
+        where store_id = #{storeId}
+    </update>
+
+    <delete id="deleteYunStoreTypeById" parameterType="Long">
+        delete from yun_store_type where store_id = #{storeId}
+    </delete>
+
+    <delete id="deleteYunStoreTypeByIds" parameterType="String">
+        delete from yun_store_type where store_id in 
+        <foreach item="storeId" collection="array" open="(" separator="," close=")">
+            #{storeId}
+        </foreach>
+    </delete>
+    
+</mapper>

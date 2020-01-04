@@ -13,49 +13,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="photos"    column="photos"    />
         <result property="video"    column="video"    />
         <result property="license"    column="license"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="area"    column="area"    />
         <result property="address"    column="address"    />
         <result property="mapX"    column="map_x"    />
         <result property="mapY"    column="map_y"    />
-        <result property="type"    column="type"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createById"    column="create_by_id"    />
-        <collection  property="types"   javaType="java.util.List"        resultMap="TypeResult" />
     </resultMap>
-
-    <resultMap id="TypeResult" type="SysStoreType">
-        <id     property="Id"       column="id"        />
-        <result property="Name"     column="name"      />
-        <result property="Remark"      column="remark"       />
-        <result property="Type"     column="type"      />
-    </resultMap>
-
 
     <sql id="selectYunStoreVo">
-        select y.*, yt.*,sst.*
-        from yun_store y
-		    left join yun_store_type yt on yt.store_id = y.id
-		    left join sys_store_type sst on sst.id = yt.type_id
+        select id, name, logo, manager, manager_phone, photos, video, license, province, city, area, address, map_x, map_y, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_store
     </sql>
 
     <select id="selectYunStoreList" parameterType="YunStore" resultMap="YunStoreResult">
         <include refid="selectYunStoreVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="logo != null  and logo != ''"> and logo = #{logo}</if>
-            <if test="manager != null  and manager != ''"> and manager = #{manager}</if>
-            <if test="managerPhone != null  and managerPhone != ''"> and manager_phone = #{managerPhone}</if>
-            <if test="photos != null  and photos != ''"> and photos = #{photos}</if>
-            <if test="video != null  and video != ''"> and video = #{video}</if>
-            <if test="license != null  and license != ''"> and license = #{license}</if>
-            <if test="address != null  and address != ''"> and address = #{address}</if>
-            <if test="mapX != null "> and map_x = #{mapX}</if>
-            <if test="mapY != null "> and map_y = #{mapY}</if>
-            <if test="type != null  and type != ''"> and type = #{type}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="manager != null  and manager != ''"> and manager like concat('%', #{manager}, '%')</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
         </where>
     </select>
     
@@ -74,10 +55,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="photos != null  and photos != ''">photos,</if>
             <if test="video != null  and video != ''">video,</if>
             <if test="license != null  and license != ''">license,</if>
+            <if test="province != null  and province != ''">province,</if>
+            <if test="city != null  and city != ''">city,</if>
+            <if test="area != null  and area != ''">area,</if>
             <if test="address != null  and address != ''">address,</if>
             <if test="mapX != null ">map_x,</if>
             <if test="mapY != null ">map_y,</if>
-            <if test="type != null  and type != ''">type,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
@@ -93,10 +76,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="photos != null  and photos != ''">#{photos},</if>
             <if test="video != null  and video != ''">#{video},</if>
             <if test="license != null  and license != ''">#{license},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="area != null  and area != ''">#{area},</if>
             <if test="address != null  and address != ''">#{address},</if>
             <if test="mapX != null ">#{mapX},</if>
             <if test="mapY != null ">#{mapY},</if>
-            <if test="type != null  and type != ''">#{type},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
@@ -116,10 +101,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="photos != null  and photos != ''">photos = #{photos},</if>
             <if test="video != null  and video != ''">video = #{video},</if>
             <if test="license != null  and license != ''">license = #{license},</if>
+            <if test="province != null  and province != ''">province = #{province},</if>
+            <if test="city != null  and city != ''">city = #{city},</if>
+            <if test="area != null  and area != ''">area = #{area},</if>
             <if test="address != null  and address != ''">address = #{address},</if>
             <if test="mapX != null ">map_x = #{mapX},</if>
             <if test="mapY != null ">map_y = #{mapY},</if>
-            <if test="type != null  and type != ''">type = #{type},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
