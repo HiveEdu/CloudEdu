@@ -23,8 +23,8 @@ import com.myedu.framework.web.page.TableDataInfo;
 /**
  * 门店Controller
  * 
- * @author 梁龙飞
- * @date 2020-01-01
+ * @author 梁少鹏
+ * @date 2020-01-04
  */
 @RestController
 @RequestMapping("/store/store")

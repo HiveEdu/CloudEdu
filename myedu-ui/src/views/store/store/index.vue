@@ -10,16 +10,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="门店logo" prop="logo">
-        <el-input
-          v-model="queryParams.logo"
-          placeholder="请输入门店logo"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="门店负责人" prop="manager">
+      <el-form-item label="负责人" prop="manager">
         <el-input
           v-model="queryParams.manager"
           placeholder="请输入门店负责人"
@@ -28,78 +19,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="负责人电话" prop="managerPhone">
+      <el-form-item label="创建者" prop="createBy">
         <el-input
-          v-model="queryParams.managerPhone"
-          placeholder="请输入负责人电话"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="门店照片墙" prop="photos">
-        <el-input
-          v-model="queryParams.photos"
-          placeholder="请输入门店照片墙"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="门店宣传视频地址" prop="video">
-        <el-input
-          v-model="queryParams.video"
-          placeholder="请输入门店宣传视频地址"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="门店营业执照" prop="license">
-        <el-input
-          v-model="queryParams.license"
-          placeholder="请输入门店营业执照"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="门店详细地址" prop="address">
-        <el-input
-          v-model="queryParams.address"
-          placeholder="请输入门店详细地址"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="门店地图坐标经纬度详情x" prop="lat">
-        <el-input
-          v-model="queryParams.lat"
-          placeholder="请输入门店地图坐标经纬度详情x"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="门店地图坐标经纬度详情y" prop="lon">
-        <el-input
-          v-model="queryParams.lon"
-          placeholder="请输入门店地图坐标经纬度详情y"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-        <el-form-item label="门店类型" prop="type">
-        <el-select v-model="queryParams.type" placeholder="请选择门店类型" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="创建人Id" prop="createById">
-        <el-input
-          v-model="queryParams.createById"
-          placeholder="请输入创建人Id"
+          v-model="queryParams.createBy"
+          placeholder="请输入创建者"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -154,19 +77,14 @@
 
     <el-table v-loading="loading" :data="storeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
-      <el-table-column label="门店名称" align="center" prop="name" />
-      <el-table-column label="门店logo" align="center" prop="logo" />
-      <el-table-column label="门店负责人" align="center" prop="manager" />
-      <el-table-column label="负责人电话" align="center" prop="managerPhone" />
-      <el-table-column label="门店照片墙" align="center" prop="photos" />
-      <el-table-column label="门店宣传视频地址" align="center" prop="video" />
-      <el-table-column label="门店营业执照" align="center" prop="license" />
+      <el-table-column label="名称" align="center" prop="name" />
+      <el-table-column label="负责人" align="center" prop="manager" />
+      <el-table-column label="电话" align="center" prop="managerPhone" />
+      <el-table-column label="省/市/区" align="center" prop="province" />
+<!--      <el-table-column label="市" align="center" prop="city" />-->
+<!--      <el-table-column label="区" align="center" prop="area" />-->
       <el-table-column label="门店详细地址" align="center" prop="address" />
-      <el-table-column label="门店地图坐标经纬度详情x" align="center" prop="lat" />
-      <el-table-column label="门店地图坐标经纬度详情y" align="center" prop="lon" />
-      <el-table-column label="门店类型" align="center" prop="type" />
-      <el-table-column label="创建人Id" align="center" prop="createById" />
+      <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -196,51 +114,60 @@
     />
 
     <!-- 添加或修改门店对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
+    <el-dialog :title="title" :visible.sync="open" width="70%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="门店名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入门店名称" />
-        </el-form-item>
-        <el-form-item label="门店logo" prop="logo">
-          <el-input v-model="form.logo" placeholder="请输入门店logo" />
-        </el-form-item>
-        <el-form-item label="门店负责人" prop="manager">
-          <el-input v-model="form.manager" placeholder="请输入门店负责人" />
-        </el-form-item>
-        <el-form-item label="负责人电话" prop="managerPhone">
-          <el-input v-model="form.managerPhone" placeholder="请输入负责人电话" />
-        </el-form-item>
-        <el-form-item label="门店照片墙" prop="photos">
-          <el-input v-model="form.photos" placeholder="请输入门店照片墙" />
-        </el-form-item>
-        <el-form-item label="门店宣传视频地址" prop="video">
-          <el-input v-model="form.video" placeholder="请输入门店宣传视频地址" />
-        </el-form-item>
-        <el-form-item label="门店营业执照" prop="license">
-          <el-input v-model="form.license" placeholder="请输入门店营业执照" />
-        </el-form-item>
-        <el-form-item label="门店详细地址" prop="address">
-          <el-input v-model="form.address" placeholder="请输入门店详细地址" />
-        </el-form-item>
-        <el-form-item label="门店地图坐标经纬度详情x" prop="lat">
-          <el-input v-model="form.lat" placeholder="请输入门店地图坐标经纬度详情x" />
-        </el-form-item>
-        <el-form-item label="门店地图坐标经纬度详情y" prop="lon">
-          <el-input v-model="form.lon" placeholder="请输入门店地图坐标经纬度详情y" />
-        </el-form-item>
-        <el-form-item label="门店类型">
-          <el-select v-model="form.type" placeholder="请选择门店类型">
-            <el-option label="请选择字典生成" value="" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
-        </el-form-item>
-        <el-form-item label="创建人Id" prop="createById">
-          <el-input v-model="form.createById" placeholder="请输入创建人Id" />
-        </el-form-item>
+        <el-steps :active="active">
+          <el-step title="基本信息" icon="el-icon-edit" @click.native="stepClick('1')"></el-step>
+          <el-step title="证件信息" icon="el-icon-upload" @click.native="stepClick('2')"></el-step>
+          <el-step title="宣传信息" icon="el-icon-picture" @click.native="stepClick('3')"></el-step>
+        </el-steps>
+        <el v-if="active==1">
+          <el-row style="margin-top: 30px">
+            <el-col :span="8">
+              <el-form-item label="门店名称" prop="name">
+                <el-input v-model="form.name" placeholder="请输入门店名称" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="负责人" prop="manager">
+                <el-input v-model="form.manager" placeholder="请输入门店负责人" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="电话" prop="managerPhone">
+                <el-input v-model="form.managerPhone" placeholder="请输入负责人电话" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item label="省" prop="province">
+            <el-input v-model="form.province" placeholder="请输入省" />
+          </el-form-item>
+          <el-form-item label="市" prop="city">
+            <el-input v-model="form.city" placeholder="请输入市" />
+          </el-form-item>
+          <el-form-item label="区" prop="area">
+            <el-input v-model="form.area" placeholder="请输入区" />
+          </el-form-item>
+          <el-form-item label="门店详细地址" prop="address">
+            <el-input v-model="form.address" placeholder="请输入门店详细地址" />
+          </el-form-item>
+        </el>
+        <el v-if="active==2">
+          <el-form-item label="门店营业执照" prop="license">
+            <el-input v-model="form.license" placeholder="请输入门店营业执照" />
+          </el-form-item>
+        </el>
+        <el v-if="active==3">
+          <el-form-item label="门店照片墙" prop="photos">
+            <el-input v-model="form.photos" placeholder="请输入门店照片墙" />
+          </el-form-item>
+          <el-form-item label="门店宣传视频地址" prop="video">
+            <el-input v-model="form.video" placeholder="请输入门店宣传视频地址" />
+          </el-form-item>
+        </el>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
@@ -254,6 +181,7 @@ import { listStore, getStore, delStore, addStore, updateStore, exportStore } fro
 export default {
   data() {
     return {
+      active: 1,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -275,17 +203,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         name: undefined,
-        logo: undefined,
         manager: undefined,
-        managerPhone: undefined,
-        photos: undefined,
-        video: undefined,
-        license: undefined,
-        address: undefined,
-        lat: undefined,
-        lon: undefined,
-        type: undefined,
-        createById: undefined
+        createBy: undefined,
       },
       // 表单参数
       form: {},
@@ -323,10 +242,12 @@ export default {
         photos: undefined,
         video: undefined,
         license: undefined,
+        province: undefined,
+        city: undefined,
+        area: undefined,
         address: undefined,
-        lat: undefined,
-        lon: undefined,
-        type: undefined,
+        mapX: undefined,
+        mapY: undefined,
         createBy: undefined,
         createTime: undefined,
         updateBy: undefined,
@@ -422,7 +343,14 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
+    },
+    next() {
+      if (this.active++ > 2) this.active = 0;
+    },
+    stepClick(active){
+      this.active=active;
     }
+
   }
 };
 </script>

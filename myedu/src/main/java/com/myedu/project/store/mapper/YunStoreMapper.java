@@ -1,16 +1,13 @@
 package com.myedu.project.store.mapper;
 
-import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.store.domain.YunStore;
-import com.myedu.project.system.domain.SysRole;
-
 import java.util.List;
 
 /**
  * 门店Mapper接口
  * 
- * @author 梁龙飞
- * @date 2020-01-01
+ * @author 梁少鹏
+ * @date 2020-01-04
  */
 public interface YunStoreMapper 
 {

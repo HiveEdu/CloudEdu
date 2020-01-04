@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * 门店Service接口
  * 
- * @author 梁龙飞
- * @date 2020-01-01
+ * @author 梁少鹏
+ * @date 2020-01-04
  */
 public interface IYunStoreService 
 {
@@ -26,14 +26,6 @@ public interface IYunStoreService
      * @return 门店集合
      */
     public List<YunStore> selectYunStoreList(YunStore yunStore);
-
-    /**
-     * 根据用户ID查询用户所属角色组
-     *
-     * @param storeName 用户名
-     * @return 结果
-     */
-    public String selectStoreTypeGroup(String storeName);
 
     /**
      * 新增门店

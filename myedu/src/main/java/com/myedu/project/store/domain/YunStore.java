@@ -2,14 +2,13 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
-
-import java.util.Arrays;
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 门店对象 yun_store
  * 
- * @author 梁龙飞
- * @date 2020-01-01
+ * @author 梁少鹏
+ * @date 2020-01-04
  */
 public class YunStore extends BaseEntity
 {
@@ -23,7 +22,6 @@ public class YunStore extends BaseEntity
     private String name;
 
     /** 门店logo */
-    @Excel(name = "门店logo")
     private String logo;
 
     /** 门店负责人 */
@@ -35,42 +33,41 @@ public class YunStore extends BaseEntity
     private String managerPhone;
 
     /** 门店照片墙 */
-    @Excel(name = "门店照片墙")
     private String photos;
 
     /** 门店宣传视频地址 */
-    @Excel(name = "门店宣传视频地址")
     private String video;
 
     /** 门店营业执照 */
-    @Excel(name = "门店营业执照")
     private String license;
+
+    /** 省 */
+    @Excel(name = "省")
+    private String province;
+
+    /** 市 */
+    @Excel(name = "市")
+    private String city;
+
+    /** 区 */
+    @Excel(name = "区")
+    private String area;
 
     /** 门店详细地址 */
     @Excel(name = "门店详细地址")
     private String address;
 
     /** 门店地图坐标经纬度详情x */
-    @Excel(name = "门店地图坐标经纬度详情x")
     private Double mapX;
 
     /** 门店地图坐标经纬度详情y */
-    @Excel(name = "门店地图坐标经纬度详情y")
     private Double mapY;
-
-    /** 门店类型（1托管班2培训机构3早教机构4家教5幼儿园） */
-    @Excel(name = "门店类型", readConverterExp = "1=托管班2培训机构3早教机构4家教5幼儿园")
-    private String type;
 
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
 
     /** 创建人Id */
-    @Excel(name = "创建人Id")
     private Long createById;
-
-    /** 类型组 */
-    private Long[] typeIds;
 
     public void setId(Long id) 
     {
@@ -144,6 +141,33 @@ public class YunStore extends BaseEntity
     {
         return license;
     }
+    public void setProvince(String province) 
+    {
+        this.province = province;
+    }
+
+    public String getProvince() 
+    {
+        return province;
+    }
+    public void setCity(String city) 
+    {
+        this.city = city;
+    }
+
+    public String getCity() 
+    {
+        return city;
+    }
+    public void setArea(String area) 
+    {
+        this.area = area;
+    }
+
+    public String getArea() 
+    {
+        return area;
+    }
     public void setAddress(String address) 
     {
         this.address = address;
@@ -162,37 +186,7 @@ public class YunStore extends BaseEntity
     {
         return mapX;
     }
-
-    @Override
-    public String toString() {
-        return "YunStore{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", logo='" + logo + '\'' +
-                ", manager='" + manager + '\'' +
-                ", managerPhone='" + managerPhone + '\'' +
-                ", photos='" + photos + '\'' +
-                ", video='" + video + '\'' +
-                ", license='" + license + '\'' +
-                ", address='" + address + '\'' +
-                ", mapX=" + mapX +
-                ", mapY=" + mapY +
-                ", type='" + type + '\'' +
-                ", delFlag='" + delFlag + '\'' +
-                ", createById=" + createById +
-                ", typeIds=" + Arrays.toString(typeIds) +
-                '}';
-    }
-
-    public Long[] getTypeIds() {
-        return typeIds;
-    }
-
-    public void setTypeIds(Long[] typeIds) {
-        this.typeIds = typeIds;
-    }
-
-    public void setMapY(Double mapY)
+    public void setMapY(Double mapY) 
     {
         this.mapY = mapY;
     }
@@ -200,15 +194,6 @@ public class YunStore extends BaseEntity
     public Double getMapY() 
     {
         return mapY;
-    }
-    public void setType(String type) 
-    {
-        this.type = type;
-    }
-
-    public String getType() 
-    {
-        return type;
     }
     public void setDelFlag(String delFlag) 
     {
@@ -229,5 +214,29 @@ public class YunStore extends BaseEntity
         return createById;
     }
 
-
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("id", getId())
+            .append("name", getName())
+            .append("logo", getLogo())
+            .append("manager", getManager())
+            .append("managerPhone", getManagerPhone())
+            .append("photos", getPhotos())
+            .append("video", getVideo())
+            .append("license", getLicense())
+            .append("province", getProvince())
+            .append("city", getCity())
+            .append("area", getArea())
+            .append("address", getAddress())
+            .append("mapX", getMapX())
+            .append("mapY", getMapY())
+            .append("createBy", getCreateBy())
+            .append("createTime", getCreateTime())
+            .append("updateBy", getUpdateBy())
+            .append("updateTime", getUpdateTime())
+            .append("delFlag", getDelFlag())
+            .append("createById", getCreateById())
+            .toString();
+    }
 }
