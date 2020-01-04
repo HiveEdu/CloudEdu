@@ -118,6 +118,16 @@
     <!-- 添加或修改学生请假对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="学生" prop="studentId">
+          <el-select v-model="form.studentId"  placeholder="请选择">
+            <el-option
+              v-for="item in studentList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="请假原因" prop="reason">
           <el-input v-model="form.reason" placeholder="请输入请假原因" />
         </el-form-item>
@@ -136,16 +146,6 @@
             value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择结束时间">
           </el-date-picker>
-        </el-form-item>
-        <el-form-item label="学生" prop="studentId">
-          <el-select v-model="form.studentId"  placeholder="请选择">
-            <el-option
-              v-for="item in studentList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注" />
