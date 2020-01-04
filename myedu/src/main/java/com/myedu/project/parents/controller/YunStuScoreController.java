@@ -79,13 +79,12 @@ public class YunStuScoreController extends BaseController
     public AjaxResult getInfo(@PathVariable(value ="scoreId", required = false)  Long scoreId)
     {
         AjaxResult ajax = AjaxResult.success();
+        List<SysCourse> list1 = sysCourseService.selectSysCourseList(new SysCourse());
+        ajax.put("courseList", list1);
         YunStudentVo yunStudentVo=new YunStudentVo();
         yunStudentVo.setCreateById(SecurityUtils.getUserId());
         List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
         ajax.put("studentLists", list);
-        SysCourse sysCourse =new SysCourse();
-        List<SysCourse> list1 = sysCourseService.selectSysCourseList(sysCourse);
-        ajax.put("scoreLists", list1);
         if (StringUtils.isNotNull(scoreId))
         {
             ajax.put(AjaxResult.DATA_TAG, yunStuScoreService.selectYunStuScoreById(scoreId));

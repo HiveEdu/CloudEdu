@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="被测学生" prop="studentName">
+      <el-form-item label="学生" prop="studentName">
         <el-input
           v-model="queryParams.studentName"
           placeholder="请输入被测学生姓名"
@@ -68,11 +68,11 @@
 
     <el-table v-loading="loading" :data="hwList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="创建人" align="center" prop="createBy" />
-      <el-table-column label="身高" align="center" prop="height" />
-      <el-table-column label="体重" align="center" prop="weight" />
-      <el-table-column label="被测学生姓名" align="center" prop="studentName" />
+      <el-table-column label="学生" align="center" prop="studentName" />
+      <el-table-column label="身高(cm)" align="center" prop="height" />
+      <el-table-column label="体重(Kg)" align="center" prop="weight" />
       <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -119,6 +119,9 @@
         </el-form-item>
         <el-form-item label="体重" prop="weight">
           <el-input-number v-model="form.weight" placeholder="请输入体重(kg)" /> kg
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入作业内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

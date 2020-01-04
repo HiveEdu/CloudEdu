@@ -79,7 +79,7 @@
       <el-table-column label="学生姓名" align="center" prop="studentName" />
       <el-table-column label="考试科目" align="center" prop="courseName" />
       <el-table-column label="考试时间" align="center" prop="examtime" width="180">
-        <template slot-scope="scope">
+        <template slot-scope="scope"  v-if="scope.row.examtime!=null">
           <span>{{ parseTime(scope.row.examtime) }}</span>
         </template>
       </el-table-column>
@@ -129,7 +129,7 @@
      <el-form-item label="考试科目" prop="courseId">
           <el-select v-model="form.courseId"  placeholder="请选择考试科目">
             <el-option
-              v-for="item in scoreList"
+              v-for="item in courseList"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -166,9 +166,9 @@ export default {
   data() {
     return {
        // 学生选项
-      studentList: [],
+      studentList:[],
       // 课程选项
-      scoreList: [],
+      courseList:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -235,7 +235,8 @@ export default {
         studentName: undefined,
         createTime: undefined,
         examtime: undefined,
-        updateTime: undefined
+        updateTime: undefined,
+        courseId:undefined,
       };
       this.resetForm("form");
     },
@@ -261,8 +262,8 @@ export default {
       this.open = true;
       this.title = "添加学生成绩";
       getScore().then(response => {
+         this.courseList= response.courseList;
          this.studentList= response.studentLists;
-         this.scoreList= response.scoreLists;
       });
     },
     /** 修改按钮操作 */
@@ -270,8 +271,8 @@ export default {
       this.reset();
       const scoreId = row.scoreId || this.ids
       getScore(scoreId).then(response => {
+        this.courseList= response.courseList;
         this.studentList= response.studentLists;
-        this.scoreList= response.scoreLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生成绩";
