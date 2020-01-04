@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="examtname != null  and examtname != ''">#{examtname},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="studentId != null and studentId != ''">#{studentId},</if>
-            <if test="courseId != null  and course_id != ''">courseId,</if>
+            <if test="courseId != null  and courseId != ''">#{courseId},</if>
             <if test="examimage != null  and examimage != ''">#{examimage},</if>
             <if test="createById != null ">#{createById},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>

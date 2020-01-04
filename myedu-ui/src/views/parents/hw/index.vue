@@ -115,10 +115,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="身高" prop="height">
-          <el-input-number v-model="form.height" placeholder="请输入身高(cm)" />
+          <el-input-number v-model="form.height" placeholder="请输入身高(cm)" /> cm
         </el-form-item>
         <el-form-item label="体重" prop="weight">
-          <el-input-number v-model="form.weight" placeholder="请输入体重(kg)" />
+          <el-input-number v-model="form.weight" placeholder="请输入体重(kg)" /> kg
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -193,7 +193,7 @@ export default {
         id: undefined,
         height: undefined,
         weight: undefined,
-        studentId: undefined,
+        studentName: undefined,
         remark: undefined,
         createBy: undefined,
         createTime: undefined,
@@ -225,7 +225,7 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生身高体重记录";
-       getHW().then(response => {
+       getHw().then(response => {
         this.studentList= response.studentLists;
       });
     },

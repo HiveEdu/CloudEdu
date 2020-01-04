@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
+import com.myedu.project.dataBasic.domain.SysCourse;
+import com.myedu.project.dataBasic.service.ISysCourseService;
 import com.myedu.project.parents.domain.vo.YunStuScoreVo;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStudentService;
@@ -40,6 +42,9 @@ public class YunStuScoreController extends BaseController
     private IYunStuScoreService yunStuScoreService;
     @Autowired
     private IYunStudentService yunStudentService;
+
+    @Autowired
+    private ISysCourseService sysCourseService;
 
     /**
      * 查询学生成绩列表
@@ -78,6 +83,9 @@ public class YunStuScoreController extends BaseController
         yunStudentVo.setCreateById(SecurityUtils.getUserId());
         List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
         ajax.put("studentLists", list);
+        SysCourse sysCourse =new SysCourse();
+        List<SysCourse> list1 = sysCourseService.selectSysCourseList(sysCourse);
+        ajax.put("scoreLists", list1);
         if (StringUtils.isNotNull(scoreId))
         {
             ajax.put(AjaxResult.DATA_TAG, yunStuScoreService.selectYunStuScoreById(scoreId));

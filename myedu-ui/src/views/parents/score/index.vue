@@ -77,7 +77,7 @@
     <el-table v-loading="loading" :data="scoreList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="学生姓名" align="center" prop="studentName" />
-      <el-table-column label="考试科目" align="center" prop="examtname" />
+      <el-table-column label="考试科目" align="center" prop="courseName" />
       <el-table-column label="考试时间" align="center" prop="examtime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.examtime) }}</span>
@@ -117,7 +117,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="学生" prop="studentId">
-          <el-select v-model="form.studentId"  placeholder="请选择">
+          <el-select v-model="form.studentId"  placeholder="请选择学生姓名">
             <el-option
               v-for="item in studentList"
               :key="item.id"
@@ -126,9 +126,16 @@
             ></el-option>
           </el-select>
       </el-form-item>
-        <el-form-item label="考试科目" prop="examtname">
-          <el-input v-model="form.examtname" placeholder="请输入考试科目" />
-        </el-form-item>
+     <el-form-item label="考试科目" prop="courseId">
+          <el-select v-model="form.courseId"  placeholder="请选择考试科目">
+            <el-option
+              v-for="item in scoreList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+      </el-form-item>
          <el-form-item label="考试时间" prop="examtime">
           <el-date-picker clearable size="small" style="width: 200px"
             v-model="form.examtime"
@@ -160,6 +167,8 @@ export default {
     return {
        // 学生选项
       studentList: [],
+      // 课程选项
+      scoreList: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -214,6 +223,7 @@ export default {
     // 表单重置
     reset() {
       this.form = {
+        studentId: undefined,
         scoreId: undefined,
         mark: undefined,
         examtname: undefined,
@@ -251,7 +261,8 @@ export default {
       this.open = true;
       this.title = "添加学生成绩";
       getScore().then(response => {
-        this.studentList= response.studentLists;
+         this.studentList= response.studentLists;
+         this.scoreList= response.scoreLists;
       });
     },
     /** 修改按钮操作 */
@@ -260,6 +271,7 @@ export default {
       const scoreId = row.scoreId || this.ids
       getScore(scoreId).then(response => {
         this.studentList= response.studentLists;
+        this.scoreList= response.scoreLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生成绩";
