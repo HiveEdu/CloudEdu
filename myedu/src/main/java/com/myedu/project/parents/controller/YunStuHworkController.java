@@ -2,6 +2,7 @@ package com.myedu.project.parents.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.parents.domain.vo.YunStuHworkVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,8 @@ public class YunStuHworkController extends BaseController
     @Log(title = "学生作业", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuHwork yunStuHwork)
-    {
+    {   yunStuHwork.setCreateById(SecurityUtils.getUserId());
+        yunStuHwork.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStuHworkService.insertYunStuHwork(yunStuHwork));
     }
 

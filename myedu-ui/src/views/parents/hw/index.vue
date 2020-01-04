@@ -110,14 +110,8 @@
         <el-form-item label="体重" prop="weight">
           <el-input v-model="form.weight" placeholder="请输入体重(kg)" />
         </el-form-item>
-        <el-form-item label="被测学生姓名" prop="studentId">
+        <el-form-item label="被测学生" prop="studentId">
           <el-input v-model="form.studentId" placeholder="请输入被测学生姓名" />
-        </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
-        </el-form-item>
-        <el-form-item label="创建人" prop="createBy">
-          <el-input v-model="form.createById" placeholder="请输入创建人" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
