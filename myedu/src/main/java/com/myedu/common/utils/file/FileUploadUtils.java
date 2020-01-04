@@ -21,9 +21,9 @@ import com.myedu.framework.config.MyEduConfig;
 public class FileUploadUtils
 {
     /**
-     * 默认大小 50M
+     * 默认大小 5000M
      */
-    public static final long DEFAULT_MAX_SIZE = 50 * 1024 * 1024;
+    public static final long DEFAULT_MAX_SIZE = 5000 * 1024 * 1024;
 
     /**
      * 默认的文件名最大长度 100

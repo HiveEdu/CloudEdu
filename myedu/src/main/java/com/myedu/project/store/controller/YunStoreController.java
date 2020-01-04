@@ -1,6 +1,8 @@
 package com.myedu.project.store.controller;
 
 import java.util.List;
+
+import com.myedu.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +78,8 @@ public class YunStoreController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunStore yunStore)
     {
+        yunStore.setCreateById(SecurityUtils.getUserId());
+        yunStore.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStoreService.insertYunStore(yunStore));
     }
 
@@ -87,6 +91,7 @@ public class YunStoreController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunStore yunStore)
     {
+        yunStore.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(yunStoreService.updateYunStore(yunStore));
     }
 
