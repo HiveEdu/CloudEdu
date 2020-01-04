@@ -1,12 +1,11 @@
 package com.myedu.project.parents.domain;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 
-import java.util.Date;
+
 
 /**
  * 学生成绩对象 yun_stu_score
@@ -64,7 +63,8 @@ public class YunStuScore extends BaseEntity
     private String delFlag;
 
     /** 考试时间 */
-    @Excel(name = "考试时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "考试时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date examtime;
 
     public void setScoreId(Long scoreId) 

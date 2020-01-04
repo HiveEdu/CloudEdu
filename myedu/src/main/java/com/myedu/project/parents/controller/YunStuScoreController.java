@@ -3,7 +3,10 @@ package com.myedu.project.parents.controller;
 import java.util.List;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.StringUtils;
 import com.myedu.project.parents.domain.vo.YunStuScoreVo;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+import com.myedu.project.parents.service.IYunStudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +38,8 @@ public class YunStuScoreController extends BaseController
 {
     @Autowired
     private IYunStuScoreService yunStuScoreService;
+    @Autowired
+    private IYunStudentService yunStudentService;
 
     /**
      * 查询学生成绩列表
@@ -65,10 +70,19 @@ public class YunStuScoreController extends BaseController
      * 获取学生成绩详细信息
      */
     @PreAuthorize("@ss.hasPermi('parents:score:query')")
-    @GetMapping(value = "/{scoreId}")
-    public AjaxResult getInfo(@PathVariable("scoreId") Long scoreId)
+    @GetMapping(value = { "/", "/{scoreId}" })
+    public AjaxResult getInfo(@PathVariable(value ="scoreId", required = false)  Long scoreId)
     {
-        return AjaxResult.success(yunStuScoreService.selectYunStuScoreById(scoreId));
+        AjaxResult ajax = AjaxResult.success();
+        YunStudentVo yunStudentVo=new YunStudentVo();
+        yunStudentVo.setCreateById(SecurityUtils.getUserId());
+        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+        ajax.put("studentLists", list);
+        if (StringUtils.isNotNull(scoreId))
+        {
+            ajax.put(AjaxResult.DATA_TAG, yunStuScoreService.selectYunStuScoreById(scoreId));
+        }
+        return ajax;
     }
 
     /**
