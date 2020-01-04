@@ -11,15 +11,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建人Id" prop="createById">
-        <el-input
-          v-model="queryParams.createById"
-          placeholder="请输入创建人Id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="创建者" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
@@ -28,14 +19,6 @@
           size="small"
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
-        <el-date-picker clearable size="small" style="width: 200px"
-          v-model="queryParams.createTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择创建时间">
-        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -239,8 +222,8 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
-      this.$refs.upload.clearFiles();
       this.reset();
+      this.$refs.upload.clearFiles();
     },
     // 表单重置
     reset() {
@@ -282,19 +265,20 @@ export default {
       this.open = true;
       this.title = "添加云托管动态管理";
       this.fileListnew=[];
-      this.$refs.upload.clearFiles();
+      this.fileList=[];
+      // this.$refs.upload.clearFiles();
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      this.fileListnew=[];
       const id = row.id || this.ids
       getDynamic(id).then(response => {
         this.form = response.data;
-        this.fileList=JSON.parse(this.form.picture);
-        this.fileListnew=JSON.parse(this.form.picture);
         this.open = true;
         this.title = "修改云托管动态管理";
+        this.fileList=JSON.parse(this.form.picture);
+        this.fileListnew=JSON.parse(this.form.picture);
+        // this.$refs.upload.clearFiles();
       });
     },
     /** 提交按钮 */
