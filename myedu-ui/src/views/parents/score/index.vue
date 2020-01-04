@@ -22,8 +22,8 @@
       <el-form-item label="考试时间" prop="examtime">
         <el-date-picker clearable size="small" style="width: 200px"
           v-model="queryParams.examtime"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择考试时间">
         </el-date-picker>
       </el-form-item>
@@ -116,17 +116,24 @@
     <!-- 添加或修改学生成绩对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-       <el-form-item label="学生ID" prop="studentId">
-          <el-input v-model="form.studentId" placeholder="学生ID" />
-        </el-form-item>
+      <el-form-item label="学生" prop="studentId">
+          <el-select v-model="form.studentId"  placeholder="请选择">
+            <el-option
+              v-for="item in studentList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+      </el-form-item>
         <el-form-item label="考试科目" prop="examtname">
           <el-input v-model="form.examtname" placeholder="请输入考试科目" />
         </el-form-item>
-        <el-form-item label="考试时间" prop="examtime">
+         <el-form-item label="考试时间" prop="examtime">
           <el-date-picker clearable size="small" style="width: 200px"
             v-model="form.examtime"
-            type="date"
-            value-format="yyyy-MM-dd"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择考试时间">
           </el-date-picker>
         </el-form-item>
@@ -151,6 +158,8 @@ import { listScore, getScore, delScore, addScore, updateScore, exportScore } fro
 export default {
   data() {
     return {
+       // 学生选项
+      studentList: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -241,12 +250,16 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生成绩";
+      getScore().then(response => {
+        this.studentList= response.studentLists;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const scoreId = row.scoreId || this.ids
       getScore(scoreId).then(response => {
+        this.studentList= response.studentLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生成绩";

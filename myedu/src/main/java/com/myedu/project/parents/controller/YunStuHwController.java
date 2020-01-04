@@ -69,8 +69,8 @@ public class YunStuHwController extends BaseController
      * 获取学生身高体重记录详细信息
      */
     @PreAuthorize("@ss.hasPermi('parents:hw:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value ="id", required = false) Long id)
     {    AjaxResult ajax = AjaxResult.success();
         YunStudentVo yunStudentVo=new YunStudentVo();
         yunStudentVo.setCreateById(SecurityUtils.getUserId());
