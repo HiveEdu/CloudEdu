@@ -104,14 +104,21 @@
     <!-- 添加或修改学生身高体重记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+         <el-form-item label="学生" prop="studentId">
+          <el-select v-model="form.studentId"  placeholder="请选择">
+            <el-option
+              v-for="item in studentList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="身高" prop="height">
-          <el-input v-model="form.height" placeholder="请输入身高(cm)" />
+          <el-input-number v-model="form.height" placeholder="请输入身高(cm)" />
         </el-form-item>
         <el-form-item label="体重" prop="weight">
-          <el-input v-model="form.weight" placeholder="请输入体重(kg)" />
-        </el-form-item>
-        <el-form-item label="被测学生" prop="studentId">
-          <el-input v-model="form.studentId" placeholder="请输入被测学生姓名" />
+          <el-input-number v-model="form.weight" placeholder="请输入体重(kg)" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -128,6 +135,8 @@ import { listHw, getHw, delHw, addHw, updateHw, exportHw } from "@/api/parents/h
 export default {
   data() {
     return {
+      // 学生选项
+      studentList: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -216,12 +225,16 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生身高体重记录";
+       getHW().then(response => {
+        this.studentList= response.studentLists;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
       getHw(id).then(response => {
+        this.studentList= response.studentLists;
         this.form = response.data;
         this.open = true;
         this.title = "修改学生身高体重记录";

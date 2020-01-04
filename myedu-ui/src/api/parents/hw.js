@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询学生身高体重记录列表
 export function listHw(query) {
   return request({
@@ -12,7 +12,7 @@ export function listHw(query) {
 // 查询学生身高体重记录详细
 export function getHw(id) {
   return request({
-    url: '/parents/hw/' + id,
+    url: '/parents/hw/' + praseStrEmpty(id),
     method: 'get'
   })
 }

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询学生成绩列表
 export function listScore(query) {
   return request({
@@ -12,7 +12,7 @@ export function listScore(query) {
 // 查询学生成绩详细
 export function getScore(scoreId) {
   return request({
-    url: '/parents/score/' + scoreId,
+    url: '/parents/score/' + praseStrEmpty(scoreId),
     method: 'get'
   })
 }
