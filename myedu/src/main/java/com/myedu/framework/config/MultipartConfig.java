@@ -19,9 +19,9 @@ public class MultipartConfig {
  public MultipartConfigElement multipartConfigElement() {
     MultipartConfigFactory factory = new MultipartConfigFactory();
     // 置文件大小限制 ,超出此大小页面会抛出异常信息
-    factory.setMaxFileSize("2MB"); //KB,MB
+    factory.setMaxFileSize("1024MB"); //KB,MB
     // 设置总上传数据总大小
-    factory.setMaxRequestSize("20MB");
+    factory.setMaxRequestSize("1024MB");
     // 设置文件临时文件夹路径
     // factory.setLocation("E://test//");
     // 如果文件大于这个值，将以文件的形式存储，如果小于这个值文件将存储在内存中，默认为0

@@ -117,9 +117,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-<!--        <el-form-item label="动态内容" prop="content">-->
-<!--          <el-input v-model="form.content" placeholder="请输入动态内容" />-->
-<!--        </el-form-item>-->
         <el-form-item label="动态内容" prop="content">
             <!-- 图片上传组件辅助 -->
             <el-upload
@@ -457,7 +454,7 @@ export default {
       this.dialogVisible = true;
     },
 
-
+    //富文本事件开始
     onEditorBlur() {
       //失去焦点事件
     },
@@ -501,6 +498,7 @@ export default {
       // loading动画消失
       this.$message.error("图片插入失败");
     }
+    //富文本事件结束
   }
 };
 </script>
