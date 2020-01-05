@@ -83,5 +83,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
-    
+
+
+    <select id="selectStoreTypeListByStoreId" parameterType="Long" resultType="Integer">
+		select yst.type_id
+        from  yun_store_type yst
+	        left join sys_store_type sst on sst.id = yst.type_id
+	        left join yun_store ys on ys.id = yst.store_id
+	    where yst.store_id = #{storeId}
+	</select>
+
 </mapper>

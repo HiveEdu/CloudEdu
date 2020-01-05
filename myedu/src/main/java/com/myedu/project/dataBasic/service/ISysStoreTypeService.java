@@ -58,4 +58,13 @@ public interface ISysStoreTypeService
      * @return 结果
      */
     public int deleteSysStoreTypeById(Long id);
+
+
+    /**
+     * 根据门店获取门店类型ID列表
+     *
+     * @param storeId 门店ID
+     * @return 结果
+     */
+    public List<Integer> selectStoreTypeListByStoreId(Long storeId);
 }

@@ -54,5 +54,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{storeId}
         </foreach>
     </delete>
+
+
+    <insert id="batchStoreType">
+        insert into yun_store_type(store_id, type_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.storeId},#{item.typeId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteStoreTypeByStoreId" parameterType="Long">
+		delete from yun_store_type where store_id=#{storeId}
+	</delete>
     
 </mapper>

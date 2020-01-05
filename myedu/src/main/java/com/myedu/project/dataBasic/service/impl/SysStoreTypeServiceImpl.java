@@ -93,4 +93,16 @@ public class SysStoreTypeServiceImpl implements ISysStoreTypeService
     {
         return sysStoreTypeMapper.deleteSysStoreTypeById(id);
     }
+
+
+    /**
+     * 根据门店获取门店类型ID列表
+     *
+     * @param storeId 门店ID
+     * @return 结果
+     */
+    @Override
+    public List<Integer> selectStoreTypeListByStoreId(Long storeId) {
+        return sysStoreTypeMapper.selectStoreTypeListByStoreId(storeId);
+    }
 }

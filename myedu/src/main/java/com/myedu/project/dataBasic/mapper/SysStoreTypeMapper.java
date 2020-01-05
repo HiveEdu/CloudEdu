@@ -68,4 +68,14 @@ public interface SysStoreTypeMapper
      * @return 结果
      */
     public int deleteSysStoreTypeByIds(Long[] ids);
+
+
+    /**
+     * 根据门店ID获取门店类型选择框列表
+     *
+     * @param storeId 门店ID
+     * @return 选中门店类型ID列表
+     */
+    public List<Integer> selectStoreTypeListByStoreId(Long storeId);
+
 }

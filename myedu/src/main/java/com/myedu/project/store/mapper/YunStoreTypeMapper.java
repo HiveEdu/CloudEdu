@@ -1,6 +1,8 @@
 package com.myedu.project.store.mapper;
 
 import com.myedu.project.store.domain.YunStoreType;
+import com.myedu.project.system.domain.SysUserPost;
+
 import java.util.List;
 
 /**
@@ -58,4 +60,22 @@ public interface YunStoreTypeMapper
      * @return 结果
      */
     public int deleteYunStoreTypeByIds(Long[] storeIds);
+
+
+
+    /**
+     * 批量新增门店类型关联
+     *
+     * @param yunStoreTypes 门店类型列表
+     * @return 结果
+     */
+    public int batchStoreType(List<YunStoreType> yunStoreTypes);
+
+    /**
+     * 通过门店ID删除门店与门店类型关联
+     *
+     * @param storeId 门店Id
+     * @return 结果
+     */
+    public int deleteStoreTypeByStoreId(Long storeId);
 }

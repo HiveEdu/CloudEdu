@@ -4,6 +4,9 @@ import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Arrays;
+
 /**
  * 门店对象 yun_store
  * 
@@ -68,6 +71,9 @@ public class YunStore extends BaseEntity
 
     /** 创建人Id */
     private Long createById;
+
+    /** 岗位组 */
+    private Long[] storeTypeIds;
 
     public void setId(Long id) 
     {
@@ -214,6 +220,14 @@ public class YunStore extends BaseEntity
         return createById;
     }
 
+    public Long[] getStoreTypeIds() {
+        return storeTypeIds;
+    }
+
+    public void setStoreTypeIds(Long[] storeTypeIds) {
+        this.storeTypeIds = storeTypeIds;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -237,6 +251,7 @@ public class YunStore extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
             .append("createById", getCreateById())
+            .append("storeTypeIds", Arrays.toString(getStoreTypeIds()))
             .toString();
     }
 }

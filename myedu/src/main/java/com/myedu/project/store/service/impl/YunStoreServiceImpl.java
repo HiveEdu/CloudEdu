@@ -1,12 +1,18 @@
 package com.myedu.project.store.service.impl;
 
-import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.common.utils.StringUtils;
+import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.YunStoreType;
+import com.myedu.project.store.mapper.YunStoreMapper;
+import com.myedu.project.store.mapper.YunStoreTypeMapper;
+import com.myedu.project.store.service.IYunStoreService;
+import com.myedu.project.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.myedu.project.store.mapper.YunStoreMapper;
-import com.myedu.project.store.domain.YunStore;
-import com.myedu.project.store.service.IYunStoreService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 门店Service业务层处理
@@ -19,7 +25,8 @@ public class YunStoreServiceImpl implements IYunStoreService
 {
     @Autowired
     private YunStoreMapper yunStoreMapper;
-
+    @Autowired
+    private YunStoreTypeMapper yunStoreTypeMapper;
     /**
      * 查询门店
      * 
@@ -54,7 +61,11 @@ public class YunStoreServiceImpl implements IYunStoreService
     public int insertYunStore(YunStore yunStore)
     {
         yunStore.setCreateTime(DateUtils.getNowDate());
-        return yunStoreMapper.insertYunStore(yunStore);
+        // 新增门店
+        int rows =yunStoreMapper.insertYunStore(yunStore);
+        // 新增门店门店类型关联表
+        insertStoreType(yunStore);
+        return rows;
     }
 
     /**
@@ -67,6 +78,11 @@ public class YunStoreServiceImpl implements IYunStoreService
     public int updateYunStore(YunStore yunStore)
     {
         yunStore.setUpdateTime(DateUtils.getNowDate());
+        Long storeId = yunStore.getId();
+        // 删除门店与门店类型关联
+        yunStoreTypeMapper.deleteStoreTypeByStoreId(storeId);
+        // 新增门店门店类型关联表
+        insertStoreType(yunStore);
         return yunStoreMapper.updateYunStore(yunStore);
     }
 
@@ -79,6 +95,11 @@ public class YunStoreServiceImpl implements IYunStoreService
     @Override
     public int deleteYunStoreByIds(Long[] ids)
     {
+        //删除与门店类型关联
+        for (Long id : ids)
+        {
+            yunStoreTypeMapper.deleteStoreTypeByStoreId(id);
+        }
         return yunStoreMapper.deleteYunStoreByIds(ids);
     }
 
@@ -91,6 +112,35 @@ public class YunStoreServiceImpl implements IYunStoreService
     @Override
     public int deleteYunStoreById(Long id)
     {
+        //删除与门店类型关联
+        yunStoreTypeMapper.deleteStoreTypeByStoreId(id);
         return yunStoreMapper.deleteYunStoreById(id);
     }
+
+    /*
+     * @Description :新增门店类型
+     * @Author : 梁少鹏
+     * @Date : 2020/1/5 10:13
+     */
+    public void insertStoreType(YunStore yunStore)
+    {
+        Long[] storeTypeIds = yunStore.getStoreTypeIds();
+        if (StringUtils.isNotNull(storeTypeIds))
+        {
+            // 新增门店与门店类型
+            List<YunStoreType> list = new ArrayList<YunStoreType>();
+            for (Long storeTypeId : storeTypeIds)
+            {
+                YunStoreType yunStoreType = new YunStoreType();
+                yunStoreType.setStoreId(yunStore.getId());
+                yunStoreType.setTypeId(storeTypeId);
+                list.add(yunStoreType);
+            }
+            if (list.size() > 0)
+            {
+                yunStoreTypeMapper.batchStoreType(list);
+            }
+        }
+    }
+
 }
