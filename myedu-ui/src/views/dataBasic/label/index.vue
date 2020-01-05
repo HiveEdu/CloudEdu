@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="标贴名称" prop="name">
+      <el-form-item label="名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入标贴名称"
+          placeholder="请输入标签名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -20,7 +20,7 @@
           />
         </el-select>
       </el-form-item>
-        <el-form-item label="可用状态" prop="isused">
+        <el-form-item label="状态" prop="isused">
         <el-select v-model="queryParams.isused" placeholder="请选择可用状态" clearable size="small">
           <el-option
             v-for="dict in isusedOptions"
@@ -88,11 +88,10 @@
 
     <el-table v-loading="loading" :data="labelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
-      <el-table-column label="标贴名称" align="center" prop="name" />
+      <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="类型" align="center" prop="type" :formatter="typeFormat" />
-      <el-table-column label="标贴颜色" align="center" prop="color" />
-      <el-table-column label="可用状态" align="center" prop="isused" :formatter="isusedFormat" />
+      <el-table-column label="颜色" align="center" prop="color" />
+      <el-table-column label="状态" align="center" prop="isused" :formatter="isusedFormat" />
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -125,10 +124,10 @@
     <!-- 添加或修改标签管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标贴名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入标贴名称" />
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入标签名称" />
         </el-form-item>
-        <el-form-item label="类型">
+        <el-form-item label="类型"  prop="type">
           <el-select v-model="form.type" placeholder="请选择类型">
             <el-option
               v-for="dict in typeOptions"
@@ -138,10 +137,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="标贴颜色" prop="color">
-          <el-input v-model="form.color" placeholder="请输入标贴颜色" />
-        </el-form-item>
-        <el-form-item label="可用状态">
+        <el-form-item label="状态" prop="isused">
           <el-select v-model="form.isused" placeholder="请选择可用状态">
             <el-option
               v-for="dict in isusedOptions"
@@ -151,11 +147,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="创建人Id" prop="createById">
-          <el-input v-model="form.createById" placeholder="请输入创建人Id" />
-        </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
+        <el-form-item label="颜色" prop="color">
+          <el-color-picker v-model="form.color"></el-color-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -206,8 +199,18 @@ export default {
       // 表单校验
       rules: {
         isused: [
-          { required: true, message: "可用状态（0可用1不可用）不能为空", trigger: "blur" }
-        ],      }
+          { required: true, message: "可用状态不能为空", trigger: "blur" }
+        ],
+        name: [
+          { required: true, message: "标签名称不能为空", trigger: "blur" }
+        ],
+        type: [
+          { required: true, message: "标签类型不能为空", trigger: "blur" }
+        ],
+        color: [
+          { required: true, message: "标签颜色不能为空", trigger: "blur" }
+        ]
+      }
     };
   },
   created() {
@@ -280,6 +283,7 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加标签管理";
+      this.form.color="#CC4E4E";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

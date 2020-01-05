@@ -1,6 +1,8 @@
 package com.myedu.project.dataBasic.controller;
 
 import java.util.List;
+
+import com.myedu.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +78,8 @@ public class SysLabelController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody SysLabel sysLabel)
     {
+        sysLabel.setCreateBy(SecurityUtils.getUsername());
+        sysLabel.setCreateById(SecurityUtils.getUserId());
         return toAjax(sysLabelService.insertSysLabel(sysLabel));
     }
 
@@ -87,6 +91,8 @@ public class SysLabelController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysLabel sysLabel)
     {
+        sysLabel.setUpdateBy(
+                SecurityUtils.getUsername());
         return toAjax(sysLabelService.updateSysLabel(sysLabel));
     }
 

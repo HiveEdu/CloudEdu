@@ -99,7 +99,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="姓名" align="center" prop="name" />
       <el-table-column label="性别" align="center" prop="gendel" :formatter="gendelFormat" />
-      <el-table-column label="所在学校" align="center" prop="school" />
+      <el-table-column label="学校" align="center" prop="school" />
       <el-table-column label="年级" align="center" prop="gradeName" />
       <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -138,10 +138,20 @@
     <!-- 添加或修改学生数据对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="学生名称" prop="name">
+        <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入学生名称" />
         </el-form-item>
-        <el-form-item label="头像上传">
+        <el-form-item label="性别" prop="gendel">
+          <el-select v-model="form.gendel" placeholder="请选择学生性别">
+            <el-option
+              v-for="dict in gendelOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="头像">
           <el-upload
             class="avatar-uploader"
             ref="upload"
@@ -157,17 +167,7 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="学生性别">
-          <el-select v-model="form.gendel" placeholder="请选择学生性别">
-            <el-option
-              v-for="dict in gendelOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所在学校" prop="school">
+        <el-form-item label="学校" prop="school">
           <el-input v-model="form.school" placeholder="请输入学生就读所在学校" />
         </el-form-item>
         <el-form-item label="年级" prop="gradeId">
@@ -231,6 +231,12 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        name: [
+          { required: true, message: "学生姓名不能为空", trigger: "blur" }
+        ],
+        gendel: [
+          { required: true, message: "学生性别不能为空", trigger: "blur" }
+        ],
       },
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       viewImage: process.env.VUE_APP_BASE_API,

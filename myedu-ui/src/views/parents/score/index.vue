@@ -10,9 +10,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="考试科目" prop="examtname">
+      <el-form-item label="考试科目" prop="courseName">
         <el-input
-          v-model="queryParams.examtname"
+          v-model="queryParams.courseName"
           placeholder="请输入考试科目"
           clearable
           size="small"
@@ -190,7 +190,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         mark: undefined,
-        examtname: undefined,
+        courseName: undefined,
         studentName: undefined,
         remark: undefined,
         examtime: undefined,

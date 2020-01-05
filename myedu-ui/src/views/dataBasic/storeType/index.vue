@@ -106,7 +106,7 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入门店类型名称" />
         </el-form-item>
-        <el-form-item label="类型">
+        <el-form-item label="类型"  prop="type">
           <el-select v-model="form.type" placeholder="请选择门店类型">
             <el-option
               v-for="dict in typeOptions"
@@ -163,6 +163,12 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        name: [
+          { required: true, message: "类型名称不能为空", trigger: "blur" }
+        ],
+        type: [
+          { required: true, message: "类型不能为空", trigger: "blur" }
+        ]
       }
     };
   },
