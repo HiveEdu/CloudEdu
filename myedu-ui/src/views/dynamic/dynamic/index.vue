@@ -193,13 +193,13 @@ const toolbarOptions = [
 
 import { quillEditor } from "vue-quill-editor";
 import imageResize  from 'quill-image-resize-module'
-import { ImageDrop } from 'quill-image-drop-module'; // 拖动加载图片组件。
+// import { ImageDrop } from 'quill-image-drop-module'; // 拖动加载图片组件。
 import Quill from 'quill'
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 Quill.register('modules/imageResize', imageResize)
-Quill.register('modules/imageDrop', ImageDrop);
+// Quill.register('modules/imageDrop', ImageDrop);
 export default {
   props: {
     /* 编辑器的内容 */
@@ -263,7 +263,7 @@ export default {
         theme: "snow", // or 'bubble'
         placeholder: "请输入内容",
         modules: {
-          imageDrop: true, // 拖动加载图片组件。
+          // imageDrop: true, // 拖动加载图片组件。
           imageResize: {   //添加
             displayStyles: {   //添加
               backgroundColor: 'black',

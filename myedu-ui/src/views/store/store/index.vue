@@ -179,10 +179,29 @@
            </el-col>
            <el-col :span="16">
               <el-form-item label="街道" prop="address">
-                <el-input v-model="form.address" placeholder="请输入门店详细地址" />
+<!--                <el-input v-model="form.address" placeholder="请输入门店详细地址" />-->
+                <el-input placeholder="请输入内容" v-model="form.address">
+                  <template slot="append" ><span @click="mapSearch">搜索</span></template>
+                </el-input>
               </el-form-item>
            </el-col>
           </el-row>
+<!--              <baidu-map class="map" :center="map.center" :zoom="map.zoom" @ready="handler">-->
+<!--                &lt;!&ndash;缩放&ndash;&gt;-->
+<!--                <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>-->
+<!--                &lt;!&ndash;定位&ndash;&gt;-->
+<!--                <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>-->
+<!--                &lt;!&ndash;点&ndash;&gt;-->
+<!--                <bm-marker :position="map.center" :dragging="map.dragging" animation="BMAP_ANIMATION_DROP">-->
+<!--                  &lt;!&ndash;提示信息&ndash;&gt;-->
+<!--                  <bm-info-window :show="map.show">Hello~</bm-info-window>-->
+<!--                </bm-marker>-->
+<!--              </baidu-map>-->
+          <baidu-map class="map" :center="map.center" :zoom="map.zoom" @ready="handler">
+            <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
+            <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
+            <bm-local-search v-if="map.isAdd" class="search" :keyword="map.keyword" :auto-viewport="true" :location="map.location"></bm-local-search>
+          </baidu-map>
         </div>
         <div v-if="active==2" style="margin-top: 30px">
           <el-form-item label="营业执照" style="margin-top: 80px">
@@ -254,6 +273,7 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -261,9 +281,22 @@
 import { listStore, getStore, delStore, addStore, updateStore, exportStore } from "@/api/store/store";
 import {addressOptions} from '@/api/addressOptions'
 import { getToken } from '@/utils/auth'
+// import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
+import BaiduMap from 'vue-baidu-map'
+import Vue from 'vue'
+Vue.use(BaiduMap, {
+  ak: '7ddN7rl0MKnrRAhxmZzEHVPObhlDUcdb'
+});
 export default {
   data() {
     return {
+      map:{
+        center: {lng: 121.4472540000, lat: 31.3236200000},
+        zoom: 15,
+        show: true,
+        dragging: true
+      },
+      mapForAdd:false,
       //门店类型列表
       storeTypes:[],
       //标签类型列表
@@ -570,6 +603,25 @@ export default {
       }
     },
     //上传视频结束
+
+
+    handler ({BMap, map}) {
+      let me = this;
+      console.log(BMap, map)
+      // 鼠标缩放
+      map.enableScrollWheelZoom(true);
+      // 点击事件获取经纬度
+      map.addEventListener('click', function (e) {
+        console.log(e.point.lng, e.point.lat)
+        alert(e.point.lng+"--"+e.point.lat);
+      })
+    }
   }
 };
 </script>
+<style scoped>
+  .map {
+    width: 100%;
+    height: 400px;
+  }
+</style>
