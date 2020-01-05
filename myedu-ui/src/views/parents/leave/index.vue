@@ -128,7 +128,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-         <el-form-item label="请假原因">
+         <el-form-item label="请假原因" prop="reason">
           <el-select v-model="form.reason" placeholder="请选择请假原因">
             <el-option
               v-for="dict in reasonOptions"
@@ -207,6 +207,18 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        studentId: [
+          { required: true, message: "请选择学生", trigger: "blur" }
+        ],
+        reason: [
+          { required: true, message: "请假原因不能为空", trigger: "blur" }
+        ],
+        leaveStartTime: [
+          { required: true, message: "请假开始时间不能为空", trigger: "blur" }
+        ],
+        leaveEndTime: [
+          { required: true, message: "请假结束时间不能为空", trigger: "blur" }
+        ],
       }
     };
   },

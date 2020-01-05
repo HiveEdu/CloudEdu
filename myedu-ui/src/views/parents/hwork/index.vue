@@ -195,6 +195,12 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        studentId: [
+          { required: true, message: "请选择学生", trigger: "blur" }
+        ],
+        hworkName: [
+          { required: true, message: "作业名称不能为空", trigger: "blur" }
+        ],
       }
     };
   },

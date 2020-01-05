@@ -199,6 +199,18 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        studentId: [
+          { required: true, message: "请选择学生", trigger: "blur" }
+        ],
+        courseId: [
+          { required: true, message: "请选择考试科目", trigger: "blur" }
+        ],
+        examtime: [
+          { required: true, message: "考试时间不能为空", trigger: "blur" }
+        ],
+        mark: [
+          { required: true, message: "考试分数", trigger: "blur" }
+        ],
       }
     };
   },

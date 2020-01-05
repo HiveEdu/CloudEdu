@@ -169,6 +169,15 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        studentId: [
+          { required: true, message: "请选择学生", trigger: "blur" }
+        ],
+        height: [
+          { required: true, message: "身高不能为空", trigger: "blur" }
+        ],
+        weight: [
+          { required: true, message: "体重不能为空", trigger: "blur" }
+        ],
       }
     };
   },
