@@ -141,24 +141,19 @@
         <el-form-item label="学生名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入学生名称" />
         </el-form-item>
-        <el-form-item label="头像上传" style="margin-top: 80px">
+        <el-form-item label="头像上传">
           <el-upload
+            class="avatar-uploader"
             ref="upload"
-            :action="uploadImgUrl"
-            list-type="picture-card"
-            content-type="false"
             :headers="headers"
-            :file-list="fileList"
-            :show-file-list="true"
-            :before-upload="beforeUpload"
-            :on-change="onChange"
+            :action="uploadImgUrl"
+            :show-file-list="false"
             :on-success="onSuccess"
-            :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
-            @realTime="realTime"
-            accept='.jpg,.jpeg,.png,.gif'
-            >
-            <i class="el-icon-plus"></i>
+            :on-preview="handlePictureCardPreview"
+            :before-upload="beforeUpload">
+            <img v-if="form.avatar" :src="form.avatar" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
         <el-form-item label="学生性别">
@@ -197,13 +192,6 @@
 import { listStudent, getStudent, delStudent, addStudent, updateStudent, exportStudent } from "@/api/parents/student";
 import { getToken } from '@/utils/auth'
 export default {
-  props: {
-    /* 图片大小 */
-    maxSize: {
-      type: Number,
-      default: 4000 //kb
-    }
-  },
   data() {
     return {
       //年级列表
@@ -247,8 +235,8 @@ export default {
       headers: {
         Authorization: 'Bearer ' + getToken()
       },
-      fileList:null,
-      fileListnew:[],
+      dialogImageUrl: '',
+      dialogVisible: false,
     };
   },
   created() {
@@ -310,8 +298,6 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生数据";
-      this.fileListnew=[];
-      this.fileList=[];
       getStudent().then(response => {
         this.gradeLists=response.gradeLists;
       });
@@ -325,8 +311,6 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改学生数据";
-        this.fileList=JSON.parse(this.form.avatar);
-        this.fileListnew=JSON.parse(this.form.avatar);
       });
     },
     /** 提交按钮 */
@@ -334,7 +318,6 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            this.form.avatar=JSON.stringify(this.fileListnew);
             updateStudent(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -345,7 +328,6 @@ export default {
               }
             });
           } else {
-            this.form.avatar=JSON.stringify(this.fileListnew);
             addStudent(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -388,12 +370,9 @@ export default {
     },
     beforeUpload(file){
     },
-    onChange(file, fileList){
-    },
     onSuccess(res,file, fileList){
       if(res.code=="200"){
-        this.fileList=fileList
-        this.fileListnew.push({uid:file.uid,name:file.name,status:file.status,url:res.url})
+        this.form.avatar=res.url
         this.msgSuccess("上传成功");
       }else{
         this.msgError("上传失败");
@@ -401,21 +380,37 @@ export default {
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
-      this.fileList=fileList;
-      for(let i=0;i<this.fileListnew.length;i++) {
-        if (this.fileListnew[i].uid === file.uid) {
-          this.fileListnew.splice(i);
-        }
-      }
+      this.form.avatar=null;
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-     // 实时预览
-    realTime(data) {
-      this.previews = data;
-    }
   }
 };
 </script>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
