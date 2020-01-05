@@ -148,6 +148,7 @@
             :action="uploadImgUrl"
             list-type="picture-card"
             content-type="false"
+            :data="{'type':'dynamic'}"
             :headers="headers"
             :file-list="fileList"
             :show-file-list="true"
