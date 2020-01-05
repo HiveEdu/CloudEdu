@@ -147,12 +147,13 @@
             ref="upload"
             :headers="headers"
             :action="uploadImgUrl"
+            :data="{'type':'stuAvatar'}"
             :show-file-list="false"
             :on-success="onSuccess"
             :on-remove="handleRemove"
             :on-preview="handlePictureCardPreview"
             :before-upload="beforeUpload">
-            <img v-if="form.avatar" :src="form.avatar" class="avatar">
+            <img v-if="form.avatar" :src="viewImage+'/'+form.avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -232,6 +233,7 @@ export default {
       rules: {
       },
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      viewImage: process.env.VUE_APP_BASE_API,
       headers: {
         Authorization: 'Bearer ' + getToken()
       },
@@ -372,7 +374,8 @@ export default {
     },
     onSuccess(res,file, fileList){
       if(res.code=="200"){
-        this.form.avatar=res.url
+       //this.form.avatar=res.url
+        this.form.avatar=res.fileName
         this.msgSuccess("上传成功");
       }else{
         this.msgError("上传失败");
