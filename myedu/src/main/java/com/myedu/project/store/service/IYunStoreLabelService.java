@@ -58,5 +58,5 @@ public interface IYunStoreLabelService
      * @param storeId 门店类型关联ID
      * @return 结果
      */
-    public int deleteYunStoreLabelById(Long storeId);
+    public int deleteStoreLabelByStoreId(Long storeId);
 }

@@ -39,7 +39,7 @@ public class YunStoreController extends BaseController
     private ISysStoreTypeService sysStoreTypeService;
 
     @Autowired
-    private ISysLabelService syslabelypeService;
+    private ISysLabelService syslabelService;
     /**
      * 查询门店列表
      */
@@ -79,12 +79,12 @@ public class YunStoreController extends BaseController
 
         SysLabel sysLabel =new SysLabel();
         sysLabel.setType(labelType.STORE.getCode());
-        ajax.put("storeLabels", syslabelypeService.selectSysLabelList(sysLabel));
+        ajax.put("storeLabels", syslabelService.selectSysLabelList(sysLabel));
         if (StringUtils.isNotNull(id))
         {
             ajax.put(AjaxResult.DATA_TAG, yunStoreService.selectYunStoreById(id));
             ajax.put("storeTypeIds", sysStoreTypeService.selectStoreTypeListByStoreId(id));
-            ajax.put("storeLabelIds", syslabelypeService.selectLabelListById(id));
+            ajax.put("storeLabelIds", syslabelService.selectLabelListById(id));
         }
         return ajax;
     }

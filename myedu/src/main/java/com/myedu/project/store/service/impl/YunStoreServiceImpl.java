@@ -69,6 +69,8 @@ public class YunStoreServiceImpl implements IYunStoreService
         int rows =yunStoreMapper.insertYunStore(yunStore);
         // 新增门店门店类型关联表
         insertStoreType(yunStore);
+        // 新增门店门店标签关联表
+        insertStoreLabel(yunStore);
         return rows;
     }
 
@@ -89,6 +91,8 @@ public class YunStoreServiceImpl implements IYunStoreService
         yunStorelabelMapper.deleteYunStoreLabelById(storeId);
         // 新增门店门店类型关联表
         insertStoreType(yunStore);
+        // 新增门店标签关联表
+        insertStoreLabel(yunStore);
         return yunStoreMapper.updateYunStore(yunStore);
     }
 
@@ -160,21 +164,21 @@ public class YunStoreServiceImpl implements IYunStoreService
      */
     public void insertStoreLabel(YunStore yunStore)
     {
-        Long[] storeTypeIds = yunStore.getStoreTypeIds();
-        if (StringUtils.isNotNull(storeTypeIds))
+        Long[] storeLabelIds = yunStore.getLabelTypeIds();
+        if (StringUtils.isNotNull(storeLabelIds))
         {
             // 新增门店与标签
             List<YunStoreLabel> list1 = new ArrayList<YunStoreLabel>();
-            for (Long storeTypeId : storeTypeIds)
+            for (Long storeLabelId : storeLabelIds)
             {
                 YunStoreLabel yunStoreLabel = new YunStoreLabel();
                 yunStoreLabel.setStoreId(yunStore.getId());
-                yunStoreLabel.setTypeId(storeTypeId);
+                yunStoreLabel.setLabelId(storeLabelId);
                 list1.add(yunStoreLabel);
             }
             if (list1.size() > 0)
             {
-                yunStorelabelMapper.batchStoreType(list1);
+                yunStorelabelMapper.batchStoreLabel(list1);
             }
         }
     }

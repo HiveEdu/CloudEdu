@@ -1,7 +1,7 @@
 package com.myedu.project.store.mapper;
 
 import com.myedu.project.store.domain.YunStoreLabel;
-import com.myedu.project.store.domain.YunStoreType;
+
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public interface YunStoreLabelMapper {
      * @param yunStoreLabels 门店标签列表
      * @return 结果
      */
-    public int batchStoreType(List<YunStoreLabel> yunStoreLabels);
+    public int batchStoreLabel(List<YunStoreLabel> yunStoreLabels);
 
     /**
      * 通过门店ID删除门店与门店标签关联
