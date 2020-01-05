@@ -140,6 +140,20 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="8">
+                <el-form-item label="类型">
+                  <el-checkbox-group v-model="form.storeTypeIds">
+                    <el-checkbox-button
+                      v-for="item in storeTypes"
+                      :label="item.id"
+                      :key="item.id">{{item.name}}
+                    </el-checkbox-button>
+                  </el-checkbox-group>
+                </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
            <el-col :span="8">
               <el-form-item label="地址" prop="province">
                 <el-cascader
@@ -240,6 +254,8 @@ import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
+      //门店类型列表
+      storeTypes:[],
       //是否有视频
       videoFlag:false,
       //视频上传进度
@@ -333,7 +349,8 @@ export default {
         updateBy: undefined,
         updateTime: undefined,
         delFlag: undefined,
-        createById: undefined
+        createById: undefined,
+        storeTypeIds:[],
       };
       this.resetForm("form");
     },
@@ -356,13 +373,16 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加门店";
       this.licenseList=[];
       this.licenseListNew=[];
       this.photosList=[];
       this.photosListNew=[];
       this.active=1;
+      getStore().then(response => {
+        this.storeTypes = response.storeTypes;
+        this.open = true;
+        this.title = "添加门店";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -370,19 +390,15 @@ export default {
       const id = row.id || this.ids
       getStore(id).then(response => {
         this.form = response.data;
-        if(this.form.province!=null){
-          this.cities=JSON.parse(this.form.province);
-        }
+        this.cities=JSON.parse(this.form.province);
+        this.licenseList=JSON.parse(this.form.license);
+        this.licenseListNew=JSON.parse(this.form.license);
+        this.photosList=JSON.parse(this.form.photos);
+        this.photosListNew=JSON.parse(this.form.photos);
+        this.storeTypes = response.storeTypes;
+        this.form.storeTypeIds = response.storeTypeIds;
         this.open = true;
         this.title = "修改门店";
-        if(this.form.license!=null){
-          this.licenseList=JSON.parse(this.form.license);
-          this.licenseListNew=JSON.parse(this.form.license);
-        }
-        if(this.form.photos!=null){
-          this.photosList=JSON.parse(this.form.photos);
-          this.photosListNew=JSON.parse(this.form.photos);
-        }
       });
     },
     /** 提交按钮 */
