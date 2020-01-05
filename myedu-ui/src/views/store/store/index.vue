@@ -153,6 +153,20 @@
             </el-col>
           </el-row>
 
+           <el-row>
+            <el-col :span="8">
+                <el-form-item label="标签">
+                  <el-checkbox-group v-model="form.storeLabelIds">
+                    <el-checkbox-button
+                      v-for="item in storeLabels"
+                      :label="item.id"
+                      :key="item.id">{{item.name}}
+                    </el-checkbox-button>
+                  </el-checkbox-group>
+                </el-form-item>
+            </el-col>
+          </el-row>
+
           <el-row>
            <el-col :span="8">
               <el-form-item label="地址" prop="province">
@@ -256,6 +270,8 @@ export default {
     return {
       //门店类型列表
       storeTypes:[],
+      //标签类型列表
+      storeLabels:[],
       //是否有视频
       videoFlag:false,
       //视频上传进度
@@ -351,6 +367,7 @@ export default {
         delFlag: undefined,
         createById: undefined,
         storeTypeIds:[],
+        storeLabelIds:[],
       };
       this.resetForm("form");
     },
@@ -380,6 +397,7 @@ export default {
       this.active=1;
       getStore().then(response => {
         this.storeTypes = response.storeTypes;
+        this.storeLabels = response.storeLabels;
         this.open = true;
         this.title = "添加门店";
       });
@@ -396,7 +414,9 @@ export default {
         this.photosList=JSON.parse(this.form.photos);
         this.photosListNew=JSON.parse(this.form.photos);
         this.storeTypes = response.storeTypes;
+        this.storeLabels = response.storeLabels;
         this.form.storeTypeIds = response.storeTypeIds;
+        this.form.storeLabelIds = response.storeLabelIds;
         this.open = true;
         this.title = "修改门店";
       });
