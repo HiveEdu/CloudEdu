@@ -58,4 +58,13 @@ public interface SysLabelMapper
      * @return 结果
      */
     public int deleteSysLabelByIds(Long[] ids);
+
+    /**
+     * 根据标签ID获取标签类型选择框列表
+     *
+     * @param id 标签ID
+     * @return 选中门店类型ID列表
+     */
+    public List<Integer> selectLabelListById(Long id);
+
 }

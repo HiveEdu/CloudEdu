@@ -8,10 +8,13 @@ import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.dataBasic.domain.SysLabel;
 import com.myedu.project.dataBasic.domain.SysStoreType;
+import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.enums.StoryType;
+import com.myedu.project.store.enums.labelType;
 import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,8 +34,12 @@ public class YunStoreController extends BaseController
 {
     @Autowired
     private IYunStoreService yunStoreService;
+
     @Autowired
     private ISysStoreTypeService sysStoreTypeService;
+
+    @Autowired
+    private ISysLabelService syslabelypeService;
     /**
      * 查询门店列表
      */
@@ -69,10 +76,15 @@ public class YunStoreController extends BaseController
         SysStoreType sysStoreType=new SysStoreType();
         sysStoreType.setType(StoryType.STORE.getCode());
         ajax.put("storeTypes", sysStoreTypeService.selectSysStoreTypeList(sysStoreType));
+
+        SysLabel sysLabel =new SysLabel();
+        sysLabel.setType(labelType.STORE.getCode());
+        ajax.put("storeLabels", syslabelypeService.selectSysLabelList(sysLabel));
         if (StringUtils.isNotNull(id))
         {
             ajax.put(AjaxResult.DATA_TAG, yunStoreService.selectYunStoreById(id));
             ajax.put("storeTypeIds", sysStoreTypeService.selectStoreTypeListByStoreId(id));
+            ajax.put("storeLabelIds", syslabelypeService.selectLabelListById(id));
         }
         return ajax;
     }

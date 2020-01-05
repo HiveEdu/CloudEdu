@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreLabelMapper">
+    
+    <resultMap type="YunStoreLabel" id="YunStoreLabelResult">
+        <result property="storeId"    column="store_id"    />
+        <result property="labelId"    column="label_id"    />
+    </resultMap>
+
+    <sql id="selectYunStoreLabelVo">
+        select store_id, label_id from yun_store_label
+    </sql>
+
+    <select id="selectYunStoreLabelList" parameterType="YunStoreLabel" resultMap="YunStoreLabelResult">
+        <include refid="selectYunStoreLabelVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectYunStoreLabelById" parameterType="Long" resultMap="YunStoreLabelResult">
+        <include refid="selectYunStoreLabelVo"/>
+        where store_id = #{storeId}
+    </select>
+
+    <insert id="insertYunStoreLabel" parameterType="YunStoreLabel">
+        insert into yun_store_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">store_id,</if>
+            <if test="labelId != null ">label_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="labelId != null ">#{labelId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreLabel" parameterType="YunStoreLabel">
+        update yun_store_label
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="labelId != null ">label_id = #{labelId},</if>
+        </trim>
+        where store_id = #{storeId}
+    </update>
+
+    <delete id="deleteYunStoreLabelById" parameterType="Long">
+        delete from yun_store_label where store_id = #{storeId}
+    </delete>
+
+    <delete id="deleteYunStoreLabelByIds" parameterType="String">
+        delete from yun_store_label where store_id in
+        <foreach item="storeId" collection="array" open="(" separator="," close=")">
+            #{storeId}
+        </foreach>
+    </delete>
+
+
+    <insert id="batchStoreLabel">
+        insert into yun_store_label(store_id, label_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.storeId},#{item.labelId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteStoreLabelByStoreId" parameterType="Long">
+		delete from yun_store_label where store_id=#{storeId}
+	</delete>
+    
+</mapper>

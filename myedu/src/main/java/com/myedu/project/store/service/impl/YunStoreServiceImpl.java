@@ -3,7 +3,9 @@ package com.myedu.project.store.service.impl;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.YunStoreLabel;
 import com.myedu.project.store.domain.YunStoreType;
+import com.myedu.project.store.mapper.YunStoreLabelMapper;
 import com.myedu.project.store.mapper.YunStoreMapper;
 import com.myedu.project.store.mapper.YunStoreTypeMapper;
 import com.myedu.project.store.service.IYunStoreService;
@@ -27,6 +29,8 @@ public class YunStoreServiceImpl implements IYunStoreService
     private YunStoreMapper yunStoreMapper;
     @Autowired
     private YunStoreTypeMapper yunStoreTypeMapper;
+    @Autowired
+    private YunStoreLabelMapper yunStorelabelMapper;
     /**
      * 查询门店
      * 
@@ -81,6 +85,8 @@ public class YunStoreServiceImpl implements IYunStoreService
         Long storeId = yunStore.getId();
         // 删除门店与门店类型关联
         yunStoreTypeMapper.deleteStoreTypeByStoreId(storeId);
+        // 删除门店与标签类型关联
+        yunStorelabelMapper.deleteYunStoreLabelById(storeId);
         // 新增门店门店类型关联表
         insertStoreType(yunStore);
         return yunStoreMapper.updateYunStore(yunStore);
@@ -96,9 +102,11 @@ public class YunStoreServiceImpl implements IYunStoreService
     public int deleteYunStoreByIds(Long[] ids)
     {
         //删除与门店类型关联
+        //删除与标签类型关联
         for (Long id : ids)
         {
             yunStoreTypeMapper.deleteStoreTypeByStoreId(id);
+            yunStorelabelMapper.deleteYunStoreLabelById(id);
         }
         return yunStoreMapper.deleteYunStoreByIds(ids);
     }
@@ -114,6 +122,8 @@ public class YunStoreServiceImpl implements IYunStoreService
     {
         //删除与门店类型关联
         yunStoreTypeMapper.deleteStoreTypeByStoreId(id);
+        //删除与标签类型关联
+        yunStorelabelMapper.deleteYunStoreLabelById(id);
         return yunStoreMapper.deleteYunStoreById(id);
     }
 
@@ -139,6 +149,32 @@ public class YunStoreServiceImpl implements IYunStoreService
             if (list.size() > 0)
             {
                 yunStoreTypeMapper.batchStoreType(list);
+            }
+        }
+    }
+
+    /*
+     * @Description :新增门店标签
+     * @Author : 梁龙飞
+     * @Date : 2020/1/5 14:50
+     */
+    public void insertStoreLabel(YunStore yunStore)
+    {
+        Long[] storeTypeIds = yunStore.getStoreTypeIds();
+        if (StringUtils.isNotNull(storeTypeIds))
+        {
+            // 新增门店与标签
+            List<YunStoreLabel> list1 = new ArrayList<YunStoreLabel>();
+            for (Long storeTypeId : storeTypeIds)
+            {
+                YunStoreLabel yunStoreLabel = new YunStoreLabel();
+                yunStoreLabel.setStoreId(yunStore.getId());
+                yunStoreLabel.setTypeId(storeTypeId);
+                list1.add(yunStoreLabel);
+            }
+            if (list1.size() > 0)
+            {
+                yunStorelabelMapper.batchStoreType(list1);
             }
         }
     }

@@ -72,8 +72,11 @@ public class YunStore extends BaseEntity
     /** 创建人Id */
     private Long createById;
 
-    /** 岗位组 */
+    /** 门店类型组 */
     private Long[] storeTypeIds;
+
+    /** 标签类型组 */
+    private Long[] labelTypeIds;
 
     public void setId(Long id) 
     {
@@ -192,12 +195,45 @@ public class YunStore extends BaseEntity
     {
         return mapX;
     }
-    public void setMapY(Double mapY) 
+
+    @Override
+    public String toString() {
+        return "YunStore{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", logo='" + logo + '\'' +
+                ", manager='" + manager + '\'' +
+                ", managerPhone='" + managerPhone + '\'' +
+                ", photos='" + photos + '\'' +
+                ", video='" + video + '\'' +
+                ", license='" + license + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", address='" + address + '\'' +
+                ", mapX=" + mapX +
+                ", mapY=" + mapY +
+                ", delFlag='" + delFlag + '\'' +
+                ", createById=" + createById +
+                ", storeTypeIds=" + Arrays.toString(storeTypeIds) +
+                ", labelTypeIds=" + Arrays.toString(labelTypeIds) +
+                '}';
+    }
+
+    public void setMapY(Double mapY)
     {
         this.mapY = mapY;
     }
 
-    public Double getMapY() 
+    public Long[] getLabelTypeIds() {
+        return labelTypeIds;
+    }
+
+    public void setLabelTypeIds(Long[] labelTypeIds) {
+        this.labelTypeIds = labelTypeIds;
+    }
+
+    public Double getMapY()
     {
         return mapY;
     }
@@ -228,30 +264,5 @@ public class YunStore extends BaseEntity
         this.storeTypeIds = storeTypeIds;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("name", getName())
-            .append("logo", getLogo())
-            .append("manager", getManager())
-            .append("managerPhone", getManagerPhone())
-            .append("photos", getPhotos())
-            .append("video", getVideo())
-            .append("license", getLicense())
-            .append("province", getProvince())
-            .append("city", getCity())
-            .append("area", getArea())
-            .append("address", getAddress())
-            .append("mapX", getMapX())
-            .append("mapY", getMapY())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("delFlag", getDelFlag())
-            .append("createById", getCreateById())
-            .append("storeTypeIds", Arrays.toString(getStoreTypeIds()))
-            .toString();
-    }
+
 }

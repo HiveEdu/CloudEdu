@@ -58,4 +58,12 @@ public interface ISysLabelService
      * @return 结果
      */
     public int deleteSysLabelById(Long id);
+
+    /**
+     * 根据标签ID获取标签类型选择框列表
+     *
+     * @param id 标签ID
+     * @return 选中门店类型ID列表
+     */
+    public List<Integer> selectLabelListById(Long id);
 }

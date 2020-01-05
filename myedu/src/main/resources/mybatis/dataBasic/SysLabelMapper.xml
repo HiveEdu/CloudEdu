@@ -92,5 +92,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectLabelListById" parameterType="Long" resultType="Integer">
+		select ysl.label_id
+        from  yun_store_label ysl
+	        left join sys_label sl on sl.id = ysl.label_id
+	        left join yun_store ys on ys.id = ysl.store_id
+	    where ysl.store_id = #{storeId}
+	</select>
     
 </mapper>
