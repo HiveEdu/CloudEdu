@@ -251,6 +251,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      imageView: process.env.VUE_APP_BASE_API,
       headers: {
         Authorization: 'Bearer ' + getToken()
       },
@@ -365,6 +366,11 @@ export default {
         this.open = true;
         this.title = "修改动态";
         this.fileList=JSON.parse(this.form.picture);
+        for(let i=0;i<this.fileList.length;i++) {
+          if(this.fileList[i].url!=null){
+            this.fileList[i].url=this.imageView+"/"+this.fileList[i].url;
+          }
+        }
         this.fileListnew=JSON.parse(this.form.picture);
         // this.$refs.upload.clearFiles();
       });
@@ -434,7 +440,7 @@ export default {
     onSuccess(res,file, fileList){
       if(res.code=="200"){
         this.fileList=fileList
-        this.fileListnew.push({uid:file.uid,name:file.name,status:file.status,url:res.url})
+        this.fileListnew.push({uid:file.uid,name:file.name,status:file.status,url:res.fileName})
         this.msgSuccess("上传成功");
       }else{
         this.msgError("上传失败");
