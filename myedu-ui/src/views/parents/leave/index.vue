@@ -69,7 +69,7 @@
     <el-table v-loading="loading" :data="leaveList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="学生" align="center" prop="studentName" />
-      <el-table-column label="请假原因" align="center" prop="reason" />
+      <el-table-column label="请假原因" align="center" prop="reason" :formatter="reaspnFormat" />
       <el-table-column label="开始时间" align="center" prop="leaveStartTime" width="180">
         <template slot-scope="scope" v-if="scope.row.leaveStartTime!=null">
           <span>{{ parseTime(scope.row.leaveStartTime) }}</span>
@@ -128,8 +128,15 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="请假原因" prop="reason">
-          <el-input v-model="form.reason" placeholder="请输入请假原因" />
+         <el-form-item label="请假原因">
+          <el-select v-model="form.reason" placeholder="请选择请假原因">
+            <el-option
+              v-for="dict in reasonOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="开始时间" prop="leaveStartTime">
           <el-date-picker clearable size="small" style="width: 200px"
@@ -183,6 +190,8 @@ export default {
       open: false,
       // 学生选项
       studentList: [],
+       // 请假原因字典
+      reasonOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -203,6 +212,9 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts("yun_leave_reason").then(response => {
+      this.reasonOptions = response.data;
+    });
   },
   methods: {
     /** 查询学生请假列表 */
@@ -213,6 +225,10 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    // 请假原因字典翻译
+    reaspnFormat(row, column) {
+      return this.selectDictLabel(this.reasonOptions, row.reason);
     },
     // 取消按钮
     cancel() {

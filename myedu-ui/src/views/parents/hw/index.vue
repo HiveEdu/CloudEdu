@@ -121,7 +121,7 @@
           <el-input-number v-model="form.weight" placeholder="请输入体重(kg)" /> kg
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入作业内容" />
+          <el-input v-model="form.remark" placeholder="请写下您的评论，记录陪伴孩子成长的每一刻" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
