@@ -198,9 +198,8 @@
 <!--                </bm-marker>-->
 <!--              </baidu-map>-->
           <baidu-map class="map" :center="map.center" :zoom="map.zoom" @ready="handler">
-            <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
+<!--            <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>-->
             <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
-            <bm-local-search v-if="map.isAdd" class="search" :keyword="map.keyword" :auto-viewport="true" :location="map.location"></bm-local-search>
           </baidu-map>
         </div>
         <div v-if="active==2" style="margin-top: 30px">
@@ -611,9 +610,15 @@ export default {
       // 鼠标缩放
       map.enableScrollWheelZoom(true);
       // 点击事件获取经纬度
+      var geoc =new  BMap.Geocoder();
       map.addEventListener('click', function (e) {
         console.log(e.point.lng, e.point.lat)
-        alert(e.point.lng+"--"+e.point.lat);
+
+        geoc.getLocation(e.point, function (rs) {
+          var addComp = rs.addressComponents;
+          var address = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+          alert(e.point.lng+"--"+e.point.lat+"--"+address);
+        });
       })
     }
   }
