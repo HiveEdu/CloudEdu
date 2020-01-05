@@ -164,7 +164,7 @@ public class YunStoreServiceImpl implements IYunStoreService
      */
     public void insertStoreLabel(YunStore yunStore)
     {
-        Long[] storeLabelIds = yunStore.getLabelTypeIds();
+        Long[] storeLabelIds = yunStore.getStoreLabelIds();
         if (StringUtils.isNotNull(storeLabelIds))
         {
             // 新增门店与标签

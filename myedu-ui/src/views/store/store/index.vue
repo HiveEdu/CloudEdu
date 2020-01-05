@@ -231,11 +231,7 @@
               <img width="100%" :src="dialogImageUrl1" alt="">
             </el-dialog>
           </el-form-item>
-<!--          <el-form-item label="视频" prop="video">-->
-<!--            <el-input v-model="form.video" placeholder="请输入门店宣传视频地址" />-->
-<!--          </el-form-item>-->
           <el-form-item label="视频上传" prop="video">
-            <!-- action必选参数, 上传的地址 -->
             <el-upload
               class="avatar-uploader el-upload--text"
               :action="uploadImgUrl"

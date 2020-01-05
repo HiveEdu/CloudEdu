@@ -76,7 +76,7 @@ public class YunStore extends BaseEntity
     private Long[] storeTypeIds;
 
     /** 标签类型组 */
-    private Long[] labelTypeIds;
+    private Long[] storeLabelIds;
 
     public void setId(Long id) 
     {
@@ -216,7 +216,7 @@ public class YunStore extends BaseEntity
                 ", delFlag='" + delFlag + '\'' +
                 ", createById=" + createById +
                 ", storeTypeIds=" + Arrays.toString(storeTypeIds) +
-                ", labelTypeIds=" + Arrays.toString(labelTypeIds) +
+                ", storeLabelIds=" + Arrays.toString(storeLabelIds) +
                 '}';
     }
 
@@ -225,12 +225,12 @@ public class YunStore extends BaseEntity
         this.mapY = mapY;
     }
 
-    public Long[] getLabelTypeIds() {
-        return labelTypeIds;
+    public Long[] getStoreLabelIds() {
+        return storeLabelIds;
     }
 
-    public void setLabelTypeIds(Long[] labelTypeIds) {
-        this.labelTypeIds = labelTypeIds;
+    public void setStoreLabelIds(Long[] storeLabelIds) {
+        this.storeLabelIds = storeLabelIds;
     }
 
     public Double getMapY()
