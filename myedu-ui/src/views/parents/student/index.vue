@@ -141,6 +141,26 @@
         <el-form-item label="学生名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入学生名称" />
         </el-form-item>
+        <el-form-item label="头像上传" style="margin-top: 80px">
+          <el-upload
+            ref="upload"
+            :action="uploadImgUrl"
+            list-type="picture-card"
+            content-type="false"
+            :headers="headers"
+            :file-list="fileList"
+            :show-file-list="true"
+            :before-upload="beforeUpload"
+            :on-change="onChange"
+            :on-success="onSuccess"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            @realTime="realTime"
+            accept='.jpg,.jpeg,.png,.gif'
+            >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="学生性别">
           <el-select v-model="form.gendel" placeholder="请选择学生性别">
             <el-option
@@ -175,8 +195,15 @@
 
 <script>
 import { listStudent, getStudent, delStudent, addStudent, updateStudent, exportStudent } from "@/api/parents/student";
-
+import { getToken } from '@/utils/auth'
 export default {
+  props: {
+    /* 图片大小 */
+    maxSize: {
+      type: Number,
+      default: 4000 //kb
+    }
+  },
   data() {
     return {
       //年级列表
@@ -215,7 +242,13 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      },
+      fileList:null,
+      fileListnew:[],
     };
   },
   created() {
@@ -242,6 +275,7 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+      this.$refs.upload.clearFiles();
     },
     // 表单重置
     reset() {
@@ -249,6 +283,7 @@ export default {
         name: undefined,
         gendel: undefined,
         school: undefined,
+        avatar: undefined,
         gradeId: undefined,
         createBy: undefined
       };
@@ -275,6 +310,8 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加学生数据";
+      this.fileListnew=[];
+      this.fileList=[];
       getStudent().then(response => {
         this.gradeLists=response.gradeLists;
       });
@@ -288,6 +325,8 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改学生数据";
+        this.fileList=JSON.parse(this.form.avatar);
+        this.fileListnew=JSON.parse(this.form.avatar);
       });
     },
     /** 提交按钮 */
@@ -295,6 +334,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
+            this.form.avatar=JSON.stringify(this.fileListnew);
             updateStudent(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -305,6 +345,7 @@ export default {
               }
             });
           } else {
+            this.form.avatar=JSON.stringify(this.fileListnew);
             addStudent(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -344,6 +385,36 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
+    },
+    beforeUpload(file){
+    },
+    onChange(file, fileList){
+    },
+    onSuccess(res,file, fileList){
+      if(res.code=="200"){
+        this.fileList=fileList
+        this.fileListnew.push({uid:file.uid,name:file.name,status:file.status,url:res.url})
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      this.fileList=fileList;
+      for(let i=0;i<this.fileListnew.length;i++) {
+        if (this.fileListnew[i].uid === file.uid) {
+          this.fileListnew.splice(i);
+        }
+      }
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+     // 实时预览
+    realTime(data) {
+      this.previews = data;
     }
   }
 };
