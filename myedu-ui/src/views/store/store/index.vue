@@ -179,10 +179,7 @@
            </el-col>
            <el-col :span="16">
               <el-form-item label="街道" prop="address">
-<!--                <el-input v-model="form.address" placeholder="请输入门店详细地址" />-->
-                <el-input placeholder="请输入内容" v-model="form.address">
-                  <template slot="append" ><span @click="mapSearch">搜索</span></template>
-                </el-input>
+                <el-input v-model="form.address" placeholder="请输入门店详细地址" />
               </el-form-item>
            </el-col>
           </el-row>
