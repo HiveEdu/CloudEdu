@@ -194,9 +194,37 @@
 <!--                  <bm-info-window :show="map.show">Hello~</bm-info-window>-->
 <!--                </bm-marker>-->
 <!--              </baidu-map>-->
-          <baidu-map class="map" :center="map.center" :zoom="map.zoom" @ready="handler">
-<!--            <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>-->
-            <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="经度" prop="address">
+                <el-input v-model="centerStr.lng" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="16">
+              <el-form-item label="纬度" prop="address">
+                <el-input v-model="centerStr.lat" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <baidu-map class="map" :center="centerStr" :zoom="zoom" @ready="handler"
+                     :scroll-wheel-zoom="true"
+                     @click="handler1"
+                     @moving="syncCenterAndZoom"
+ 　　　　　　　　　　　　@moveend="syncCenterAndZoom"
+ 　　　　　　　　　　　　@zoomend="syncCenterAndZoom">
+            <bm-local-search :keyword="keyword" :location="location" :auto-viewport="autoViewport":panel="panel" :select-first-result="selectFirstResult":pagecapacity="pageCapacity"></bm-local-search>
+            <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
+            <bm-geolocation
+              anchor="BMAP_ANCHOR_BOTTOM_RIGHT"
+              :showAddressBar="true"
+              :autoLocation="true"
+              :show="false"
+             ></bm-geolocation>
+<!--            <bm-marker-->
+<!--                  :position="{ lng: centerStr.lng, lat: centerStr.lat }"-->
+<!--                  :dragging="true"-->
+<!--　　　　　　　　　　　　　　　　animation="BMAP_ANIMATION_BOUNCE">-->
+<!--　　　　　　　　　　　　　　</bm-marker>-->
           </baidu-map>
         </div>
         <div v-if="active==2" style="margin-top: 30px">
@@ -286,11 +314,16 @@ Vue.use(BaiduMap, {
 export default {
   data() {
     return {
-      map:{
-        center: {lng: 121.4472540000, lat: 31.3236200000},
-        zoom: 15,
-        show: true,
-        dragging: true
+      keyword: "西安", //百度地图搜索值
+      location: "西安", //百度地图默认优先检索地区
+      autoViewport:true,//百度地图检索结束后是否自动调整地图视野
+      panel:false,//百度地图是否选展现检索结果面板
+      selectFirstResult:true,//百度地图是否选择第一个检索结果
+      pageCapacity:1,
+      zoom:15,
+      centerStr: {
+        lng: "",
+        lat: ""
       },
       mapForAdd:false,
       //门店类型列表
@@ -599,8 +632,33 @@ export default {
       }
     },
     //上传视频结束
+    syncCenterAndZoom(e) {
+      const { lng, lat } = e.target.getCenter();
+      this.centerStr.lng = lng;
+      this.centerStr.lat = lat;
+      this.zoom = e.target.getZoom();
+    },
 
-
+    handler1(e){
+      let geocoder= new BMap.Geocoder();  //创建地址解析器的实例
+      geocoder.getLocation(e.point,rs=>{
+        //地址描述(string)=
+        // console.log(rs.address);    //这里打印可以看到里面的详细地址信息，可以根据需求选择想要的
+        // console.log(rs.addressComponents);//结构化的地址描述(object)
+        // console.log(rs.addressComponents.province); //省
+        // console.log(rs.addressComponents.city); //城市
+        // console.log(rs.addressComponents.district); //区县
+        // console.log(rs.addressComponents.street); //街道
+        // console.log(rs.addressComponents.streetNumber); //门牌号
+        // console.log(rs.surroundingPois); //附近的POI点(array)
+        // console.log(rs.business); //商圈字段，代表此点所属的商圈(string)
+        this.form.address=rs.addressComponents.street+rs.addressComponents.streetNumber;
+        this.cities=[];
+        this.cities.push(rs.addressComponents.province);
+        this.cities.push(rs.addressComponents.city);
+        this.cities.push(rs.addressComponents.district);
+      });
+    },
     handler ({BMap, map}) {
       let me = this;
       console.log(BMap, map)
@@ -610,11 +668,9 @@ export default {
       var geoc =new  BMap.Geocoder();
       map.addEventListener('click', function (e) {
         console.log(e.point.lng, e.point.lat)
-
         geoc.getLocation(e.point, function (rs) {
           var addComp = rs.addressComponents;
           var address = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-          alert(e.point.lng+"--"+e.point.lat+"--"+address);
         });
       })
     }
