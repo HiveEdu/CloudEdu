@@ -28,6 +28,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+       <el-form-item label="审核状态" prop="checkStatus">
+          <el-select v-model="form.checkStatus" placeholder="请选择审核状态">
+            <el-option
+              v-for="dict in checkStatusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -325,6 +335,8 @@ export default {
         lng: "",
         lat: ""
       },
+      // 审核状态字典
+      checkStatusOptions: [],
       mapForAdd:false,
       //门店类型列表
       storeTypes:[],
@@ -367,6 +379,7 @@ export default {
         name: undefined,
         manager: undefined,
         createBy: undefined,
+        checkStatus:undefined
       },
       // 表单参数
       form: {},
@@ -385,6 +398,9 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts("yun_store_check_status").then(response => {
+      this.checkStatusOptions = response.data;
+    });
   },
   methods: {
     /** 查询门店列表 */
@@ -395,6 +411,10 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    // 审核状态字典翻译
+    checkFormat(row, column) {
+      return this.selectDictLabel(this.checkStatusOptions, row.checkStatus);
     },
     // 取消按钮
     cancel() {
