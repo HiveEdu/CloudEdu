@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="门店名称" prop="name">
+      <el-form-item label="名称" prop="name">
         <el-input
           v-model="queryParams.name"
           placeholder="请输入门店名称"
@@ -216,12 +216,10 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <baidu-map class="map" :center="centerStr" :zoom="zoom" @ready="handler"
+          <baidu-map class="map" :center="centerStr" :zoom="zoom"
                      :scroll-wheel-zoom="true"
-                     @click="handler1"
-                     @moving="syncCenterAndZoom"
- 　　　　　　　　　　　　@moveend="syncCenterAndZoom"
- 　　　　　　　　　　　　@zoomend="syncCenterAndZoom">
+                     @ready="handler"
+                     @click="mapclick">
             <bm-local-search :keyword="keyword" :location="location" :auto-viewport="autoViewport":panel="panel" :select-first-result="selectFirstResult":pagecapacity="pageCapacity"></bm-local-search>
             <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
             <bm-geolocation
@@ -230,11 +228,6 @@
               :autoLocation="true"
               :show="false"
              ></bm-geolocation>
-<!--            <bm-marker-->
-<!--                  :position="{ lng: centerStr.lng, lat: centerStr.lat }"-->
-<!--                  :dragging="true"-->
-<!--　　　　　　　　　　　　　　　　animation="BMAP_ANIMATION_BOUNCE">-->
-<!--　　　　　　　　　　　　　　</bm-marker>-->
           </baidu-map>
         </div>
         <div v-if="active==2" style="margin-top: 30px">
@@ -324,8 +317,8 @@ Vue.use(BaiduMap, {
 export default {
   data() {
     return {
-      keyword: "西安", //百度地图搜索值
-      location: "西安", //百度地图默认优先检索地区
+      keyword: "", //百度地图搜索值
+      location: "", //百度地图默认优先检索地区
       autoViewport:true,//百度地图检索结束后是否自动调整地图视野
       panel:false,//百度地图是否选展现检索结果面板
       selectFirstResult:true,//百度地图是否选择第一个检索结果
@@ -355,7 +348,7 @@ export default {
       active: 1,
       //省市区文件数据
       addressOptions: addressOptions,
-      cities:['陕西省','西安市','未央区'],
+      cities:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -495,6 +488,8 @@ export default {
         this.storeLabels = response.storeLabels;
         this.form.storeTypeIds = response.storeTypeIds;
         this.form.storeLabelIds = response.storeLabelIds;
+        this.centerStr.lng=this.form.mapX;
+        this.centerStr.lat=this.form.mapY;
         this.open = true;
         this.title = "修改门店";
       });
@@ -507,6 +502,8 @@ export default {
             this.form.province=JSON.stringify(this.cities);
             this.form.license=JSON.stringify(this.licenseListNew);
             this.form.photos=JSON.stringify(this.photosListNew);
+            this.form.mapX=this.centerStr.lng;
+            this.form.mapY=this.centerStr.lat;
             updateStore(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -520,6 +517,8 @@ export default {
             this.form.province=JSON.stringify(this.cities);
             this.form.license=JSON.stringify(this.licenseListNew);
             this.form.photos=JSON.stringify(this.photosListNew);
+            this.form.mapX=this.centerStr.lng;
+            this.form.mapY=this.centerStr.lat;
             addStore(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -652,14 +651,23 @@ export default {
       }
     },
     //上传视频结束
-    syncCenterAndZoom(e) {
+    handler({BMap, map}) {
+      var geolocation = new BMap.Geolocation();
+      let _this = this;
+      geolocation.getCurrentPosition(function (r) {
+        _this.centerStr.lat=r.latitude;
+        _this.centerStr.lng=r.longitude;
+        // _this.cities=[];
+        // _this.cities.push(rs.address.province);
+        // _this.cities.push(rs.address.city);
+        // _this.cities.push(rs.address.district);
+      })
+    },
+    mapclick(e){
       const { lng, lat } = e.target.getCenter();
       this.centerStr.lng = lng;
       this.centerStr.lat = lat;
       this.zoom = e.target.getZoom();
-    },
-
-    handler1(e){
       let geocoder= new BMap.Geocoder();  //创建地址解析器的实例
       geocoder.getLocation(e.point,rs=>{
         //地址描述(string)=
@@ -679,21 +687,6 @@ export default {
         this.cities.push(rs.addressComponents.district);
       });
     },
-    handler ({BMap, map}) {
-      let me = this;
-      console.log(BMap, map)
-      // 鼠标缩放
-      map.enableScrollWheelZoom(true);
-      // 点击事件获取经纬度
-      var geoc =new  BMap.Geocoder();
-      map.addEventListener('click', function (e) {
-        console.log(e.point.lng, e.point.lat)
-        geoc.getLocation(e.point, function (rs) {
-          var addComp = rs.addressComponents;
-          var address = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-        });
-      })
-    }
   }
 };
 </script>
