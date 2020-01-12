@@ -58,40 +58,15 @@
 
     <el-table v-loading="loading" :data="classList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
       <el-table-column label="课程名称" align="center" prop="name" />
       <el-table-column label="课程类型" align="center" prop="classify" />
       <el-table-column label="托管类型" align="center" prop="reclassifyColl" />
-      <el-table-column label="是否一对一" align="center" prop="isOneToOne" />
       <el-table-column label="招生人数" align="center" prop="stuCount" />
-      <el-table-column label="招生对象" align="center" prop="gradeId" />
-      <el-table-column label="开始时间" align="center" prop="cStarttime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.cStarttime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="结束时间" align="center" prop="cEndtime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.cEndtime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="课程费用" align="center" prop="courseCost" />
-      <el-table-column label="餐费" align="center" prop="meals" />
-      <el-table-column label="课程介绍" align="center" prop="introduce" />
-      <el-table-column label="课程封面" align="center" prop="picture" />
-      <el-table-column label="门店Id" align="center" prop="storeId" />
-      <el-table-column label="上课时间" align="center" prop="classTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.classTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="上课时长" align="center" prop="classHour" />
       <el-table-column label="总课时" align="center" prop="classAll" />
       <el-table-column label="总费用" align="center" prop="totalCost" />
       <el-table-column label="上课周期" align="center" prop="week" />
       <el-table-column label="课程内容" align="center" prop="content" />
       <el-table-column label="课程状态" align="center" prop="status" />
-      <el-table-column label="创建人Id" align="center" prop="createById" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -124,18 +99,18 @@
     <el-dialog :title="title" :visible.sync="open" width="700px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-steps :active="active">
-          <el-step title="选择课程类型" icon="el-icon-edit" @click.native="stepClick(1)"></el-step>
-          <el-step title="课程设置信息" icon="el-icon-upload" @click.native="stepClick(2)"></el-step>
-          <el-step title="课程介绍" icon="el-icon-picture" @click.native="stepClick(3)"></el-step>
+          <el-step title="选择课程类型" icon="el-icon-s-operation" @click.native="stepClick(1)"></el-step>
+          <el-step title="课程设置信息" icon="el-icon-setting" @click.native="stepClick(2)"></el-step>
+          <el-step title="课程介绍" icon="el-icon-document" @click.native="stepClick(3)"></el-step>
         </el-steps>
         <div v-if="active==1">
           <el-form-item label="课程类型" prop="classify">
-            <el-input v-model="form.classify" placeholder="请输入课程类型" />
+            <el-input v-model="form.classify" placeholder="请输入课程类型" required="true"/>
           </el-form-item>
         </div>
         <div v-if="active==2">
           <el-form-item label="课程名称" prop="name">
-            <el-input v-model="form.name" placeholder="请输入课程名称" />
+            <el-input v-model="form.name" placeholder="例：2020年上半学期晚托班" />
           </el-form-item>
           <el-form-item label="托管类型" prop="reclassifyColl">
             <el-input v-model="form.reclassifyColl" placeholder="请输入托管类型" />
@@ -144,25 +119,25 @@
             <el-input v-model="form.isOneToOne" placeholder="请输入是否一对一" />
           </el-form-item>
           <el-form-item label="招生人数" prop="stuCount">
-            <el-input v-model="form.stuCount" placeholder="请输入招生人数" />
+            <el-input-number v-model="form.stuCount" placeholder="请输入招生人数" />
           </el-form-item>
           <el-form-item label="招生对象" prop="gradeId">
             <el-input v-model="form.gradeId" placeholder="请输入招生对象" />
           </el-form-item>
-          <el-form-item label="开始时间" prop="cStarttime">
+          <el-form-item label="开课时间" prop="cStarttime">
             <el-date-picker clearable size="small" style="width: 200px"
               v-model="form.cStarttime"
               type="date"
               value-format="yyyy-MM-dd"
-              placeholder="选择开始时间">
+              placeholder="选择开课时间">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="结束时间" prop="cEndtime">
+          <el-form-item label="结课时间" prop="cEndtime">
             <el-date-picker clearable size="small" style="width: 200px"
               v-model="form.cEndtime"
               type="date"
               value-format="yyyy-MM-dd"
-              placeholder="选择结束时间">
+              placeholder="选择结课时间">
             </el-date-picker>
           </el-form-item>
         </div>
@@ -179,31 +154,39 @@
         <el-form-item label="课程封面" prop="picture">
           <el-input v-model="form.picture" placeholder="请输入课程封面" />
         </el-form-item>
-        <el-form-item label="门店Id" prop="storeId">
-          <el-input v-model="form.storeId" placeholder="请输入门店Id" />
-        </el-form-item>
         <el-form-item label="上课时间" prop="classTime">
-          <el-date-picker clearable size="small" style="width: 200px"
+          <el-time-select
             v-model="form.classTime"
-            type="date"
-            value-format="yyyy-MM-dd"
+            :picker-options="{
+              start: '08:30',
+              step: '00:15',
+              end: '23:30'
+            }"
             placeholder="选择上课时间">
-          </el-date-picker>
+           </el-time-select>
         </el-form-item>
-        <el-form-item label="上课时长" prop="classHour">
-          <el-input v-model="form.classHour" placeholder="请输入上课时长" />
+        <el-form-item label="每节课时长(分钟)" prop="classHour">
+          <el-input-number v-model="form.classHour" placeholder="请输入上课时长" />
         </el-form-item>
-        <el-form-item label="总课时" prop="classAll">
-          <el-input v-model="form.classAll" placeholder="请输入总课时" />
+        <el-form-item label="总课时(共几节课)" prop="classAll">
+          <el-input-number v-model="form.classAll" placeholder="请输入总课时" />
         </el-form-item>
         <el-form-item label="总费用" prop="totalCost">
           <el-input v-model="form.totalCost" placeholder="请输入总费用" />
         </el-form-item>
-        <el-form-item label="上课周期" prop="week">
-          <el-input v-model="form.week" placeholder="请输入上课周期" />
+        <el-form-item label="周几上课" prop="week">
+          <!-- <el-input v-model="form.week" placeholder="请输入上课周期" /> -->
+          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+          <div style="margin: 15px 0;"></div>
+          <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+            <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
         <el-form-item label="课程内容" prop="content">
-          <el-input v-model="form.content" placeholder="请输入课程内容" />
+          <el-input type="textarea"
+          :rows="2"
+          placeholder="请输入课程内容"
+          v-model="form.content"></el-input>
         </el-form-item>
         <el-form-item label="课程状态">
           <el-radio-group v-model="form.status">
@@ -223,7 +206,7 @@
 
 <script>
 import { listClass, getClass, delClass, addClass, updateClass, exportClass } from "@/api/store/class";
-
+const cityOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
   data() {
     return {
@@ -270,6 +253,10 @@ export default {
         status: undefined,
         createById: undefined
       },
+        checkAll: false,
+        checkedCities: ['周一', '周二'],
+        cities: cityOptions,
+        isIndeterminate: true,
       // 表单参数
       form: {},
       // 表单校验
@@ -281,6 +268,16 @@ export default {
     this.getList();
   },
   methods: {
+      /** 选择周几上课 */
+       handleCheckAllChange(val) {
+        this.checkedCities = val ? cityOptions : [];
+        this.isIndeterminate = false;
+       },
+       handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.cities.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      },
     /** 查询课程设置列表 */
     getList() {
       this.loading = true;
