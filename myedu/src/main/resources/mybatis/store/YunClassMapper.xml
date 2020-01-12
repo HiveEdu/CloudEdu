@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunClassMapper">
+    
+    <resultMap type="YunClass" id="YunClassResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="classify"    column="classify"    />
+        <result property="reclassifyColl"    column="reclassify_coll"    />
+        <result property="isOneToOne"    column="is_one_to_one"    />
+        <result property="stuCount"    column="stu_count"    />
+        <result property="gradeId"    column="grade_id"    />
+        <result property="cStarttime"    column="c_starttime"    />
+        <result property="cEndtime"    column="c_endtime"    />
+        <result property="courseCost"    column="course_cost"    />
+        <result property="meals"    column="meals"    />
+        <result property="introduce"    column="introduce"    />
+        <result property="picture"    column="picture"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="classTime"    column="class_time"    />
+        <result property="classHour"    column="class_hour"    />
+        <result property="classAll"    column="class_all"    />
+        <result property="totalCost"    column="total_cost"    />
+        <result property="week"    column="week"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunClassVo">
+        select id, name, classify, reclassify_coll, is_one_to_one, stu_count, grade_id, c_starttime, c_endtime, course_cost, meals, introduce, picture, store_id, class_time, class_hour, class_all, total_cost, week, content, status, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_class
+    </sql>
+
+    <select id="selectYunClassList" parameterType="YunClass" resultMap="YunClassResult">
+        <include refid="selectYunClassVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="classify != null  and classify != ''"> and classify like concat('%', #{classify}, '%')</if>
+            <if test="reclassifyColl != null  and reclassifyColl != ''"> and reclassify_coll like concat('%', #{reclassifyColl}, '%')</if>
+            <if test="isOneToOne != null  and isOneToOne != ''"> and is_one_to_one = #{isOneToOne}</if>
+            <if test="stuCount != null "> and stu_count = #{stuCount}</if>
+            <if test="gradeId != null "> and grade_id = #{gradeId}</if>
+            <if test="cStarttime != null "> and c_starttime = #{cStarttime}</if>
+            <if test="cEndtime != null "> and c_endtime = #{cEndtime}</if>
+            <if test="courseCost != null "> and course_cost = #{courseCost}</if>
+            <if test="meals != null "> and meals = #{meals}</if>
+            <if test="introduce != null  and introduce != ''"> and introduce = #{introduce}</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+            <if test="classTime != null "> and class_time = #{classTime}</if>
+            <if test="classHour != null "> and class_hour = #{classHour}</if>
+            <if test="classAll != null "> and class_all = #{classAll}</if>
+            <if test="totalCost != null "> and total_cost = #{totalCost}</if>
+            <if test="week != null "> and week = #{week}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunClassById" parameterType="Long" resultMap="YunClassResult">
+        <include refid="selectYunClassVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunClass" parameterType="YunClass" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="classify != null  and classify != ''">classify,</if>
+            <if test="reclassifyColl != null  and reclassifyColl != ''">reclassify_coll,</if>
+            <if test="isOneToOne != null  and isOneToOne != ''">is_one_to_one,</if>
+            <if test="stuCount != null ">stu_count,</if>
+            <if test="gradeId != null ">grade_id,</if>
+            <if test="cStarttime != null ">c_starttime,</if>
+            <if test="cEndtime != null ">c_endtime,</if>
+            <if test="courseCost != null ">course_cost,</if>
+            <if test="meals != null ">meals,</if>
+            <if test="introduce != null  and introduce != ''">introduce,</if>
+            <if test="picture != null  and picture != ''">picture,</if>
+            <if test="storeId != null ">store_id,</if>
+            <if test="classTime != null ">class_time,</if>
+            <if test="classHour != null ">class_hour,</if>
+            <if test="classAll != null ">class_all,</if>
+            <if test="totalCost != null ">total_cost,</if>
+            <if test="week != null ">week,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="classify != null  and classify != ''">#{classify},</if>
+            <if test="reclassifyColl != null  and reclassifyColl != ''">#{reclassifyColl},</if>
+            <if test="isOneToOne != null  and isOneToOne != ''">#{isOneToOne},</if>
+            <if test="stuCount != null ">#{stuCount},</if>
+            <if test="gradeId != null ">#{gradeId},</if>
+            <if test="cStarttime != null ">#{cStarttime},</if>
+            <if test="cEndtime != null ">#{cEndtime},</if>
+            <if test="courseCost != null ">#{courseCost},</if>
+            <if test="meals != null ">#{meals},</if>
+            <if test="introduce != null  and introduce != ''">#{introduce},</if>
+            <if test="picture != null  and picture != ''">#{picture},</if>
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="classTime != null ">#{classTime},</if>
+            <if test="classHour != null ">#{classHour},</if>
+            <if test="classAll != null ">#{classAll},</if>
+            <if test="totalCost != null ">#{totalCost},</if>
+            <if test="week != null ">#{week},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunClass" parameterType="YunClass">
+        update yun_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="classify != null  and classify != ''">classify = #{classify},</if>
+            <if test="reclassifyColl != null  and reclassifyColl != ''">reclassify_coll = #{reclassifyColl},</if>
+            <if test="isOneToOne != null  and isOneToOne != ''">is_one_to_one = #{isOneToOne},</if>
+            <if test="stuCount != null ">stu_count = #{stuCount},</if>
+            <if test="gradeId != null ">grade_id = #{gradeId},</if>
+            <if test="cStarttime != null ">c_starttime = #{cStarttime},</if>
+            <if test="cEndtime != null ">c_endtime = #{cEndtime},</if>
+            <if test="courseCost != null ">course_cost = #{courseCost},</if>
+            <if test="meals != null ">meals = #{meals},</if>
+            <if test="introduce != null  and introduce != ''">introduce = #{introduce},</if>
+            <if test="picture != null  and picture != ''">picture = #{picture},</if>
+            <if test="storeId != null ">store_id = #{storeId},</if>
+            <if test="classTime != null ">class_time = #{classTime},</if>
+            <if test="classHour != null ">class_hour = #{classHour},</if>
+            <if test="classAll != null ">class_all = #{classAll},</if>
+            <if test="totalCost != null ">total_cost = #{totalCost},</if>
+            <if test="week != null ">week = #{week},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunClassById" parameterType="Long">
+        delete from yun_class where id = #{id}
+    </delete>
+
+    <delete id="deleteYunClassByIds" parameterType="String">
+        delete from yun_class where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
