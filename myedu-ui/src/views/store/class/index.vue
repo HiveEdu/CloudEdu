@@ -105,7 +105,14 @@
         </el-steps>
         <div v-if="active==1">
           <el-form-item label="课程类型" prop="classify">
-            <el-input v-model="form.classify" placeholder="请输入课程类型" required="true"/>
+             <el-select v-model="queryParams.classify" placeholder="请选择课程类型" clearable size="small">
+              <el-option
+                v-for="dict in typeOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
           </el-form-item>
         </div>
         <div v-if="active==2">
@@ -226,6 +233,8 @@ export default {
       // 弹出层标题
       title: "",
       // 是否显示弹出层
+      // 课程类型字典
+      typeOptions: [],
       open: false,
       // 查询参数
       queryParams: {
@@ -261,13 +270,26 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        classify: [
+          { required: true, message: "课程类型不能为空", trigger: "blur" }
+        ],
+        name: [
+          { required: true, message: "课程名称不能为空", trigger: "blur" }
+        ]
       }
     };
   },
   created() {
     this.getList();
+     this.getDicts("course_type").then(response => {
+      this.typeOptions = response.data;
+    });
   },
   methods: {
+      // 课程类型字典翻译
+        typeFormat(row, column) {
+          return this.selectDictLabel(this.typeOptions, row.type);
+        },
       /** 选择周几上课 */
        handleCheckAllChange(val) {
         this.checkedCities = val ? cityOptions : [];
