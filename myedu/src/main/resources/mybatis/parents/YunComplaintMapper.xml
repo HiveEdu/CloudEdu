@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.parents.mapper.YunComplaintMapper">
+    
+    <resultMap type="YunComplaint" id="YunComplaintResult">
+        <result property="id"    column="id"    />
+        <result property="complaint"    column="complaint"    />
+        <result property="reason"    column="reason"    />
+        <result property="evidentImg"    column="evident_img"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunComplaintVo">
+        select id, complaint, reason, evident_img, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_complaint
+    </sql>
+
+    <select id="selectYunComplaintList" parameterType="YunComplaint" resultMap="YunComplaintResult">
+        <include refid="selectYunComplaintVo"/>
+        <where>  
+            <if test="complaint != null  and complaint != ''"> and complaint = #{complaint}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="evidentImg != null  and evidentImg != ''"> and evident_img = #{evidentImg}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunComplaintById" parameterType="Long" resultMap="YunComplaintResult">
+        <include refid="selectYunComplaintVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunComplaint" parameterType="YunComplaint">
+        insert into yun_complaint
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="complaint != null  and complaint != ''">complaint,</if>
+            <if test="reason != null  and reason != ''">reason,</if>
+            <if test="evidentImg != null  and evidentImg != ''">evident_img,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="complaint != null  and complaint != ''">#{complaint},</if>
+            <if test="reason != null  and reason != ''">#{reason},</if>
+            <if test="evidentImg != null  and evidentImg != ''">#{evidentImg},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunComplaint" parameterType="YunComplaint">
+        update yun_complaint
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="complaint != null  and complaint != ''">complaint = #{complaint},</if>
+            <if test="reason != null  and reason != ''">reason = #{reason},</if>
+            <if test="evidentImg != null  and evidentImg != ''">evident_img = #{evidentImg},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunComplaintById" parameterType="Long">
+        delete from yun_complaint where id = #{id}
+    </delete>
+
+    <delete id="deleteYunComplaintByIds" parameterType="String">
+        delete from yun_complaint where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
