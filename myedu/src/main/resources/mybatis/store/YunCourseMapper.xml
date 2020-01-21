@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.myedu.project.store.mapper.YunClassMapper">
+<mapper namespace="com.myedu.project.store.mapper.YunCourseMapper">
     
-    <resultMap type="YunClass" id="YunClassResult">
+    <resultMap type="YunCourse" id="YunCourseResult">
         <result property="id"    column="id"    />
         <result property="name"    column="name"    />
         <result property="classify"    column="classify"    />
@@ -34,16 +34,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createById"    column="create_by_id"    />
     </resultMap>
 
-    <sql id="selectYunClassVo">
-        select id, name, classify, reclassify_coll, is_one_to_one, stu_count, grade_id, c_starttime, c_endtime, course_cost, meals, introduce, picture, store_id, class_time, class_hour, class_all, total_cost, week, content, status, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_class
+    <sql id="selectYunCourseVo">
+        select id, name, classify, reclassify_coll, is_one_to_one, stu_count, grade_id, c_starttime, c_endtime, course_cost, meals, introduce, picture, store_id, class_time, class_hour, class_all, total_cost, week, content, status, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_course
     </sql>
 
-    <select id="selectYunClassList" parameterType="YunClass" resultMap="YunClassResult">
-        <include refid="selectYunClassVo"/>
+    <select id="selectYunCourseList" parameterType="YunCourse" resultMap="YunCourseResult">
+        <include refid="selectYunCourseVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="classify != null  and classify != ''"> and classify like concat('%', #{classify}, '%')</if>
-            <if test="reclassifyColl != null  and reclassifyColl != ''"> and reclassify_coll like concat('%', #{reclassifyColl}, '%')</if>
+            <if test="classify != null  and classify != ''"> and classify = #{classify}</if>
+            <if test="reclassifyColl != null  and reclassifyColl != ''"> and reclassify_coll = #{reclassifyColl}</if>
             <if test="isOneToOne != null  and isOneToOne != ''"> and is_one_to_one = #{isOneToOne}</if>
             <if test="stuCount != null "> and stu_count = #{stuCount}</if>
             <if test="gradeId != null "> and grade_id = #{gradeId}</if>
@@ -65,13 +65,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectYunClassById" parameterType="Long" resultMap="YunClassResult">
-        <include refid="selectYunClassVo"/>
+    <select id="selectYunCourseById" parameterType="Long" resultMap="YunCourseResult">
+        <include refid="selectYunCourseVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertYunClass" parameterType="YunClass" useGeneratedKeys="true" keyProperty="id">
-        insert into yun_class
+    <insert id="insertYunCourse" parameterType="YunCourse" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_course
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">name,</if>
             <if test="classify != null  and classify != ''">classify,</if>
@@ -130,8 +130,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateYunClass" parameterType="YunClass">
-        update yun_class
+    <update id="updateYunCourse" parameterType="YunCourse">
+        update yun_course
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null  and name != ''">name = #{name},</if>
             <if test="classify != null  and classify != ''">classify = #{classify},</if>
@@ -163,12 +163,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteYunClassById" parameterType="Long">
-        delete from yun_class where id = #{id}
+    <delete id="deleteYunCourseById" parameterType="Long">
+        delete from yun_course where id = #{id}
     </delete>
 
-    <delete id="deleteYunClassByIds" parameterType="String">
-        delete from yun_class where id in 
+    <delete id="deleteYunCourseByIds" parameterType="String">
+        delete from yun_course where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

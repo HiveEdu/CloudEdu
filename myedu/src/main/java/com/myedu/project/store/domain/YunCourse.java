@@ -1,18 +1,17 @@
 package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
+import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import java.util.Date;
-
 /**
- * 课程设置对象 yun_class
+ * 课程对象 yun_course
  * 
- * @author myedu
- * @date 2020-01-11
+ * @author 梁少鹏
+ * @date 2020-01-21
  */
-public class YunClass extends BaseEntity
+public class YunCourse extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
