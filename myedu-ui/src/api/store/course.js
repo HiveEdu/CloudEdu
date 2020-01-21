@@ -51,3 +51,19 @@ export function exportCourse(query) {
     params: query
   })
 }
+
+//更改课程状态下线
+export function changeStatusOff(id) {
+  return request({
+    url: '/store/course/changeStatusOff/' + id,
+    method: 'get',
+  })
+}
+
+//更改课程状态在售
+export function changeStatusOn(id) {
+  return request({
+    url: '/store/course/changeStatusOn/' + id,
+    method: 'get',
+  })
+}

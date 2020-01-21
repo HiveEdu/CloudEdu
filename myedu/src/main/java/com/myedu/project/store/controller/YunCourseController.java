@@ -6,6 +6,7 @@ import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
+import com.myedu.project.store.enums.CourseType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -115,5 +116,46 @@ public class YunCourseController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(yunCourseService.deleteYunCourseByIds(ids));
+    }
+    /*
+     * @Description :更改课程状态下线
+     * @Author : 梁少鹏
+     * @Date : 2020/1/21 16:30
+     */
+    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOff')")
+    @Log(title = "课程", businessType = BusinessType.UPDATE)
+    @GetMapping("/changeStatusOff/{ids}")
+    public AjaxResult changeStatusOff(@PathVariable Long[] ids)
+    {
+        int rows=0;
+        for (Long id:ids) {
+            YunCourse yunCourse= yunCourseService.selectYunCourseById(id);
+            if(yunCourse!=null){
+                yunCourse.setStatus(CourseType.OFFLINE.getCode());
+                rows=yunCourseService.updateYunCourse(yunCourse);
+            }
+        }
+        return toAjax(rows);
+    }
+
+    /*
+     * @Description :更改课程状态在售
+     * @Author : 梁少鹏
+     * @Date : 2020/1/21 16:30
+     */
+    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOn')")
+    @Log(title = "课程", businessType = BusinessType.UPDATE)
+    @GetMapping("/changeStatusOn/{ids}")
+    public AjaxResult changeStatusOn(@PathVariable Long[] ids)
+    {
+        int rows=0;
+        for (Long id:ids) {
+            YunCourse yunCourse= yunCourseService.selectYunCourseById(id);
+            if(yunCourse!=null){
+                yunCourse.setStatus(CourseType.ONLINE.getCode());
+                rows=yunCourseService.updateYunCourse(yunCourse);
+            }
+        }
+        return toAjax(rows);
     }
 }

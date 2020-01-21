@@ -121,6 +121,15 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['course:course:remove']"
           >删除</el-button>
+          <el-dropdown size="mini" style="margin-left:10px;">
+            <span class="el-dropdown-link">
+              操作<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-if="scope.row.status==0" @click.native="changeStatus(scope.row,1)">下线</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status==1" @click.native="changeStatus(scope.row,0)">上线</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -364,7 +373,7 @@
 </template>
 
 <script>
-import { listCourse, getCourse, delCourse, addCourse, updateCourse, exportCourse } from "@/api/store/course";
+import { listCourse, getCourse, delCourse, changeStatusOff,changeStatusOn,addCourse, updateCourse, exportCourse } from "@/api/store/course";
 import { getToken } from '@/utils/auth'
 const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
@@ -613,6 +622,31 @@ export default {
           this.msgSuccess("删除成功");
         }).catch(function() {});
     },
+    /** 更改课程状态 */
+    changeStatus(row,status) {
+      const ids = row.id || this.ids;
+      let courseStatus=null;
+      if(status==0){
+        courseStatus="上线"
+      }else if(status==1){
+        courseStatus="下线"
+      }
+      this.$confirm('是否确认'+courseStatus+'课程编号为"' + ids + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        if(status==0){
+          return changeStatusOn(ids);
+        }else if(status==1){
+          return changeStatusOff(ids);
+        }
+
+      }).then(() => {
+        this.getList();
+        this.msgSuccess(courseStatus+"成功");
+      }).catch(function() {});
+    },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
@@ -696,5 +730,12 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
   }
 </style>
