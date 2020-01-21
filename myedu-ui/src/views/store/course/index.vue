@@ -89,6 +89,11 @@
 
     <el-table v-loading="loading" :data="courseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="封面" width="55" >
+        　　<template slot-scope="scope">
+        　　　　<img :src="viewImage+'/'+scope.row.picture" width="50" height="50" class="head_pic"/>
+        　　</template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="类型" align="center" prop="classify" :formatter="classifyFormat" />
 <!--      <el-table-column label="招生人数" align="center" prop="stuCount" />-->
