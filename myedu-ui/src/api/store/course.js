@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询课程列表
 export function listCourse(query) {
   return request({
@@ -12,7 +12,7 @@ export function listCourse(query) {
 // 查询课程详细
 export function getCourse(id) {
   return request({
-    url: '/store/course/' + id,
+    url: '/store/course/' + praseStrEmpty(id),
     method: 'get'
   })
 }

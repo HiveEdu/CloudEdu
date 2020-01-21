@@ -1,6 +1,11 @@
 package com.myedu.project.store.controller;
 
 import java.util.List;
+
+import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.StringUtils;
+import com.myedu.project.dataBasic.domain.SysGrade;
+import com.myedu.project.dataBasic.service.ISysGradeService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +37,8 @@ public class YunCourseController extends BaseController
 {
     @Autowired
     private IYunCourseService yunCourseService;
+    @Autowired
+    private ISysGradeService sysGradeService;
 
     /**
      * 查询课程列表
@@ -62,10 +69,17 @@ public class YunCourseController extends BaseController
      * 获取课程详细信息
      */
     @PreAuthorize("@ss.hasPermi('store:course:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
-        return AjaxResult.success(yunCourseService.selectYunCourseById(id));
+        AjaxResult ajax = AjaxResult.success();
+        SysGrade sysGrade=new SysGrade();
+        ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG,yunCourseService.selectYunCourseById(id));
+        }
+        return ajax;
     }
 
     /**
@@ -76,6 +90,8 @@ public class YunCourseController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunCourse yunCourse)
     {
+        yunCourse.setCreateById(SecurityUtils.getUserId());
+        yunCourse.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunCourseService.insertYunCourse(yunCourse));
     }
 

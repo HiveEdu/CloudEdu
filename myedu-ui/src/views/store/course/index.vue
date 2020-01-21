@@ -20,16 +20,16 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="一对一" prop="isOneToOne">
-        <el-select v-model="queryParams.isOneToOne" placeholder="请选择是否一对一" clearable size="small">
-          <el-option
-            v-for="dict in isOneToOneOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
+<!--        <el-form-item label="一对一" prop="isOneToOne">-->
+<!--        <el-select v-model="queryParams.isOneToOne" placeholder="请选择是否一对一" clearable size="small">-->
+<!--          <el-option-->
+<!--            v-for="dict in isOneToOneOptions"-->
+<!--            :key="dict.dictValue"-->
+<!--            :label="dict.dictLabel"-->
+<!--            :value="dict.dictValue"-->
+<!--          />-->
+<!--        </el-select>-->
+<!--      </el-form-item>-->
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择课程状态" clearable size="small">
           <el-option
@@ -91,8 +91,8 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="类型" align="center" prop="classify" :formatter="classifyFormat" />
-      <el-table-column label="招生人数" align="center" prop="stuCount" />
-      <el-table-column label="招生对象" align="center" prop="gradeId" />
+<!--      <el-table-column label="招生人数" align="center" prop="stuCount" />-->
+<!--      <el-table-column label="招生对象" align="center" prop="gradeId" />-->
       <el-table-column label="开始时间" align="center" prop="cStarttime" width="180">
         <template slot-scope="scope" v-if="scope.row.cStarttime!=null">
           <span>{{ parseTime(scope.row.cStarttime) }}</span>
@@ -134,116 +134,226 @@
     />
 
     <!-- 添加或修改课程对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
+    <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="课程名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入课程名称" />
-        </el-form-item>
-        <el-form-item label="课程类型">
-          <el-select v-model="form.classify" placeholder="请选择课程类型">
-            <el-option
-              v-for="dict in classifyOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="托管类型">
-          <el-select v-model="form.reclassifyColl" placeholder="请选择托管类型">
-            <el-option
-              v-for="dict in reclassifyCollOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="是否一对一">
-          <el-radio-group v-model="form.isOneToOne">
-            <el-radio
-              v-for="dict in isOneToOneOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="招生人数" prop="stuCount">
-          <el-input v-model="form.stuCount" placeholder="请输入招生人数" />
-        </el-form-item>
-        <el-form-item label="招生对象" prop="gradeId">
-          <el-input v-model="form.gradeId" placeholder="请输入招生对象" />
-        </el-form-item>
-        <el-form-item label="开始时间" prop="cStarttime">
-          <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.cStarttime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择开始时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="结束时间" prop="cEndtime">
-          <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.cEndtime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择结束时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="课程费用" prop="courseCost">
-          <el-input v-model="form.courseCost" placeholder="请输入课程费用" />
-        </el-form-item>
-        <el-form-item label="餐费" prop="meals">
-          <el-input v-model="form.meals" placeholder="请输入餐费" />
-        </el-form-item>
-        <el-form-item label="课程介绍" prop="introduce">
-          <el-input v-model="form.introduce" placeholder="请输入课程介绍" />
-        </el-form-item>
-        <el-form-item label="课程封面" prop="picture">
-          <el-input v-model="form.picture" placeholder="请输入课程封面" />
-        </el-form-item>
-        <el-form-item label="门店Id" prop="storeId">
-          <el-input v-model="form.storeId" placeholder="请输入门店Id" />
-        </el-form-item>
-        <el-form-item label="上课时间" prop="classTime">
-          <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.classTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择上课时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="上课时长" prop="classHour">
-          <el-input v-model="form.classHour" placeholder="请输入上课时长" />
-        </el-form-item>
-        <el-form-item label="总课时" prop="classAll">
-          <el-input v-model="form.classAll" placeholder="请输入总课时" />
-        </el-form-item>
-        <el-form-item label="总费用" prop="totalCost">
-          <el-input v-model="form.totalCost" placeholder="请输入总费用" />
-        </el-form-item>
-        <el-form-item label="上课周期" prop="week">
-          <el-input v-model="form.week" placeholder="请输入上课周期" />
-        </el-form-item>
-        <el-form-item label="课程内容" prop="content">
-          <el-input v-model="form.content" placeholder="请输入课程内容" />
-        </el-form-item>
-        <el-form-item label="课程状态">
-          <el-select v-model="form.status" placeholder="请选择课程状态">
-            <el-option
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
-        </el-form-item>
-        <el-form-item label="创建人Id" prop="createById">
-          <el-input v-model="form.createById" placeholder="请输入创建人Id" />
-        </el-form-item>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="名称" prop="name">
+                <el-input v-model="form.name" placeholder="请输入课程名称" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="类型"  prop="classify">
+                <el-select v-model="form.classify" placeholder="请选择课程类型">
+                  <el-option
+                    v-for="dict in classifyOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" v-if="form.classify==0">
+              <el-form-item label="托管类型">
+                <el-select v-model="form.reclassifyColl" placeholder="请选择托管类型">
+                  <el-option
+                    v-for="dict in reclassifyCollOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" v-if="form.classify!=3">
+              <el-form-item label="一对一">
+                <el-radio-group v-model="form.isOneToOne">
+                  <el-radio
+                    v-for="dict in isOneToOneOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictValue"
+                  >{{dict.dictLabel}}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="招生对象" prop="gradeId">
+                <el-select v-model="form.gradeId" multiple placeholder="请选择招生对象"  style="width: 100%;">
+                  <el-option
+                    v-for="item in sysGrades"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="23">
+                  <el-form-item label="招生人数" prop="stuCount">
+                    <el-input-number min="0" controls-position="right" v-model="form.stuCount" style="width: 100%;" placeholder="请输入招生人数" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="1" style="margin-top:6px; ">
+                  <span >人</span>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="开始时间" prop="cStarttime">
+                <el-date-picker clearable size="small"
+                                v-model="form.cStarttime"
+                                type="date"
+                                style="width: 100%;"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择开始时间">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="结束时间" prop="cEndtime">
+                <el-date-picker clearable size="small"
+                                v-model="form.cEndtime"
+                                style="width: 100%;"
+                                type="date"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择结束时间">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="上课时间" prop="classTime">
+                <el-time-select
+                  v-model="form.classTime"
+                  style="width: 100%;"
+                  :picker-options="{
+                  start: '08:30',
+                  step: '00:15',
+                  end: '23:30'
+                  }"
+                  placeholder="选择上课时间">
+                </el-time-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="23">
+                  <el-form-item label="时长" prop="classHour">
+                    <el-input-number  min="0" controls-position="right" style="width: 100%;" v-model="form.classHour" placeholder="例:45分" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="1" style="margin-top:6px; ">
+                  <span >分</span>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="周次" prop="week">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+                  <el-checkbox-group v-model="checkedWeeks" @change="handleCheckedWeeksChange">
+                    <el-checkbox v-for="week in weeks" :label="week" :key="week">{{week}}</el-checkbox>
+                  </el-checkbox-group>
+                </el-checkbox>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="23">
+                  <el-form-item label="总课时" prop="classAll">
+                    <el-input-number min="0" controls-position="right" v-model="form.classAll" style="width: 100%;" placeholder="请输入总课时" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="1" style="margin-top:6px; ">
+                  <span >节</span>
+                </el-col>
+              </el-row>
+
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="23">
+                  <el-form-item label="课程费用" prop="courseCost">
+                    <el-input-number min="0" @change="courseCostChange" controls-position="right" v-model="form.courseCost" style="width: 100%;" placeholder="请输入课程费用" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="1" style="margin-top:6px; ">
+                  <span >元</span>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="23">
+                    <el-form-item label="餐费" prop="meals">
+                      <el-input-number  min="0" @change="mealsChange" controls-position="right" v-model="form.meals" style="width: 100%;" placeholder="请输入餐费" />
+                    </el-form-item>
+                </el-col>
+                <el-col :span="1" style="margin-top:6px; ">
+                  <span >元</span>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="23">
+                  <el-form-item label="总费用" prop="totalCost">
+                    <el-input-number min="0" controls-position="right" v-model="form.totalCost" style="width: 100%;" placeholder="请输入总费用" >
+                    </el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="1" style="margin-top:6px; ">
+                  <span >元</span>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="课程内容" prop="content">
+              <el-input v-model="form.content" type="textarea" placeholder="请输入课程内容" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="课程介绍" prop="introduce">
+                <el-input v-model="form.introduce" type="textarea" placeholder="请输入课程介绍" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        <el-row>
+            <el-form-item label="封面">
+              <el-upload
+                class="avatar-uploader"
+                ref="upload"
+                :headers="headers"
+                :action="uploadImgUrl"
+                :data="{'type':'course'}"
+                :show-file-list="false"
+                :on-success="onSuccess"
+                :on-remove="handleRemove"
+                :on-preview="handlePictureCardPreview"
+                :before-upload="beforeUpload">
+                <img v-if="form.picture" :src="viewImage+'/'+form.picture" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -255,10 +365,19 @@
 
 <script>
 import { listCourse, getCourse, delCourse, addCourse, updateCourse, exportCourse } from "@/api/store/course";
-
+import { getToken } from '@/utils/auth'
+const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
   data() {
     return {
+      // 招生对象选择
+      sysGrades: [],
+      //周次选择开始
+      checkAll: false,
+      checkedWeeks: [],
+      weeks: weekOptions,
+      isIndeterminate: true,
+      //周次选择结束
       // 遮罩层
       loading: true,
       // 选中数组
@@ -313,7 +432,23 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+        name: [
+          { required: true, message: "课程名称不能为空", trigger: "blur" }
+        ],
+        classify: [
+          { required: true, message: "课程类型不能为空", trigger: "blur" }
+        ],
+        content: [
+          { required: true, message: "课程内容不能为空", trigger: "blur" }
+        ],
+      },
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      viewImage: process.env.VUE_APP_BASE_API,
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      },
+      dialogImageUrl: '',
+      dialogVisible: false,
     };
   },
   created() {
@@ -414,15 +549,21 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加课程";
+      getCourse().then(response => {
+        this.sysGrades = response.sysGrades;
+        this.open = true;
+        this.title = "添加课程";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
       getCourse(id).then(response => {
+        this.sysGrades = response.sysGrades;
         this.form = response.data;
+        this.form.gradeId=JSON.parse(this.form.gradeId);
+        this.checkedWeeks=JSON.parse(this.form.week);
         this.open = true;
         this.title = "修改课程";
       });
@@ -431,6 +572,8 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.gradeId=JSON.stringify(this.form.gradeId);
+          this.form.week=JSON.stringify(this.checkedWeeks);
           if (this.form.id != undefined) {
             updateCourse(this.form).then(response => {
               if (response.code === 200) {
@@ -442,6 +585,7 @@ export default {
               }
             });
           } else {
+            this.form.status=0;//默认在售状态
             addCourse(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -481,7 +625,76 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
-    }
+    },
+
+    handleCheckAllChange(val) {
+      this.checkedWeeks= val ? weekOptions : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedWeeksChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.weeks.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.weeks.length;
+    },
+    //图片上传开始
+    beforeUpload(file){
+    },
+    onSuccess(res,file, fileList){
+      if(res.code=="200"){
+        this.form.picture=res.fileName
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      this.form.picture=null;
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    //图片上传结束
+    //餐费值改变事件
+    mealsChange(e){
+      if(this.form.courseCost==0){
+        this.form.courseCost=0;
+      }
+      this.form.totalCost=e+this.form.courseCost;
+    },
+    //课程费值改变事件
+    courseCostChange(e){
+      if(this.form.meals==0){
+        this.form.meals=0;
+      }
+      this.form.totalCost=e+this.form.meals;
+    },
   }
 };
 </script>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

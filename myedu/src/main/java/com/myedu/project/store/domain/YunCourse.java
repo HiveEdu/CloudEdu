@@ -40,7 +40,7 @@ public class YunCourse extends BaseEntity
 
     /** 招生对象 */
     @Excel(name = "招生对象")
-    private Long gradeId;
+    private String gradeId;
 
     /** 开始时间 */
     @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -71,8 +71,8 @@ public class YunCourse extends BaseEntity
     private Long storeId;
 
     /** 上课时间 */
-    @Excel(name = "上课时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date classTime;
+    @Excel(name = "上课时间", width = 30)
+    private String classTime;
 
     /** 上课时长 */
     @Excel(name = "上课时长")
@@ -88,7 +88,7 @@ public class YunCourse extends BaseEntity
 
     /** 上课周期 */
     @Excel(name = "上课周期")
-    private Long week;
+    private String week;
 
     /** 课程内容 */
     @Excel(name = "课程内容")
@@ -159,12 +159,12 @@ public class YunCourse extends BaseEntity
     {
         return stuCount;
     }
-    public void setGradeId(Long gradeId) 
+    public void setGradeId(String gradeId)
     {
         this.gradeId = gradeId;
     }
 
-    public Long getGradeId() 
+    public String getGradeId()
     {
         return gradeId;
     }
@@ -231,12 +231,12 @@ public class YunCourse extends BaseEntity
     {
         return storeId;
     }
-    public void setClassTime(Date classTime) 
+    public void setClassTime(String classTime)
     {
         this.classTime = classTime;
     }
 
-    public Date getClassTime() 
+    public String getClassTime()
     {
         return classTime;
     }
@@ -267,12 +267,12 @@ public class YunCourse extends BaseEntity
     {
         return totalCost;
     }
-    public void setWeek(Long week) 
+    public void setWeek(String week)
     {
         this.week = week;
     }
 
-    public Long getWeek() 
+    public String getWeek()
     {
         return week;
     }
