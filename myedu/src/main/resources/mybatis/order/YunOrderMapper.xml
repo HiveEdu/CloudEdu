@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.order.mapper.YunOrderMapper">
+    
+    <resultMap type="YunOrder" id="YunOrderResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="greadId"    column="gread_id"    />
+        <result property="managTime"    column="manag_time"    />
+        <result property="isMeal"    column="is_meal"    />
+        <result property="enrolTime"    column="enrol_time"    />
+        <result property="certificateType"    column="certificate_type"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="certificateNum"    column="certificate_num"    />
+        <result property="totalMoney"    column="total_money"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunOrderVo">
+        select id, num, student_id, store_id, course_id, gread_id, manag_time, is_meal, enrol_time, certificate_type, student_name, certificate_num, total_money, status, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_order
+    </sql>
+
+    <select id="selectYunOrderList" parameterType="YunOrder" resultMap="YunOrderResult">
+        <include refid="selectYunOrderVo"/>
+        <where>  
+            <if test="num != null  and num != ''"> and num = #{num}</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="greadId != null "> and gread_id = #{greadId}</if>
+            <if test="managTime != null "> and manag_time = #{managTime}</if>
+            <if test="isMeal != null  and isMeal != ''"> and is_meal = #{isMeal}</if>
+            <if test="enrolTime != null "> and enrol_time = #{enrolTime}</if>
+            <if test="certificateType != null  and certificateType != ''"> and certificate_type = #{certificateType}</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="certificateNum != null  and certificateNum != ''"> and certificate_num = #{certificateNum}</if>
+            <if test="totalMoney != null "> and total_money = #{totalMoney}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunOrderById" parameterType="Long" resultMap="YunOrderResult">
+        <include refid="selectYunOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunOrder" parameterType="YunOrder">
+        insert into yun_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="num != null  and num != ''">num,</if>
+            <if test="studentId != null ">student_id,</if>
+            <if test="storeId != null ">store_id,</if>
+            <if test="courseId != null ">course_id,</if>
+            <if test="greadId != null ">gread_id,</if>
+            <if test="managTime != null ">manag_time,</if>
+            <if test="isMeal != null  and isMeal != ''">is_meal,</if>
+            <if test="enrolTime != null ">enrol_time,</if>
+            <if test="certificateType != null  and certificateType != ''">certificate_type,</if>
+            <if test="studentName != null  and studentName != ''">student_name,</if>
+            <if test="certificateNum != null  and certificateNum != ''">certificate_num,</if>
+            <if test="totalMoney != null ">total_money,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="num != null  and num != ''">#{num},</if>
+            <if test="studentId != null ">#{studentId},</if>
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="courseId != null ">#{courseId},</if>
+            <if test="greadId != null ">#{greadId},</if>
+            <if test="managTime != null ">#{managTime},</if>
+            <if test="isMeal != null  and isMeal != ''">#{isMeal},</if>
+            <if test="enrolTime != null ">#{enrolTime},</if>
+            <if test="certificateType != null  and certificateType != ''">#{certificateType},</if>
+            <if test="studentName != null  and studentName != ''">#{studentName},</if>
+            <if test="certificateNum != null  and certificateNum != ''">#{certificateNum},</if>
+            <if test="totalMoney != null ">#{totalMoney},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunOrder" parameterType="YunOrder">
+        update yun_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''">num = #{num},</if>
+            <if test="studentId != null ">student_id = #{studentId},</if>
+            <if test="storeId != null ">store_id = #{storeId},</if>
+            <if test="courseId != null ">course_id = #{courseId},</if>
+            <if test="greadId != null ">gread_id = #{greadId},</if>
+            <if test="managTime != null ">manag_time = #{managTime},</if>
+            <if test="isMeal != null  and isMeal != ''">is_meal = #{isMeal},</if>
+            <if test="enrolTime != null ">enrol_time = #{enrolTime},</if>
+            <if test="certificateType != null  and certificateType != ''">certificate_type = #{certificateType},</if>
+            <if test="studentName != null  and studentName != ''">student_name = #{studentName},</if>
+            <if test="certificateNum != null  and certificateNum != ''">certificate_num = #{certificateNum},</if>
+            <if test="totalMoney != null ">total_money = #{totalMoney},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunOrderById" parameterType="Long">
+        delete from yun_order where id = #{id}
+    </delete>
+
+    <delete id="deleteYunOrderByIds" parameterType="String">
+        delete from yun_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -58,4 +58,5 @@ public interface YunStoreMapper
      * @return 结果
      */
     public int deleteYunStoreByIds(Long[] ids);
+
 }

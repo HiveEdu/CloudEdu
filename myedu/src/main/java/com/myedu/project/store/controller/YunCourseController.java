@@ -91,8 +91,6 @@ public class YunCourseController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunCourse yunCourse)
     {
-        yunCourse.setCreateById(SecurityUtils.getUserId());
-        yunCourse.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunCourseService.insertYunCourse(yunCourse));
     }
 

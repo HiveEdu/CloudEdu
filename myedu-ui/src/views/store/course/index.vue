@@ -133,6 +133,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="scope.row.status==0" @click.native="changeStatus(scope.row,1)">下线</el-dropdown-item>
               <el-dropdown-item v-if="scope.row.status==1" @click.native="changeStatus(scope.row,0)">上线</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status==0" @click.native="toSignUp(scope.row)">报名</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -146,7 +147,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
+    <signUpModal ref="signUpModal" :signUp="signUp" :courseData="courseData" @closeSignUp="closeSignUp"></signUpModal>
     <!-- 添加或修改课程对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -380,10 +381,14 @@
 <script>
 import { listCourse, getCourse, delCourse, changeStatusOff,changeStatusOn,addCourse, updateCourse, exportCourse } from "@/api/store/course";
 import { getToken } from '@/utils/auth'
+import signUpModal from './modal/signUpModal'
 const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
+  components: { signUpModal },
   data() {
     return {
+      signUp:false,
+      courseData:null,
       // 招生对象选择
       sysGrades: [],
       //周次选择开始
@@ -481,6 +486,16 @@ export default {
     });
   },
   methods: {
+
+    //打开课程报名页面
+    toSignUp(row){
+      this.courseData=row;
+      this.signUp=true;
+    },
+    //关闭课程报名页面
+    closeSignUp(){
+      this.signUp=false;
+    },
     /** 查询课程列表 */
     getList() {
       this.loading = true;
