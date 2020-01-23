@@ -1,26 +1,25 @@
 package com.myedu.project.order.controller;
 
-import java.util.List;
-
 import com.myedu.common.utils.SecurityUtils;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.myedu.common.utils.StringUtils;
+import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
-import com.myedu.project.order.domain.YunOrder;
-import com.myedu.project.order.service.IYunOrderService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.dataBasic.domain.SysGrade;
+import com.myedu.project.dataBasic.service.ISysGradeService;
+import com.myedu.project.order.domain.YunOrder;
+import com.myedu.project.order.domain.vo.YunOrderVo;
+import com.myedu.project.order.service.IYunOrderService;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+import com.myedu.project.parents.service.IYunStudentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 订单Controller
@@ -34,16 +33,19 @@ public class YunOrderController extends BaseController
 {
     @Autowired
     private IYunOrderService yunOrderService;
-
+    @Autowired
+    private IYunStudentService yunStudentService;
+    @Autowired
+    private ISysGradeService sysGradeService;
     /**
      * 查询订单列表
      */
     @PreAuthorize("@ss.hasPermi('order:order:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunOrder yunOrder)
+    public TableDataInfo list(YunOrderVo yunOrder)
     {
         startPage();
-        List<YunOrder> list = yunOrderService.selectYunOrderList(yunOrder);
+        List<YunOrderVo> list = yunOrderService.selectYunOrderList(yunOrder);
         return getDataTable(list);
     }
 
@@ -53,10 +55,10 @@ public class YunOrderController extends BaseController
     @PreAuthorize("@ss.hasPermi('order:order:export')")
     @Log(title = "订单", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunOrder yunOrder)
+    public AjaxResult export(YunOrderVo yunOrder)
     {
-        List<YunOrder> list = yunOrderService.selectYunOrderList(yunOrder);
-        ExcelUtil<YunOrder> util = new ExcelUtil<YunOrder>(YunOrder.class);
+        List<YunOrderVo> list = yunOrderService.selectYunOrderList(yunOrder);
+        ExcelUtil<YunOrderVo> util = new ExcelUtil<YunOrderVo>(YunOrderVo.class);
         return util.exportExcel(list, "order");
     }
 
@@ -64,10 +66,20 @@ public class YunOrderController extends BaseController
      * 获取订单详细信息
      */
     @PreAuthorize("@ss.hasPermi('order:order:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
-        return AjaxResult.success(yunOrderService.selectYunOrderById(id));
+        AjaxResult ajax = AjaxResult.success();
+        YunStudentVo yunStudent=new YunStudentVo();
+        yunStudent.setCreateById(SecurityUtils.getUserId());
+        SysGrade sysGrade=new SysGrade();
+        ajax.put("students", yunStudentService.selectYunStudentList(yunStudent));
+        ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG,yunOrderService.selectYunOrderById(id));
+        }
+        return ajax;
     }
 
     /**

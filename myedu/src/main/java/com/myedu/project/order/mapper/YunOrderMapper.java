@@ -1,6 +1,8 @@
 package com.myedu.project.order.mapper;
 
 import com.myedu.project.order.domain.YunOrder;
+import com.myedu.project.order.domain.vo.YunOrderVo;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ public interface YunOrderMapper
      * @param yunOrder 订单
      * @return 订单集合
      */
-    public List<YunOrder> selectYunOrderList(YunOrder yunOrder);
+    public List<YunOrderVo> selectYunOrderList(YunOrderVo yunOrder);
 
     /**
      * 新增订单

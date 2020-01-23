@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询订单列表
 export function listOrder(query) {
   return request({
@@ -12,7 +12,7 @@ export function listOrder(query) {
 // 查询订单详细
 export function getOrder(id) {
   return request({
-    url: '/order/order/' + id,
+    url: '/order/order/' + praseStrEmpty(id),
     method: 'get'
   })
 }

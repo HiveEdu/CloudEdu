@@ -4,6 +4,8 @@ import java.util.List;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.OrderCodeFactory;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.order.domain.vo.YunOrderVo;
+import com.myedu.project.order.enums.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.order.mapper.YunOrderMapper;
@@ -41,7 +43,7 @@ public class YunOrderServiceImpl implements IYunOrderService
      * @return 订单
      */
     @Override
-    public List<YunOrder> selectYunOrderList(YunOrder yunOrder)
+    public List<YunOrderVo> selectYunOrderList(YunOrderVo yunOrder)
     {
         return yunOrderMapper.selectYunOrderList(yunOrder);
     }
@@ -59,6 +61,7 @@ public class YunOrderServiceImpl implements IYunOrderService
         yunOrder.setCreateBy(SecurityUtils.getUsername());
         yunOrder.setCreateTime(DateUtils.getNowDate());
         yunOrder.setNum(OrderCodeFactory.getOrderCode(SecurityUtils.getUserId()));
+        yunOrder.setStatus(OrderStatus.TOBEPAID.getCode());
         return yunOrderMapper.insertYunOrder(yunOrder);
     }
 

@@ -8,12 +8,27 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="学生" prop="studentId">
-            <el-input v-model="signUpForm.studentId" placeholder="请输入关联学生" />
+            <el-select v-model="signUpForm.studentId"  placeholder="请输入关联学生"  style="width: 100%;">
+              <el-option
+                v-for="item in students"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="年级" prop="greadId">
-            <el-input v-model="signUpForm.greadId" placeholder="请输入关联年级" />
+            <el-select v-model="signUpForm.greadId"  placeholder="请输入关联年级"  style="width: 100%;">
+              <el-option
+                v-for="item in sysGrades"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -87,7 +102,7 @@
 </template>
 
 <script>
-  import {addOrder} from "@/api/order/order";
+  import {addOrder,getOrder} from "@/api/order/order";
     export default {
         name: "signUpModal",
         props: {
@@ -105,6 +120,10 @@
             this.getDicts("certificate_type").then(response => {
               this.certificateTypeOptions = response.data;
             });
+            getOrder().then(response => {
+              this.sysGrades = response.sysGrades;
+              this.students = response.students;
+            });
             this.dialogVisible=e;
           },
           courseData:function (e) {
@@ -114,6 +133,10 @@
         },
         data() {
           return {
+            // 年级列表
+            sysGrades: [],
+            // 学生列表
+            students:[],
             dialogVisible:false,
             title:"报名",
             // 是否含餐字典
@@ -126,6 +149,16 @@
             signUpForm: {},
             // 表单校验
             signUpFormRules: {
+              studentId: [
+                { required: true, message: "学生不能为空", trigger: "blur" }
+              ],
+              greadId: [
+                { required: true, message: "年级不能为空", trigger: "blur" }
+              ],
+              enrolTime: [
+                { required: true, message: "入学时间不能为空", trigger: "blur" }
+              ],
+
             }
           }
         },

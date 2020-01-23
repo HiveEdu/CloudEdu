@@ -37,13 +37,13 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['order:order:add']"
-        >新增</el-button>
+<!--        <el-button-->
+<!--          type="primary"-->
+<!--          icon="el-icon-plus"-->
+<!--          size="mini"-->
+<!--          @click="handleAdd"-->
+<!--          v-hasPermi="['order:order:add']"-->
+<!--        >新增</el-button>-->
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -79,12 +79,12 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="num" />
-      <el-table-column label="门店" align="center" prop="storeId" />
-      <el-table-column label="课程" align="center" prop="courseId" />
-      <el-table-column label="学生" align="center" prop="studentId" />
-      <el-table-column label="年级" align="center" prop="greadId" />
+      <el-table-column label="门店" align="center" prop="storeName" />
+      <el-table-column label="课程" align="center" prop="courseName" />
+      <el-table-column label="学生" align="center" prop="studentAssName" />
+      <el-table-column label="年级" align="center" prop="gradeName" />
       <el-table-column label="入学时间" align="center" prop="enrolTime" width="180">
-        <template slot-scope="scope" v-if="scope.row.enrolTime1=null">
+        <template slot-scope="scope" v-if="scope.row.enrolTime!=null">
           <span>{{ parseTime(scope.row.enrolTime) }}</span>
         </template>
       </el-table-column>
@@ -129,12 +129,26 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="学生" prop="studentId">
-              <el-input v-model="form.studentId" placeholder="请输入关联学生" />
+              <el-select v-model="form.studentId"  placeholder="请输入关联学生"  style="width: 100%;">
+                <el-option
+                  v-for="item in students"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="年级" prop="greadId">
-              <el-input v-model="form.greadId" placeholder="请输入关联年级" />
+              <el-select v-model="form.greadId"  placeholder="请输入关联年级"  style="width: 100%;">
+                <el-option
+                  v-for="item in sysGrades"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -214,6 +228,10 @@ import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } fro
 export default {
   data() {
     return {
+      // 年级列表
+      sysGrades: [],
+      // 学生列表
+      students:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -264,6 +282,15 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        studentId: [
+          { required: true, message: "学生不能为空", trigger: "blur" }
+        ],
+        greadId: [
+          { required: true, message: "年级不能为空", trigger: "blur" }
+        ],
+        enrolTime: [
+          { required: true, message: "入学时间不能为空", trigger: "blur" }
+        ],
       }
     };
   },
@@ -355,8 +382,12 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加订单";
+      getOrder().then(response => {
+        this.sysGrades = response.sysGrades;
+        this.students = response.students;
+        this.open = true;
+        this.title = "添加订单";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -364,6 +395,8 @@ export default {
       const id = row.id || this.ids
       getOrder(id).then(response => {
         this.form = response.data;
+        this.sysGrades = response.sysGrades;
+        this.students = response.students;
         this.open = true;
         this.title = "修改订单";
       });

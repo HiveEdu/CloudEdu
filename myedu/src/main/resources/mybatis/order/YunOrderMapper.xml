@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.order.mapper.YunOrderMapper">
     
-    <resultMap type="YunOrder" id="YunOrderResult">
+    <resultMap type="YunOrderVo" id="YunOrderResult">
         <result property="id"    column="id"    />
         <result property="num"    column="num"    />
         <result property="studentId"    column="student_id"    />
@@ -28,35 +28,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunOrderVo">
-        select id, num, student_id, store_id, course_id, gread_id, manag_time, is_meal, enrol_time, certificate_type, student_name, certificate_num, total_money, status, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_order
+        select yo.*,ys.name as storeName,yc.name as courseName,
+        ys2.name as studentAssName,sg.name as gradeName
+        from yun_order yo
+        left  join yun_store ys on ys.id=yo.store_id
+        left  join yun_course yc on yc.id=yo.course_id
+        left  join yun_student ys2 on ys2.id=yo.student_id
+        left  join sys_grade sg on sg.id=yo.gread_id
     </sql>
 
-    <select id="selectYunOrderList" parameterType="YunOrder" resultMap="YunOrderResult">
+    <select id="selectYunOrderList" parameterType="YunOrderVo" resultMap="YunOrderResult">
         <include refid="selectYunOrderVo"/>
         <where>  
-            <if test="num != null  and num != ''"> and num = #{num}</if>
-            <if test="studentId != null "> and student_id = #{studentId}</if>
-            <if test="storeId != null "> and store_id = #{storeId}</if>
-            <if test="courseId != null "> and course_id = #{courseId}</if>
-            <if test="greadId != null "> and gread_id = #{greadId}</if>
-            <if test="managTime != null "> and manag_time = #{managTime}</if>
-            <if test="isMeal != null  and isMeal != ''"> and is_meal = #{isMeal}</if>
-            <if test="enrolTime != null "> and enrol_time = #{enrolTime}</if>
-            <if test="certificateType != null  and certificateType != ''"> and certificate_type = #{certificateType}</if>
-            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
-            <if test="certificateNum != null  and certificateNum != ''"> and certificate_num = #{certificateNum}</if>
-            <if test="totalMoney != null "> and total_money = #{totalMoney}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="createTime != null "> and create_time = #{createTime}</if>
-            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="num != null  and num != ''"> and yo.num = #{num}</if>
+            <if test="studentId != null "> and yo.student_id = #{studentId}</if>
+            <if test="storeId != null "> and yo.store_id = #{storeId}</if>
+            <if test="courseId != null "> and yo.course_id = #{courseId}</if>
+            <if test="greadId != null "> and yo.gread_id = #{greadId}</if>
+            <if test="managTime != null "> and yo.manag_time = #{managTime}</if>
+            <if test="isMeal != null  and isMeal != ''"> and yo.is_meal = #{isMeal}</if>
+            <if test="enrolTime != null "> and yo.enrol_time = #{enrolTime}</if>
+            <if test="certificateType != null  and certificateType != ''"> and yo.certificate_type = #{certificateType}</if>
+            <if test="studentName != null  and studentName != ''"> and yo.student_name like concat('%', #{studentName}, '%')</if>
+            <if test="certificateNum != null  and certificateNum != ''"> and yo.certificate_num = #{certificateNum}</if>
+            <if test="totalMoney != null "> and yo.total_money = #{totalMoney}</if>
+            <if test="status != null  and status != ''"> and yo.status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and yo.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and yo.create_time = #{createTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and yo.del_flag = #{delFlag}</if>
+            <if test="createById != null "> and yo.create_by_id = #{createById}</if>
         </where>
     </select>
     
     <select id="selectYunOrderById" parameterType="Long" resultMap="YunOrderResult">
         <include refid="selectYunOrderVo"/>
-        where id = #{id}
+        where yo.id = #{id}
     </select>
         
     <insert id="insertYunOrder" parameterType="YunOrder">
