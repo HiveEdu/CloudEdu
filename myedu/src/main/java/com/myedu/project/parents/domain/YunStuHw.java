@@ -2,6 +2,8 @@ package com.myedu.project.parents.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,29 +13,36 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author  llf
  * @date 2019-12-29
  */
+@ApiModel("学生身高体重实体")
 public class YunStuHw extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** $column.columnComment */
+    /** 学生身高体重表主键Id */
+    @ApiModelProperty("学生身高体重表主键Id")
     private Long id;
 
     /** 身高（cm） */
+    @ApiModelProperty("身高（cm）")
     @Excel(name = "身高", readConverterExp = "c=m")
     private Double height;
 
     /** 体重（kg） */
+    @ApiModelProperty("体重（kg）")
     @Excel(name = "体重", readConverterExp = "k=g")
     private Double weight;
 
     /** 关联学生id */
+    @ApiModelProperty("关联学生id")
     @Excel(name = "关联学生id")
     private Long studentId;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     @Excel(name = "创建人Id")
     private Long createById;
 

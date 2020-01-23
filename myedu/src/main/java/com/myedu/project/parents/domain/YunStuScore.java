@@ -3,8 +3,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
-
-
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 
 /**
@@ -13,22 +13,27 @@ import com.myedu.framework.web.domain.BaseEntity;
  * @author 梁龙飞
  * @date 2019-12-30
  */
+@ApiModel("学生成绩实体")
 public class YunStuScore extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 成绩id */
+    @ApiModelProperty("学生成绩主键Id")
     private Long scoreId;
 
     /** 考试分数 */
+    @ApiModelProperty("考试分数")
     @Excel(name = "考试分数")
     private Double mark;
 
     /**学生id */
+    @ApiModelProperty("学生id")
     @Excel(name = "学生id")
     private Long studentId;
 
     /**课程id */
+    @ApiModelProperty("课程id")
     @Excel(name = "课程id")
     private Long courseId;
 
@@ -48,21 +53,26 @@ public class YunStuScore extends BaseEntity
     }
 
     /** 考试科目 */
+    @ApiModelProperty("考试科目")
     @Excel(name = "考试科目")
     private String examtname;
 
     /** 照片地址 */
+    @ApiModelProperty("照片地址")
     @Excel(name = "照片地址")
     private String examimage;
 
     /**  创建id */
+    @ApiModelProperty("创建id")
     @Excel(name = " 创建id")
     private Long createById;
 
     /** 更新标志 */
+    @ApiModelProperty("更新标志")
     private String delFlag;
 
     /** 考试时间 */
+    @ApiModelProperty("考试时间")
     @Excel(name = "考试时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date examtime;

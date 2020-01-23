@@ -2,6 +2,8 @@ package com.myedu.project.parents.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,40 +13,50 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁少鹏
  * @date 2019-12-29
  */
+@ApiModel("学生错题实体")
 public class YunStuMistake extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("学生错题主键Id")
     private Long id;
 
     /** 错题来源 */
+    @ApiModelProperty("错题来源")
     @Excel(name = "错题来源")
     private String source;
 
     /** 错题类型 */
+    @ApiModelProperty("错题类型")
     @Excel(name = "错题类型")
     private String type;
 
     /** 错题原因 */
+    @ApiModelProperty("错题原因")
     @Excel(name = "错题原因")
     private String reason;
 
     /** 错题图片地址 */
+    @ApiModelProperty("错题图片地址")
     private String images;
 
     /** 解决思路 */
+    @ApiModelProperty("解决思路")
     @Excel(name = "解决思路")
     private String solutions;
 
     /** 关联学生id */
+    @ApiModelProperty("关联学生id")
     @Excel(name = "关联学生id")
     private Long studentId;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     @Excel(name = "创建人Id")
     private Long createById;
 

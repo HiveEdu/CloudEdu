@@ -1,6 +1,7 @@
 package com.myedu.project.parents.domain.vo;
 
 import com.myedu.project.parents.domain.YunStuHwork;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +11,7 @@ import com.myedu.project.parents.domain.YunStuHwork;
  * Description:学生作业关联实体
  */
 public class YunStuHworkVo extends YunStuHwork {
+    @ApiModelProperty("学生姓名")
     private String studentName;
 
     public String getStudentName() {

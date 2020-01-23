@@ -2,6 +2,8 @@ package com.myedu.project.parents.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,30 +12,37 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author myedu
  * @date 2020-01-18
  */
+@ApiModel("家长投诉实体")
 public class YunComplaint extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键ID */
+    @ApiModelProperty("投诉表主键ID")
     private Long id;
 
     /** 投诉谁 */
+    @ApiModelProperty("投诉谁")
     @Excel(name = "投诉谁")
     private String complaint;
 
     /** 投诉理由 */
+    @ApiModelProperty("投诉理由")
     @Excel(name = "投诉理由")
     private String reason;
 
     /** 投诉证据 */
-    @Excel(name = "投诉理证据")
+    @ApiModelProperty("投诉证据")
+    @Excel(name = "投诉证据")
     private String evidentImg;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     @Excel(name = "删除标志")
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     private Long createById;
 
     public void setId(Long id) 

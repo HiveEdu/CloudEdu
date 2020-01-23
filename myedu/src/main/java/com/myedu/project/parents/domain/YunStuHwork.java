@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -12,44 +14,55 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁少鹏
  * @date 2019-12-29
  */
+@ApiModel("学生作业实体")
 public class YunStuHwork extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("学生作业主键Id")
     private Long id;
 
     /** 关联学生Id */
+    @ApiModelProperty("关联学生Id")
     private Long studentId;
 
     /** 作业类型 */
+    @ApiModelProperty("作业类型")
     @Excel(name = "作业类型")
     private String hworkType;
 
     /** 作业名称 */
+    @ApiModelProperty("作业名称")
     @Excel(name = "作业名称")
     private String hworkName;
 
     /** 完成状态 */
+    @ApiModelProperty("完成状态")
     @Excel(name = "完成状态")
     private String hworkStatus;
 
     /** 完成时间 */
+    @ApiModelProperty("完成时间")
     @Excel(name = "完成时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date hworkTime;
 
     /** 作业内容 */
+    @ApiModelProperty("作业内容")
     @Excel(name = "作业内容")
     private String hworkContent;
 
     /** 作业照片地址 */
+    @ApiModelProperty("作业照片地址")
     private String hworkImage;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     private Long createById;
 
     public void setId(Long id) 
