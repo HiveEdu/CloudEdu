@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.account.mapper.YunAccountChangeMapper">
+    
+    <resultMap type="YunAccountChange" id="YunAccountChangeResult">
+        <result property="id"    column="id"    />
+        <result property="accountId"    column="account_id"    />
+        <result property="changeType"    column="change_type"    />
+        <result property="preAmount"    column="pre_amount"    />
+        <result property="cashAmount"    column="cash_amount"    />
+        <result property="uncashAmount"    column="uncash_amount"    />
+        <result property="refId"    column="ref_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunAccountChangeVo">
+        select id, account_id, change_type, pre_amount, cash_amount, uncash_amount, ref_id, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_account_change
+    </sql>
+
+    <select id="selectYunAccountChangeList" parameterType="YunAccountChange" resultMap="YunAccountChangeResult">
+        <include refid="selectYunAccountChangeVo"/>
+        <where>  
+            <if test="accountId != null "> and account_id = #{accountId}</if>
+            <if test="changeType != null  and changeType != ''"> and change_type = #{changeType}</if>
+            <if test="preAmount != null "> and pre_amount = #{preAmount}</if>
+            <if test="cashAmount != null "> and cash_amount = #{cashAmount}</if>
+            <if test="uncashAmount != null "> and uncash_amount = #{uncashAmount}</if>
+            <if test="refId != null "> and ref_id = #{refId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunAccountChangeById" parameterType="Long" resultMap="YunAccountChangeResult">
+        <include refid="selectYunAccountChangeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunAccountChange" parameterType="YunAccountChange" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_account_change
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="accountId != null ">account_id,</if>
+            <if test="changeType != null  and changeType != ''">change_type,</if>
+            <if test="preAmount != null ">pre_amount,</if>
+            <if test="cashAmount != null ">cash_amount,</if>
+            <if test="uncashAmount != null ">uncash_amount,</if>
+            <if test="refId != null ">ref_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="accountId != null ">#{accountId},</if>
+            <if test="changeType != null  and changeType != ''">#{changeType},</if>
+            <if test="preAmount != null ">#{preAmount},</if>
+            <if test="cashAmount != null ">#{cashAmount},</if>
+            <if test="uncashAmount != null ">#{uncashAmount},</if>
+            <if test="refId != null ">#{refId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunAccountChange" parameterType="YunAccountChange">
+        update yun_account_change
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="accountId != null ">account_id = #{accountId},</if>
+            <if test="changeType != null  and changeType != ''">change_type = #{changeType},</if>
+            <if test="preAmount != null ">pre_amount = #{preAmount},</if>
+            <if test="cashAmount != null ">cash_amount = #{cashAmount},</if>
+            <if test="uncashAmount != null ">uncash_amount = #{uncashAmount},</if>
+            <if test="refId != null ">ref_id = #{refId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunAccountChangeById" parameterType="Long">
+        delete from yun_account_change where id = #{id}
+    </delete>
+
+    <delete id="deleteYunAccountChangeByIds" parameterType="String">
+        delete from yun_account_change where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <delete id="deleteYunAccountChangeByAccountId" parameterType="Long">
+        delete from yun_account_change where account_id = #{accountId}
+    </delete>
+</mapper>

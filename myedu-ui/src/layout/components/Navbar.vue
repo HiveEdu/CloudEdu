@@ -8,9 +8,9 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
         
-        <el-tooltip content="下载源码" effect="dark" placement="bottom">
-          <ruo-yi id="ruoyi" class="right-menu-item hover-effect" />
-        </el-tooltip>
+<!--        <el-tooltip content="下载源码" effect="dark" placement="bottom">-->
+<!--          <ruo-yi id="ruoyi" class="right-menu-item hover-effect" />-->
+<!--        </el-tooltip>-->
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
