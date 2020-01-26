@@ -20,6 +20,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="dateRange"
+          size="small"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -227,6 +239,8 @@ export default {
       total: 0,
       // 云托管动态管理表格数据
       dynamicList: [],
+      // 日期范围
+      dateRange: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -299,11 +313,12 @@ export default {
     /** 查询云托管动态管理列表 */
     getList() {
       this.loading = true;
-      listDynamic(this.queryParams).then(response => {
-        this.dynamicList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listDynamic(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+          this.dynamicList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 动态类型字典翻译
     typeFormat(row, column) {
@@ -340,6 +355,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

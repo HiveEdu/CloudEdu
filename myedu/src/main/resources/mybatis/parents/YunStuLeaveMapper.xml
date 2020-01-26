@@ -28,8 +28,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectYunStuLeaveVo"/>
         <where>  
             <if test="reason != null  and reason != ''"> and ysl.reason = #{reason}</if>
-            <!--<if test="leaveStartTime != null "> and ysl.leave_start_time = #{leaveStartTime}</if>-->
-            <!--<if test="leaveEndTime != null "> and ysl.leave_end_time = #{leaveEndTime}</if>-->
             <if test="studentId != null "> and ysl.student_id = #{studentId}</if>
             <if test="remark != null  and remark != ''"> and ysl.remark = #{remark}</if>
             <if test="createById != null "> and ysl.create_by_id = #{createById}</if>
