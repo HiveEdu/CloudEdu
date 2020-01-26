@@ -19,6 +19,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="dateRange"
+          size="small"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -192,6 +204,8 @@ export default {
       studentList: [],
        // 请假原因字典
       reasonOptions: [],
+      // 日期范围
+      dateRange: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -232,11 +246,12 @@ export default {
     /** 查询学生请假列表 */
     getList() {
       this.loading = true;
-      listLeave(this.queryParams).then(response => {
-        this.leaveList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listLeave(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+          this.leaveList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 请假原因字典翻译
     reaspnFormat(row, column) {
@@ -271,6 +286,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

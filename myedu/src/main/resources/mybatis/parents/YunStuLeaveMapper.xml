@@ -28,13 +28,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectYunStuLeaveVo"/>
         <where>  
             <if test="reason != null  and reason != ''"> and ysl.reason = #{reason}</if>
-            <if test="leaveStartTime != null "> and ysl.leave_start_time = #{leaveStartTime}</if>
-            <if test="leaveEndTime != null "> and ysl.leave_end_time = #{leaveEndTime}</if>
+            <!--<if test="leaveStartTime != null "> and ysl.leave_start_time = #{leaveStartTime}</if>-->
+            <!--<if test="leaveEndTime != null "> and ysl.leave_end_time = #{leaveEndTime}</if>-->
             <if test="studentId != null "> and ysl.student_id = #{studentId}</if>
             <if test="remark != null  and remark != ''"> and ysl.remark = #{remark}</if>
             <if test="createById != null "> and ysl.create_by_id = #{createById}</if>
             <if test="createBy!= null "> and ysl.create_by like concat('%', #{createBy}, '%')</if>
             <if test="studentName!= null ">and ys.name like concat('%', #{studentName}, '%')</if>
+            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(ysl.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                and date_format(ysl.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
        </where>
     </select>
     
