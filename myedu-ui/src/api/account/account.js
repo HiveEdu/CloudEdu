@@ -51,3 +51,22 @@ export function exportAccount(query) {
     params: query
   })
 }
+
+
+//账户充值
+export function racharge(data) {
+  return request({
+    url: '/account/account/racharge',
+    method: 'put',
+    data: data
+  })
+}
+
+// 支付
+export function toAliPay(url, data) {
+  return request({
+    url: url,
+    data,
+    method: 'put'
+  })
+}

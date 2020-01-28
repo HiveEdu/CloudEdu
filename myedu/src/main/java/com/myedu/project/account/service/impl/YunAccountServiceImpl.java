@@ -1,5 +1,6 @@
 package com.myedu.project.account.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
@@ -69,9 +70,9 @@ public class YunAccountServiceImpl implements IYunAccountService
         if(result==1){//主表添加成功增加记录表
             YunAccountChange yunAccountChange=new YunAccountChange();
             yunAccountChange.setAccountId(yunAccount.getId());
-            yunAccountChange.setPreAmount((double) 0);
+            yunAccountChange.setPreAmount(new BigDecimal(0));
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
-            yunAccountChange.setUncashAmount((double) 0);
+            yunAccountChange.setUncashAmount(new BigDecimal(0));
             yunAccountChange.setChangeType(AccountChangeType.RECHARGE.getCode());
             yunAccountChange.setCreateById(SecurityUtils.getUserId());
             yunAccountChange.setCreateBy(SecurityUtils.getUsername());
@@ -98,7 +99,7 @@ public class YunAccountServiceImpl implements IYunAccountService
             yunAccountChange.setAccountId(yunAccount.getId());
             yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
-            yunAccountChange.setUncashAmount((double) 0);
+            yunAccountChange.setUncashAmount(new BigDecimal(0));
             yunAccountChange.setChangeType(AccountChangeType.INTERNALTRANSFERACCOUNT.getCode());
             yunAccountChange.setCreateById(SecurityUtils.getUserId());
             yunAccountChange.setCreateBy(SecurityUtils.getUsername());

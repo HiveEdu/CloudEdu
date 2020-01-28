@@ -1,10 +1,19 @@
 package com.myedu.project.account.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.account.domain.YunAccountChange;
+import com.myedu.project.account.domain.vo.YunAccountVo;
+import com.myedu.project.account.enums.AccountChangeType;
+import com.myedu.project.account.service.IYunAccountChangeService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,7 +43,8 @@ public class YunAccountController extends BaseController
 {
     @Autowired
     private IYunAccountService yunAccountService;
-
+    @Autowired
+    private IYunAccountChangeService yunAccountChangeService;
     /**
      * 查询账户管理列表
      */
@@ -114,4 +124,44 @@ public class YunAccountController extends BaseController
     {
         return toAjax(yunAccountService.deleteYunAccountByIds(ids));
     }
+
+
+
+    /*
+     * @Description :账户充值
+     * @Author : 梁少鹏
+     * @Date : 2020/1/26 11:14
+     */
+    @PreAuthorize("@ss.hasPermi('account:account:racharge')")
+    @Log(title = "账户充值", businessType = BusinessType.UPDATE)
+    @PutMapping("/racharge")
+    public AjaxResult racharge(@RequestBody YunAccountVo yunAccount)
+    {
+        yunAccount.setCaseAmount(yunAccount.getRachargeAmount().add(yunAccount.getTotalAmount()));
+        yunAccount.setTotalAmount(yunAccount.getRachargeAmount().add(yunAccount.getTotalAmount()));
+        int result=yunAccountService.updateYunAccount(yunAccount);
+        if(result==1){//主表修改成功增加记录表
+            YunAccount yunAccount1=yunAccountService.selectYunAccountById(yunAccount.getId());
+            YunAccountChange yunAccountChange=new YunAccountChange();
+            yunAccountChange.setAccountId(yunAccount.getId());
+            yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
+            yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
+            yunAccountChange.setUncashAmount(new BigDecimal(0));
+            yunAccountChange.setChangeType(AccountChangeType.INTERNALTRANSFERACCOUNT.getCode());
+            yunAccountChange.setCreateById(SecurityUtils.getUserId());
+            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
+            yunAccountChange.setCreateTime(DateUtils.getNowDate());
+            yunAccountChangeService.insertYunAccountChange(yunAccountChange);
+        }
+        return toAjax(result);
+    }
+//    @PreAuthorize("@ss.hasPermi('account:account:toPayAsPc')")
+//    @Log(title = "支付宝PC网页支付")
+//    @PostMapping(value = "/toPayAsPC")
+//    public ResponseEntity<String> toPayAsPc(@Validated @RequestBody YunAccountVo yunAccount) throws Exception{
+//        AlipayConfig aliPay = alipayService.find();
+//        trade.setOutTradeNo(alipayUtils.getOrderCode());
+//        String payUrl = alipayService.toPayAsPc(aliPay,trade);
+//        return ResponseEntity.ok(payUrl);
+//    }
 }

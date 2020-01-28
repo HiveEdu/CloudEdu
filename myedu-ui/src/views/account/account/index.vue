@@ -86,13 +86,22 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['account:account:edit']"
           >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['account:account:remove']"
-          >删除</el-button>
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-delete"-->
+<!--            @click="handleDelete(scope.row)"-->
+<!--            v-hasPermi="['account:account:remove']"-->
+<!--          >删除</el-button>-->
+          <el-dropdown size="mini" style="margin-left:10px;">
+            <span class="el-dropdown-link">
+              操作<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-if="scope.row.status==0" @click.native="openRecharge(scope.row)">充值 </el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status==0" @click.native="changeStatus(scope.row)">提现 </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -104,6 +113,9 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <!--充值页面-->
+    <rechargeModal ref="rechargeModal" :recharge="recharge" :currentData="currentData" @closeRecharge="closeRecharge"></rechargeModal>
+
 
     <!-- 添加或修改账户管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
@@ -181,10 +193,15 @@
 
 <script>
 import { listAccount, getAccount, delAccount, addAccount, updateAccount, exportAccount } from "@/api/account/account";
-
+import rechargeModal from './modal/rechargeModal'
 export default {
+  components: { rechargeModal },
   data() {
     return {
+      //充值页面默认不打开
+      recharge:false,
+      //当前行记录为空
+      currentData:null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -232,6 +249,16 @@ export default {
     });
   },
   methods: {
+    //打开充值页面
+    openRecharge(row){
+      this.currentData=row;
+      this.recharge=true;
+    },
+    //关闭充值页面
+    closeRecharge(){
+      this.recharge=false;
+      this.getList();
+    },
     /** 查询账户管理列表 */
     getList() {
       this.loading = true;

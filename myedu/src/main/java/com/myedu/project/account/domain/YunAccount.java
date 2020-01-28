@@ -4,6 +4,9 @@ import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
+
 /**
  * 账户管理对象 yun_account
  * 
@@ -19,23 +22,23 @@ public class YunAccount extends BaseEntity
 
     /** 总金额 */
     @Excel(name = "总金额")
-    private Double totalAmount;
+    private BigDecimal totalAmount;
 
     /** 可提现金额 */
     @Excel(name = "可提现金额")
-    private Double caseAmount;
+    private BigDecimal caseAmount;
 
     /** 不可提现金额 */
     @Excel(name = "不可提现金额")
-    private Double uncaseAmount;
+    private BigDecimal uncaseAmount;
 
     /** 冻结金额 */
     @Excel(name = "冻结金额")
-    private Double freezeCaseAmount;
+    private BigDecimal freezeCaseAmount;
 
     /** 不可提现冻结金额 */
     @Excel(name = "不可提现冻结金额")
-    private Double freezeUncaseAmount;
+    private BigDecimal freezeUncaseAmount;
 
     /** 状态（0可用1不可用） */
     @Excel(name = "状态", readConverterExp = "0=可用1不可用")
@@ -58,48 +61,48 @@ public class YunAccount extends BaseEntity
     {
         return id;
     }
-    public void setTotalAmount(Double totalAmount) 
+    public void setTotalAmount(BigDecimal totalAmount)
     {
         this.totalAmount = totalAmount;
     }
 
-    public Double getTotalAmount() 
+    public BigDecimal getTotalAmount()
     {
         return totalAmount;
     }
-    public void setCaseAmount(Double caseAmount) 
+    public void setCaseAmount(BigDecimal caseAmount)
     {
         this.caseAmount = caseAmount;
     }
 
-    public Double getCaseAmount() 
+    public BigDecimal getCaseAmount()
     {
         return caseAmount;
     }
-    public void setUncaseAmount(Double uncaseAmount) 
+    public void setUncaseAmount(BigDecimal uncaseAmount)
     {
         this.uncaseAmount = uncaseAmount;
     }
 
-    public Double getUncaseAmount() 
+    public BigDecimal getUncaseAmount()
     {
         return uncaseAmount;
     }
-    public void setFreezeCaseAmount(Double freezeCaseAmount) 
+    public void setFreezeCaseAmount(BigDecimal freezeCaseAmount)
     {
         this.freezeCaseAmount = freezeCaseAmount;
     }
 
-    public Double getFreezeCaseAmount() 
+    public BigDecimal getFreezeCaseAmount()
     {
         return freezeCaseAmount;
     }
-    public void setFreezeUncaseAmount(Double freezeUncaseAmount) 
+    public void setFreezeUncaseAmount(BigDecimal freezeUncaseAmount)
     {
         this.freezeUncaseAmount = freezeUncaseAmount;
     }
 
-    public Double getFreezeUncaseAmount() 
+    public BigDecimal getFreezeUncaseAmount()
     {
         return freezeUncaseAmount;
     }

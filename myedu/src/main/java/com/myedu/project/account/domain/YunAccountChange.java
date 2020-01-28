@@ -4,6 +4,9 @@ import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
+
 /**
  * 账户资金变动流水对象 yun_account_change
  * 
@@ -27,15 +30,15 @@ public class YunAccountChange extends BaseEntity
 
     /** 变动前总金额 */
     @Excel(name = "变动前总金额")
-    private Double preAmount;
+    private BigDecimal preAmount;
 
     /** 可提现发生金额 */
     @Excel(name = "可提现发生金额")
-    private Double cashAmount;
+    private BigDecimal cashAmount;
 
     /** 不可发生金额 */
     @Excel(name = "不可发生金额")
-    private Double uncashAmount;
+    private BigDecimal uncashAmount;
 
     /** 关联流水ID(change_type不同，对应不同流水表，如充值、支付、提现流水) */
     @Excel(name = "关联流水ID(change_type不同，对应不同流水表，如充值、支付、提现流水)")
@@ -75,30 +78,30 @@ public class YunAccountChange extends BaseEntity
     {
         return changeType;
     }
-    public void setPreAmount(Double preAmount) 
+    public void setPreAmount(BigDecimal preAmount)
     {
         this.preAmount = preAmount;
     }
 
-    public Double getPreAmount() 
+    public BigDecimal getPreAmount()
     {
         return preAmount;
     }
-    public void setCashAmount(Double cashAmount) 
+    public void setCashAmount(BigDecimal cashAmount)
     {
         this.cashAmount = cashAmount;
     }
 
-    public Double getCashAmount() 
+    public BigDecimal getCashAmount()
     {
         return cashAmount;
     }
-    public void setUncashAmount(Double uncashAmount) 
+    public void setUncashAmount(BigDecimal uncashAmount)
     {
         this.uncashAmount = uncashAmount;
     }
 
-    public Double getUncashAmount() 
+    public BigDecimal getUncashAmount()
     {
         return uncashAmount;
     }

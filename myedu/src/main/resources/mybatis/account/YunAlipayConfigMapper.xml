@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.account.mapper.YunAlipayConfigMapper">
+    
+    <resultMap type="YunAlipayConfig" id="YunAlipayConfigResult">
+        <result property="id"    column="id"    />
+        <result property="appId"    column="app_id"    />
+        <result property="charset"    column="charset"    />
+        <result property="format"    column="format"    />
+        <result property="gatewayUrl"    column="gateway_url"    />
+        <result property="notifyUrl"    column="notify_url"    />
+        <result property="privateKey"    column="private_key"    />
+        <result property="publicKey"    column="public_key"    />
+        <result property="returnUrl"    column="return_url"    />
+        <result property="signType"    column="sign_type"    />
+        <result property="sysServiceProviderId"    column="sys_service_provider_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunAlipayConfigVo">
+        select id, app_id, charset, format, gateway_url, notify_url, private_key, public_key, return_url, sign_type, sys_service_provider_id, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_alipay_config
+    </sql>
+
+    <select id="selectYunAlipayConfigList" parameterType="YunAlipayConfig" resultMap="YunAlipayConfigResult">
+        <include refid="selectYunAlipayConfigVo"/>
+        <where>  
+            <if test="appId != null  and appId != ''"> and app_id = #{appId}</if>
+            <if test="charset != null  and charset != ''"> and charset = #{charset}</if>
+            <if test="format != null  and format != ''"> and format = #{format}</if>
+            <if test="gatewayUrl != null  and gatewayUrl != ''"> and gateway_url = #{gatewayUrl}</if>
+            <if test="notifyUrl != null  and notifyUrl != ''"> and notify_url = #{notifyUrl}</if>
+            <if test="privateKey != null  and privateKey != ''"> and private_key = #{privateKey}</if>
+            <if test="publicKey != null  and publicKey != ''"> and public_key = #{publicKey}</if>
+            <if test="returnUrl != null  and returnUrl != ''"> and return_url = #{returnUrl}</if>
+            <if test="signType != null  and signType != ''"> and sign_type = #{signType}</if>
+            <if test="sysServiceProviderId != null  and sysServiceProviderId != ''"> and sys_service_provider_id = #{sysServiceProviderId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunAlipayConfigById" parameterType="Long" resultMap="YunAlipayConfigResult">
+        <include refid="selectYunAlipayConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunAlipayConfig" parameterType="YunAlipayConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_alipay_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appId != null  and appId != ''">app_id,</if>
+            <if test="charset != null  and charset != ''">charset,</if>
+            <if test="format != null  and format != ''">format,</if>
+            <if test="gatewayUrl != null  and gatewayUrl != ''">gateway_url,</if>
+            <if test="notifyUrl != null  and notifyUrl != ''">notify_url,</if>
+            <if test="privateKey != null  and privateKey != ''">private_key,</if>
+            <if test="publicKey != null  and publicKey != ''">public_key,</if>
+            <if test="returnUrl != null  and returnUrl != ''">return_url,</if>
+            <if test="signType != null  and signType != ''">sign_type,</if>
+            <if test="sysServiceProviderId != null  and sysServiceProviderId != ''">sys_service_provider_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appId != null  and appId != ''">#{appId},</if>
+            <if test="charset != null  and charset != ''">#{charset},</if>
+            <if test="format != null  and format != ''">#{format},</if>
+            <if test="gatewayUrl != null  and gatewayUrl != ''">#{gatewayUrl},</if>
+            <if test="notifyUrl != null  and notifyUrl != ''">#{notifyUrl},</if>
+            <if test="privateKey != null  and privateKey != ''">#{privateKey},</if>
+            <if test="publicKey != null  and publicKey != ''">#{publicKey},</if>
+            <if test="returnUrl != null  and returnUrl != ''">#{returnUrl},</if>
+            <if test="signType != null  and signType != ''">#{signType},</if>
+            <if test="sysServiceProviderId != null  and sysServiceProviderId != ''">#{sysServiceProviderId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunAlipayConfig" parameterType="YunAlipayConfig">
+        update yun_alipay_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="appId != null  and appId != ''">app_id = #{appId},</if>
+            <if test="charset != null  and charset != ''">charset = #{charset},</if>
+            <if test="format != null  and format != ''">format = #{format},</if>
+            <if test="gatewayUrl != null  and gatewayUrl != ''">gateway_url = #{gatewayUrl},</if>
+            <if test="notifyUrl != null  and notifyUrl != ''">notify_url = #{notifyUrl},</if>
+            <if test="privateKey != null  and privateKey != ''">private_key = #{privateKey},</if>
+            <if test="publicKey != null  and publicKey != ''">public_key = #{publicKey},</if>
+            <if test="returnUrl != null  and returnUrl != ''">return_url = #{returnUrl},</if>
+            <if test="signType != null  and signType != ''">sign_type = #{signType},</if>
+            <if test="sysServiceProviderId != null  and sysServiceProviderId != ''">sys_service_provider_id = #{sysServiceProviderId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunAlipayConfigById" parameterType="Long">
+        delete from yun_alipay_config where id = #{id}
+    </delete>
+
+    <delete id="deleteYunAlipayConfigByIds" parameterType="String">
+        delete from yun_alipay_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
