@@ -25,7 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
+import io.swagger.annotations.ApiImplicitParams;
+import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Created with IntelliJ IDEA.
  * User: 梁少鹏
@@ -91,9 +92,18 @@ public class AppUserController extends BaseController {
     * @Date : 2019/12/28 18:42
     */
     @ApiOperation("APP用户登录")
-    @ApiImplicitParam(name = "SysUser", value = "APP用户登录", dataType = "String")
+    //@ApiImplicitParam(name = "SysUser", value = "APP用户登录", dataType = "String")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="path",name="username",dataType="String",required=true,value="用户的姓名"),
+            @ApiImplicitParam(paramType="path",name="password",dataType="String",required=true,value="用户的密码"),
+            @ApiImplicitParam(paramType="path",name="code",dataType="String",required=true,value="验证码"),
+            @ApiImplicitParam(paramType="path",name="uuid",dataType="String",required=true,value="uuid"),
+    })
     @PostMapping("/appLogin")
-    public AjaxResult appLogin(String username, String password, String code, String uuid)
+    public AjaxResult appLogin(@RequestParam("username") String username,
+                               @RequestParam("password") String password,
+                               @RequestParam("code") String code,
+                               @RequestParam("uuid") String uuid)
     {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
