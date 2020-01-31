@@ -78,7 +78,31 @@ public class YunStore extends BaseEntity
     /** 标签类型组 */
     private Long[] storeLabelIds;
 
-    public void setId(Long id) 
+    /** 状态（0待审核1审核通过2审核驳回） */
+    @Excel(name = "审核状态", readConverterExp = "0=可用1不可用")
+    private String status;
+
+    /** 驳回原因 */
+    @Excel(name = "驳回原因")
+    private String rejectResion;
+
+    public String getRejectResion() {
+        return rejectResion;
+    }
+
+    public void setRejectResion(String rejectResion) {
+        this.rejectResion = rejectResion;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -217,6 +241,8 @@ public class YunStore extends BaseEntity
                 ", createById=" + createById +
                 ", storeTypeIds=" + Arrays.toString(storeTypeIds) +
                 ", storeLabelIds=" + Arrays.toString(storeLabelIds) +
+                ", status='" + status + '\'' +
+                ", rejectResion='" + rejectResion + '\'' +
                 '}';
     }
 

@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,12 +95,12 @@ public class AppUserController extends BaseController {
     @ApiOperation("APP用户登录")
     //@ApiImplicitParam(name = "SysUser", value = "APP用户登录", dataType = "String")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType="path",name="username",dataType="String",required=true,value="用户的姓名"),
-            @ApiImplicitParam(paramType="path",name="password",dataType="String",required=true,value="用户的密码"),
-            @ApiImplicitParam(paramType="path",name="code",dataType="String",required=true,value="验证码"),
-            @ApiImplicitParam(paramType="path",name="uuid",dataType="String",required=true,value="uuid"),
+            @ApiImplicitParam(paramType="form",name="username",dataType="String",required=true,value="用户的姓名"),
+            @ApiImplicitParam(paramType="form",name="password",dataType="String",required=true,value="用户的密码"),
+            @ApiImplicitParam(paramType="form",name="code",dataType="String",required=true,value="验证码"),
+            @ApiImplicitParam(paramType="form",name="uuid",dataType="String",required=true,value="uuid"),
     })
-    @PostMapping("/appLogin")
+    @PostMapping(value = "/appLogin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public AjaxResult appLogin(@RequestParam("username") String username,
                                @RequestParam("password") String password,
                                @RequestParam("code") String code,
