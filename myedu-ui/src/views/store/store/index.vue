@@ -28,8 +28,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-       <el-form-item label="审核状态" prop="checkStatus">
-          <el-select v-model="form.checkStatus" placeholder="请选择审核状态">
+       <el-form-item label="审核状态" prop="status">
+          <el-select v-model="queryParams.status" placeholder="请选择审核状态">
             <el-option
               v-for="dict in checkStatusOptions"
               :key="dict.dictValue"
@@ -94,6 +94,7 @@
 <!--      <el-table-column label="市" align="center" prop="city" />-->
 <!--      <el-table-column label="区" align="center" prop="area" />-->
       <el-table-column label="门店详细地址" align="center" prop="address" />
+      <el-table-column label="审核状态" align="center" prop="status" :formatter="checkFormat" />
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -111,6 +112,14 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['store:store:remove']"
           >删除</el-button>
+          <el-dropdown size="mini" style="margin-left:10px;">
+            <span class="el-dropdown-link">
+              操作<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-if="scope.row.status==0" @click.native="openReview(scope.row)">审核</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -122,7 +131,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
+    <!--审核页面-->
+    <reviewModal ref="reviewModal" :review="review" :currentData="currentData" @closeReview="closeReview"></reviewModal>
     <!-- 添加或修改门店对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="70%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -307,6 +317,7 @@
 <script>
 import { listStore, getStore, delStore, addStore, updateStore, exportStore } from "@/api/store/store";
 import {addressOptions} from '@/api/addressOptions'
+import reviewModal from './modal/reviewModal'
 import { getToken } from '@/utils/auth'
 // import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BaiduMap from 'vue-baidu-map'
@@ -315,8 +326,13 @@ Vue.use(BaiduMap, {
   ak: '7ddN7rl0MKnrRAhxmZzEHVPObhlDUcdb'
 });
 export default {
+  components: { reviewModal },
   data() {
     return {
+       //审核页面默认不打开
+      review:false,
+      //当前行记录为空
+      currentData:null,
       keyword: "", //百度地图搜索值
       location: "", //百度地图默认优先检索地区
       autoViewport:true,//百度地图检索结束后是否自动调整地图视野
@@ -371,8 +387,8 @@ export default {
         pageSize: 10,
         name: undefined,
         manager: undefined,
-        createBy: undefined,
-        checkStatus:undefined
+        status: undefined,
+        createBy: undefined
       },
       // 表单参数
       form: {},
@@ -396,6 +412,17 @@ export default {
     });
   },
   methods: {
+
+    //打开审核页面
+    openReview(row){
+      this.currentData=row;
+      this.review=true;
+    },
+    //关闭审核页面
+    closeReview(){
+      this.review=false;
+      this.getList();
+    },
     /** 查询门店列表 */
     getList() {
       this.loading = true;
@@ -407,7 +434,7 @@ export default {
     },
     // 审核状态字典翻译
     checkFormat(row, column) {
-      return this.selectDictLabel(this.checkStatusOptions, row.checkStatus);
+      return this.selectDictLabel(this.checkStatusOptions, row.status);
     },
     // 取消按钮
     cancel() {
