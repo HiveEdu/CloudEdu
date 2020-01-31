@@ -118,6 +118,8 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="scope.row.status==0" @click.native="openReview(scope.row)">审核</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status==3" @click.native="changeStatus(scope.row,4)">下线</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status==4" @click.native="changeStatus(scope.row,3)">上线</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -315,7 +317,7 @@
 </template>
 
 <script>
-import { listStore, getStore, delStore, addStore, updateStore, exportStore } from "@/api/store/store";
+import { listStore, getStore, delStore, addStore, changeStatusOff,changeStatusOn,updateStore, exportStore } from "@/api/store/store";
 import {addressOptions} from '@/api/addressOptions'
 import reviewModal from './modal/reviewModal'
 import { getToken } from '@/utils/auth'
@@ -559,6 +561,31 @@ export default {
         }
       });
       this.$refs.upload.clearFiles();
+    },
+    /** 更改课程状态 */
+    changeStatus(row,status) {
+      const ids = row.id || this.ids;
+      let courseStatus=null;
+      if(status==4){
+        courseStatus="上线"
+      }else if(status==3){
+        courseStatus="下线"
+      }
+      this.$confirm('是否确认'+courseStatus+'门店编号为"' + ids + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        if(status==4){
+          return changeStatusOn(ids);
+        }else if(status==3){
+          return changeStatusOff(ids);
+        }
+
+      }).then(() => {
+        this.getList();
+        this.msgSuccess(courseStatus+"成功");
+      }).catch(function() {});
     },
     /** 删除按钮操作 */
     handleDelete(row) {

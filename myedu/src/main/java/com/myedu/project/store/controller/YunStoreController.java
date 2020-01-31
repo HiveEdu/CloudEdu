@@ -12,7 +12,10 @@ import com.myedu.project.dataBasic.domain.SysLabel;
 import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
+import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.enums.CourseType;
+import com.myedu.project.store.enums.StoreStatus;
 import com.myedu.project.store.enums.StoryType;
 import com.myedu.project.store.enums.labelType;
 import com.myedu.project.store.service.IYunStoreService;
@@ -123,5 +126,47 @@ public class YunStoreController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(yunStoreService.deleteYunStoreByIds(ids));
+    }
+
+    /*
+     * @Description :更改课程状态下线
+     * @Author : 梁少鹏
+     * @Date : 2020/1/21 16:30
+     */
+    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOff')")
+    @Log(title = "课程", businessType = BusinessType.UPDATE)
+    @GetMapping("/changeStatusOff/{ids}")
+    public AjaxResult changeStatusOff(@PathVariable Long[] ids)
+    {
+        int rows=0;
+        for (Long id:ids) {
+            YunStore yunStore= yunStoreService.selectYunStoreById(id);
+            if(yunStore!=null){
+                yunStore.setStatus(StoreStatus.OFFLINE.getCode());
+                rows=yunStoreService.updateYunStore(yunStore);
+            }
+        }
+        return toAjax(rows);
+    }
+
+    /*
+     * @Description :更改课程状态在售
+     * @Author : 梁少鹏
+     * @Date : 2020/1/21 16:30
+     */
+    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOn')")
+    @Log(title = "课程", businessType = BusinessType.UPDATE)
+    @GetMapping("/changeStatusOn/{ids}")
+    public AjaxResult changeStatusOn(@PathVariable Long[] ids)
+    {
+        int rows=0;
+        for (Long id:ids) {
+            YunStore yunStore= yunStoreService.selectYunStoreById(id);
+            if(yunStore!=null){
+                yunStore.setStatus(StoreStatus.ONLINE.getCode());
+                rows=yunStoreService.updateYunStore(yunStore);
+            }
+        }
+        return toAjax(rows);
     }
 }
