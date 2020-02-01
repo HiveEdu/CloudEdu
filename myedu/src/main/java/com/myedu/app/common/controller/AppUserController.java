@@ -2,12 +2,13 @@ package com.myedu.app.common.controller;
 
 import com.myedu.common.constant.Constants;
 import com.myedu.common.constant.UserConstants;
-import com.myedu.common.utils.IdUtils;
-import com.myedu.common.utils.SecurityUtils;
-import com.myedu.common.utils.VerifyCodeUtils;
+import com.myedu.common.utils.*;
 import com.myedu.common.utils.sign.Base64;
 import com.myedu.framework.redis.RedisCache;
+import com.myedu.framework.security.LoginUser;
 import com.myedu.framework.security.service.SysLoginService;
+import com.myedu.framework.security.service.SysPermissionService;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.project.system.domain.SysUser;
@@ -17,14 +18,19 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +54,11 @@ public class AppUserController extends BaseController {
 
     @Autowired
     private RedisCache redisCache;
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private SysPermissionService permissionService;
   /*
    * @Description :
    * @Author : 梁少鹏
@@ -112,7 +123,28 @@ public class AppUserController extends BaseController {
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
-
+    /*
+     * @Description :获取用户详情
+     * @Author : 梁少鹏
+     * @Date : 2020/2/1 20:07
+     */
+    @ApiOperation("获取用户详情")
+    @ApiImplicitParam(name = "HttpServletResponse", value = "APP用户登录验证码生成")
+    @GetMapping("/getUserInfo")
+    public AjaxResult getUserInfo()
+    {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        SysUser user = loginUser.getUser();
+        // 角色集合
+        Set<String> roles = permissionService.getRolePermission(user);
+        // 权限集合
+        Set<String> permissions = permissionService.getMenuPermission(user);
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("user", user);
+        ajax.put("roles", roles);
+        ajax.put("permissions", permissions);
+        return ajax;
+    }
     /*
      * @Description 生成APP登录验证码
      * @Author : 梁少鹏
@@ -150,6 +182,46 @@ public class AppUserController extends BaseController {
         {
             stream.close();
         }
+    }
+
+
+    /*
+     * @Description :token校验
+     * @Author : 梁少鹏
+     * @Date : 2020/2/1 19:35
+     */
+    @ApiOperation("token校验")
+    @ApiImplicitParam(name = "HttpServletRequest", value = "token校验")
+    @GetMapping("/CheckToken")
+    public AjaxResult CheckToken(HttpServletRequest request) throws IOException
+    {
+        String token=tokenService.getToken(request);
+        AjaxResult ajax = AjaxResult.success();
+        if(token.isEmpty()){
+            ajax.error(1002,"token为空");
+        }else{
+            ajax.put(Constants.TOKEN, token);
+        }
+        return  ajax;
+    }
+
+    /*
+     * @Description :token刷新
+     * @Author : 梁少鹏
+     * @Date : 2020/2/1 19:35
+     */
+    @ApiOperation("token刷新")
+    @ApiImplicitParam(name = "HttpServletRequest", value = "token刷新")
+    @GetMapping("/verifyToken")
+    public AjaxResult verifyToken(HttpServletRequest request) throws IOException
+    {
+        LoginUser loginUser = tokenService.getLoginUser(request);
+        if (StringUtils.isNotNull(loginUser) && StringUtils.isNull(SecurityUtils.getAuthentication()))
+        {
+            tokenService.verifyToken(loginUser);
+        }
+        AjaxResult ajax = AjaxResult.success();
+        return  ajax;
     }
 
 }
