@@ -129,7 +129,7 @@ public class AppUserController extends BaseController {
      * @Date : 2020/2/1 20:07
      */
     @ApiOperation("获取用户详情")
-    @ApiImplicitParam(name = "HttpServletResponse", value = "APP用户登录验证码生成")
+    @ApiImplicitParam(name = "HttpServletResponse", value = "获取用户详情")
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo()
     {
