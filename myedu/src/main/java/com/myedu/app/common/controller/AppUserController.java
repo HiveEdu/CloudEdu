@@ -11,7 +11,10 @@ import com.myedu.framework.security.service.SysPermissionService;
 import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
+import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.system.domain.SysRole;
 import com.myedu.project.system.domain.SysUser;
+import com.myedu.project.system.service.ISysRoleService;
 import com.myedu.project.system.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import io.swagger.annotations.ApiImplicitParams;
@@ -59,6 +63,9 @@ public class AppUserController extends BaseController {
 
     @Autowired
     private SysPermissionService permissionService;
+
+    @Autowired
+    private ISysRoleService roleService;
   /*
    * @Description :
    * @Author : 梁少鹏
@@ -143,6 +150,22 @@ public class AppUserController extends BaseController {
         ajax.put("user", user);
         ajax.put("roles", roles);
         ajax.put("permissions", permissions);
+        return ajax;
+    }
+    /*
+     * @Description :获取角色列表
+     * @Author : 梁少鹏
+     * @Date : 2020/2/1 20:15
+     */
+    @ApiOperation("获取角色列表")
+    @ApiImplicitParam(name = "HttpServletResponse", value = "获取角色列表")
+    @GetMapping("/getRoleList")
+    public AjaxResult getRoleList()
+    {
+        AjaxResult ajax = AjaxResult.success();
+        SysRole role=new SysRole();
+        List<SysRole> list = roleService.selectRoleList(role);
+        ajax.put("roleList", list);
         return ajax;
     }
     /*
