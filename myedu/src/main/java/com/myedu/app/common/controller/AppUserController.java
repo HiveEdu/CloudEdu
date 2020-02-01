@@ -128,9 +128,7 @@ public class AppUserController extends BaseController {
         // 生成令牌
         String token = loginService.login(username, password, code, uuid);
         ajax.put(Constants.TOKEN, token);
-
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        SysUser user = loginUser.getUser();
+        SysUser user=userService.selectUserByUserName(username);
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
