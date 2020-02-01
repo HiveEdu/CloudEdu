@@ -128,6 +128,16 @@ public class AppUserController extends BaseController {
         // 生成令牌
         String token = loginService.login(username, password, code, uuid);
         ajax.put(Constants.TOKEN, token);
+
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        SysUser user = loginUser.getUser();
+        // 角色集合
+        Set<String> roles = permissionService.getRolePermission(user);
+        // 权限集合
+        Set<String> permissions = permissionService.getMenuPermission(user);
+        ajax.put("user", user);
+        ajax.put("roles", roles);
+        ajax.put("permissions", permissions);
         return ajax;
     }
     /*
