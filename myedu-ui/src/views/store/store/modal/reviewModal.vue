@@ -79,7 +79,7 @@ import {updateStore } from "@/api/store/store";
                 });
               } 
       });
-      this.$refs.upload.clearFiles();
+    
           },
         }
     }

@@ -119,7 +119,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="scope.row.status==0" @click.native="openReview(scope.row)">审核</el-dropdown-item>
               <el-dropdown-item v-if="scope.row.status==3" @click.native="changeStatus(scope.row,4)">下线</el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.status==4" @click.native="changeStatus(scope.row,3)">上线</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status==4 || scope.row.status==1" @click.native="changeStatus(scope.row,3)">上线</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -566,9 +566,9 @@ export default {
     changeStatus(row,status) {
       const ids = row.id || this.ids;
       let courseStatus=null;
-      if(status==4){
+      if(status==3){
         courseStatus="上线"
-      }else if(status==3){
+      }else if(status==4){
         courseStatus="下线"
       }
       this.$confirm('是否确认'+courseStatus+'门店编号为"' + ids + '"的数据项?', "警告", {
@@ -576,9 +576,9 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function() {
-        if(status==4){
+        if(status==3){
           return changeStatusOn(ids);
-        }else if(status==3){
+        }else if(status==4){
           return changeStatusOff(ids);
         }
 
