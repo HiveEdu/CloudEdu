@@ -77,8 +77,12 @@ public class YunAccountController extends BaseController
     @GetMapping(value = { "/", "/{id}" })
     public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
+        AjaxResult ajax = AjaxResult.success();
         if(id!=null){
-            return AjaxResult.success(yunAccountService.selectYunAccountById(id));
+            List<YunAccountChange> yunAccountChanges=yunAccountChangeService.selectYunAccountChangeByAccountId(id);
+            ajax.put(AjaxResult.DATA_TAG,yunAccountService.selectYunAccountById(id));
+            ajax.put("WITHDRAWLIST",yunAccountChanges);
+            return ajax;
         }else{
             YunAccount yunAccount=new YunAccount();
             yunAccount.setCreateById(SecurityUtils.getUserId());
@@ -139,15 +143,15 @@ public class YunAccountController extends BaseController
     {
         yunAccount.setCaseAmount(yunAccount.getRachargeAmount().add(yunAccount.getTotalAmount()));
         yunAccount.setTotalAmount(yunAccount.getRachargeAmount().add(yunAccount.getTotalAmount()));
+        YunAccount yunAccount1=yunAccountService.selectYunAccountById(yunAccount.getId());
         int result=yunAccountService.updateYunAccount(yunAccount);
         if(result==1){//主表修改成功增加记录表
-            YunAccount yunAccount1=yunAccountService.selectYunAccountById(yunAccount.getId());
             YunAccountChange yunAccountChange=new YunAccountChange();
             yunAccountChange.setAccountId(yunAccount.getId());
             yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
-            yunAccountChange.setUncashAmount(new BigDecimal(0));
-            yunAccountChange.setChangeType(AccountChangeType.INTERNALTRANSFERACCOUNT.getCode());
+            yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());
+            yunAccountChange.setChangeType(AccountChangeType.RECHARGE.getCode());
             yunAccountChange.setCreateById(SecurityUtils.getUserId());
             yunAccountChange.setCreateBy(SecurityUtils.getUsername());
             yunAccountChange.setCreateTime(DateUtils.getNowDate());
@@ -155,6 +159,32 @@ public class YunAccountController extends BaseController
         }
         return toAjax(result);
     }
+
+
+    @PreAuthorize("@ss.hasPermi('account:account:withdraw')")
+    @Log(title = "账户提现", businessType = BusinessType.UPDATE)
+    @PutMapping("/withdraw")
+    public AjaxResult withdraw(@RequestBody YunAccountVo yunAccount)
+    {
+        yunAccount.setCaseAmount(yunAccount.getTotalAmount().subtract(yunAccount.getRachargeAmount()));
+        yunAccount.setTotalAmount(yunAccount.getTotalAmount().subtract(yunAccount.getRachargeAmount()));
+        YunAccount yunAccount1=yunAccountService.selectYunAccountById(yunAccount.getId());
+        int result=yunAccountService.updateYunAccount(yunAccount);
+        if(result==1){//主表修改成功增加记录表
+            YunAccountChange yunAccountChange=new YunAccountChange();
+            yunAccountChange.setAccountId(yunAccount.getId());
+            yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
+            yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
+            yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());
+            yunAccountChange.setChangeType(AccountChangeType.WITHDRAW.getCode());
+            yunAccountChange.setCreateById(SecurityUtils.getUserId());
+            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
+            yunAccountChange.setCreateTime(DateUtils.getNowDate());
+            yunAccountChangeService.insertYunAccountChange(yunAccountChange);
+        }
+        return toAjax(result);
+    }
+
 //    @PreAuthorize("@ss.hasPermi('account:account:toPayAsPc')")
 //    @Log(title = "支付宝PC网页支付")
 //    @PostMapping(value = "/toPayAsPC")

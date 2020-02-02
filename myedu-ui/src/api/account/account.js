@@ -61,6 +61,15 @@ export function racharge(data) {
     data: data
   })
 }
+//账户提现
+export function withdraw(data) {
+  return request({
+    url: '/account/account/withdraw',
+    method: 'put',
+    data: data
+  })
+}
+
 
 // 支付
 export function toAliPay(url, data) {

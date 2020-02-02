@@ -58,4 +58,12 @@ public interface IYunAccountChangeService
      * @return 结果
      */
     public int deleteYunAccountChangeById(Long id);
+
+
+    /*
+     * @Description :根据账户Id查询账单
+     * @Author : 梁少鹏
+     * @Date : 2020/2/2 17:50
+     */
+    public List<YunAccountChange> selectYunAccountChangeByAccountId(Long accountId);
 }

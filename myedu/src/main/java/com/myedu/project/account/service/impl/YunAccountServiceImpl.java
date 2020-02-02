@@ -92,21 +92,7 @@ public class YunAccountServiceImpl implements IYunAccountService
     public int updateYunAccount(YunAccount yunAccount)
     {
         yunAccount.setUpdateTime(DateUtils.getNowDate());
-        int result=yunAccountMapper.updateYunAccount(yunAccount);
-        if(result==1){//主表修改成功增加记录表
-            YunAccount yunAccount1=yunAccountMapper.selectYunAccountById(yunAccount.getId());
-            YunAccountChange yunAccountChange=new YunAccountChange();
-            yunAccountChange.setAccountId(yunAccount.getId());
-            yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
-            yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
-            yunAccountChange.setUncashAmount(new BigDecimal(0));
-            yunAccountChange.setChangeType(AccountChangeType.INTERNALTRANSFERACCOUNT.getCode());
-            yunAccountChange.setCreateById(SecurityUtils.getUserId());
-            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
-            yunAccountChange.setCreateTime(DateUtils.getNowDate());
-            yunAccountChangeMapper.insertYunAccountChange(yunAccountChange);
-        }
-        return result;
+        return yunAccountMapper.updateYunAccount(yunAccount);
     }
 
     /**

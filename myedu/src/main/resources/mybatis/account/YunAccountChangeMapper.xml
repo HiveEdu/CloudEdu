@@ -43,7 +43,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectYunAccountChangeVo"/>
         where id = #{id}
     </select>
-        
+
+    <select id="selectYunAccountChangeByAccountId" parameterType="Long" resultMap="YunAccountChangeResult">
+        <include refid="selectYunAccountChangeVo"/>
+        where account_id = #{accountId}
+    </select>
+
     <insert id="insertYunAccountChange" parameterType="YunAccountChange" useGeneratedKeys="true" keyProperty="id">
         insert into yun_account_change
         <trim prefix="(" suffix=")" suffixOverrides=",">

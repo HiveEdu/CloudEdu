@@ -22,7 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunAccountVo">
-        select id, total_amount, case_amount, uncase_amount, freeze_case_amount, freeze_uncase_amount, status, remark, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_account
+        select id, total_amount, case_amount, uncase_amount, freeze_case_amount, freeze_uncase_amount, status, remark, create_by, create_time, update_by, update_time, del_flag, create_by_id
+        from yun_account
     </sql>
 
     <select id="selectYunAccountList" parameterType="YunAccount" resultMap="YunAccountResult">

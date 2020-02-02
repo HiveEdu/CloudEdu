@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="创建者" prop="createBy">
+      <el-form-item label="账号" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
-          placeholder="请输入创建者"
+          placeholder="请输入用户账号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -79,13 +79,13 @@
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['account:account:edit']"
-          >修改</el-button>
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-edit"-->
+<!--            @click="handleUpdate(scope.row)"-->
+<!--            v-hasPermi="['account:account:edit']"-->
+<!--          >修改</el-button>-->
 <!--          <el-button-->
 <!--            size="mini"-->
 <!--            type="text"-->
@@ -93,13 +93,18 @@
 <!--            @click="handleDelete(scope.row)"-->
 <!--            v-hasPermi="['account:account:remove']"-->
 <!--          >删除</el-button>-->
+          <el-button
+            size="mini"
+            type="text"
+            @click="openAccountBill(scope.row)"
+          >账单</el-button>
           <el-dropdown size="mini" style="margin-left:10px;">
             <span class="el-dropdown-link">
               操作<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="scope.row.status==0" @click.native="openRecharge(scope.row)">充值 </el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.status==0" @click.native="changeStatus(scope.row)">提现 </el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status==0" @click.native="opneWithdraw(scope.row)">提现 </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -115,8 +120,10 @@
     />
     <!--充值页面-->
     <rechargeModal ref="rechargeModal" :recharge="recharge" :currentData="currentData" @closeRecharge="closeRecharge"></rechargeModal>
-
-
+    <!--提现页面-->
+    <withdrawModal ref="withdrawModal" :withdraw="withdraw" :currentData="currentData" @closeWithdraw="closeWithdraw"></withdrawModal>
+    <!--账单页面-->
+    <accountBillModal ref="accountBillModal" :accountBill="accountBill" :accountBillList="accountBillList" :currentData="currentData" @closeAccountBill="closeAccountBill"></accountBillModal>
     <!-- 添加或修改账户管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -194,10 +201,18 @@
 <script>
 import { listAccount, getAccount, delAccount, addAccount, updateAccount, exportAccount } from "@/api/account/account";
 import rechargeModal from './modal/rechargeModal'
+import withdrawModal from './modal/withdrawModal'
+import accountBillModal from './modal/accountBillModal'
 export default {
-  components: { rechargeModal },
+  components: { rechargeModal,withdrawModal,accountBillModal },
   data() {
     return {
+      //账单列表
+      accountBillList:null,
+      //账单页面默认不打开
+      accountBill:false,
+      //提现页面默认不打开
+      withdraw:false,
       //充值页面默认不打开
       recharge:false,
       //当前行记录为空
@@ -249,6 +264,29 @@ export default {
     });
   },
   methods: {
+    //打開账单页面
+    openAccountBill(row){
+      this.currentData=row;
+      getAccount(row.id).then(response => {
+        this.accountBillList=response.WITHDRAWLIST;
+        this.accountBill=true;
+      });
+    },
+    //关闭账单页面
+    closeAccountBill(){
+      this.accountBill=false;
+      this.getList();
+    },
+    //打开提现页面
+    opneWithdraw(row){
+      this.currentData=row;
+      this.withdraw=true;
+    },
+    //关闭提现页面
+    closeWithdraw(){
+      this.withdraw=false;
+      this.getList();
+    },
     //打开充值页面
     openRecharge(row){
       this.currentData=row;

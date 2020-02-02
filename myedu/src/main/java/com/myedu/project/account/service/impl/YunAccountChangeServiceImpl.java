@@ -93,4 +93,15 @@ public class YunAccountChangeServiceImpl implements IYunAccountChangeService
     {
         return yunAccountChangeMapper.deleteYunAccountChangeById(id);
     }
+
+
+    /*
+     * @Description :根据账户Id查询账单
+     * @Author : 梁少鹏
+     * @Date : 2020/2/2 17:50
+     */
+    @Override
+    public List<YunAccountChange> selectYunAccountChangeByAccountId(Long accountId) {
+        return yunAccountChangeMapper.selectYunAccountChangeByAccountId(accountId);
+    }
 }

@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * Description:
  */
 public class YunAccountVo extends YunAccount {
-    //账户充值金额
+    //账户充值提现金额
     private BigDecimal rachargeAmount;
 
     public BigDecimal getRachargeAmount() {
