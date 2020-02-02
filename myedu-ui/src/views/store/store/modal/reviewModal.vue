@@ -12,8 +12,8 @@
         </el-row>
         <el-form-item label="审核" prop="status" style="margin-top:10px">
                 <el-radio-group v-model="reviewForm.status" > 
-                  <el-radio key="1" label="1">审核通过</el-radio>
-                  <el-radio key="2" label="2">审核驳回</el-radio>
+                  <el-radio key="1" label="1" border>审核通过</el-radio>
+                  <el-radio key="2" label="2" border>审核驳回</el-radio>
                 </el-radio-group>
         </el-form-item>
         <el-form-item label="驳回原因" prop="rejectResion" v-if="reviewForm.status==2">

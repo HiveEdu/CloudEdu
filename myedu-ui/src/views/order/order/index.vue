@@ -95,22 +95,31 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+       <el-table-column  label="操作" width="200" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button
+          <el-button  size="mini" type="primary"
+                     @click="detail(scope.row)">
+            订单详情</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+             操作
+            <el-dropdown-menu slot="dropdown">
+             <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['order:order:edit']"
-          >修改</el-button>
+          >修改订单</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['order:order:remove']"
-          >删除</el-button>
+          >删除订单</el-button>
+          </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -122,7 +131,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
+    <!-- 表单组件-->
+   <eDetail ref="form1" :is-add="isAdd"/>
     <!-- 添加或修改订单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -224,8 +234,9 @@
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } from "@/api/order/order";
-
+import eDetail from './detail'
 export default {
+   components: {eDetail},
   data() {
     return {
       // 年级列表
@@ -400,6 +411,32 @@ export default {
         this.open = true;
         this.title = "修改订单";
       });
+    },
+  //订单详情
+    detail(orderList) {
+      this.isAdd = false
+      const _this = this.$refs.form1
+      _this.form = {
+        num: orderList.num,
+        studentId: orderList.studentId,
+        storeId: orderList.storeId,
+        courseId: orderList.courseId,
+        greadId: orderList.greadId,
+        managTime: orderList.managTime,
+        isMeal: orderList.isMeal,
+        enrolTime: orderList.enrolTime,
+        certificateType: orderList.certificateType,
+        studentAssName: orderList.studentAssName,
+        gradeName: orderList.gradeName,
+        certificateNum: orderList.certificateNum,
+        totalMoney: orderList.totalMoney,
+        status: orderList.status,
+        createBy: orderList.createBy,
+        storeName: orderList.storeName,
+        courseName: orderList.courseName,
+        createTime: orderList.createTime
+      }
+      _this.dialog = true
     },
     /** 提交按钮 */
     submitForm: function() {
