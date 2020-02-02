@@ -144,7 +144,7 @@ public class AppUserController extends BaseController {
      * @Date : 2020/2/1 20:07
      */
     @ApiOperation("获取用户详情")
-    @ApiImplicitParam(name = "HttpServletResponse", value = "获取用户详情")
+    @ApiImplicitParam(name = "HttpServletRequest", value = "获取用户详情")
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo()
     {
@@ -229,7 +229,7 @@ public class AppUserController extends BaseController {
         String token=tokenService.getToken(request);
         AjaxResult ajax = AjaxResult.success();
         if(token.isEmpty()){
-            ajax.error(1002,"token为空");
+            ajax.error("token为空");
         }else{
             ajax.put(Constants.TOKEN, token);
         }
