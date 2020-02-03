@@ -19,17 +19,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="创建者" prop="createBy">
+      <el-form-item label="负责人" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
-          placeholder="请输入创建者"
+          placeholder="请输入创建者用户"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-       <el-form-item label="审核状态" prop="status">
-          <el-select v-model="queryParams.status" placeholder="请选择审核状态">
+       <el-form-item label="状态" prop="status">
+          <el-select v-model="queryParams.status" placeholder="请选择状态">
             <el-option
               v-for="dict in checkStatusOptions"
               :key="dict.dictValue"
@@ -96,34 +96,65 @@
       <el-table-column label="门店详细地址" align="center" prop="address" />
       <el-table-column label="审核状态" align="center" prop="status" :formatter="checkFormat" />
       <el-table-column label="创建者" align="center" prop="createBy" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['store:store:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['store:store:remove']"
-          >删除</el-button>
-          <el-dropdown size="mini" style="margin-left:10px;">
-            <span class="el-dropdown-link">
-              操作<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
+          <el-button  size="mini" type="primary">详情</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="scope.row.status==0" @click.native="openReview(scope.row)">审核</el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.status==3" @click.native="changeStatus(scope.row,4)">下线</el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.status==4 || scope.row.status==1" @click.native="changeStatus(scope.row,3)">上线</el-dropdown-item>
+              <el-button
+                size="mini"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['course:course:edit']"
+                style="margin-top: 10px"
+              >修改</el-button>
+              <br>
+              <el-button
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['course:course:remove']"
+                style="margin-top: 10px"
+              >删除</el-button>
+              <br v-if="scope.row.status==0">
+              <el-button
+                v-if="scope.row.status==0"
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="openReview(scope.row)"
+                style="margin-top: 10px"
+              >审核</el-button>
+              <br  v-if="scope.row.status==3">
+              <el-button
+                v-if="scope.row.status==3"
+                size="mini"
+                type="warning"
+                icon="el-icon-edit"
+                @click="changeStatus(scope.row,4)"
+                style="margin-top: 10px"
+              >下线</el-button>
+              <br v-if="scope.row.status==4 || scope.row.status==1">
+              <el-button
+                v-if="scope.row.status==4 || scope.row.status==1"
+                size="mini"
+                type="warning"
+                icon="el-icon-edit"
+                @click="changeStatus(scope.row,3)"
+                style="margin-top: 10px"
+              >上线</el-button>
+              <br>
+
             </el-dropdown-menu>
           </el-dropdown>
         </template>
       </el-table-column>
+
+
+
     </el-table>
     
     <pagination

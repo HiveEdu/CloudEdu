@@ -110,30 +110,58 @@
       </el-table-column>
       <el-table-column label="课程内容" align="center" prop="content" />
       <el-table-column label="课程状态" align="center" prop="status" :formatter="statusFormat" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['course:course:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['course:course:remove']"
-          >删除</el-button>
-          <el-dropdown size="mini" style="margin-left:10px;">
-            <span class="el-dropdown-link">
-              操作<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
+          <el-button  size="mini" type="primary">详情</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="scope.row.status==0" @click.native="changeStatus(scope.row,1)">下线</el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.status==1" @click.native="changeStatus(scope.row,0)">上线</el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.status==0" @click.native="toSignUp(scope.row)">报名</el-dropdown-item>
+              <el-button
+                size="mini"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['course:course:edit']"
+                style="margin-top: 10px"
+              >修改</el-button>
+              <br>
+              <el-button
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['course:course:remove']"
+                style="margin-top: 10px"
+              >删除</el-button>
+              <br  v-if="scope.row.status==0">
+              <el-button
+                v-if="scope.row.status==0"
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="toSignUp(scope.row)"
+                style="margin-top: 10px"
+              >报名</el-button>
+              <br v-if="scope.row.status==0">
+              <el-button
+                v-if="scope.row.status==0"
+                size="mini"
+                type="warning"
+                icon="el-icon-edit"
+                @click="changeStatus(scope.row,1)"
+                style="margin-top: 10px"
+              >下线</el-button>
+              <br  v-if="scope.row.status==1">
+              <el-button
+                v-if="scope.row.status==1"
+                size="mini"
+                type="warning"
+                icon="el-icon-edit"
+                @click="changeStatus(scope.row,0)"
+                style="margin-top: 10px"
+              >上线</el-button>
+              <br>
+
             </el-dropdown-menu>
           </el-dropdown>
         </template>
