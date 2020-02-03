@@ -49,7 +49,7 @@ public class StoreCoupon extends BaseEntity
     private Long status;
 
     /** 兑换项目添加时间 */
-    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date addTime;
 
     /** 是否删除 */
