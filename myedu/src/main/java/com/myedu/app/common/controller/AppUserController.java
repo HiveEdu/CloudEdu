@@ -82,6 +82,7 @@ public class AppUserController extends BaseController {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
         user.setUserName(user.getUserName());
+        user.setPhonenumber(user.getUserName());
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
         return toAjax(userService.insertUser(user));
     }
@@ -96,12 +97,12 @@ public class AppUserController extends BaseController {
     @PostMapping("/editUser")
     public AjaxResult editUser(SysUser user)
     {
-        userService.checkUserAllowed(user);
-        if (UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+        //userService.checkUserAllowed(user);
+        if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        user.setUserName(user.getPhonenumber());
+        user.setUserName(user.getUserName());
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.updateUser(user));
     }
