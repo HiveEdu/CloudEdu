@@ -25,6 +25,10 @@ public class SysRole extends BaseEntity
     @Excel(name = "角色名称")
     private String roleName;
 
+    /** 角色图片 */
+    @Excel(name = "角色图片")
+    private String image;
+
     /** 角色权限 */
     @Excel(name = "角色权限")
     private String roleKey;
@@ -56,6 +60,14 @@ public class SysRole extends BaseEntity
     public SysRole()
     {
 
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public SysRole(Long roleId)
@@ -192,6 +204,7 @@ public class SysRole extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("image", getImage())
             .toString();
     }
 }

@@ -186,6 +186,24 @@
         <el-form-item label="备注">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
         </el-form-item>
+        <el-form-item label="照片">
+          <el-upload
+            class="avatar-uploader"
+            ref="upload"
+            :headers="headers"
+            :action="uploadImgUrl"
+            :data="{'type':'roleImage'}"
+            :show-file-list="false"
+            :on-success="onSuccess"
+            :on-remove="handleRemove"
+            :on-preview="handlePictureCardPreview"
+            :before-upload="beforeUpload">
+            <img v-if="form.image" :src="viewImage+'/'+form.image" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -236,7 +254,7 @@
 import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
-
+import { getToken } from '@/utils/auth'
 export default {
   name: "Role",
   data() {
@@ -315,7 +333,14 @@ export default {
         roleSort: [
           { required: true, message: "角色顺序不能为空", trigger: "blur" }
         ]
-      }
+      },
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      viewImage: process.env.VUE_APP_BASE_API,
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      },
+      dialogImageUrl: '',
+      dialogVisible: false,
     };
   },
   created() {
@@ -477,6 +502,7 @@ export default {
         if (valid) {
           if (this.form.roleId != undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys();
+            alert(this.form.image);
             updateRole(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -542,7 +568,50 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
-    }
+    },
+    beforeUpload(file){
+    },
+    onSuccess(res,file, fileList){
+      if(res.code=="200"){
+        this.form.image=res.fileName
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      this.form.image=null;
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
   }
 };
 </script>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
