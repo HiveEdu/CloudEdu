@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.StoreCouponIssueMapper">
+    
+    <resultMap type="StoreCouponIssue" id="StoreCouponIssueResult">
+        <result property="id"    column="id"    />
+        <result property="cid"    column="cid"    />
+        <result property="cname"    column="cname"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="totalCount"    column="total_count"    />
+        <result property="remainCount"    column="remain_count"    />
+        <result property="isPermanent"    column="is_permanent"    />
+        <result property="status"    column="status"    />
+        <result property="isDel"    column="is_del"    />
+        <result property="addTime"    column="add_time"    />
+        <result property="endTimeDate"    column="end_time_date"    />
+        <result property="startTimeDate"    column="start_time_date"    />
+    </resultMap>
+
+    <sql id="selectStoreCouponIssueVo">
+        select id, cid, cname, start_time, end_time, total_count, remain_count, is_permanent, status, is_del, add_time, end_time_date, start_time_date from store_coupon_issue
+    </sql>
+
+    <select id="selectStoreCouponIssueList" parameterType="StoreCouponIssue" resultMap="StoreCouponIssueResult">
+        <include refid="selectStoreCouponIssueVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectStoreCouponIssueById" parameterType="Long" resultMap="StoreCouponIssueResult">
+        <include refid="selectStoreCouponIssueVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertStoreCouponIssue" parameterType="StoreCouponIssue">
+        insert into store_coupon_issue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="cid != null ">cid,</if>
+            <if test="cname != null  and cname != ''">cname,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="totalCount != null ">total_count,</if>
+            <if test="remainCount != null ">remain_count,</if>
+            <if test="isPermanent != null ">is_permanent,</if>
+            <if test="status != null ">status,</if>
+            <if test="isDel != null ">is_del,</if>
+            <if test="addTime != null ">add_time,</if>
+            <if test="endTimeDate != null ">end_time_date,</if>
+            <if test="startTimeDate != null ">start_time_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="cid != null ">#{cid},</if>
+            <if test="cname != null  and cname != ''">#{cname},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="totalCount != null ">#{totalCount},</if>
+            <if test="remainCount != null ">#{remainCount},</if>
+            <if test="isPermanent != null ">#{isPermanent},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="isDel != null ">#{isDel},</if>
+            <if test="addTime != null ">#{addTime},</if>
+            <if test="endTimeDate != null ">#{endTimeDate},</if>
+            <if test="startTimeDate != null ">#{startTimeDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStoreCouponIssue" parameterType="StoreCouponIssue">
+        update store_coupon_issue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cid != null ">cid = #{cid},</if>
+            <if test="cname != null  and cname != ''">cname = #{cname},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="totalCount != null ">total_count = #{totalCount},</if>
+            <if test="remainCount != null ">remain_count = #{remainCount},</if>
+            <if test="isPermanent != null ">is_permanent = #{isPermanent},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="isDel != null ">is_del = #{isDel},</if>
+            <if test="addTime != null ">add_time = #{addTime},</if>
+            <if test="endTimeDate != null ">end_time_date = #{endTimeDate},</if>
+            <if test="startTimeDate != null ">start_time_date = #{startTimeDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStoreCouponIssueById" parameterType="Long">
+        delete from store_coupon_issue where id = #{id}
+    </delete>
+
+    <delete id="deleteStoreCouponIssueByIds" parameterType="String">
+        delete from store_coupon_issue where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
