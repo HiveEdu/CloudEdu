@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-        <el-form-item label="动态类型" prop="type">
+        <el-form-item label="类型" prop="type">
         <el-select v-model="queryParams.type" placeholder="请选择动态类型" clearable size="small">
           <el-option
             v-for="dict in typeOptions"
@@ -11,10 +11,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建者" prop="createBy">
+      <el-form-item label="用户" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
-          placeholder="请输入创建者"
+          placeholder="请输入创建者用户"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -81,11 +81,11 @@
 
     <el-table v-loading="loading" :data="dynamicList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="用户" align="center" prop="createBy" />
       <el-table-column label="动态类型" align="center" prop="type" :formatter="typeFormat" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -189,6 +189,7 @@
 <script>
 import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic } from "@/api/dynamic/dynamic";
 import { getToken } from '@/utils/auth'
+import { formatTime } from '@/utils/index'
 // 工具栏配置
 const toolbarOptions = [
   ["bold", "italic", "underline", "strike"],       // 加粗 斜体 下划线 删除线
@@ -310,6 +311,9 @@ export default {
     });
   },
   methods: {
+    parseTimeBefore(e){
+      return formatTime((new Date(e)).getTime() / 1000);
+    },
     /** 查询云托管动态管理列表 */
     getList() {
       this.loading = true;

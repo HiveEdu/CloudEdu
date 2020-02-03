@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="订单编号" prop="num">
+      <el-form-item label="编号" prop="num">
         <el-input
           v-model="queryParams.num"
           placeholder="请输入订单编号"
@@ -20,10 +20,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建者" prop="createBy">
+      <el-form-item label="用户" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
-          placeholder="请输入创建者"
+          placeholder="请输入创建者用户"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -89,36 +89,37 @@
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
-      <el-table-column label="创建者" align="center" prop="createBy" />
+      <el-table-column label="用户" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-       <el-table-column  label="操作" width="200" align="center" fixed="right">
+       <el-table-column  label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button  size="mini" type="primary"
                      @click="detail(scope.row)">
-            订单详情</el-button>
+                   详情</el-button>
           <el-dropdown size="mini" split-button type="primary" trigger="click">
              操作
-            <el-dropdown-menu slot="dropdown">
-             <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['order:order:edit']"
-          >修改订单</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['order:order:remove']"
-          >删除订单</el-button>
-          </el-dropdown-item>
-            </el-dropdown-menu>
+                <el-dropdown-menu slot="dropdown">
+                 <el-button
+                size="mini"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['order:order:edit']"
+                >修改</el-button>
+                <br>
+                <el-button
+                  style="margin-top: 10px"
+                  size="mini"
+                  type="danger"
+                  icon="el-icon-delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['order:order:remove']"
+                >删除</el-button>
+              </el-dropdown-menu>
           </el-dropdown>
         </template>
       </el-table-column>
@@ -234,7 +235,8 @@
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } from "@/api/order/order";
-import eDetail from './detail'
+import eDetail from './modal/detail'
+import { formatTime } from '@/utils/index'
 export default {
    components: {eDetail},
   data() {
@@ -322,6 +324,9 @@ export default {
 
   },
   methods: {
+    parseTimeBefore(e){
+      return formatTime((new Date(e)).getTime() / 1000);
+    },
     /** 查询订单列表 */
     getList() {
       this.loading = true;

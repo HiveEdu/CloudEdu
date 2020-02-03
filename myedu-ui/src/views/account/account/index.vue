@@ -101,16 +101,17 @@
             <el-dropdown-menu slot="dropdown">
               <el-button
                 size="mini"
-                type="primary"
+                type="success"
                 icon="el-icon-edit"
                 @click="openRecharge(scope.row)"
               >充值</el-button>
               <br>
               <el-button
                 size="mini"
-                type="primary"
-                icon="el-icon-delete"
+                type="warning"
+                icon="el-icon-edit"
                 @click="opneWithdraw(scope.row)"
+                style="margin-top: 10px"
               >提现</el-button>
             </el-dropdown-menu>
           </el-dropdown>
