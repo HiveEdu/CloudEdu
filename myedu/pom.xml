@@ -132,7 +132,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>4.0.12</version>
+		</dependency>
 		<!--io常用工具类 -->
 		<dependency>
 			<groupId>commons-io</groupId>

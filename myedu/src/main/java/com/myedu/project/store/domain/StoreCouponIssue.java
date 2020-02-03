@@ -29,13 +29,23 @@ public class StoreCouponIssue extends BaseEntity
 
     /** 优惠券领取开启时间 */
     @Excel(name = "优惠券领取开启时间")
-    private Long startTime;
+    private Integer startTime;
 
     /** 优惠券领取结束时间 */
     @Excel(name = "优惠券领取结束时间")
-    private Long endTime;
+    private Integer endTime;
+
+//    @Override
+//    public Integer getEndTime() {
+//        return endTime;
+//    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
+    }
 
     /** 优惠券领取数量 */
+
     @Excel(name = "优惠券领取数量")
     private Long totalCount;
 
@@ -57,7 +67,7 @@ public class StoreCouponIssue extends BaseEntity
 
     /** 优惠券添加时间 */
     @Excel(name = "优惠券添加时间")
-    private Long addTime;
+    private Integer addTime;
 
     /** $column.columnComment */
     @Excel(name = "优惠券添加时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -94,24 +104,19 @@ public class StoreCouponIssue extends BaseEntity
     {
         return cname;
     }
-    public void setStartTime(Long startTime) 
-    {
+
+
+
+
+    public Integer getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Integer startTime) {
         this.startTime = startTime;
     }
 
-    public Long getStartTime() 
-    {
-        return startTime;
-    }
-    public void setEndTime(Long endTime)
-    {
-        this.endTime = endTime;
-    }
 
-//    public Long getEndTime()
-//    {
-//        return endTime;
-//    }
     public void setTotalCount(Long totalCount)
     {
         this.totalCount = totalCount;
@@ -153,19 +158,19 @@ public class StoreCouponIssue extends BaseEntity
         this.isDel = isDel;
     }
 
-    public Long getIsDel() 
-    {
-        return isDel;
+    public Integer getAddTime() {
+        return addTime;
     }
-    public void setAddTime(Long addTime) 
-    {
+
+    public void setAddTime(Integer addTime) {
         this.addTime = addTime;
     }
 
-    public Long getAddTime() 
+    public Long getIsDel()
     {
-        return addTime;
+        return isDel;
     }
+
     public void setEndTimeDate(Date endTimeDate) 
     {
         this.endTimeDate = endTimeDate;

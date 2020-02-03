@@ -1,8 +1,13 @@
 package com.myedu.project.store.controller;
 
 import java.util.List;
+
+import com.myedu.common.utils.OrderUtil;
+import com.myedu.common.utils.StringUtils;
+import cn.hutool.core.util.ObjectUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,13 +74,25 @@ public class StoreCouponIssueController extends BaseController
     }
 
     /**
-     * 新增优惠券制作
+     * 发布优惠券
      */
     @PreAuthorize("@ss.hasPermi('store:coupon_issue:add')")
-    @Log(title = "优惠券制作", businessType = BusinessType.INSERT)
+    @Log(title = "发布优惠券", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody StoreCouponIssue storeCouponIssue)
     {
+        if(ObjectUtil.isNotNull(storeCouponIssue.getStartTimeDate())){
+        storeCouponIssue.setStartTime(OrderUtil.
+                dateToTimestamp(storeCouponIssue.getStartTimeDate()));
+        }
+        if(ObjectUtil.isNotNull(storeCouponIssue.getEndTimeDate())){
+            storeCouponIssue.setEndTime(OrderUtil.
+                    dateToTimestamp(storeCouponIssue.getEndTimeDate()));
+        }
+        if(storeCouponIssue.getTotalCount() > 0) {
+            storeCouponIssue.setRemainCount(storeCouponIssue.getTotalCount());
+        }
+        storeCouponIssue.setAddTime(OrderUtil.getSecondTimestampTwo());
         return toAjax(storeCouponIssueService.insertStoreCouponIssue(storeCouponIssue));
     }
 
@@ -100,4 +117,7 @@ public class StoreCouponIssueController extends BaseController
     {
         return toAjax(storeCouponIssueService.deleteStoreCouponIssueByIds(ids));
     }
+
+
+
 }
