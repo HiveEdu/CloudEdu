@@ -171,8 +171,7 @@ public class AppUserController extends BaseController {
     public AjaxResult getRoleList()
     {
         AjaxResult ajax = AjaxResult.success();
-        SysRole role=new SysRole();
-        List<SysRole> list = roleService.selectRoleList(role);
+        List<SysRole> list = roleService.selectRoleAll();
         ajax.put("roleList", list);
         return ajax;
     }
