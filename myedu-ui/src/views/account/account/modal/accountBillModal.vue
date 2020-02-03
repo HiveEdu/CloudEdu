@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column label="日期" align="center" prop="createTime">
         <template slot-scope="scope" v-if="scope.row.createTime!=null">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import { formatTime } from '@/utils/index'
     export default {
         name: "accountBillModal",
         props: {
@@ -65,7 +66,9 @@
           changeTypeFormat(row, column) {
             return this.selectDictLabel(this.changeTypeOptions, row.changeType);
           },
-
+          parseTimeBefore(e){
+            return formatTime((new Date(e)).getTime() / 1000);
+          },
           handleClose() {
             this.$emit('closeAccountBill', false);
           },
