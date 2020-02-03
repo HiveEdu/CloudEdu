@@ -77,38 +77,47 @@
       <el-table-column label="不可提现冻结金额" align="center" prop="freezeUncaseAmount" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-edit"-->
-<!--            @click="handleUpdate(scope.row)"-->
-<!--            v-hasPermi="['account:account:edit']"-->
-<!--          >修改</el-button>-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-delete"-->
-<!--            @click="handleDelete(scope.row)"-->
-<!--            v-hasPermi="['account:account:remove']"-->
-<!--          >删除</el-button>-->
-          <el-button
-            size="mini"
-            type="text"
-            @click="openAccountBill(scope.row)"
-          >账单</el-button>
-          <el-dropdown size="mini" style="margin-left:10px;">
-            <span class="el-dropdown-link">
-              操作<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
+          <!--          <el-button-->
+          <!--            size="mini"-->
+          <!--            type="text"-->
+          <!--            icon="el-icon-edit"-->
+          <!--            @click="handleUpdate(scope.row)"-->
+          <!--            v-hasPermi="['account:account:edit']"-->
+          <!--          >修改</el-button>-->
+          <!--          <el-button-->
+          <!--            size="mini"-->
+          <!--            type="text"-->
+          <!--            icon="el-icon-delete"-->
+          <!--            @click="handleDelete(scope.row)"-->
+          <!--            v-hasPermi="['account:account:remove']"-->
+          <!--          >删除</el-button>-->
+          <el-button  size="mini" type="primary"
+                      @click="openAccountBill(scope.row)">
+            账单</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="scope.row.status==0" @click.native="openRecharge(scope.row)">充值 </el-dropdown-item>
-              <el-dropdown-item v-if="scope.row.status==0" @click.native="opneWithdraw(scope.row)">提现 </el-dropdown-item>
+              <el-button
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="openRecharge(scope.row)"
+              >充值</el-button>
+              <br>
+              <el-button
+                size="mini"
+                type="primary"
+                icon="el-icon-delete"
+                @click="opneWithdraw(scope.row)"
+              >提现</el-button>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
       </el-table-column>
+
+
     </el-table>
     
     <pagination

@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.web.bind.annotation.RequestParam;
 /**
@@ -171,7 +173,7 @@ public class AppUserController extends BaseController {
     public AjaxResult getRoleList()
     {
         AjaxResult ajax = AjaxResult.success();
-        List<SysRole> list = roleService.selectRoleAll();
+        List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
         ajax.put("roleList", list);
         return ajax;
     }
