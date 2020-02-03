@@ -50,27 +50,14 @@
 
     <el-table v-loading="loading" :data="coupon_issueList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="优惠券添加时间" align="center" prop="id" />
-      <el-table-column label="优惠券ID" align="center" prop="cid" />
       <el-table-column label="优惠券ID" align="center" prop="cname" />
       <el-table-column label="优惠券领取开启时间" align="center" prop="startTime" />
       <el-table-column label="优惠券领取结束时间" align="center" prop="endTime" />
       <el-table-column label="优惠券领取数量" align="center" prop="totalCount" />
-      <el-table-column label="优惠券剩余领取数量" align="center" prop="remainCount" />
-      <el-table-column label="优惠券剩余领取数量" align="center" prop="isPermanent" />
-      <el-table-column label="1 正常 0 未开启 -1 已无效" align="center" prop="status" />
-      <el-table-column label="1 正常 0 未开启 -1 已无效" align="center" prop="isDel" />
-      <el-table-column label="优惠券添加时间" align="center" prop="addTime" />
-      <el-table-column label="优惠券添加时间" align="center" prop="endTimeDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.endTimeDate) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="优惠券添加时间" align="center" prop="startTimeDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTimeDate) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="剩余领取数量" align="center" prop="remainCount" />
+      <el-table-column label="是否不限量" align="center" prop="isPermanent" />
+      <el-table-column label="状态" align="center" prop="status" />
+      <el-table-column label="创建时间" align="center" prop="addTime" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

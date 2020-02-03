@@ -117,7 +117,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
+    <!--表单组件-->
+    <eIForm ref="form2" :is-add="isAdd" />
     <!-- 添加或修改优惠券制作对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="130px">
@@ -152,7 +153,9 @@
 <script>
 import { listCoupon, getCoupon, delCoupon, addCoupon, updateCoupon, exportCoupon } from "@/api/store/coupon";
 import { formatTime } from '@/utils/index'
+import eIForm from '../coupon_issue/couponissue/form'
 export default {
+  components: { eIForm },
   data() {
     return {
       // 遮罩层
@@ -237,6 +240,20 @@ export default {
     resetQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
+    },
+     edit2(data) {
+      this.isAdd = true
+      const _this = this.$refs.form2
+      _this.form = {
+        cid: data.id,
+        cname: data.title,
+        isPermanent: 0,
+        status: 1,
+        totalCount: 0,
+        remainCount: 0,
+        isDel: 0
+      }
+      _this.dialog = true
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
