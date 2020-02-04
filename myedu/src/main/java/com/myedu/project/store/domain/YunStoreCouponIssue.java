@@ -1,18 +1,17 @@
 package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
+import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import java.util.Date;
-
 /**
- * 优惠券制作对象 store_coupon_issue
+ * 店铺优惠券发布对象 yun_store_coupon_issue
  * 
- * @author 梁龙飞
- * @date 2020-02-02
+ * @author 梁少鹏
+ * @date 2020-02-03
  */
-public class StoreCouponIssue extends BaseEntity
+public class YunStoreCouponIssue extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -23,29 +22,19 @@ public class StoreCouponIssue extends BaseEntity
     @Excel(name = "优惠券ID")
     private Long cid;
 
-    /** $column.columnComment */
-    @Excel(name = "优惠券ID")
+    /** 优惠券名称 */
+    @Excel(name = "优惠券名称")
     private String cname;
 
     /** 优惠券领取开启时间 */
-    @Excel(name = "优惠券领取开启时间")
-    private Integer startTime;
+    @Excel(name = "优惠券领取开启时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date leadStartTime;
 
     /** 优惠券领取结束时间 */
-    @Excel(name = "优惠券领取结束时间")
-    private Integer endTime;
-
-//    @Override
-//    public Integer getEndTime() {
-//        return endTime;
-//    }
-
-    public void setEndTime(Integer endTime) {
-        this.endTime = endTime;
-    }
+    @Excel(name = "优惠券领取结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date leadEndTime;
 
     /** 优惠券领取数量 */
-
     @Excel(name = "优惠券领取数量")
     private Long totalCount;
 
@@ -53,45 +42,49 @@ public class StoreCouponIssue extends BaseEntity
     @Excel(name = "优惠券剩余领取数量")
     private Long remainCount;
 
+    /** 优惠券剩余已领取数量 */
+    @Excel(name = "优惠券剩已领取数量")
+    private Long leadCount;
+
     /** $column.columnComment */
-    @Excel(name = "优惠券剩余领取数量")
-    private Long isPermanent;
+    @Excel(name = "是否限量")
+    private String isPermanent;
 
     /** 1 正常 0 未开启 -1 已无效 */
     @Excel(name = "1 正常 0 未开启 -1 已无效")
-    private Long status;
+    private String status;
 
     /** $column.columnComment */
-    @Excel(name = "1 正常 0 未开启 -1 已无效")
-    private Long isDel;
-
-    /** 优惠券添加时间 */
-    @Excel(name = "优惠券添加时间")
-    private Integer addTime;
-
-    /** $column.columnComment */
-    @Excel(name = "优惠券添加时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "1 正常 0 未开启 -1 已无效", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTimeDate;
 
     /** $column.columnComment */
-    @Excel(name = "优惠券添加时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "1 正常 0 未开启 -1 已无效", width = 30, dateFormat = "yyyy-MM-dd")
     private Date startTimeDate;
 
-    public void setId(Long id) 
+    /** 删除标志（0代表存在 1代表删除） */
+    @Excel(name = "删除标志", readConverterExp = "0=代表存在,1=代表删除")
+    private String delFlag;
+
+    /** 创建人Id */
+    @Excel(name = "创建人Id")
+    private Long createById;
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setCid(Long cid) 
+    public void setCid(Long cid)
     {
         this.cid = cid;
     }
 
-    public Long getCid() 
+    public Long getCid()
     {
         return cid;
     }
@@ -104,20 +97,25 @@ public class StoreCouponIssue extends BaseEntity
     {
         return cname;
     }
-
-
-
-
-    public Integer getStartTime() {
-        return startTime;
+    public void setLeadStartTime(Date leadStartTime) 
+    {
+        this.leadStartTime = leadStartTime;
     }
 
-    public void setStartTime(Integer startTime) {
-        this.startTime = startTime;
+    public Date getLeadStartTime() 
+    {
+        return leadStartTime;
+    }
+    public void setLeadEndTime(Date leadEndTime) 
+    {
+        this.leadEndTime = leadEndTime;
     }
 
-
-    public void setTotalCount(Long totalCount)
+    public Date getLeadEndTime() 
+    {
+        return leadEndTime;
+    }
+    public void setTotalCount(Long totalCount) 
     {
         this.totalCount = totalCount;
     }
@@ -135,42 +133,24 @@ public class StoreCouponIssue extends BaseEntity
     {
         return remainCount;
     }
-    public void setIsPermanent(Long isPermanent) 
+    public void setIsPermanent(String isPermanent)
     {
         this.isPermanent = isPermanent;
     }
 
-    public Long getIsPermanent() 
+    public String getIsPermanent()
     {
         return isPermanent;
     }
-    public void setStatus(Long status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public Long getStatus() 
+    public String getStatus()
     {
         return status;
     }
-    public void setIsDel(Long isDel) 
-    {
-        this.isDel = isDel;
-    }
-
-    public Integer getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Integer addTime) {
-        this.addTime = addTime;
-    }
-
-    public Long getIsDel()
-    {
-        return isDel;
-    }
-
     public void setEndTimeDate(Date endTimeDate) 
     {
         this.endTimeDate = endTimeDate;
@@ -189,6 +169,32 @@ public class StoreCouponIssue extends BaseEntity
     {
         return startTimeDate;
     }
+    public void setDelFlag(String delFlag) 
+    {
+        this.delFlag = delFlag;
+    }
+
+    public String getDelFlag() 
+    {
+        return delFlag;
+    }
+    public void setCreateById(Long createById) 
+    {
+        this.createById = createById;
+    }
+
+    public Long getCreateById() 
+    {
+        return createById;
+    }
+
+    public Long getLeadCount() {
+        return leadCount;
+    }
+
+    public void setLeadCount(Long leadCount) {
+        this.leadCount = leadCount;
+    }
 
     @Override
     public String toString() {
@@ -196,16 +202,21 @@ public class StoreCouponIssue extends BaseEntity
             .append("id", getId())
             .append("cid", getCid())
             .append("cname", getCname())
-            .append("startTime", getStartTime())
-            .append("endTime", getEndTime())
+            .append("leadStartTime", getLeadStartTime())
+            .append("leadEndTime", getLeadEndTime())
             .append("totalCount", getTotalCount())
             .append("remainCount", getRemainCount())
             .append("isPermanent", getIsPermanent())
             .append("status", getStatus())
-            .append("isDel", getIsDel())
-            .append("addTime", getAddTime())
             .append("endTimeDate", getEndTimeDate())
             .append("startTimeDate", getStartTimeDate())
+            .append("createBy", getCreateBy())
+            .append("createTime", getCreateTime())
+            .append("updateBy", getUpdateBy())
+            .append("updateTime", getUpdateTime())
+            .append("delFlag", getDelFlag())
+            .append("createById", getCreateById())
+            .append("leadCount", getLeadCount())
             .toString();
     }
 }

@@ -4,16 +4,13 @@ import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import java.util.Date;
-
 /**
- * 优惠券制作对象 store_coupon
+ * 店铺优惠券对象 yun_store_coupon
  * 
- * @author 梁龙飞
+ * @author 梁少鹏
  * @date 2020-02-03
  */
-public class StoreCoupon extends BaseEntity
+public class YunStoreCoupon extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -46,15 +43,24 @@ public class StoreCoupon extends BaseEntity
 
     /** 状态（0：关闭，1：开启） */
     @Excel(name = "状态", readConverterExp = "0=：关闭，1：开启")
-    private Long status;
+    private String  status;
 
-    /** 兑换项目添加时间 */
-    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date addTime;
+    /** 删除标志（0代表存在 1代表删除） */
+    @Excel(name = "删除标志", readConverterExp = "0=代表存在,1=代表删除")
+    private String delFlag;
 
-    /** 是否删除 */
-    @Excel(name = "是否删除")
-    private Integer isDel;
+    /** 创建人Id */
+    @Excel(name = "创建人Id")
+    private Long createById;
+
+    /** 门店Id */
+    @Excel(name = "门店Id")
+    private Long storeId;
+
+    /** 发布次数*/
+    @Excel(name = "发布次数")
+    private Long publishNum;
+
 
     public void setId(Long id) 
     {
@@ -119,32 +125,49 @@ public class StoreCoupon extends BaseEntity
     {
         return sort;
     }
-    public void setStatus(Long status) 
+    public void setStatus(String  status)
     {
         this.status = status;
     }
 
-    public Long getStatus() 
+    public String  getStatus()
     {
         return status;
     }
-
-    public Date getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-
-    public void setIsDel(Integer isDel)
+    public void setDelFlag(String delFlag) 
     {
-        this.isDel = isDel;
+        this.delFlag = delFlag;
     }
 
-    public Integer getIsDel() 
+    public String getDelFlag() 
     {
-        return isDel;
+        return delFlag;
+    }
+    public void setCreateById(Long createById) 
+    {
+        this.createById = createById;
+    }
+
+    public Long getCreateById() 
+    {
+        return createById;
+    }
+    public void setStoreId(Long storeId) 
+    {
+        this.storeId = storeId;
+    }
+
+    public Long getStoreId() 
+    {
+        return storeId;
+    }
+
+    public Long getPublishNum() {
+        return publishNum;
+    }
+
+    public void setPublishNum(Long publishNum) {
+        this.publishNum = publishNum;
     }
 
     @Override
@@ -158,8 +181,14 @@ public class StoreCoupon extends BaseEntity
             .append("couponTime", getCouponTime())
             .append("sort", getSort())
             .append("status", getStatus())
-            .append("addTime", getAddTime())
-            .append("isDel", getIsDel())
+            .append("createBy", getCreateBy())
+            .append("createTime", getCreateTime())
+            .append("updateBy", getUpdateBy())
+            .append("updateTime", getUpdateTime())
+            .append("delFlag", getDelFlag())
+            .append("createById", getCreateById())
+            .append("storeId", getStoreId())
+            .append("publishNum", getPublishNum())
             .toString();
     }
 }

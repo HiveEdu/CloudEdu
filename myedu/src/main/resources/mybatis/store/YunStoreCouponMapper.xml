@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreCouponMapper">
+    
+    <resultMap type="YunStoreCoupon" id="YunStoreCouponResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="integral"    column="integral"    />
+        <result property="couponPrice"    column="coupon_price"    />
+        <result property="useMinPrice"    column="use_min_price"    />
+        <result property="couponTime"    column="coupon_time"    />
+        <result property="sort"    column="sort"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="publishNum"    column="publish_num"    />
+    </resultMap>
+
+    <sql id="selectYunStoreCouponVo">
+        select id, title, integral, coupon_price, use_min_price, coupon_time, sort, status, create_by, create_time, update_by, update_time, del_flag, create_by_id, store_id,publish_num from yun_store_coupon
+    </sql>
+
+    <select id="selectYunStoreCouponList" parameterType="YunStoreCoupon" resultMap="YunStoreCouponResult">
+        <include refid="selectYunStoreCouponVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="integral != null "> and integral = #{integral}</if>
+            <if test="couponPrice != null "> and coupon_price = #{couponPrice}</if>
+            <if test="useMinPrice != null "> and use_min_price = #{useMinPrice}</if>
+            <if test="couponTime != null "> and coupon_time = #{couponTime}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+            <if test="publishNum != null "> and publish_num = #{publishNum}</if>
+
+        </where>
+    </select>
+    
+    <select id="selectYunStoreCouponById" parameterType="Long" resultMap="YunStoreCouponResult">
+        <include refid="selectYunStoreCouponVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStoreCoupon" parameterType="YunStoreCoupon" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_store_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            <if test="integral != null ">integral,</if>
+            <if test="couponPrice != null ">coupon_price,</if>
+            <if test="useMinPrice != null ">use_min_price,</if>
+            <if test="couponTime != null ">coupon_time,</if>
+            <if test="sort != null ">sort,</if>
+            <if test="status != null ">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="storeId != null ">store_id,</if>
+            <if test="publishNum != null ">publish_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="integral != null ">#{integral},</if>
+            <if test="couponPrice != null ">#{couponPrice},</if>
+            <if test="useMinPrice != null ">#{useMinPrice},</if>
+            <if test="couponTime != null ">#{couponTime},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="publishNum != null ">#{publishNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreCoupon" parameterType="YunStoreCoupon">
+        update yun_store_coupon
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="integral != null ">integral = #{integral},</if>
+            <if test="couponPrice != null ">coupon_price = #{couponPrice},</if>
+            <if test="useMinPrice != null ">use_min_price = #{useMinPrice},</if>
+            <if test="couponTime != null ">coupon_time = #{couponTime},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="storeId != null ">store_id = #{storeId},</if>
+            <if test="publishNum != null ">publish_num = #{publishNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStoreCouponById" parameterType="Long">
+        delete from yun_store_coupon where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStoreCouponByIds" parameterType="String">
+        delete from yun_store_coupon where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

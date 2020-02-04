@@ -1,10 +1,29 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="优惠券名" prop="title">
+      <el-form-item label="名称" prop="title">
         <el-input
           v-model="queryParams.title"
           placeholder="请输入优惠券名称"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+     <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
+          <el-option
+            v-for="dict in statusOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="用户" prop="createBy">
+        <el-input
+          v-model="queryParams.createBy"
+          placeholder="请输入创建者用户"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -15,7 +34,6 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -25,6 +43,16 @@
           @click="handleAdd"
           v-hasPermi="['store:coupon:add']"
         >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['store:coupon:edit']"
+        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -47,63 +75,50 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="couponList" @selection-change="handleSelectionChange" size="small" style="width: 100%;">
+    <el-table v-loading="loading" :data="couponList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="优惠券名称" align="center" prop="title" />
+      <el-table-column label="名称" align="center" prop="title" />
       <el-table-column label="优惠券面值" align="center" prop="couponPrice" />
-      <el-table-column label="最低消费" align="center" prop="useMinPrice">
-      <template slot-scope="scope">
-          <span>{{ scope.row.useMinPrice }}元</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="有效期限" align="center" prop="couponTime">
-      <template slot-scope="scope">
-          <span>{{ scope.row.couponTime }}天</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="排序" align="center" prop="sort" />
-      <el-table-column label="状态" align="center" prop="status" >
+      <el-table-column label="优惠券最低消费" align="center" prop="useMinPrice" />
+      <el-table-column label="优惠券有效期限" align="center" prop="couponTime" />
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
+      <el-table-column label="创建者" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <div>
-            <el-tag v-if="scope.row.status === 1" style="cursor: pointer" :type="''">开启</el-tag>
-            <el-tag v-else :type=" 'info' ">关闭</el-tag>
-          </div>
+          <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="addTime">
-      <template slot-scope="scope" v-if="scope.row.addTime!=null">
-          <span>{{ parseTimeBefore(scope.row.addTime) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="发布次数" align="center" prop="publishNum" />
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
           <el-button
-            v-permission="['admin','YXSTORECOUPON_ALL','YXSTORECOUPON_EDIT']"
             size="mini"
             type="primary"
-            @click="edit2(scope.row)"
+            @click="couponPublish(scope.row)"
           >
             发布
           </el-button>
-           <el-dropdown size="mini" split-button type="primary" trigger="click">
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-          <el-button
-            size="mini"
-            type="primary"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['store:coupon:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['store:coupon:remove']"
-          >删除</el-button>
-          </el-dropdown-item>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  icon="el-icon-edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['store:coupon:edit']"
+                >修改</el-button>
+                <br>
+                <el-button
+                  style="margin-top: 10px"
+                  size="mini"
+                  type="danger"
+                  icon="el-icon-delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['store:coupon:remove']"
+                >删除</el-button>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -117,29 +132,52 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <!--表单组件-->
-    <eIForm ref="form2" :is-add="isAdd" />
-    <!-- 添加或修改优惠券制作对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="130px">
+    <!--优惠券发布页面-->
+    <publishModal ref="publishModal" :publish="publish" :courseData="courseData" @closePublish="closePublish"></publishModal>
+    <!-- 添加或修改店铺优惠券对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="50%">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="优惠券名称" prop="title">
-          <el-input v-model="form.title" placeholder="请输入优惠券名称" style="width: 300px;" />
+          <el-input v-model="form.title" placeholder="请输入优惠券名称" />
         </el-form-item>
-        <el-form-item label="优惠券面值" prop="couponPrice">
-          <el-input v-model="form.couponPrice" placeholder="请输入兑换的优惠券面值" style="width: 300px;" />
-        </el-form-item>
-        <el-form-item label="最低消费" prop="useMinPrice">
-          <el-input v-model="form.useMinPrice" placeholder="请输入最低消费多少金额可用优惠券" style="width: 300px;"  />
-        </el-form-item>
-        <el-form-item label="有效期限" prop="couponTime">
-          <el-input v-model="form.couponTime" placeholder="请输入优惠券有效期限" style="width: 300px;" />
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入排序" style="width: 300px;" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio v-model="form.status" :label="1">开启</el-radio>
-          <el-radio v-model="form.status" :label="0">关闭</el-radio>
+        <el-row>
+          <el-col :span="23">
+            <el-form-item label="优惠券面值" prop="couponPrice">
+              <el-input-number  :min="0"  style="width: 100%;" controls-position="right"  v-model="form.couponPrice" placeholder="请输入兑换的优惠券面值" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" style="margin-top:6px; ">
+            <span >元</span>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="23">
+            <el-form-item label="优惠券最低消费" prop="useMinPrice">
+              <el-input-number  :min="0"  style="width: 100%;" controls-position="right"  v-model="form.useMinPrice" placeholder="请输入最低消费多少金额可用优惠券" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" style="margin-top:6px; ">
+            <span >元</span>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="23">
+            <el-form-item label="优惠券有效期限" prop="couponTime">
+              <el-input-number :min="0"  style="width: 100%;" controls-position="right" v-model="form.couponTime" placeholder="请输入优惠券有效期限" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" style="margin-top:6px; ">
+            <span >天</span>
+          </el-col>
+        </el-row>
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="form.status">
+            <el-radio
+              v-for="dict in statusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictValue"
+            >{{dict.dictLabel}}</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -153,11 +191,13 @@
 <script>
 import { listCoupon, getCoupon, delCoupon, addCoupon, updateCoupon, exportCoupon } from "@/api/store/coupon";
 import { formatTime } from '@/utils/index'
-import eIForm from '../coupon_issue/couponissue/form'
+import publishModal from './modal/publishModal'
 export default {
-  components: { eIForm },
+  components: { publishModal },
   data() {
     return {
+      publish:false,
+      courseData:null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -168,40 +208,74 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 优惠券制作表格数据
+      // 店铺优惠券表格数据
       couponList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      // 状态字典
+      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         title: undefined,
+        integral: undefined,
+        couponPrice: undefined,
+        useMinPrice: undefined,
+        couponTime: undefined,
+        sort: undefined,
+        status: undefined,
+        createBy: undefined,
+        createTime: undefined,
+        delFlag: undefined,
+        createById: undefined,
+        storeId: undefined
       },
       // 表单参数
-      form: {
-        id: '',
-        title: '',
-        integral: 0,
-        couponPrice: 0,
-        useMinPrice: 0,
-        couponTime: 1,
-        sort: 0,
-        status: 1,
-        addTime: ''
-      },
+      form: {},
       // 表单校验
       rules: {
+        title: [
+          { required: true, message: "优惠券名称不能为空", trigger: "blur" }
+        ],
+        couponPrice: [
+          { required: true, message: "优惠券面值不能为空", trigger: "blur" }
+        ],
+        useMinPrice: [
+          { required: true, message: "优惠券最低消费不能为空", trigger: "blur" }
+        ],
+        couponTime: [
+          { required: true, message: "优惠券有效期不能为空", trigger: "blur" }
+        ],
+        status: [
+          { required: true, message: "优惠券状态不能为空", trigger: "blur" }
+        ],
       }
     };
   },
   created() {
     this.getList();
+    this.getDicts("coupon_type").then(response => {
+      this.statusOptions = response.data;
+    });
   },
   methods: {
-    /** 查询优惠券制作列表 */
+    //打开优惠券发布页面
+    couponPublish(row){
+      this.courseData=row;
+      this.publish=true;
+    },
+    //关闭优惠券发布页面
+    closePublish(){
+      this.publish=false;
+      this.getList()
+    },
+    parseTimeBefore(e){
+      return formatTime((new Date(e)).getTime() / 1000);
+    },
+    /** 查询店铺优惠券列表 */
     getList() {
       this.loading = true;
       listCoupon(this.queryParams).then(response => {
@@ -209,6 +283,10 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    // 状态字典翻译
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.statusOptions, row.status);
     },
     // 取消按钮
     cancel() {
@@ -226,8 +304,13 @@ export default {
         couponTime: undefined,
         sort: undefined,
         status: "0",
-        addTime: undefined,
-        isDel: undefined
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined,
+        delFlag: undefined,
+        createById: undefined,
+        storeId: undefined
       };
       this.resetForm("form");
     },
@@ -241,20 +324,6 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-     edit2(data) {
-      this.isAdd = true
-      const _this = this.$refs.form2
-      _this.form = {
-        cid: data.id,
-        cname: data.title,
-        isPermanent: 0,
-        status: 1,
-        totalCount: 0,
-        remainCount: 0,
-        isDel: 0
-      }
-      _this.dialog = true
-    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
@@ -265,12 +334,9 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加优惠券制作";
+      this.form.status="1";
+      this.title = "添加店铺优惠券";
     },
-    /** 时间操作 */
-     parseTimeBefore(e){
-            return formatTime((new Date(e)).getTime() / 1000);
-     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -278,7 +344,7 @@ export default {
       getCoupon(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改优惠券制作";
+        this.title = "修改店铺优惠券";
       });
     },
     /** 提交按钮 */
@@ -312,7 +378,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除优惠券制作编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除店铺优惠券编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -326,7 +392,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有优惠券制作数据项?', "警告", {
+      this.$confirm('是否确认导出所有店铺优惠券数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

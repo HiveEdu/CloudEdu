@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询优惠券制作列表
+// 查询店铺优惠券列表
 export function listCoupon(query) {
   return request({
     url: '/store/coupon/list',
@@ -9,7 +9,7 @@ export function listCoupon(query) {
   })
 }
 
-// 查询优惠券制作详细
+// 查询店铺优惠券详细
 export function getCoupon(id) {
   return request({
     url: '/store/coupon/' + id,
@@ -17,7 +17,7 @@ export function getCoupon(id) {
   })
 }
 
-// 新增优惠券制作
+// 新增店铺优惠券
 export function addCoupon(data) {
   return request({
     url: '/store/coupon',
@@ -26,7 +26,7 @@ export function addCoupon(data) {
   })
 }
 
-// 修改优惠券制作
+// 修改店铺优惠券
 export function updateCoupon(data) {
   return request({
     url: '/store/coupon',
@@ -35,7 +35,7 @@ export function updateCoupon(data) {
   })
 }
 
-// 删除优惠券制作
+// 删除店铺优惠券
 export function delCoupon(id) {
   return request({
     url: '/store/coupon/' + id,
@@ -43,11 +43,20 @@ export function delCoupon(id) {
   })
 }
 
-// 导出优惠券制作
+// 导出店铺优惠券
 export function exportCoupon(query) {
   return request({
     url: '/store/coupon/export',
     method: 'get',
     params: query
+  })
+}
+
+//优惠券发布
+export function publishCou(data) {
+  return request({
+    url: '/store/coupon/publish',
+    method: 'post',
+    data: data
   })
 }

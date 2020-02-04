@@ -1,6 +1,34 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+      <el-form-item label="名称" prop="cname">
+        <el-input
+          v-model="queryParams.cname"
+          placeholder="请输入优惠券名称"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+        <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择已发布优惠券状态" clearable size="small">
+          <el-option
+            v-for="dict in statusOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="用户" prop="createBy">
+        <el-input
+          v-model="queryParams.createBy"
+          placeholder="请输入创建者用"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -14,7 +42,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['store:coupon_issue:add']"
+          v-hasPermi="['store:issue:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -24,7 +52,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['store:coupon_issue:edit']"
+          v-hasPermi="['store:issue:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -34,7 +62,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['store:coupon_issue:remove']"
+          v-hasPermi="['store:issue:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -43,21 +71,34 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['store:coupon_issue:export']"
+          v-hasPermi="['store:issue:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="coupon_issueList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="issueList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="优惠券ID" align="center" prop="cname" />
-      <el-table-column label="优惠券领取开启时间" align="center" prop="startTime" />
-      <el-table-column label="优惠券领取结束时间" align="center" prop="endTime" />
+      <el-table-column label="优惠券名称" align="center" prop="cname" />
+      <el-table-column label="优惠券领取开启时间" align="center" prop="leadStartTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.leadStartTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="优惠券领取结束时间" align="center" prop="leadEndTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.leadEndTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="优惠券领取数量" align="center" prop="totalCount" />
-      <el-table-column label="剩余领取数量" align="center" prop="remainCount" />
-      <el-table-column label="是否不限量" align="center" prop="isPermanent" />
-      <el-table-column label="状态" align="center" prop="status" />
-      <el-table-column label="创建时间" align="center" prop="addTime" />
+      <el-table-column label="优惠券剩余领取数量" align="center" prop="remainCount" />
+      <el-table-column label="优惠券剩余领取数量" align="center" prop="isPermanent" />
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
+      <el-table-column label="创建者" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -65,14 +106,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['store:coupon_issue:edit']"
+            v-hasPermi="['store:issue:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['store:coupon_issue:remove']"
+            v-hasPermi="['store:issue:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -86,56 +127,17 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改优惠券制作对话框 -->
+    <!-- 添加或修改店铺优惠券发布对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="优惠券ID" prop="cid">
-          <el-input v-model="form.cid" placeholder="请输入优惠券ID" />
-        </el-form-item>
-        <el-form-item label="优惠券ID" prop="cname">
-          <el-input v-model="form.cname" placeholder="请输入优惠券ID" />
-        </el-form-item>
-        <el-form-item label="优惠券领取开启时间" prop="startTime">
-          <el-input v-model="form.startTime" placeholder="请输入优惠券领取开启时间" />
-        </el-form-item>
-        <el-form-item label="优惠券领取结束时间" prop="endTime">
-          <el-input v-model="form.endTime" placeholder="请输入优惠券领取结束时间" />
-        </el-form-item>
-        <el-form-item label="优惠券领取数量" prop="totalCount">
-          <el-input v-model="form.totalCount" placeholder="请输入优惠券领取数量" />
-        </el-form-item>
-        <el-form-item label="优惠券剩余领取数量" prop="remainCount">
-          <el-input v-model="form.remainCount" placeholder="请输入优惠券剩余领取数量" />
-        </el-form-item>
-        <el-form-item label="优惠券剩余领取数量" prop="isPermanent">
-          <el-input v-model="form.isPermanent" placeholder="请输入优惠券剩余领取数量" />
-        </el-form-item>
-        <el-form-item label="1 正常 0 未开启 -1 已无效">
+        <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio label="1">请选择字典生成</el-radio>
+            <el-radio
+              v-for="dict in statusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictValue"
+            >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="1 正常 0 未开启 -1 已无效" prop="isDel">
-          <el-input v-model="form.isDel" placeholder="请输入1 正常 0 未开启 -1 已无效" />
-        </el-form-item>
-        <el-form-item label="优惠券添加时间" prop="addTime">
-          <el-input v-model="form.addTime" placeholder="请输入优惠券添加时间" />
-        </el-form-item>
-        <el-form-item label="优惠券添加时间" prop="endTimeDate">
-          <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.endTimeDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择优惠券添加时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="优惠券添加时间" prop="startTimeDate">
-          <el-date-picker clearable size="small" style="width: 200px"
-            v-model="form.startTimeDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择优惠券添加时间">
-          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -147,8 +149,8 @@
 </template>
 
 <script>
-import { listCoupon_issue, getCoupon_issue, delCoupon_issue, addCoupon_issue, updateCoupon_issue, exportCoupon_issue } from "@/api/store/coupon_issue";
-
+import { listIssue, getIssue, delIssue, addIssue, updateIssue, exportIssue } from "@/api/store/couponIssue";
+import { formatTime } from '@/utils/index'
 export default {
   data() {
     return {
@@ -162,16 +164,32 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 优惠券制作表格数据
-      coupon_issueList: [],
+      // 店铺优惠券发布表格数据
+      issueList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      // 1 正常 0 未开启 -1 已无效字典
+      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        cid: undefined,
+        cname: undefined,
+        leadStartTime: undefined,
+        leadEndTime: undefined,
+        totalCount: undefined,
+        remainCount: undefined,
+        isPermanent: undefined,
+        status: undefined,
+        endTimeDate: undefined,
+        startTimeDate: undefined,
+        createBy: undefined,
+        createTime: undefined,
+        delFlag: undefined,
+        createById: undefined
       },
       // 表单参数
       form: {},
@@ -182,16 +200,26 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts("coupon_type").then(response => {
+      this.statusOptions = response.data;
+    });
   },
   methods: {
-    /** 查询优惠券制作列表 */
+    parseTimeBefore(e){
+      return formatTime((new Date(e)).getTime() / 1000);
+    },
+    /** 查询店铺优惠券发布列表 */
     getList() {
       this.loading = true;
-      listCoupon_issue(this.queryParams).then(response => {
-        this.coupon_issueList = response.rows;
+      listIssue(this.queryParams).then(response => {
+        this.issueList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
+    },
+    // 1 正常 0 未开启 -1 已无效字典翻译
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.statusOptions, row.status);
     },
     // 取消按钮
     cancel() {
@@ -204,16 +232,20 @@ export default {
         id: undefined,
         cid: undefined,
         cname: undefined,
-        startTime: undefined,
-        endTime: undefined,
+        leadStartTime: undefined,
+        leadEndTime: undefined,
         totalCount: undefined,
         remainCount: undefined,
         isPermanent: undefined,
         status: "0",
-        isDel: undefined,
-        addTime: undefined,
         endTimeDate: undefined,
-        startTimeDate: undefined
+        startTimeDate: undefined,
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined,
+        delFlag: undefined,
+        createById: undefined
       };
       this.resetForm("form");
     },
@@ -237,16 +269,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加优惠券制作";
+      this.title = "添加店铺优惠券发布";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getCoupon_issue(id).then(response => {
+      getIssue(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改优惠券制作";
+        this.title = "修改店铺优惠券发布";
       });
     },
     /** 提交按钮 */
@@ -254,7 +286,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateCoupon_issue(this.form).then(response => {
+            updateIssue(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -264,7 +296,7 @@ export default {
               }
             });
           } else {
-            addCoupon_issue(this.form).then(response => {
+            addIssue(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -280,12 +312,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除优惠券制作编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除店铺优惠券发布编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delCoupon_issue(ids);
+          return delIssue(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
@@ -294,12 +326,12 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有优惠券制作数据项?', "警告", {
+      this.$confirm('是否确认导出所有店铺优惠券发布数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return exportCoupon_issue(queryParams);
+          return exportIssue(queryParams);
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});

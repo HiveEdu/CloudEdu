@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreCouponIssueMapper">
+    
+    <resultMap type="YunStoreCouponIssue" id="YunStoreCouponIssueResult">
+        <result property="id"    column="id"    />
+        <result property="cid"    column="cid"    />
+        <result property="cname"    column="cname"    />
+        <result property="leadStartTime"    column="lead_start_time"    />
+        <result property="leadEndTime"    column="lead_end_time"    />
+        <result property="totalCount"    column="total_count"    />
+        <result property="remainCount"    column="remain_count"    />
+        <result property="leadCount"    column="lead_count"    />
+        <result property="isPermanent"    column="is_permanent"    />
+        <result property="status"    column="status"    />
+        <result property="endTimeDate"    column="end_time_date"    />
+        <result property="startTimeDate"    column="start_time_date"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunStoreCouponIssueVo">
+        select id, cid, cname, lead_start_time, lead_end_time, total_count, remain_count, is_permanent, status, end_time_date, start_time_date, create_by, create_time, update_by, update_time, del_flag, create_by_id,lead_count from yun_store_coupon_issue
+    </sql>
+
+    <select id="selectYunStoreCouponIssueList" parameterType="YunStoreCouponIssue" resultMap="YunStoreCouponIssueResult">
+        <include refid="selectYunStoreCouponIssueVo"/>
+        <where>  
+            <if test="cid != null "> and cid = #{cid}</if>
+            <if test="cname != null  and cname != ''"> and cname like concat('%', #{cname}, '%')</if>
+            <if test="leadStartTime != null "> and lead_start_time = #{leadStartTime}</if>
+            <if test="leadEndTime != null "> and lead_end_time = #{leadEndTime}</if>
+            <if test="totalCount != null "> and total_count = #{totalCount}</if>
+            <if test="remainCount != null "> and remain_count = #{remainCount}</if>
+            <if test="isPermanent != null "> and is_permanent = #{isPermanent}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="endTimeDate != null "> and end_time_date = #{endTimeDate}</if>
+            <if test="startTimeDate != null "> and start_time_date = #{startTimeDate}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="leadCount != null "> and lead_count = #{leadCount}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStoreCouponIssueById" parameterType="Integer" resultMap="YunStoreCouponIssueResult">
+        <include refid="selectYunStoreCouponIssueVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStoreCouponIssue" parameterType="YunStoreCouponIssue" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_store_coupon_issue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cid != null ">cid,</if>
+            <if test="cname != null  and cname != ''">cname,</if>
+            <if test="leadStartTime != null ">lead_start_time,</if>
+            <if test="leadEndTime != null ">lead_end_time,</if>
+            <if test="totalCount != null ">total_count,</if>
+            <if test="remainCount != null ">remain_count,</if>
+            <if test="isPermanent != null ">is_permanent,</if>
+            <if test="status != null ">status,</if>
+            <if test="endTimeDate != null ">end_time_date,</if>
+            <if test="startTimeDate != null ">start_time_date,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="leadCount != null ">lead_count,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cid != null ">#{cid},</if>
+            <if test="cname != null  and cname != ''">#{cname},</if>
+            <if test="leadStartTime != null ">#{leadStartTime},</if>
+            <if test="leadEndTime != null ">#{leadEndTime},</if>
+            <if test="totalCount != null ">#{totalCount},</if>
+            <if test="remainCount != null ">#{remainCount},</if>
+            <if test="isPermanent != null ">#{isPermanent},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="endTimeDate != null ">#{endTimeDate},</if>
+            <if test="startTimeDate != null ">#{startTimeDate},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="leadCount != null ">#{leadCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreCouponIssue" parameterType="YunStoreCouponIssue">
+        update yun_store_coupon_issue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cid != null ">cid = #{cid},</if>
+            <if test="cname != null  and cname != ''">cname = #{cname},</if>
+            <if test="leadStartTime != null ">lead_start_time = #{leadStartTime},</if>
+            <if test="leadEndTime != null ">lead_end_time = #{leadEndTime},</if>
+            <if test="totalCount != null ">total_count = #{totalCount},</if>
+            <if test="remainCount != null ">remain_count = #{remainCount},</if>
+            <if test="isPermanent != null ">is_permanent = #{isPermanent},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="endTimeDate != null ">end_time_date = #{endTimeDate},</if>
+            <if test="startTimeDate != null ">start_time_date = #{startTimeDate},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="leadCount != null ">lead_count = #{leadCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStoreCouponIssueById" parameterType="Integer">
+        delete from yun_store_coupon_issue where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStoreCouponIssueByIds" parameterType="String">
+        delete from yun_store_coupon_issue where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
