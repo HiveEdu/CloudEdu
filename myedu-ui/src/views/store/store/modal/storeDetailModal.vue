@@ -12,18 +12,19 @@
         <el-col :span="8" style="height: 200px">
           <a :href="imageView+'/'+form.logo"  target="_blank"><img   :src="imageView+'/'+form.logo" alt="" height="100%" width="100%"></a>
         </el-col>
-        <el-col :span="8" >
+        <el-col :span="16" >
           <div class="text item">门店名称:{{ form.name }}</div>
         </el-col>
-        <el-col :span="8">
+        <br><br>
+        <el-col :span="16">
           <div class="text item">负责人: {{ form.manager }}</div>
         </el-col>
         <br><br>
-        <el-col :span="8">
+        <el-col :span="16">
           <div class="text item">负责人电话: {{ form.managerPhone }}</div>
         </el-col>
         <br><br>
-        <el-col :span="8">
+        <el-col :span="16">
           <div class="text item">标贴:
             <span v-for="item in storeLabels">
                <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
@@ -33,11 +34,11 @@
           </div>
         </el-col>
         <br><br>
-        <el-col :span="8">
+        <el-col :span="16">
           <div class="text item">地址: {{ form.province }}</div>
         </el-col>
         <br><br>
-        <el-col :span="8">
+        <el-col :span="16">
           <div class="text item">街道: {{ form.address }}</div>
         </el-col>
         <br><br>
