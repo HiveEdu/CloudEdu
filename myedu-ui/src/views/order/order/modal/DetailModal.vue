@@ -90,7 +90,13 @@
            <div class="text item">入学时间: {{ parseTime(form.enrolTime)}}</div>
         </el-col>
         <el-col :span="12">
-           <div class="text item">托管时长: {{ form.managTime }}</div>
+           <div class="text item">托管时长:
+            <span v-for="item in manageTimeOptions">
+               <span v-if="form.managTime==item.dictValue">
+                 {{ item.dictLabel }}
+               </span>
+            </span>
+           </div>
         </el-col>
       </el-row>
     </el-card>
