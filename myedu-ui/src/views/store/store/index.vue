@@ -98,7 +98,7 @@
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button  size="mini" type="primary">详情</el-button>
+          <el-button  size="mini" type="primary"  @click="openStoreDatail(scope.row)">详情</el-button>
           <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
             <el-dropdown-menu slot="dropdown">
@@ -166,6 +166,8 @@
     />
     <!--审核页面-->
     <reviewModal ref="reviewModal" :review="review" :currentData="currentData" @closeReview="closeReview"></reviewModal>
+    <!--门店详情-->
+    <storeDetailModal ref="storeDetailModal" :storeDetail="storeDetail" :currentData="currentData" @closeStoreDetail="closeStoreDetail"></storeDetailModal>
     <!-- 添加或修改门店对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="70%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -351,6 +353,7 @@
 import { listStore, getStore, delStore, addStore, changeStatusOff,changeStatusOn,updateStore, exportStore } from "@/api/store/store";
 import {addressOptions} from '@/api/addressOptions'
 import reviewModal from './modal/reviewModal'
+import storeDetailModal from './modal/storeDetailModal'
 import { getToken } from '@/utils/auth'
 // import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BaiduMap from 'vue-baidu-map'
@@ -359,9 +362,10 @@ Vue.use(BaiduMap, {
   ak: '7ddN7rl0MKnrRAhxmZzEHVPObhlDUcdb'
 });
 export default {
-  components: { reviewModal },
+  components: { reviewModal,storeDetailModal },
   data() {
     return {
+      storeDetail:false,
        //审核页面默认不打开
       review:false,
       //当前行记录为空
@@ -445,7 +449,15 @@ export default {
     });
   },
   methods: {
-
+    //打开门店详情页面
+    openStoreDatail(row){
+      this.currentData=row;
+      this.storeDetail=true;
+    },
+    //关闭门店详情页面
+    closeStoreDetail(){
+      this.storeDetail=false;
+    },
     //打开审核页面
     openReview(row){
       this.currentData=row;
