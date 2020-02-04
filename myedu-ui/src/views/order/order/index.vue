@@ -78,7 +78,7 @@
 
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" prop="num" />
+      <!-- <el-table-column label="编号" align="center" prop="num" /> -->
       <el-table-column label="门店" align="center" prop="storeName" />
       <el-table-column label="课程" align="center" prop="courseName" />
       <el-table-column label="学生" align="center" prop="studentAssName" />
@@ -97,9 +97,7 @@
       </el-table-column>
        <el-table-column  label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button  size="mini" type="primary"
-                     @click="detail(scope.row)">
-                   详情</el-button>
+          <el-button  size="mini" type="primary" @click="openDatail(scope.row)">详情</el-button>
           <el-dropdown size="mini" split-button type="primary" trigger="click">
              操作
                 <el-dropdown-menu slot="dropdown">
@@ -133,7 +131,7 @@
       @pagination="getList"
     />
     <!-- 表单组件-->
-   <eDetail ref="form1" :is-add="isAdd"/>
+   <DetailModal ref="DetailModal" :orderDetail="orderDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <!-- 添加或修改订单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -235,12 +233,13 @@
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } from "@/api/order/order";
-import eDetail from './modal/detail'
+import DetailModal from './modal/DetailModal'
 import { formatTime } from '@/utils/index'
 export default {
-   components: {eDetail},
+  components: {DetailModal},
   data() {
     return {
+      orderDetail:false,
       // 年级列表
       sysGrades: [],
       // 学生列表
@@ -288,6 +287,7 @@ export default {
         status: undefined,
         createBy: undefined,
         createTime: undefined,
+        studentAssName: undefined,
         delFlag: undefined,
         createById: undefined
       },
@@ -324,6 +324,15 @@ export default {
 
   },
   methods: {
+      //打开订单详情页面
+    openDatail(row){
+      this.currentData=row;
+      this.orderDetail=true;
+    },
+    //关闭订单详情页面
+    closeDetail(){
+      this.orderDetail=false;
+    },
     parseTimeBefore(e){
       return formatTime((new Date(e)).getTime() / 1000);
     },
@@ -416,32 +425,6 @@ export default {
         this.open = true;
         this.title = "修改订单";
       });
-    },
-  //订单详情
-    detail(orderList) {
-      this.isAdd = false
-      const _this = this.$refs.form1
-      _this.form = {
-        num: orderList.num,
-        studentId: orderList.studentId,
-        storeId: orderList.storeId,
-        courseId: orderList.courseId,
-        greadId: orderList.greadId,
-        managTime: orderList.managTime,
-        isMeal: orderList.isMeal,
-        enrolTime: orderList.enrolTime,
-        certificateType: orderList.certificateType,
-        studentAssName: orderList.studentAssName,
-        gradeName: orderList.gradeName,
-        certificateNum: orderList.certificateNum,
-        totalMoney: orderList.totalMoney,
-        status: orderList.status,
-        createBy: orderList.createBy,
-        storeName: orderList.storeName,
-        courseName: orderList.courseName,
-        createTime: orderList.createTime
-      }
-      _this.dialog = true
     },
     /** 提交按钮 */
     submitForm: function() {

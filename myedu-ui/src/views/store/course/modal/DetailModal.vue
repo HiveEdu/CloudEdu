@@ -28,8 +28,8 @@
         </el-col>
         <el-col :span="12" v-if="form.classify==0">
           <div class="text item">托管类型:
-            <span v-for="item in reclassifyCollOptions">
-               <span v-if="form.reclassifyColl==item.dictValue">
+            <span v-for="item in statusOptions">
+               <span v-if="form.status==item.dictValue">
                  {{ item.dictLabel }}
                </span>
             </span>
