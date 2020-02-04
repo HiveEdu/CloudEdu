@@ -87,6 +87,11 @@
 
     <el-table v-loading="loading" :data="storeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column ref="table" prop="logo" label="logo" width="60">
+        <template slot-scope="scope">
+          <a :href="imageView+'/'+scope.row.logo" style="color: #42b983" target="_blank"><img :src="imageView+'/'+scope.row.logo" alt="点击打开" class="el-avatar" style="border-radius:10px"></a>
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="负责人" align="center" prop="manager" />
       <el-table-column label="电话" align="center" prop="managerPhone" />
@@ -261,19 +266,43 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <baidu-map class="map" :center="centerStr" :zoom="zoom"
-                     :scroll-wheel-zoom="true"
-                     @ready="handler"
-                     @click="mapclick">
-            <bm-local-search :keyword="keyword" :location="location" :auto-viewport="autoViewport":panel="panel" :select-first-result="selectFirstResult":pagecapacity="pageCapacity"></bm-local-search>
-            <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
-            <bm-geolocation
-              anchor="BMAP_ANCHOR_BOTTOM_RIGHT"
-              :showAddressBar="true"
-              :autoLocation="true"
-              :show="false"
-             ></bm-geolocation>
-          </baidu-map>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="地图">
+                <baidu-map class="map" :center="centerStr" :zoom="zoom"
+                           :scroll-wheel-zoom="true"
+                           @ready="handler"
+                           @click="mapclick">
+                  <bm-local-search :keyword="keyword" :location="location" :auto-viewport="autoViewport":panel="panel" :select-first-result="selectFirstResult":pagecapacity="pageCapacity"></bm-local-search>
+                  <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
+                  <bm-geolocation
+                    anchor="BMAP_ANCHOR_BOTTOM_RIGHT"
+                    :showAddressBar="true"
+                    :autoLocation="true"
+                    :show="false"
+                   ></bm-geolocation>
+                </baidu-map>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="logo">
+                <el-upload
+                  class="avatar-uploader"
+                  ref="upload"
+                  :headers="headers"
+                  :action="uploadImgUrl"
+                  :data="{'type':'store'}"
+                  :show-file-list="false"
+                  :on-success="onSuccessLogo"
+                  :on-remove="handleRemoveLogo"
+                  :on-preview="handlePictureCardPreviewLogo"
+                  :before-upload="beforeUploadLogo">
+                  <img v-if="form.logo" :src="imageView+'/'+form.logo" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </div>
         <div v-if="active==2" style="margin-top: 30px">
           <el-form-item label="营业执照" style="margin-top: 80px">
@@ -677,6 +706,26 @@ export default {
     onChangeCitys(value){
       this.cities = value;
     },
+    //logo上传开始
+    beforeUploadLogo(file){
+    },
+    onSuccessLogo(res,file, fileList){
+      if(res.code=="200"){
+        this.form.logo=res.fileName
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemoveLogo(file, fileList) {
+      console.log(file, fileList);
+      this.form.logo=null;
+    },
+    handlePictureCardPreviewLogo(file) {
+      // this.dialogImageUrl = file.url;
+      // this.dialogVisible = true;
+    },
+    //图片上传结束
     //营业执照上传开始
     beforeUpload(file){
     },
@@ -802,5 +851,35 @@ export default {
   .map {
     width: 100%;
     height: 400px;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
   }
 </style>

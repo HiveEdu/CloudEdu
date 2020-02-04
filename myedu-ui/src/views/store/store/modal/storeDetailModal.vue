@@ -10,29 +10,22 @@
       </div>
       <el-row>
         <el-col :span="8">
+          <img  :src="imageView+'/'+form.logo" alt="" height="100%" width="100%">
+        </el-col>
+
+
+        <el-col :span="8">
           <div class="text item">门店名称:{{ form.name }}</div>
         </el-col>
         <el-col :span="8">
           <div class="text item">负责人: {{ form.manager }}</div>
         </el-col>
+        <br><br>
         <el-col :span="8">
           <div class="text item">负责人电话: {{ form.managerPhone }}</div>
         </el-col>
-      </el-row>
-      <el-row>
-        <br>
-      </el-row>
-      <el-row>
+        <br><br>
         <el-col :span="8">
-          <div class="text item">类型:
-            <span v-for="item in storeTypes">
-               <span v-for="item1 in form.storeTypeIds" v-if="item1==item.id">
-                 {{ item.name }}
-               </span>
-            </span>
-          </div>
-        </el-col>
-        <el-col :span="16">
           <div class="text item">标贴:
             <span v-for="item in storeLabels">
                <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
@@ -41,28 +34,15 @@
             </span>
           </div>
         </el-col>
-      </el-row>
-      <el-row>
-        <br>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
+        <br><br>
+        <el-col :span="8">
           <div class="text item">地址: {{ form.province }}</div>
         </el-col>
-      </el-row>
-
-      <el-row>
-        <br>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
+        <br><br>
+        <el-col :span="8">
           <div class="text item">街道: {{ form.address }}</div>
         </el-col>
-      </el-row>
-      <el-row>
-        <br>
-      </el-row>
-      <el-row>
+        <br><br>
         <el-col :span="8">
           <div class="text item">经度:{{ form.mapX }}</div>
         </el-col>
@@ -77,7 +57,7 @@
       </div>
         <el-carousel >
           <el-carousel-item v-for="item in licenseList" :key="item">
-            <img  :src="item.url" alt="" height="100%" width="100%">
+            <img  :src="imageView+'/'+item.url" alt="" height="100%" width="100%">
           </el-carousel-item>
         </el-carousel>
     </el-card>
@@ -118,6 +98,7 @@
             storeTypes:[],
             //标签类型列表
             storeLabels:[],
+            imageView: process.env.VUE_APP_BASE_API,
             //营业执照列表
             licenseList:[],
             //表单参数
