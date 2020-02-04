@@ -74,13 +74,12 @@
     <el-card>
       <div slot="header">
         <span>营业执照</span>
+      </div>
         <el-carousel >
           <el-carousel-item v-for="item in licenseList" :key="item">
             <img  :src="item.url" alt="" height="100%" width="100%">
-<!--            <h3>{{item.url}}</h3>-->
           </el-carousel-item>
         </el-carousel>
-      </div>
     </el-card>
     <span slot="footer" class="dialog-footer">
     <el-button @click="handleClose">取 消</el-button>
