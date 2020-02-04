@@ -9,12 +9,10 @@
         <span>门店基本信息</span>
       </div>
       <el-row>
-        <el-col :span="8">
-          <img  :src="imageView+'/'+form.logo" alt="" height="100%" width="100%">
+        <el-col :span="8" style="height: 200px">
+          <a :href="imageView+'/'+form.logo"  target="_blank"><img   :src="imageView+'/'+form.logo" alt="" height="100%" width="100%"></a>
         </el-col>
-
-
-        <el-col :span="8">
+        <el-col :span="8" >
           <div class="text item">门店名称:{{ form.name }}</div>
         </el-col>
         <el-col :span="8">
