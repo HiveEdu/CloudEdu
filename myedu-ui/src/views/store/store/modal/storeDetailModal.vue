@@ -25,9 +25,19 @@
         </el-col>
         <br><br>
         <el-col :span="16">
+          <div class="text item" style="margin-left: 5%">类型:
+            <span v-for="item in storeTypes">
+               <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
+                 {{ item.name }}
+               </span>
+            </span>
+          </div>
+        </el-col>
+        <br><br>
+        <el-col :span="16">
           <div class="text item" style="margin-left: 5%">标贴:
             <span v-for="item in storeLabels">
-               <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
+               <span v-for="item1 in form.storeTypeIds" v-if="item1==item.id">
                  {{ item.name }}
                </span>
             </span>
@@ -42,11 +52,14 @@
           <div class="text item" style="margin-left: 5%">街道: {{ form.address }}</div>
         </el-col>
         <br><br>
+
+      </el-row>
+      <el-row>
         <el-col :span="8">
           <div class="text item" style="margin-left: 10%">经度:{{ form.mapX }}</div>
         </el-col>
         <el-col :span="8">
-          <div class="text item" style="margin-left: 5%">纬度: {{ form.mapY }}</div>
+          <div class="text item" style="margin-left: 10%">纬度: {{ form.mapY }}</div>
         </el-col>
       </el-row>
     </el-card>
