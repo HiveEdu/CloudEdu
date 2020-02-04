@@ -18,7 +18,7 @@
       </el-row>
        <el-row>
          <el-col :span="12">
-          <div class="text item">类型:
+          <div class="text item">课程类型:
             <span v-for="item in classifyOptions">
                <span v-if="form.classify==item.dictValue">
                  {{ item.dictValue }}
@@ -27,10 +27,10 @@
           </div>
         </el-col>
         <el-col :span="12">
-          <div class="text item">是否一对一: 
-            <span v-for="item in isOneToOneOptions">
-               <span v-if="form.isOneToOne==item.dictValue">
-                 {{ item.dictLabel }}
+          <div class="text item">托管类型:
+            <span v-for="item in reclassifyCollOptions">
+               <span v-if="form.reclassifyColl==item.dictValue">
+                 {{ item.dictValue }}
                </span>
             </span>
           </div>
@@ -51,10 +51,19 @@
         <br>
       </el-row>
       <el-row>
-         <el-col :span="24">
+         <el-col :span="12">
           <div class="text item">课程状态: 
             <span v-for="item in statusOptions">
                <span v-if="form.status==item.dictValue">
+                 {{ item.dictLabel }}
+               </span>
+            </span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">是否一对一: 
+            <span v-for="item in isOneToOneOptions">
+               <span v-if="form.isOneToOne==item.dictValue">
                  {{ item.dictLabel }}
                </span>
             </span>
@@ -179,7 +188,7 @@
             title:"课程详情",
             dialogVisible:false,
              sysGrades: [],
-             gradeId:[],
+             gradeId:"",
             // 课程类型字典
             classifyOptions: [],
             // 托管类型字典
