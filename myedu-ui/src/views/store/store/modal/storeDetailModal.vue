@@ -9,23 +9,23 @@
         <span>门店基本信息</span>
       </div>
       <el-row>
-        <el-col :span="8" style="height: 200px">
+        <el-col :span="8" style="height: 200px;">
           <a :href="imageView+'/'+form.logo"  target="_blank"><img   :src="imageView+'/'+form.logo" alt="" height="100%" width="100%"></a>
         </el-col>
         <el-col :span="16" >
-          <div class="text item">门店名称:{{ form.name }}</div>
+          <div class="text item" style="margin-left: 5%">门店名称:{{ form.name }}</div>
         </el-col>
         <br><br>
         <el-col :span="16">
-          <div class="text item">负责人: {{ form.manager }}</div>
+          <div class="text item" style="margin-left: 5%">负责人: {{ form.manager }}</div>
         </el-col>
         <br><br>
         <el-col :span="16">
-          <div class="text item">负责人电话: {{ form.managerPhone }}</div>
+          <div class="text item" style="margin-left: 5%">负责人电话: {{ form.managerPhone }}</div>
         </el-col>
         <br><br>
         <el-col :span="16">
-          <div class="text item">标贴:
+          <div class="text item" style="margin-left: 5%">标贴:
             <span v-for="item in storeLabels">
                <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
                  {{ item.name }}
@@ -35,18 +35,18 @@
         </el-col>
         <br><br>
         <el-col :span="16">
-          <div class="text item">地址: {{ form.province }}</div>
+          <div class="text item" style="margin-left: 5%">地址: {{ form.province }}</div>
         </el-col>
         <br><br>
         <el-col :span="16">
-          <div class="text item">街道: {{ form.address }}</div>
+          <div class="text item" style="margin-left: 5%">街道: {{ form.address }}</div>
         </el-col>
         <br><br>
         <el-col :span="8">
-          <div class="text item">经度:{{ form.mapX }}</div>
+          <div class="text item" style="margin-left: 10%">经度:{{ form.mapX }}</div>
         </el-col>
         <el-col :span="8">
-          <div class="text item">纬度: {{ form.mapY }}</div>
+          <div class="text item" style="margin-left: 5%">纬度: {{ form.mapY }}</div>
         </el-col>
       </el-row>
     </el-card>
