@@ -89,9 +89,10 @@
           <span>{{ parseTime(scope.row.leadEndTime) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="限量" align="center" prop="isPermanent" :formatter="isPermanentFormat"/>
       <el-table-column label="优惠券领取数量" align="center" prop="totalCount" />
       <el-table-column label="优惠券剩余领取数量" align="center" prop="remainCount" />
-      <el-table-column label="优惠券剩余领取数量" align="center" prop="isPermanent" />
+      <el-table-column label="优惠券剩已取数量" align="center" prop="leadCount" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -220,6 +221,13 @@ export default {
     // 1 正常 0 未开启 -1 已无效字典翻译
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    isPermanentFormat(row){
+      if(row.isPermanent==0){
+        return "是";
+      }else if(row.isPermanent==1){
+        return "否";
+      }
     },
     // 取消按钮
     cancel() {
