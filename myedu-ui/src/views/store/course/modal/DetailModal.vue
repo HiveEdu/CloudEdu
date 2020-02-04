@@ -21,16 +21,16 @@
           <div class="text item">课程类型:
             <span v-for="item in classifyOptions">
                <span v-if="form.classify==item.dictValue">
-                 {{ item.dictValue }}
+                 {{ item.dictLabel }}
                </span>
             </span>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" v-if="form.classify==0">
           <div class="text item">托管类型:
             <span v-for="item in reclassifyCollOptions">
                <span v-if="form.reclassifyColl==item.dictValue">
-                 {{ item.dictValue }}
+                 {{ item.dictLabel }}
                </span>
             </span>
           </div>
@@ -86,8 +86,8 @@
         <el-row>
          <el-col :span="12">
           <div class="text item">招生对象: 
-            <span v-for="item in gradeId">
-               <span v-for="item1 in form.sysGrades" v-if="item1==item.id">
+            <span v-for="item in sysGrades">
+               <span v-for="item1 in form.gradeId" v-if="item1==item.id">
                  {{ item.name }}
                </span>
             </span>
@@ -188,7 +188,6 @@
             title:"课程详情",
             dialogVisible:false,
              sysGrades: [],
-             gradeId:"",
             // 课程类型字典
             classifyOptions: [],
             // 托管类型字典
