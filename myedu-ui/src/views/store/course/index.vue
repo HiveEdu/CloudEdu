@@ -112,7 +112,7 @@
       <el-table-column label="课程状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button  size="mini" type="primary">详情</el-button>
+          <el-button  size="mini" type="primary" @click="openDatail(scope.row)">详情</el-button>
           <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
             <el-dropdown-menu slot="dropdown">
@@ -175,6 +175,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+     <!--课程详情-->
+    <DetailModal ref="DetailModal" :courseDetail="courseDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <signUpModal ref="signUpModal" :signUp="signUp" :courseData="courseData" @closeSignUp="closeSignUp"></signUpModal>
     <!-- 添加或修改课程对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
@@ -410,11 +412,13 @@
 import { listCourse, getCourse, delCourse, changeStatusOff,changeStatusOn,addCourse, updateCourse, exportCourse } from "@/api/store/course";
 import { getToken } from '@/utils/auth'
 import signUpModal from './modal/signUpModal'
+import DetailModal from './modal/DetailModal'
 const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
-  components: { signUpModal },
+  components: { signUpModal,DetailModal},
   data() {
     return {
+      courseDetail:false,
       signUp:false,
       courseData:null,
       // 招生对象选择
@@ -514,7 +518,15 @@ export default {
     });
   },
   methods: {
-
+      //打开门店详情页面
+    openDatail(row){
+      this.currentData=row;
+      this.courseDetail=true;
+    },
+    //关闭门店详情页面
+    closeDetail(){
+      this.courseDetail=false;
+    },
     //打开课程报名页面
     toSignUp(row){
       this.courseData=row;
