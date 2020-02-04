@@ -435,6 +435,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      imageView: process.env.VUE_APP_BASE_API,
       headers: {
         Authorization: 'Bearer ' + getToken()
       },

@@ -2,7 +2,7 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogVisible"
-    width="40%"
+    width="50%"
     @close="handleClose">
     <el-card>
       <div slot="header">
