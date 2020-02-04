@@ -331,7 +331,7 @@
               :on-success="handleVideoSuccess"
               :before-upload="beforeUploadVideo"
               :on-progress="uploadVideoProcess">
-              <video v-if="form.video !='' && videoFlag == false" :src="form.video" class="avatar" controls="controls">您的浏览器不支持视频播放</video>
+              <video v-if="form.video !='' && videoFlag == false" :src="imageView+'/'+form.video" class="avatar" controls="controls">您的浏览器不支持视频播放</video>
               <i v-else-if="form.video =='' && videoFlag == false" class="el-icon-plus avatar-uploader-icon"></i>
               <el-progress v-if="videoFlag == true" type="circle" :percentage="videoUploadPercent" style="margin-top:30px;"></el-progress>
             </el-upload>
@@ -557,6 +557,16 @@ export default {
         this.licenseListNew=JSON.parse(this.form.license);
         this.photosList=JSON.parse(this.form.photos);
         this.photosListNew=JSON.parse(this.form.photos);
+        for(let i=0;i<this.licenseList.length;i++) {
+          if(this.licenseList[i].url!=null){
+            this.licenseList[i].url=this.imageView+"/"+this.licenseList[i].url;
+          }
+        }
+        for(let i=0;i<this.photosList.length;i++) {
+          if(this.photosList[i].url!=null){
+            this.photosList[i].url=this.imageView+"/"+this.photosList[i].url;
+          }
+        }
         this.storeTypes = response.storeTypes;
         this.storeLabels = response.storeLabels;
         this.form.storeTypeIds = response.storeTypeIds;
@@ -675,7 +685,7 @@ export default {
     onSuccess(res,file, fileList){
       if(res.code=="200"){
         this.licenseList=fileList
-        this.licenseListNew.push({uid:file.uid,name:file.name,status:file.status,url:res.url})
+        this.licenseListNew.push({uid:file.uid,name:file.name,status:file.status,url:res.fileName})
         this.msgSuccess("上传成功");
       }else{
         this.msgError("上传失败");
@@ -703,7 +713,7 @@ export default {
     onSuccess1(res,file, fileList){
       if(res.code=="200"){
         this.photosList=fileList
-        this.photosListNew.push({uid:file.uid,name:file.name,status:file.status,url:res.url})
+        this.photosListNew.push({uid:file.uid,name:file.name,status:file.status,url:res.fileName})
         this.msgSuccess("上传成功");
       }else{
         this.msgError("上传失败");
@@ -743,7 +753,7 @@ export default {
       this.videoFlag = false;
       this.videoUploadPercent = 0;
       if(res.code == 200){
-        this.form.video = res.url;
+        this.form.video = res.fileName;
       }else{
         this.$message.error('视频上传失败，请重新上传！');
       }
