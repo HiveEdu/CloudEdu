@@ -77,12 +77,12 @@ public class AppUserController extends BaseController {
     @ApiImplicitParam(name = "SysUser", value = "用户注册", dataType = "SysUser")
     @PostMapping("/userRegister")
     public AjaxResult saveUser(SysUser user)
-    {
-        if(UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+    {if(UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        user.setUserName(user.getPhonenumber());
+        user.setUserName(user.getUserName());
+        user.setPhonenumber(user.getUserName());
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
         return toAjax(userService.insertUser(user));
     }
@@ -97,12 +97,12 @@ public class AppUserController extends BaseController {
     @PostMapping("/editUser")
     public AjaxResult editUser(SysUser user)
     {
-        userService.checkUserAllowed(user);
-        if (UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+        //userService.checkUserAllowed(user);
+        if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        user.setUserName(user.getPhonenumber());
+        user.setUserName(user.getUserName());
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.updateUser(user));
     }
@@ -115,22 +115,22 @@ public class AppUserController extends BaseController {
     @ApiOperation("APP用户登录")
     //@ApiImplicitParam(name = "SysUser", value = "APP用户登录", dataType = "String")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType="form",name="username",dataType="String",required=true,value="用户的姓名"),
+            @ApiImplicitParam(paramType="form",name="userName",dataType="String",required=true,value="用户的姓名"),
             @ApiImplicitParam(paramType="form",name="password",dataType="String",required=true,value="用户的密码"),
             @ApiImplicitParam(paramType="form",name="code",dataType="String",required=true,value="验证码"),
             @ApiImplicitParam(paramType="form",name="uuid",dataType="String",required=true,value="uuid"),
     })
     @PostMapping(value = "/appLogin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public AjaxResult appLogin(@RequestParam("username") String username,
+    public AjaxResult appLogin(@RequestParam("userName") String userName,
                                @RequestParam("password") String password,
                                @RequestParam("code") String code,
                                @RequestParam("uuid") String uuid)
     {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
-        String token = loginService.login(username, password, code, uuid);
+        String token = loginService.login(userName, password, code, uuid);
         ajax.put(Constants.TOKEN, token);
-        SysUser user=userService.selectUserByUserName(username);
+        SysUser user=userService.selectUserByUserName(userName);
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
