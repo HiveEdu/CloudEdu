@@ -4,6 +4,7 @@ import java.util.List;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.vo.YunCourseVo;
 import com.myedu.project.store.mapper.YunStoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class YunCourseServiceImpl implements IYunCourseService
      * @return 课程
      */
     @Override
-    public YunCourse selectYunCourseById(Long id)
+    public YunCourseVo selectYunCourseById(Long id)
     {
         return yunCourseMapper.selectYunCourseById(id);
     }
@@ -43,7 +44,7 @@ public class YunCourseServiceImpl implements IYunCourseService
      * @return 课程
      */
     @Override
-    public List<YunCourse> selectYunCourseList(YunCourse yunCourse)
+    public List<YunCourseVo> selectYunCourseList(YunCourse yunCourse)
     {
         return yunCourseMapper.selectYunCourseList(yunCourse);
     }
@@ -57,14 +58,6 @@ public class YunCourseServiceImpl implements IYunCourseService
     @Override
     public int insertYunCourse(YunCourse yunCourse)
     {
-        YunStore yunStore=new YunStore();
-        yunStore.setCreateById(SecurityUtils.getUserId());
-        List<YunStore> yunStores=yunStoreMapper.selectYunStoreList(yunStore);
-        Long storeId=null;
-        if(!yunStores.isEmpty()){
-            storeId=yunStores.get(0).getId();
-            yunCourse.setStoreId(storeId);
-        }
         yunCourse.setCreateById(SecurityUtils.getUserId());
         yunCourse.setCreateBy(SecurityUtils.getUsername());
         yunCourse.setCreateTime(DateUtils.getNowDate());

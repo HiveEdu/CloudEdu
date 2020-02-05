@@ -181,6 +181,21 @@
     <!-- 添加或修改课程对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="所属门店" prop="storeId">
+              <el-select v-model="form.storeId"  placeholder="请选择所属门店"  style="width: 100%;">
+                <el-option
+                  v-for="item in stores"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
           <el-row>
             <el-col :span="6">
               <el-form-item label="名称" prop="name">
@@ -445,6 +460,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      //门店列表
+      stores:[],
       // 课程类型字典
       classifyOptions: [],
       // 托管类型字典
@@ -483,6 +500,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        storeId:[
+          { required: true, message: "所属门店不能为空", trigger: "blur" }
+        ],
         name: [
           { required: true, message: "课程名称不能为空", trigger: "blur" }
         ],
@@ -620,6 +640,7 @@ export default {
       this.reset();
       getCourse().then(response => {
         this.sysGrades = response.sysGrades;
+        this.stores=response.stores;
         this.open = true;
         this.title = "添加课程";
       });
@@ -630,6 +651,7 @@ export default {
       const id = row.id || this.ids
       getCourse(id).then(response => {
         this.sysGrades = response.sysGrades;
+        this.stores=response.stores;
         this.form = response.data;
         this.form.gradeId=JSON.parse(this.form.gradeId);
         this.checkedWeeks=JSON.parse(this.form.week);

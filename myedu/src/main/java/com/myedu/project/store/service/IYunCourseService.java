@@ -1,6 +1,8 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunCourse;
+import com.myedu.project.store.domain.vo.YunCourseVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface IYunCourseService
      * @param id 课程ID
      * @return 课程
      */
-    public YunCourse selectYunCourseById(Long id);
+    public YunCourseVo selectYunCourseById(Long id);
 
     /**
      * 查询课程列表
@@ -25,7 +27,7 @@ public interface IYunCourseService
      * @param yunCourse 课程
      * @return 课程集合
      */
-    public List<YunCourse> selectYunCourseList(YunCourse yunCourse);
+    public List<YunCourseVo> selectYunCourseList(YunCourse yunCourse);
 
     /**
      * 新增课程

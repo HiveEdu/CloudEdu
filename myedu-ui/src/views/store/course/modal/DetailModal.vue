@@ -9,9 +9,13 @@
         <span>课程信息</span>
       </div>
       <el-row>
-        <el-col :span="24">
+        <el-col :span="12">
           <div class="text item">课程名称: {{ form.name }}</div>
-        </el-col>     
+        </el-col>
+        <el-col :span="12">
+          <div class="text item">所属门店: {{ form.storeName }}
+          </div>
+        </el-col>
       </el-row>
       <el-row>
         <br>
@@ -180,6 +184,7 @@
               this.form = response.data;
               this.gradeId = response.gradeId;
               this.sysGrades = response.sysGrades;
+              this.stores=response.sysGrades;
             });
           },
         },
@@ -196,6 +201,8 @@
             isOneToOneOptions: [],
             // 课程状态字典
             statusOptions: [],
+            //门店列表
+            stores:[],
             //表单参数
             form:{}
           }

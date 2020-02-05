@@ -6,7 +6,10 @@ import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
+import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.vo.YunCourseVo;
 import com.myedu.project.store.enums.CourseType;
+import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +43,8 @@ public class YunCourseController extends BaseController
     private IYunCourseService yunCourseService;
     @Autowired
     private ISysGradeService sysGradeService;
-
+    @Autowired
+    private IYunStoreService yunStoreService;
     /**
      * 查询课程列表
      */
@@ -49,7 +53,7 @@ public class YunCourseController extends BaseController
     public TableDataInfo list(YunCourse yunCourse)
     {
         startPage();
-        List<YunCourse> list = yunCourseService.selectYunCourseList(yunCourse);
+        List<YunCourseVo> list = yunCourseService.selectYunCourseList(yunCourse);
         return getDataTable(list);
     }
 
@@ -61,8 +65,8 @@ public class YunCourseController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(YunCourse yunCourse)
     {
-        List<YunCourse> list = yunCourseService.selectYunCourseList(yunCourse);
-        ExcelUtil<YunCourse> util = new ExcelUtil<YunCourse>(YunCourse.class);
+        List<YunCourseVo> list = yunCourseService.selectYunCourseList(yunCourse);
+        ExcelUtil<YunCourseVo> util = new ExcelUtil<YunCourseVo>(YunCourseVo.class);
         return util.exportExcel(list, "course");
     }
 
@@ -76,6 +80,10 @@ public class YunCourseController extends BaseController
         AjaxResult ajax = AjaxResult.success();
         SysGrade sysGrade=new SysGrade();
         ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
+        YunStore yunStore=new YunStore();
+        yunStore.setCreateById(SecurityUtils.getUserId());
+        List<YunStore> stores=yunStoreService.selectYunStoreList(yunStore);
+        ajax.put("stores", stores);
         if (StringUtils.isNotNull(id))
         {
             ajax.put(AjaxResult.DATA_TAG,yunCourseService.selectYunCourseById(id));
