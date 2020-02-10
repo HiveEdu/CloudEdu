@@ -92,7 +92,7 @@
       <el-table-column label="用户" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
+          <span>{{ parseTimeBefore (scope.row.createTime) }}</span>
         </template>
       </el-table-column>
        <el-table-column  label="操作" width="200" align="center">

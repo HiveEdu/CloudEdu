@@ -1,6 +1,8 @@
 package com.myedu.project.order.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -54,6 +56,10 @@ public class YunOrder extends BaseEntity
     @Excel(name = "证件类型")
     private String certificateType;
 
+    /** 支付方式 */
+    @Excel(name = "支付方式")
+    private String payWay;
+
     /** 学生姓名 */
     @Excel(name = "学生姓名")
     private String studentName;
@@ -64,7 +70,7 @@ public class YunOrder extends BaseEntity
 
     /** 实付总金额 */
     @Excel(name = "实付总金额")
-    private Double totalMoney;
+    private BigDecimal totalMoney;
 
     /** 支付状态 */
     @Excel(name = "支付状态")
@@ -186,12 +192,12 @@ public class YunOrder extends BaseEntity
     {
         return certificateNum;
     }
-    public void setTotalMoney(Double totalMoney) 
+    public void setTotalMoney(BigDecimal totalMoney)
     {
         this.totalMoney = totalMoney;
     }
 
-    public Double getTotalMoney() 
+    public BigDecimal getTotalMoney()
     {
         return totalMoney;
     }
@@ -223,6 +229,14 @@ public class YunOrder extends BaseEntity
         return createById;
     }
 
+    public String getPayWay() {
+        return payWay;
+    }
+
+    public void setPayWay(String payWay) {
+        this.payWay = payWay;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -240,6 +254,7 @@ public class YunOrder extends BaseEntity
             .append("certificateNum", getCertificateNum())
             .append("totalMoney", getTotalMoney())
             .append("status", getStatus())
+            .append("payWay", getPayWay())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

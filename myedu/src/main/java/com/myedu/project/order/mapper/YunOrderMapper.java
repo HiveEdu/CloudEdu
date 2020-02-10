@@ -19,7 +19,7 @@ public interface YunOrderMapper
      * @param id 订单ID
      * @return 订单
      */
-    public YunOrder selectYunOrderById(Long id);
+    public YunOrderVo selectYunOrderById(Long id);
 
     /**
      * 查询订单列表

@@ -47,26 +47,27 @@
           </div>
         </el-col>
         <el-col :span="12">
-           <div class="text item">餐费: {{ form.totalNum }}</div>
-        </el-col> 
-        <el-col :span="12">
-           <div class="text item">实际支付: {{ form.payPrice }}</div>
-        </el-col>
-        <el-col :span="12">
-           <div class="text item">支付方式: {{ form.payTypeName }}</div>
+           <div class="text item">餐费: {{ form.meals }}元</div>
         </el-col>
          <el-col :span="12">
-            <div class="text item">订单状态:
-            <span v-for="item in statusOptions">
+           <div class="text item">订单状态:
+             <span v-for="item in statusOptions">
                <span v-if="form.status==item.dictValue">
                  {{ item.dictLabel }}
                </span>
             </span>
-          </div>
+           </div>
+         </el-col>
+        <el-col :span="12">
+           <div class="text item">支付方式: {{ form.payWay }}</div>
         </el-col>
          <el-col :span="12">
-           <div class="text item">总金额: {{ form.totalMoney }}元</div>
-        </el-col>
+           <div class="text item">总金额: {{ form.totalCost }}元</div>
+         </el-col>
+         <el-col :span="12">
+           <div class="text item">实际支付: {{ form.totalMoney }}元</div>
+         </el-col>
+
          <el-col :span="12">
            <div class="text item">支付时间: {{ parseTime(form.payTime) }}</div>
         </el-col>

@@ -31,7 +31,7 @@ public class YunOrderServiceImpl implements IYunOrderService
      * @return 订单
      */
     @Override
-    public YunOrder selectYunOrderById(Long id)
+    public YunOrderVo selectYunOrderById(Long id)
     {
         return yunOrderMapper.selectYunOrderById(id);
     }

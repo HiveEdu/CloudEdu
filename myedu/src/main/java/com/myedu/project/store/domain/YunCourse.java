@@ -1,6 +1,8 @@
 package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -56,7 +58,7 @@ public class YunCourse extends BaseEntity
 
     /** 餐费 */
     @Excel(name = "餐费")
-    private Double meals;
+    private BigDecimal meals;
 
     /** 课程介绍 */
     @Excel(name = "课程介绍")
@@ -84,7 +86,7 @@ public class YunCourse extends BaseEntity
 
     /** 总费用 */
     @Excel(name = "总费用")
-    private Double totalCost;
+    private BigDecimal totalCost;
 
     /** 上课周期 */
     @Excel(name = "上课周期")
@@ -195,12 +197,12 @@ public class YunCourse extends BaseEntity
     {
         return courseCost;
     }
-    public void setMeals(Double meals) 
+    public void setMeals(BigDecimal meals)
     {
         this.meals = meals;
     }
 
-    public Double getMeals() 
+    public BigDecimal getMeals()
     {
         return meals;
     }
@@ -258,12 +260,12 @@ public class YunCourse extends BaseEntity
     {
         return classAll;
     }
-    public void setTotalCost(Double totalCost) 
+    public void setTotalCost(BigDecimal totalCost)
     {
         this.totalCost = totalCost;
     }
 
-    public Double getTotalCost() 
+    public BigDecimal getTotalCost()
     {
         return totalCost;
     }
