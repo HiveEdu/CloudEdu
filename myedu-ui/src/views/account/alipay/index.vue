@@ -279,8 +279,10 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加支付宝配置类";
+      getAlipay().then(response => {
+        this.open = true;
+        this.title = "添加支付宝配置类";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

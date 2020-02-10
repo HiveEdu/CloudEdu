@@ -2,6 +2,7 @@ package com.myedu.project.account.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.SecurityUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -66,10 +67,24 @@ public class YunAlipayConfigController extends BaseController
      * 获取支付宝配置类详细信息
      */
     @PreAuthorize("@ss.hasPermi('account:alipay:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
-        return AjaxResult.success(yunAlipayConfigService.selectYunAlipayConfigById(id));
+        AjaxResult ajax = AjaxResult.success();
+        if(id!=null){
+            ajax.put(AjaxResult.DATA_TAG,yunAlipayConfigService.selectYunAlipayConfigById(id));
+            return ajax;
+        }else{
+            YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
+            yunAlipayConfig.setCreateById(SecurityUtils.getUserId());
+            List<YunAlipayConfig> yunAlipayConfigs=yunAlipayConfigService.selectYunAlipayConfigList(yunAlipayConfig);
+            if(yunAlipayConfigs.size()>0){
+                return AjaxResult.error(204,"账户配置已经存在");
+            }else{
+                return AjaxResult.success("账户配置不存在可以创建");
+            }
+        }
+//        return AjaxResult.success(yunAlipayConfigService.selectYunAlipayConfigById(id));
     }
 
     /**

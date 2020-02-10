@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { praseStrEmpty } from "@/utils/ruoyi";
 
 // 查询支付宝配置类列表
 export function listAlipay(query) {
@@ -12,7 +13,7 @@ export function listAlipay(query) {
 // 查询支付宝配置类详细
 export function getAlipay(id) {
   return request({
-    url: '/account/alipay/' + id,
+    url: '/account/alipay/' +  praseStrEmpty(id),
     method: 'get'
   })
 }
