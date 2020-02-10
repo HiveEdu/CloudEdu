@@ -1,0 +1,370 @@
+<template>
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+      <el-form-item label="授课科目" prop="course">
+        <el-input
+          v-model="queryParams.course"
+          placeholder="请输入授课科目"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="学校" prop="school">
+        <el-input
+          v-model="queryParams.school"
+          placeholder="请输入学校"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['hometeacher:info:add']"
+        >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['hometeacher:info:edit']"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['hometeacher:info:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['hometeacher:info:export']"
+        >导出</el-button>
+      </el-col>
+    </el-row>
+
+    <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="主键" align="center" prop="id" />
+      <el-table-column label="关联用户id" align="center" prop="userId" />
+      <el-table-column label="授课科目" align="center" prop="course" />
+      <el-table-column label="奖励荣誉" align="center" prop="awards" />
+      <el-table-column label="教学经历" align="center" prop="experience" />
+      <el-table-column label="教学特点" align="center" prop="trait" />
+      <el-table-column label="学校" align="center" prop="school" />
+      <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
+      <el-table-column label="证书" align="center" prop="credentials" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['hometeacher:info:edit']"
+          >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['hometeacher:info:remove']"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
+    <!-- 添加或修改家教老师表对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="500px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-steps :active="active">
+          <el-step title="基本信息" icon="el-icon-edit" @click.native="stepClick(1)"></el-step>
+          <el-step title="证件信息" icon="el-icon-upload" @click.native="stepClick(2)"></el-step>
+          <el-step title="毕业信息" icon="el-icon-picture" @click.native="stepClick(3)"></el-step>
+        </el-steps>
+        <div v-if="active==1">
+        <el-form-item label="授课科目" prop="courseId">
+           <el-select v-model="form.courseId" multiple placeholder="请选择授课科目"  style="width: 100%;">
+                  <el-option
+                    v-for="item in sysCourses"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+        </el-form-item>
+        <el-form-item label="教学经历" prop="experience">
+          <el-input v-model="form.experience" type="textarea" placeholder="请输入教学经历" />
+        </el-form-item>
+        <el-form-item label="教学特点" prop="trait">
+          <el-input v-model="form.trait" type="textarea" placeholder="请输入教学特点" />
+        </el-form-item>
+         </div>
+        <div v-if="active==2" style="margin-top: 30px">
+        <el-form-item label="奖励荣誉" prop="awards">
+        <el-input v-model="form.awards" placeholder="请输入奖励荣誉" />
+        </el-form-item>
+        <el-form-item label="照片展示" prop="photos">
+          <el-input v-model="form.photos" placeholder="请输入照片展示" />
+        </el-form-item>
+        <el-form-item label="视频风采" prop="video">
+          <el-input v-model="form.video" placeholder="请输入视频风采" />
+        </el-form-item>
+         </div>
+        <div v-if="active==3" style="margin-top: 30px">
+            <el-form-item label="是否毕业">
+              <el-radio-group v-model="form.isGraduate">
+                <el-radio
+                  v-for="dict in isOneToOneOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{dict.dictLabel}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+        <el-form-item label="学校" prop="school">
+          <el-input v-model="form.school" placeholder="请输入学校" />
+        </el-form-item>
+  
+           <el-form-item v-if="form.isGraduate==1"   label="学生证书" prop="credentials">
+            <el-input v-model="form.credentials" placeholder="请上传学生证书" />
+          </el-form-item>
+        
+        
+          <el-form-item v-if="form.isGraduate==0"  label="毕业证书" prop="credentials">
+            <el-input v-model="form.credentials" placeholder="请上传毕业证书" />
+          </el-form-item>  
+       
+        <el-form-item label="身份证" prop="identityCard">
+          <el-input v-model="form.identityCard" placeholder="请输入身份证" />
+        </el-form-item>
+         </div>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { listInfo, getInfo, delInfo, addInfo, updateInfo, exportInfo } from "@/api/hometeacher/info";
+
+export default {
+  data() {
+    return {
+       // 是否毕业字典
+      isOneToOneOptions: [],
+       // 课程选择
+      sysCourses: [],
+      active: 1,
+      // 遮罩层
+      loading: true,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      // 总条数
+      total: 0,
+      // 家教老师表表格数据
+      infoList: [],
+      // 弹出层标题
+      title: "",
+      // 是否显示弹出层
+      open: false,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        courseId: undefined,
+        school: undefined,
+      },
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+      }
+    };
+  },
+  created() {
+    this.getList();
+     this.getDicts("is-one-to-one").then(response => {
+      this.isOneToOneOptions = response.data;
+    });
+  },
+  methods: {
+    // 是否一对一字典翻译
+    isOneToOneFormat(row, column) {
+      return this.selectDictLabel(this.isOneToOneOptions, row.isGraduate);
+    },
+    /** 查询家教老师表列表 */
+    getList() {
+      this.loading = true;
+      listInfo(this.queryParams).then(response => {
+        this.infoList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        id: undefined,
+        userId: undefined,
+        courseId: undefined,
+        awards: undefined,
+        experience: undefined,
+        trait: undefined,
+        photos: undefined,
+        video: undefined,
+        school: undefined,
+        isGraduate: undefined,
+        credentials: undefined,
+        identityCard: undefined,
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined,
+        delFlag: undefined
+      };
+      this.resetForm("form");
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.id)
+      this.single = selection.length!=1
+      this.multiple = !selection.length
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      getInfo().then(response => {
+        this.sysCourses = response.sysCourses;
+        this.open = true;
+        this.title = "添加家教老师表";
+      });
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      const id = row.id || this.ids
+      getInfo(id).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改家教老师表";
+      });
+    },
+    /** 提交按钮 */
+    submitForm: function() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          this.form.courseId=JSON.stringify(this.form.courseId);
+          if (this.form.id != undefined) {
+            updateInfo(this.form).then(response => {
+              if (response.code === 200) {
+                this.msgSuccess("修改成功");
+                this.open = false;
+                this.getList();
+              } else {
+                this.msgError(response.msg);
+              }
+            });
+          } else {
+            addInfo(this.form).then(response => {
+              if (response.code === 200) {
+                this.msgSuccess("新增成功");
+                this.open = false;
+                this.getList();
+              } else {
+                this.msgError(response.msg);
+              }
+            });
+          }
+        }
+      });
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const ids = row.id || this.ids;
+      this.$confirm('是否确认删除家教老师表编号为"' + ids + '"的数据项?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return delInfo(ids);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("删除成功");
+        }).catch(function() {});
+    },
+     next() {
+      if (this.active++ > 2) this.active = 0;
+    },
+    stepClick(active){
+      this.active=active;
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      const queryParams = this.queryParams;
+      this.$confirm('是否确认导出所有家教老师表数据项?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return exportInfo(queryParams);
+        }).then(response => {
+          this.download(response.msg);
+        }).catch(function() {});
+    }
+  }
+};
+</script>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.hometeacher.mapper.YunUserInfoMapper">
+    
+    <resultMap type="YunUserInfo" id="YunUserInfoResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="awards"    column="awards"    />
+        <result property="experience"    column="experience"    />
+        <result property="trait"    column="trait"    />
+        <result property="photos"    column="photos"    />
+        <result property="video"    column="video"    />
+        <result property="school"    column="school"    />
+        <result property="isGraduate"    column="is_graduate"    />
+        <result property="credentials"    column="credentials"    />
+        <result property="identityCard"    column="identity_card"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectYunUserInfoVo">
+        select id, user_id, course_id, awards, experience, trait, photos, video, school, is_graduate, credentials, identity_card, create_by, create_time, update_by, update_time, del_flag from yun_user_info
+    </sql>
+
+    <select id="selectYunUserInfoList" parameterType="YunUserInfo" resultMap="YunUserInfoResult">
+        <include refid="selectYunUserInfoVo"/>
+        <where>  
+            <if test="courseId != null  and courseId != ''"> and course_id = #{courseId}</if>
+            <if test="school != null  and school != ''"> and school = #{school}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunUserInfoById" parameterType="Long" resultMap="YunUserInfoResult">
+        <include refid="selectYunUserInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunUserInfo" parameterType="YunUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="courseId != null  and courseId != ''">course_id,</if>
+            <if test="awards != null  and awards != ''">awards,</if>
+            <if test="experience != null  and experience != ''">experience,</if>
+            <if test="trait != null  and trait != ''">trait,</if>
+            <if test="photos != null  and photos != ''">photos,</if>
+            <if test="video != null  and video != ''">video,</if>
+            <if test="school != null  and school != ''">school,</if>
+            <if test="isGraduate != null  and isGraduate != ''">is_graduate,</if>
+            <if test="credentials != null  and credentials != ''">credentials,</if>
+            <if test="identityCard != null  and identityCard != ''">identity_card,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="courseId != null  and courseId != ''">#{courseId},</if>
+            <if test="awards != null  and awards != ''">#{awards},</if>
+            <if test="experience != null  and experience != ''">#{experience},</if>
+            <if test="trait != null  and trait != ''">#{trait},</if>
+            <if test="photos != null  and photos != ''">#{photos},</if>
+            <if test="video != null  and video != ''">#{video},</if>
+            <if test="school != null  and school != ''">#{school},</if>
+            <if test="isGraduate != null  and isGraduate != ''">#{isGraduate},</if>
+            <if test="credentials != null  and credentials != ''">#{credentials},</if>
+            <if test="identityCard != null  and identityCard != ''">#{identityCard},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunUserInfo" parameterType="YunUserInfo">
+        update yun_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="courseId != null  and courseId != ''">course_id = #{courseId},</if>
+            <if test="awards != null  and awards != ''">awards = #{awards},</if>
+            <if test="experience != null  and experience != ''">experience = #{experience},</if>
+            <if test="trait != null  and trait != ''">trait = #{trait},</if>
+            <if test="photos != null  and photos != ''">photos = #{photos},</if>
+            <if test="video != null  and video != ''">video = #{video},</if>
+            <if test="school != null  and school != ''">school = #{school},</if>
+            <if test="isGraduate != null  and isGraduate != ''">is_graduate = #{isGraduate},</if>
+            <if test="credentials != null  and credentials != ''">credentials = #{credentials},</if>
+            <if test="identityCard != null  and identityCard != ''">identity_card = #{identityCard},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunUserInfoById" parameterType="Long">
+        delete from yun_user_info where id = #{id}
+    </delete>
+
+    <delete id="deleteYunUserInfoByIds" parameterType="String">
+        delete from yun_user_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
