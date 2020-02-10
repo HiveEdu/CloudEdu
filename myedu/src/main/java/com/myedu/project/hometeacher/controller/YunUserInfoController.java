@@ -2,6 +2,7 @@ package com.myedu.project.hometeacher.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.account.domain.YunAccount;
 import com.myedu.project.dataBasic.domain.SysCourse;
@@ -76,11 +77,19 @@ public class YunUserInfoController extends BaseController
         //获取课程列表信息
         SysCourse sysCourse = new SysCourse();
         ajax.put("sysCourses", sysCourseService.selectSysCourseList(sysCourse));
-        if (StringUtils.isNotNull(id))
-        {
+        if(id!=null){
             ajax.put(AjaxResult.DATA_TAG,yunUserInfoService.selectYunUserInfoById(id));
+            return ajax;
+        }else{
+            YunUserInfo yunUserInfo=new YunUserInfo();
+            List<YunUserInfo> yunUserInfos=  yunUserInfoService.selectYunUserInfoList(yunUserInfo);
+            if(yunUserInfos.size()>0){
+                return AjaxResult.error(204,"您的个人信息已经存在");
+            }else{
+                return AjaxResult.success("您的个人信息创建成功");
+            }
         }
-        return ajax;
+
     }
 
     /**
@@ -91,12 +100,7 @@ public class YunUserInfoController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunUserInfo yunUserInfo)
     {
-        List<YunUserInfo> yunUserInfos=  yunUserInfoService.selectYunUserInfoList(yunUserInfo);
-        if(yunUserInfos.size()>0){
-            return AjaxResult.error(204,"您的信息已经存在，不能重复添加");
-        }else{
-            return toAjax(yunUserInfoService.insertYunUserInfo(yunUserInfo));
-        }
+        return toAjax(yunUserInfoService.insertYunUserInfo(yunUserInfo));
 
     }
 
