@@ -76,7 +76,6 @@
       <el-table-column label="教学特点" align="center" prop="trait" />
       <el-table-column label="学校" align="center" prop="school" />
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
-      <el-table-column label="证书" align="center" prop="credentials" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -130,13 +129,32 @@
         <el-form-item label="教学特点" prop="trait">
           <el-input v-model="form.trait" type="textarea" placeholder="请输入教学特点" />
         </el-form-item>
-         </div>
-        <div v-if="active==2" style="margin-top: 30px">
         <el-form-item label="奖励荣誉" prop="awards">
         <el-input v-model="form.awards" placeholder="请输入奖励荣誉" />
         </el-form-item>
-        <el-form-item label="照片展示" prop="photos">
-          <el-input v-model="form.photos" placeholder="请输入照片展示" />
+         </div>
+        <div v-if="active==2" style="margin-top: 30px">
+        <el-form-item label="照片展示" prop="photos" style="margin-top: 80px">
+          <el-upload
+              ref="upload"
+              :action="uploadImgUrl"
+              list-type="picture-card"
+              content-type="false"
+              :headers="headers"
+              :file-list="photosList"
+              :show-file-list="true"
+              :before-upload="beforeUpload"
+              :on-change="onChange"
+              :on-success="onSuccess"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              accept='.jpg,.jpeg,.png,.gif'
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
         </el-form-item>
         <el-form-item label="视频风采" prop="video">
           <el-input v-model="form.video" placeholder="请输入视频风采" />
@@ -155,18 +173,54 @@
         <el-form-item label="学校" prop="school">
           <el-input v-model="form.school" placeholder="请输入学校" />
         </el-form-item>
-  
-           <el-form-item v-if="form.isGraduate==1"   label="学生证书" prop="credentials">
-            <el-input v-model="form.credentials" placeholder="请上传学生证书" />
+           <el-form-item v-if="form.isGraduate==1"   label="学生证书">
+            <!-- <el-input v-model="form.credentials" placeholder="请上传学生证书" /> -->
+            <el-upload
+                  class="avatar-uploader"
+                  ref="upload"
+                  :headers="headers"
+                  :action="uploadImgUrl"
+                  :data="{'type':'store'}"
+                  :show-file-list="false"
+                  :on-success="onSuccessLogo"
+                  :on-remove="handleRemoveLogo"
+                  :on-preview="handlePictureCardPreviewLogo"
+                  :before-upload="beforeUploadLogo">
+                  <img v-if="form.credentials" :src="imageView+'/'+form.credentials" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </el-form-item>
-        
-        
           <el-form-item v-if="form.isGraduate==0"  label="毕业证书" prop="credentials">
-            <el-input v-model="form.credentials" placeholder="请上传毕业证书" />
+            <el-upload
+                  class="avatar-uploader"
+                  ref="upload"
+                  :headers="headers"
+                  :action="uploadImgUrl"
+                  :data="{'type':'store'}"
+                  :show-file-list="false"
+                  :on-success="onSuccessLogo"
+                  :on-remove="handleRemoveLogo"
+                  :on-preview="handlePictureCardPreviewLogo"
+                  :before-upload="beforeUploadLogo">
+                  <img v-if="form.credentials" :src="imageView+'/'+form.credentials" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </el-form-item>  
-       
         <el-form-item label="身份证" prop="identityCard">
-          <el-input v-model="form.identityCard" placeholder="请输入身份证" />
+          <el-upload
+                  class="avatar-uploader"
+                  ref="upload"
+                  :headers="headers"
+                  :action="uploadImgUrl"
+                  :data="{'type':'store'}"
+                  :show-file-list="false"
+                  :on-success="onSuccessIDCard"
+                  :on-remove="handleRemoveIDCard"
+                  :on-preview="handlePictureCardPreviewIDCard"
+                  :before-upload="beforeUploadIDCard">
+                  <img v-if="form.identityCard" :src="imageView+'/'+form.identityCard" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
         </el-form-item>
          </div>
       </el-form>
@@ -181,10 +235,17 @@
 
 <script>
 import { listInfo, getInfo, delInfo, addInfo, updateInfo, exportInfo } from "@/api/hometeacher/info";
-
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
+       //照片列表
+      photosList:[],
+      photosListNew:[],
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      },
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
        // 是否毕业字典
       isOneToOneOptions: [],
        // 课程选择
@@ -268,6 +329,74 @@ export default {
       };
       this.resetForm("form");
     },
+    //证书上传开始
+    beforeUploadLogo(file){
+    },
+    onSuccessLogo(res,file, fileList){
+      if(res.code=="200"){
+        this.form.credentials=res.fileName
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemoveLogo(file, fileList) {
+      console.log(file, fileList);
+      this.form.credentials=null;
+    },
+    handlePictureCardPreviewLogo(file) {
+      // this.dialogImageUrl = file.url;
+      // this.dialogVisible = true;
+    },
+
+    //身份证书上传开始
+    beforeUploadIDCard(file){
+    },
+    onSuccessIDCard(res,file, fileList){
+      if(res.code=="200"){
+        this.form.identityCard=res.fileName
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemoveIDCard(file, fileList) {
+      console.log(file, fileList);
+      this.form.identityCard=null;
+    },
+    handlePictureCardPreviewIDCard(file) {
+      // this.dialogImageUrl = file.url;
+      // this.dialogVisible = true;
+    },
+
+    //照片墙上传开始
+    beforeUpload(file){
+    },
+    onChange(file, fileList){
+    },
+    onSuccess(res,file, fileList){
+      if(res.code=="200"){
+        this.photosList=fileList
+        this.photosListNew.push({uid:file.uid,name:file.name,status:file.status,url:res.fileName})
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      this.photosList=fileList;
+      for(let i=0;i<this.photosListNew.length;i++) {
+        if (this.photosListNew[i].uid === file.uid) {
+          this.photosListNew.splice(i);
+        }
+      }
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    //营业执照上传结束
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -286,6 +415,8 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      this.photosList=[];
+      this.photosListNew=[];
       this.reset();
       getInfo().then(response => {
         this.sysCourses = response.sysCourses;
@@ -299,8 +430,17 @@ export default {
       const id = row.id || this.ids
       getInfo(id).then(response => {
         this.form = response.data;
+        this.photosList=JSON.parse(this.form.photos);
+        this.photosListNew=JSON.parse(this.form.photos);
+         for(let i=0;i<this.photosList.length;i++) {
+          if(this.photosList[i].url!=null){
+            this.photosList[i].url=this.imageView+"/"+this.photosList[i].url;
+          }
+        }
         this.open = true;
         this.title = "修改家教老师表";
+       
+       
       });
     },
     /** 提交按钮 */
@@ -309,6 +449,7 @@ export default {
         if (valid) {
           this.form.courseId=JSON.stringify(this.form.courseId);
           if (this.form.id != undefined) {
+            this.form.photos=JSON.stringify(this.photosListNew);
             updateInfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -319,6 +460,7 @@ export default {
               }
             });
           } else {
+            this.form.photos=JSON.stringify(this.photosListNew);
             addInfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -331,6 +473,7 @@ export default {
           }
         }
       });
+      this.$refs.upload.clearFiles();
     },
     /** 删除按钮操作 */
     handleDelete(row) {
