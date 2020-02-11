@@ -8,6 +8,7 @@ import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.account.domain.YunAlipayConfig;
 import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.order.domain.YunOrder;
@@ -113,5 +114,16 @@ public class YunOrderController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(yunOrderService.deleteYunOrderByIds(ids));
+    }
+
+
+    @PreAuthorize("@ss.hasPermi('order:order:toPayAsPC')")
+    @Log(title = "支付宝PC网页支付")
+    @PostMapping(value = "/toPayAsPC")
+    public AjaxResult toPayAsPc(@RequestBody YunOrderVo yunOrder) throws Exception{
+        AjaxResult ajax = AjaxResult.success();
+        String payUrl = yunOrderService.toPayAsPc(yunOrder);
+        ajax.put("url",payUrl);
+        return ajax;
     }
 }

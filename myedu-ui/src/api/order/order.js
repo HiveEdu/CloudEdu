@@ -51,3 +51,12 @@ export function exportOrder(query) {
     params: query
   })
 }
+
+// 订单支付
+export function orderPay(url, data) {
+  return request({
+    url:url,
+    data: data,
+    method: 'post'
+  })
+}

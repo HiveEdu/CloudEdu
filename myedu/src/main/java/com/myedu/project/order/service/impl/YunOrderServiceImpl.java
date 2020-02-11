@@ -1,11 +1,19 @@
 package com.myedu.project.order.service.impl;
 
 import java.util.List;
+
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.OrderCodeFactory;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.account.domain.YunAlipayConfig;
+import com.myedu.project.account.mapper.YunAlipayConfigMapper;
 import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.order.enums.OrderStatus;
+import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.mapper.YunStoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.order.mapper.YunOrderMapper;
@@ -23,7 +31,10 @@ public class YunOrderServiceImpl implements IYunOrderService
 {
     @Autowired
     private YunOrderMapper yunOrderMapper;
-
+    @Autowired
+    private YunStoreMapper yunStoreMapper;
+    @Autowired
+    private YunAlipayConfigMapper yunAlipayConfigMapper;
     /**
      * 查询订单
      * 
@@ -100,5 +111,52 @@ public class YunOrderServiceImpl implements IYunOrderService
     public int deleteYunOrderById(Long id)
     {
         return yunOrderMapper.deleteYunOrderById(id);
+    }
+
+    /**
+     * 订单支付网页pc支付
+     *
+     * @param yunOrder 订单
+     * @return 结果
+     */
+    @Override
+    public String toPayAsPc(YunOrderVo yunOrder) throws Exception{
+        YunStore yunStore= yunStoreMapper.selectYunStoreById(yunOrder.getStoreId());
+        YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
+        yunAlipayConfig.setCreateById(yunStore.getCreateById());
+        List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);
+        if(yunAlipayConfigs!=null){
+            yunAlipayConfig=yunAlipayConfigs.get(0);
+        }
+        AlipayClient alipayClient = new DefaultAlipayClient(yunAlipayConfig.getGatewayUrl(),
+                yunAlipayConfig.getAppId(),
+                yunAlipayConfig.getPrivateKey(),
+                yunAlipayConfig.getFormat(),
+                yunAlipayConfig.getCharset(),
+                yunAlipayConfig.getPublicKey(),
+                yunAlipayConfig.getSignType());
+        // 创建API对应的request(电脑网页版)
+        AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
+        //订单完成后返回的页面和异步通知地址
+        request.setReturnUrl(yunAlipayConfig.getReturnUrl());
+        request.setNotifyUrl(yunAlipayConfig.getNotifyUrl());
+        // 填充订单参数
+        String order=yunOrder.getNum();//订单号
+        String totalAmount=String.valueOf(yunOrder.getTotalMoney());//支付金额
+        String subject=yunOrder.getCourseName();//商品名称
+        String body=yunOrder.getRemark();//商品描述
+        request.setBizContent("{" +
+                "    \"out_trade_no\":\""+order+"\"," +
+                "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," +
+                "    \"total_amount\":"+totalAmount+"," +
+                "    \"subject\":\""+subject+"\"," +
+                "    \"body\":\""+body+"\"," +
+                "    \"extend_params\":{" +
+                "    \"sys_service_provider_id\":\""+yunAlipayConfig.getSysServiceProviderId()+"\"" +
+                "    }"+
+                "  }");//填充业务参数
+        // 调用SDK生成表单, 通过GET方式，口可以获取url
+        System.out.println(alipayClient.pageExecute(request, "GET").getBody());
+        return alipayClient.pageExecute(request, "GET").getBody();
     }
 }

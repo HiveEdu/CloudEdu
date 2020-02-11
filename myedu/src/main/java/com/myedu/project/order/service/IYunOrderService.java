@@ -60,4 +60,12 @@ public interface IYunOrderService
      * @return 结果
      */
     public int deleteYunOrderById(Long id);
+
+    /**
+     * 订单支付
+     *
+     * @param yunOrder 订单
+     * @return 结果
+     */
+    public String toPayAsPc(YunOrderVo yunOrder) throws Exception;
 }

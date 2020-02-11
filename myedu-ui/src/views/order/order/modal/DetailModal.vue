@@ -11,10 +11,10 @@
        <el-row>
         <el-col :span="12">
           <div class="text item">学生姓名: {{ form.studentAssName }}</div>
-        </el-col>     
+        </el-col>
         <el-col :span="12">
           <div class="text item">年级: {{ form.gradeName }}</div>
-        </el-col>     
+        </el-col>
          <el-col :span="12">
           <div class="text item">证件类型:
             <span v-for="item in certificateTypeOptions">
@@ -23,10 +23,10 @@
                </span>
             </span>
           </div>
-        </el-col>    
+        </el-col>
         <el-col :span="12">
           <div class="text item">证件号码: {{ form.certificateNum }}</div>
-        </el-col>     
+        </el-col>
       </el-row>
     </el-card>
     <el-card>
@@ -36,9 +36,9 @@
        <el-row>
         <el-col :span="24">
           <div class="text item">订单编号: {{ form.num }}</div>
-        </el-col> 
+        </el-col>
          <el-col :span="12">
-          <div class="text item">是否含餐: 
+          <div class="text item">是否含餐:
             <span v-for="item in isMealOptions">
                <span v-if="form.isMeal==item.dictValue">
                  {{ item.dictLabel }}
@@ -71,8 +71,8 @@
          <el-col :span="12">
            <div class="text item">支付时间: {{ parseTime(form.payTime) }}</div>
         </el-col>
-        <el-col :span="12">   
-          <div class="text item">创建时间: {{ parseTime(form.createTime) }}</div> 
+        <el-col :span="12">
+          <div class="text item">创建时间: {{ parseTime(form.createTime) }}</div>
         </el-col>
       </el-row>
     </el-card>
@@ -107,6 +107,9 @@
       </div>
       <!-- <div class="text item">{{ form.remark }}</div> -->
     </el-card>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="handleClose">取 消</el-button>
+  </span>
   </el-dialog>
 </template>
 

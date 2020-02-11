@@ -117,6 +117,14 @@
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['order:order:remove']"
                 >删除</el-button>
+                <br >
+                <el-button
+                  style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
+                  size="mini"
+                  type="success"
+                  icon="el-icon-success"
+                  @click="openPay(scope.row)"
+                >付款</el-button>
               </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -130,8 +138,10 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <!-- 表单组件-->
-   <DetailModal ref="DetailModal" :orderDetail="orderDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
+    <!-- 详情页面-->
+    <DetailModal ref="DetailModal" :orderDetail="orderDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
+    <!-- 支付页面-->
+    <PayModal ref="PayModal" :pay="pay" :currentData="currentData" @closePayModal="closePayModal"></PayModal>
     <!-- 添加或修改订单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -234,11 +244,13 @@
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } from "@/api/order/order";
 import DetailModal from './modal/DetailModal'
+import PayModal from './modal/PayModal'
 import { formatTime } from '@/utils/index'
 export default {
-  components: {DetailModal},
+  components: {DetailModal,PayModal},
   data() {
     return {
+      pay:false,
       orderDetail:false,
       // 年级列表
       sysGrades: [],
@@ -324,6 +336,15 @@ export default {
 
   },
   methods: {
+    //打开支付页面
+    openPay(row){
+      this.currentData=row;
+      this.pay=true;
+    },
+    //关闭支付页面
+    closePayModal(){
+      this.pay=false;
+    },
       //打开订单详情页面
     openDatail(row){
       this.currentData=row;
