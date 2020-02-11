@@ -68,18 +68,16 @@
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
       <el-table-column label="关联用户id" align="center" prop="userId" />
-      <el-table-column label="授课科目" align="center" prop="course" />
       <el-table-column label="奖励荣誉" align="center" prop="awards" />
       <el-table-column label="教学经历" align="center" prop="experience" />
       <el-table-column label="教学特点" align="center" prop="trait" />
       <el-table-column label="学校" align="center" prop="school" />
-      <el-table-column label="学历" align="center" prop="isGraduate" :formatter="EducationFormat"/>
+      <el-table-column label="学历" align="center" prop="education" :formatter="EducationFormat"/>
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button  size="mini" type="primary"  @click="openStoreDatail(scope.row)">详情</el-button>
+          <el-button  size="mini" type="primary"  @click="openDatail(scope.row)">详情</el-button>
            <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
             <el-dropdown-menu slot="dropdown">
@@ -113,7 +111,10 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    
 
+     <!--课程详情-->
+    <DetailModal ref="DetailModal" :infoDetail="infoDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <!-- 添加或修改家教老师表对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -226,7 +227,7 @@
                   ref="upload"
                   :headers="headers"
                   :action="uploadImgUrl"
-                  :data="{'type':'store'}"
+                  :data="{'type':'info'}"
                   :show-file-list="false"
                   :on-success="onSuccessLogo"
                   :on-remove="handleRemoveLogo"
@@ -242,7 +243,7 @@
                   ref="upload"
                   :headers="headers"
                   :action="uploadImgUrl"
-                  :data="{'type':'store'}"
+                  :data="{'type':'info'}"
                   :show-file-list="false"
                   :on-success="onSuccessIDCard"
                   :on-remove="handleRemoveIDCard"
@@ -266,9 +267,12 @@
 <script>
 import { listInfo, getInfo, delInfo, addInfo, updateInfo, exportInfo } from "@/api/hometeacher/info";
 import { getToken } from '@/utils/auth'
+import DetailModal from '../modal/DetailModal'
 export default {
+  components: {DetailModal},
   data() {
     return {
+      infoDetail:false,
       dialogImageUrl: '',
       dialogVisible: false,
       //是否有视频
@@ -341,6 +345,15 @@ export default {
      });
   },
   methods: {
+     //打开门店详情页面
+    openDatail(row){
+      this.currentData=row;
+      this.infoDetail=true;
+    },
+    //关闭门店详情页面
+    closeDetail(){
+      this.infoDetail=false;
+    },
     // 是否一对一字典翻译
     isOneToOneFormat(row, column) {
       return this.selectDictLabel(this.isOneToOneOptions, row.isGraduate);
@@ -405,7 +418,6 @@ export default {
       // this.dialogImageUrl = file.url;
       // this.dialogVisible = true;
     },
-
     //身份证书上传开始
     beforeUploadIDCard(file){
     },
