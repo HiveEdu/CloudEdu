@@ -182,19 +182,19 @@
         </el-form-item>
          </div>
         <div v-if="active==3" style="margin-top: 30px">
-            <el-form-item label="是否毕业">
-              <el-radio-group v-model="form.isGraduate">
-                <el-radio
-                  v-for="dict in isOneToOneOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-        <el-form-item label="学校" prop="school">
-          <el-input v-model="form.school" placeholder="请输入学校" />
-        </el-form-item>
-           <el-form-item v-if="form.isGraduate==1"   label="学生证书">
+          <el-form-item label="是否毕业" prop="isGraduate">
+            <el-radio-group v-model="form.isGraduate">
+              <el-radio
+                v-for="dict in isOneToOneOptions"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{dict.dictLabel}}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="学校" prop="school">
+            <el-input v-model="form.school" placeholder="请输入学校" />
+          </el-form-item>
+           <el-form-item    label="学生证书" prop="credentials" v-if="form.isGraduate==1">
             <el-upload
                   class="avatar-uploader"
                   ref="upload"
@@ -210,7 +210,7 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
-          <el-form-item v-if="form.isGraduate==0"  label="毕业证书" prop="credentials">
+           <el-form-item  label="毕业证书" prop="credentials" v-if="form.isGraduate==0">
             <el-upload
                   class="avatar-uploader"
                   ref="upload"
@@ -225,8 +225,8 @@
                   <img v-if="form.credentials" :src="imageView+'/'+form.credentials" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-          </el-form-item>  
-        <el-form-item label="身份证" prop="identityCard">
+          </el-form-item>
+           <el-form-item label="身份证" prop="identityCard">
           <el-upload
                   class="avatar-uploader"
                   ref="upload"
@@ -312,7 +312,7 @@ export default {
     this.getList();
      this.getDicts("is-one-to-one").then(response => {
       this.isOneToOneOptions = response.data;
-    });
+     });
   },
   methods: {
     // 是否一对一字典翻译
@@ -487,15 +487,15 @@ export default {
         this.sysCourses = response.sysCourses;
         this.photosList=JSON.parse(this.form.photos);
         this.photosListNew=JSON.parse(this.form.photos);
+        if(this.photosList!=null){
          for(let i=0;i<this.photosList.length;i++) {
           if(this.photosList[i].url!=null){
             this.photosList[i].url=this.imageView+"/"+this.photosList[i].url;
           }
+         }
         }
         this.open = true;
         this.title = "修改家教老师表";
-       
-       
       });
     },
     /** 提交按钮 */
