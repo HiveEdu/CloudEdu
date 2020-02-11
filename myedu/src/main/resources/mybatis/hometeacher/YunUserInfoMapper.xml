@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userId"    column="user_id"    />
         <result property="courseId"    column="course_id"    />
         <result property="awards"    column="awards"    />
+        <result property="education"    column="education"    />
         <result property="experience"    column="experience"    />
         <result property="trait"    column="trait"    />
         <result property="photos"    column="photos"    />
@@ -25,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunUserInfoVo">
-        select id, user_id, course_id, awards, experience, trait, photos, video, school, is_graduate, credentials, identity_card, create_by, create_time, update_by, update_time, del_flag from yun_user_info
+        select id, education,user_id, course_id, awards, experience, trait, photos, video, school, is_graduate, credentials, identity_card, create_by, create_time, update_by, update_time, del_flag from yun_user_info
     </sql>
 
     <select id="selectYunUserInfoList" parameterType="YunUserInfo" resultMap="YunUserInfoResult">
@@ -47,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null ">user_id,</if>
             <if test="courseId != null  and courseId != ''">course_id,</if>
             <if test="awards != null  and awards != ''">awards,</if>
+            <if test="education != null  and education != ''">education,</if>
             <if test="experience != null  and experience != ''">experience,</if>
             <if test="trait != null  and trait != ''">trait,</if>
             <if test="photos != null  and photos != ''">photos,</if>
@@ -65,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null ">#{userId},</if>
             <if test="courseId != null  and courseId != ''">#{courseId},</if>
             <if test="awards != null  and awards != ''">#{awards},</if>
+            <if test="education != null  and education != ''">#{education},</if>
             <if test="experience != null  and experience != ''">#{experience},</if>
             <if test="trait != null  and trait != ''">#{trait},</if>
             <if test="photos != null  and photos != ''">#{photos},</if>
@@ -87,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null ">user_id = #{userId},</if>
             <if test="courseId != null  and courseId != ''">course_id = #{courseId},</if>
             <if test="awards != null  and awards != ''">awards = #{awards},</if>
+            <if test="education != null  and education != ''">education = #{education},</if>
             <if test="experience != null  and experience != ''">experience = #{experience},</if>
             <if test="trait != null  and trait != ''">trait = #{trait},</if>
             <if test="photos != null  and photos != ''">photos = #{photos},</if>

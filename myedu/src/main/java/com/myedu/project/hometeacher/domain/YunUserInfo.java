@@ -65,10 +65,23 @@ public class YunUserInfo extends BaseEntity
     @Excel(name = "是否毕业", readConverterExp = "0=是1否")
     private String isGraduate;
 
+    /** 学历*/
+    @ApiModelProperty("学历")
+    @Excel(name = "学历", readConverterExp = "0=博士1硕士")
+    private String education;
+
     /** 证书 */
     @ApiModelProperty("证书")
     @Excel(name = "证书")
     private String credentials;
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
 
     /** 身份证 */
     @ApiModelProperty("身份证")
@@ -217,6 +230,7 @@ public class YunUserInfo extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
+                .append("education", getEducation())
             .toString();
     }
 }
