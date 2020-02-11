@@ -75,6 +75,7 @@
       <el-table-column label="教学经历" align="center" prop="experience" />
       <el-table-column label="教学特点" align="center" prop="trait" />
       <el-table-column label="学校" align="center" prop="school" />
+      <el-table-column label="学历" align="center" prop="isGraduate" :formatter="EducationFormat"/>
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
@@ -194,6 +195,15 @@
           <el-form-item label="学校" prop="school">
             <el-input v-model="form.school" placeholder="请输入学校" />
           </el-form-item>
+          <el-form-item label="学历" prop="education">
+            <el-radio-group v-model="form.education">
+              <el-radio
+                v-for="dict in Educations"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{dict.dictLabel}}</el-radio>
+            </el-radio-group>
+          </el-form-item>
            <el-form-item    label="学生证书" prop="credentials" v-if="form.isGraduate==1">
             <el-upload
                   class="avatar-uploader"
@@ -275,6 +285,7 @@ export default {
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
        // 是否毕业字典
       isOneToOneOptions: [],
+      Educations: [],
        // 课程选择
       sysCourses: [],
       active: 1,
@@ -305,6 +316,18 @@ export default {
       form: {},
       // 表单校验
       rules: {
+         courseId:[
+          { required: true, message: "所授课程不能为空", trigger: "blur" }
+        ],
+        school: [
+          { required: true, message: "学校不能为空", trigger: "blur" }
+        ],
+        isGraduate: [
+          { required: true, message: "是否毕业不能为空", trigger: "blur" }
+        ],
+        education: [
+          { required: true, message: "学历不能为空", trigger: "blur" }
+        ],
       }
     };
   },
@@ -313,11 +336,18 @@ export default {
      this.getDicts("is-one-to-one").then(response => {
       this.isOneToOneOptions = response.data;
      });
+     this.getDicts("Education").then(response => {
+      this.Educations = response.data;
+     });
   },
   methods: {
     // 是否一对一字典翻译
     isOneToOneFormat(row, column) {
       return this.selectDictLabel(this.isOneToOneOptions, row.isGraduate);
+    },
+    // 学历字典翻译
+    EducationFormat(row, column) {
+      return this.selectDictLabel(this.Educations, row.education);
     },
     /** 查询家教老师表列表 */
     getList() {
