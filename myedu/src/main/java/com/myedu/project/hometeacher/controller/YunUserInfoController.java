@@ -74,10 +74,10 @@ public class YunUserInfoController extends BaseController
     public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
         AjaxResult ajax = AjaxResult.success();
-        //获取课程列表信息
-        SysCourse sysCourse = new SysCourse();
-        ajax.put("sysCourses", sysCourseService.selectSysCourseList(sysCourse));
         if(id!=null){
+            //获取课程列表信息
+            SysCourse sysCourse = new SysCourse();
+            ajax.put("sysCourses", sysCourseService.selectSysCourseList(sysCourse));
             ajax.put(AjaxResult.DATA_TAG,yunUserInfoService.selectYunUserInfoById(id));
             return ajax;
         }else{

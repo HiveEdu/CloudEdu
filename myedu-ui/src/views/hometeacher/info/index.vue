@@ -76,22 +76,31 @@
       <el-table-column label="教学特点" align="center" prop="trait" />
       <el-table-column label="学校" align="center" prop="school" />
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['hometeacher:info:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['hometeacher:info:remove']"
-          >删除</el-button>
+          <el-button  size="mini" type="primary"  @click="openStoreDatail(scope.row)">详情</el-button>
+           <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
+            <el-dropdown-menu slot="dropdown">
+              <el-button
+                size="mini"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['chometeacher:info:edit']"
+                style="margin-top: 10px"
+              >修改</el-button>
+              <br>
+              <el-button
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['hometeacher:info:remove']"
+                style="margin-top: 10px"
+              >删除</el-button>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -157,7 +166,19 @@
             </el-dialog>
         </el-form-item>
         <el-form-item label="视频风采" prop="video">
-          <el-input v-model="form.video" placeholder="请输入视频风采" />
+          <el-upload
+              class="avatar-uploader el-upload--text"
+              :action="uploadImgUrl"
+              :headers="headers"
+              :show-file-list="false"
+              :on-success="handleVideoSuccess"
+              :before-upload="beforeUploadVideo"
+              :on-progress="uploadVideoProcess">
+              <video v-if="form.video !='' && videoFlag == false" :src="imageView+'/'+form.video" class="avatar" controls="controls">您的浏览器不支持视频播放</video>
+              <i v-else-if="form.video =='' && videoFlag == false" class="el-icon-plus avatar-uploader-icon"></i>
+              <el-progress v-if="videoFlag == true" type="circle" :percentage="videoUploadPercent" style="margin-top:30px;"></el-progress>
+            </el-upload>
+            <P class="text">请保证视频格式正确</P>
         </el-form-item>
          </div>
         <div v-if="active==3" style="margin-top: 30px">
@@ -174,7 +195,6 @@
           <el-input v-model="form.school" placeholder="请输入学校" />
         </el-form-item>
            <el-form-item v-if="form.isGraduate==1"   label="学生证书">
-            <!-- <el-input v-model="form.credentials" placeholder="请上传学生证书" /> -->
             <el-upload
                   class="avatar-uploader"
                   ref="upload"
@@ -239,12 +259,19 @@ import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
-       //照片列表
+      dialogImageUrl: '',
+      dialogVisible: false,
+      //是否有视频
+      videoFlag:false,
+      //视频上传进度
+      videoUploadPercent:0,
+      //照片列表
       photosList:[],
       photosListNew:[],
       headers: {
         Authorization: 'Bearer ' + getToken()
       },
+      imageView: process.env.VUE_APP_BASE_API,
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
        // 是否毕业字典
       isOneToOneOptions: [],
@@ -397,6 +424,32 @@ export default {
       this.dialogVisible = true;
     },
     //营业执照上传结束
+     //上传视频开始
+    beforeUploadVideo(file) {
+      const isLt10M = file.size / 1024 / 1024  < 10;
+      if (['video/mp4', 'video/ogg', 'video/flv','video/avi','video/wmv','video/rmvb'].indexOf(file.type) == -1) {
+        this.$message.error('请上传正确的视频格式');
+        return false;
+      }
+      // if (!isLt10M) {
+      //   this.$message.error('上传视频大小不能超过10MB哦!');
+      //   return false;
+      // }
+    },
+    uploadVideoProcess(event, file, fileList){
+      this.videoFlag = true;
+      this.videoUploadPercent = file.percentage.toFixed(0);
+    },
+    handleVideoSuccess(res, file) {                               //获取上传图片地址
+      this.videoFlag = false;
+      this.videoUploadPercent = 0;
+      if(res.code == 200){
+        this.form.video = res.fileName;
+      }else{
+        this.$message.error('视频上传失败，请重新上传！');
+      }
+    },
+    //上传视频结束
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -430,6 +483,8 @@ export default {
       const id = row.id || this.ids
       getInfo(id).then(response => {
         this.form = response.data;
+        this.form.courseId=JSON.parse(this.form.courseId);
+        this.sysCourses = response.sysCourses;
         this.photosList=JSON.parse(this.form.photos);
         this.photosListNew=JSON.parse(this.form.photos);
          for(let i=0;i<this.photosList.length;i++) {
@@ -511,3 +566,35 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+</style>
