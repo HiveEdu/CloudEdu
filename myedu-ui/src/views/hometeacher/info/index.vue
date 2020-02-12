@@ -139,7 +139,7 @@
                   ></el-option>
                 </el-select>
         </el-form-item>
-        <el-form-item label="教学经历" prop="experience">
+        <el-form-item label="成功案例" prop="experience">
           <el-input v-model="form.experience" type="textarea" placeholder="请输入教学经历" />
         </el-form-item>
         <el-form-item label="教学特点" prop="trait">

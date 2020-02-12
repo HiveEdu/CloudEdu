@@ -97,7 +97,12 @@
       <div slot="header">
         <span>教学介绍信息</span>
       </div>
-      <div class="text item">教学特点: {{ form.trait }}</div>
+      <div class="text item">教学特点: {{ form.trait }}</div>  
+    </el-card>
+     <el-card>
+      <div slot="header">
+        <span>成功案例</span>
+      </div>
       <div class="text item">教学经历: {{ form.experience }}</div>   
     </el-card>
     <span slot="footer" class="dialog-footer">
