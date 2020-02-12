@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.hometeacher.mapper.YunUserInfoMapper">
     
-    <resultMap type="YunUserInfo" id="YunUserInfoResult">
+    <resultMap type="YunUserInfoVo" id="YunUserInfoResult">
         <result property="id"    column="id"    />
         <result property="userId"    column="user_id"    />
         <result property="courseId"    column="course_id"    />
@@ -26,7 +26,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunUserInfoVo">
-        select id, education,user_id, course_id, awards, experience, trait, photos, video, school, is_graduate, credentials, identity_card, create_by, create_time, update_by, update_time, del_flag from yun_user_info
+        select yui.*,su.nick_name as nickName,su.avatar as avatar,su.address as address,su.sex as sex
+        from yun_user_info yui
+        left  join  sys_user su on yui.user_id=su.user_id
     </sql>
 
     <select id="selectYunUserInfoList" parameterType="YunUserInfo" resultMap="YunUserInfoResult">

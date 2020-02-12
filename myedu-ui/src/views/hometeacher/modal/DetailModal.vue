@@ -10,6 +10,28 @@
       </div>
       <el-row>
         <el-col :span="12">
+         <div class="text item">昵称: {{ form.nickName}}
+         </div>
+        </el-col>
+          <el-col :span="8">
+            <div class="text item">性别: 
+              <span v-for="item in gendelOptions">
+                <span v-if="form.sex==item.dictValue">
+                  {{ item.dictLabel }}
+                </span>
+              </span>
+            </div>
+        </el-col>
+      </el-row>
+       <el-row>
+        <br>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+         <div class="text item">地址: {{ form.address}}
+         </div>
+        </el-col>
+        <el-col :span="12">
          <div class="text item">所授课程:
            <span v-for="item in sysCourses">
                <span v-for="item1 in form.courseId" v-if="item1==item.id">
@@ -19,7 +41,7 @@
          </div>
         </el-col>
       </el-row>
-       <el-row>
+      <el-row>
         <br>
       </el-row>
        <el-row>
@@ -98,8 +120,11 @@
             this.getDicts("Education").then(response => {
             this.Educations = response.data;
           });
-          this.getDicts("is-one-to-one").then(response => {
+            this.getDicts("is-one-to-one").then(response => {
             this.isOneToOneOptions = response.data;
+          });
+            this.getDicts("sys_user_sex").then(response => {
+            this.gendelOptions = response.data;
           });
           },
           currentData:function (e) {
@@ -119,6 +144,8 @@
              sysCourses: [],
              //照片列表
              photosList:[],
+             // 老师性别字典
+             gendelOptions: [],
              // 是否毕业字典
              isOneToOneOptions: [],
              imageView: process.env.VUE_APP_BASE_API,
