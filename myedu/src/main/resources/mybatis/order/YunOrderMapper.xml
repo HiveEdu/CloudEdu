@@ -64,13 +64,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="delFlag != null  and delFlag != ''"> and yo.del_flag = #{delFlag}</if>
             <if test="createById != null "> and yo.create_by_id = #{createById}</if>
         </where>
+        order by yo.create_time desc
     </select>
     
     <select id="selectYunOrderById" parameterType="Long" resultMap="YunOrderResult">
         <include refid="selectYunOrderVo"/>
         where yo.id = #{id}
     </select>
-        
+
+    <select id="selectYunOrderByNum" parameterType="String" resultMap="YunOrderResult">
+        <include refid="selectYunOrderVo"/>
+        where yo.num = #{num}
+    </select>
+
     <insert id="insertYunOrder" parameterType="YunOrder">
         insert into yun_order
         <trim prefix="(" suffix=")" suffixOverrides=",">

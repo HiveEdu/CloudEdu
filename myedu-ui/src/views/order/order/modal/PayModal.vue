@@ -61,6 +61,7 @@
           this.$emit('closePayModal', false);
         },
         changeWay(e){
+          this.handleClose();
           this.form.totalMoney=this.form.totalCost;
           // 先打开一个空的新窗口，再请求
           this.newWin = window.open()

@@ -16,10 +16,13 @@ import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.order.service.IYunOrderService;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStudentService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -125,5 +128,36 @@ public class YunOrderController extends BaseController
         String payUrl = yunOrderService.toPayAsPc(yunOrder);
         ajax.put("url",payUrl);
         return ajax;
+    }
+
+    /*
+     * @Description :同步通知
+     * @Author : 梁少鹏
+     * @Date : 2020/2/12 11:35
+     */
+    @GetMapping(value = "/getReturnUrlInfo")
+    public String alipayReturnUrlInfo(HttpServletRequest request) {
+        String result=yunOrderService.synchronous(request);
+        if(result.equals("success")){
+            return "<html>\n" +
+                    "<head>\n" +
+                    "<script type=\"text/javascript\"> function load() { window.close(); } </script>\n" +
+                    "</head>\n" +
+                    "<body onload=\"" +
+                    "load()\"> </body>\n" +
+                    "</html>";
+        }else{
+            result="支付失败";
+        }
+        return result;
+    }
+    /*
+     * @Description :异步通知
+     * @Author : 梁少鹏
+     * @Date : 2020/2/12 11:35
+     */
+    @PostMapping(value = "/getNotifyUrlInfo")
+    public void alipayNotifyUrlInfo(HttpServletRequest request, HttpServletResponse response){
+        yunOrderService.notify(request,response);
     }
 }

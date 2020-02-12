@@ -106,6 +106,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
+                .antMatchers("/order/order/getReturnUrlInfo").anonymous()
+                .antMatchers("/order/order/getNotifyUrlInfo").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()

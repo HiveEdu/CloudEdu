@@ -60,4 +60,13 @@ public interface YunOrderMapper
      * @return 结果
      */
     public int deleteYunOrderByIds(Long[] ids);
+
+
+    /**
+     * 查询订单
+     *
+     * @param num 订单号
+     * @return 订单
+     */
+    public YunOrderVo selectYunOrderByNum(String num);
 }

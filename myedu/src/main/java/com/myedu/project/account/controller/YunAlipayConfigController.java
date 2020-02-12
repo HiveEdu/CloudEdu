@@ -129,5 +129,4 @@ public class YunAlipayConfigController extends BaseController
         ajax.put("url",payUrl);
         return ajax;
     }
-
 }
