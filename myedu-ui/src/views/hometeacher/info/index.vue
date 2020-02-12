@@ -68,10 +68,15 @@
 
     <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="关联用户id" align="center" prop="userId" />
-      <el-table-column label="奖励荣誉" align="center" prop="awards" />
-      <el-table-column label="教学经历" align="center" prop="experience" />
-      <el-table-column label="教学特点" align="center" prop="trait" />
+      <!-- <el-table-column label="头像" align="center" prop="avatar" /> -->
+       <el-table-column label="头像" width="55" >
+        　　<template slot-scope="scope">
+        　　　　<img :src="viewImage+'/'+scope.row.avatar" width="50" height="50" class="head_pic"/>
+        　　</template>
+      </el-table-column>
+      <el-table-column label="昵称" align="center" prop="nickName" />
+      <el-table-column label="性别" align="center" prop="sex" :formatter="gendelFormat"/>
+      <el-table-column label="地址" align="center" prop="address" />
       <el-table-column label="学校" align="center" prop="school" />
       <el-table-column label="学历" align="center" prop="education" :formatter="EducationFormat"/>
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
@@ -134,7 +139,7 @@
                   ></el-option>
                 </el-select>
         </el-form-item>
-        <el-form-item label="教学经历" prop="experience">
+        <el-form-item label="成功案例" prop="experience">
           <el-input v-model="form.experience" type="textarea" placeholder="请输入教学经历" />
         </el-form-item>
         <el-form-item label="教学特点" prop="trait">
@@ -289,6 +294,8 @@ export default {
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
        // 是否毕业字典
       isOneToOneOptions: [],
+      // 老师性别字典
+      gendelOptions: [],
       Educations: [],
        // 课程选择
       sysCourses: [],
@@ -316,6 +323,7 @@ export default {
         courseId: undefined,
         school: undefined,
       },
+       viewImage: process.env.VUE_APP_BASE_API,
       // 表单参数
       form: {},
       // 表单校验
@@ -337,6 +345,9 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts("sys_user_sex").then(response => {
+      this.gendelOptions = response.data;
+    });
      this.getDicts("is-one-to-one").then(response => {
       this.isOneToOneOptions = response.data;
      });
@@ -345,6 +356,10 @@ export default {
      });
   },
   methods: {
+     // 老师性别字典翻译
+    gendelFormat(row, column) {
+      return this.selectDictLabel(this.gendelOptions, row.sex);
+    },
      //打开门店详情页面
     openDatail(row){
       this.currentData=row;

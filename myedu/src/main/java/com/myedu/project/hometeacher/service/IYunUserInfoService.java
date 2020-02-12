@@ -1,6 +1,8 @@
 package com.myedu.project.hometeacher.service;
 
 import com.myedu.project.hometeacher.domain.YunUserInfo;
+import com.myedu.project.hometeacher.domain.vo.YunUserInfoVo;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ public interface IYunUserInfoService
      * @param yunUserInfo 家教老师表
      * @return 家教老师表集合
      */
-    public List<YunUserInfo> selectYunUserInfoList(YunUserInfo yunUserInfo);
+    public List<YunUserInfoVo> selectYunUserInfoList(YunUserInfo yunUserInfo);
 
     /**
      * 新增家教老师表

@@ -3,6 +3,7 @@ package com.myedu.project.hometeacher.service.impl;
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.hometeacher.domain.vo.YunUserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.hometeacher.mapper.YunUserInfoMapper;
@@ -40,7 +41,7 @@ public class YunUserInfoServiceImpl implements IYunUserInfoService
      * @return 家教老师表
      */
     @Override
-    public List<YunUserInfo> selectYunUserInfoList(YunUserInfo yunUserInfo)
+    public List<YunUserInfoVo> selectYunUserInfoList(YunUserInfo yunUserInfo)
     {
         return yunUserInfoMapper.selectYunUserInfoList(yunUserInfo);
     }

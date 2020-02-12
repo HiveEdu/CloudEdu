@@ -7,6 +7,7 @@ import com.myedu.common.utils.StringUtils;
 import com.myedu.project.account.domain.YunAccount;
 import com.myedu.project.dataBasic.domain.SysCourse;
 import com.myedu.project.dataBasic.service.ISysCourseService;
+import com.myedu.project.hometeacher.domain.vo.YunUserInfoVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class YunUserInfoController extends BaseController
     public TableDataInfo list(YunUserInfo yunUserInfo)
     {
         startPage();
-        List<YunUserInfo> list = yunUserInfoService.selectYunUserInfoList(yunUserInfo);
+        List<YunUserInfoVo> list = yunUserInfoService.selectYunUserInfoList(yunUserInfo);
         return getDataTable(list);
     }
 
@@ -61,8 +62,8 @@ public class YunUserInfoController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(YunUserInfo yunUserInfo)
     {
-        List<YunUserInfo> list = yunUserInfoService.selectYunUserInfoList(yunUserInfo);
-        ExcelUtil<YunUserInfo> util = new ExcelUtil<YunUserInfo>(YunUserInfo.class);
+        List<YunUserInfoVo> list = yunUserInfoService.selectYunUserInfoList(yunUserInfo);
+        ExcelUtil<YunUserInfoVo> util = new ExcelUtil<YunUserInfoVo>(YunUserInfoVo.class);
         return util.exportExcel(list, "info");
     }
 
@@ -82,7 +83,7 @@ public class YunUserInfoController extends BaseController
             return ajax;
         }else{
             YunUserInfo yunUserInfo=new YunUserInfo();
-            List<YunUserInfo> yunUserInfos=  yunUserInfoService.selectYunUserInfoList(yunUserInfo);
+            List<YunUserInfoVo> yunUserInfos=  yunUserInfoService.selectYunUserInfoList(yunUserInfo);
             if(yunUserInfos.size()>0){
                 return AjaxResult.error(204,"您的个人信息已经存在");
             }else{
