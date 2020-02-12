@@ -91,6 +91,7 @@
         </template>
       </el-table-column>
       <el-table-column label="授课区域" align="center" prop="region" />
+      <el-table-column label="课程状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button  size="mini" type="primary" @click="openDatail(scope.row)">详情</el-button>
@@ -273,6 +274,7 @@
 
 <script>
 import { listCourse, getCourse, delCourse, addCourse, updateCourse, exportCourse } from "@/api/hometeacher/course";
+import{changeStatusOff,changeStatusOn}from "@/api/store/course";
 import signUpModal from './modal1/signUpModal'
 import DetailModal from './modal1/DetailModal'
 const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
@@ -362,6 +364,10 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+     // 课程状态字典翻译
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.statusOptions, row.status);
     },
     // 取消按钮
     cancel() {
@@ -508,6 +514,7 @@ export default {
               }
             });
           } else {
+            this.form.status=0;//默认在售状态
             addCourse(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
