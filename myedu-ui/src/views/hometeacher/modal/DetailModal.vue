@@ -63,8 +63,13 @@
     </el-card>
     <el-card>
       <div slot="header">
-        <span>证件信息</span>
+        <span>照片信息</span>
       </div>
+       <el-carousel >
+          <el-carousel-item v-for="item in photosList" :key="item">
+            <img  :src="imageView+'/'+item.url" alt="" height="100%" width="100%">
+          </el-carousel-item>
+        </el-carousel>
     </el-card>
     <el-card>
       <div slot="header">
@@ -102,6 +107,7 @@
               this.form = response.data;
               this.courseId = response.courseId;
               this.sysCourses = response.sysCourses;
+              this.photosList=JSON.parse(this.form.photos);
             });
           },
         },
@@ -111,18 +117,13 @@
             dialogVisible:false,
              // 课程选择
              sysCourses: [],
-            // 课程类型字典
-            classifyOptions: [],
-            // 托管类型字典
-            reclassifyCollOptions: [],
-            // 是否一对一字典
-            isOneToOneOptions: [],
-            // 课程状态字典
-            statusOptions: [],
-            //门店列表
-            stores:[],
-            //表单参数
-            form:{}
+             //照片列表
+             photosList:[],
+             // 是否毕业字典
+             isOneToOneOptions: [],
+             imageView: process.env.VUE_APP_BASE_API,
+             //表单参数
+             form:{}
           }
         },
       methods: {
