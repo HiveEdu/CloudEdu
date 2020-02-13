@@ -325,6 +325,18 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        name: [
+          { required: true, message: "课程名称不能为空", trigger: "blur" }
+        ],
+        region: [
+          { required: true, message: "可授课不能为空", trigger: "blur" }
+        ],
+        content: [
+          { required: true, message: "辅导内容不能为空", trigger: "blur" }
+        ],
+        courseCost: [
+          { required: true, message: "课时费不能为空", trigger: "blur" }
+        ],
       }
     };
   },

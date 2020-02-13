@@ -29,7 +29,7 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <div class="text item">可授课区域: {{ form.region}}</div>
+          <div class="text item">可授课区域: {{ form.region }}</div>
         </el-col>
          <el-col :span="12">
           <div class="text item">课程状态: 

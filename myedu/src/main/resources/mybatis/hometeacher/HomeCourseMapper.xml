@@ -36,7 +36,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectHomeCourseVo">
-        select id, name, classify, reclassify_coll, is_one_to_one, stu_count, grade_id, c_starttime, c_endtime, course_cost, meals, introduce, picture, store_id, class_time, class_hour, class_all, total_cost, week, content, status, create_by, create_time, update_by, update_time, del_flag, create_by_id, region from yun_course
+        select id, name, classify, reclassify_coll, is_one_to_one, stu_count, grade_id, c_starttime, c_endtime, course_cost, meals, introduce, picture, store_id, class_time, class_hour, class_all, total_cost, week, content, status, create_by, create_time, update_by, update_time, del_flag, create_by_id, region
+         from yun_course where store_id is null
     </sql>
 
     <select id="selectHomeCourseList" parameterType="HomeCourse" resultMap="HomeCourseResult">
@@ -71,7 +72,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="meals != null ">meals,</if>
             <if test="introduce != null  and introduce != ''">introduce,</if>
             <if test="picture != null  and picture != ''">picture,</if>
-            <if test="storeId != null ">store_id,</if>
             <if test="classTime != null  and classTime != ''">class_time,</if>
             <if test="classHour != null ">class_hour,</if>
             <if test="classAll != null ">class_all,</if>
@@ -100,7 +100,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="meals != null ">#{meals},</if>
             <if test="introduce != null  and introduce != ''">#{introduce},</if>
             <if test="picture != null  and picture != ''">#{picture},</if>
-            <if test="storeId != null ">#{storeId},</if>
             <if test="classTime != null  and classTime != ''">#{classTime},</if>
             <if test="classHour != null ">#{classHour},</if>
             <if test="classAll != null ">#{classAll},</if>
@@ -133,7 +132,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="meals != null ">meals = #{meals},</if>
             <if test="introduce != null  and introduce != ''">introduce = #{introduce},</if>
             <if test="picture != null  and picture != ''">picture = #{picture},</if>
-            <if test="storeId != null ">store_id = #{storeId},</if>
             <if test="classTime != null  and classTime != ''">class_time = #{classTime},</if>
             <if test="classHour != null ">class_hour = #{classHour},</if>
             <if test="classAll != null ">class_all = #{classAll},</if>

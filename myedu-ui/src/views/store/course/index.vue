@@ -96,8 +96,6 @@
       </el-table-column>
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="类型" align="center" prop="classify" :formatter="classifyFormat" />
-<!--      <el-table-column label="招生人数" align="center" prop="stuCount" />-->
-<!--      <el-table-column label="招生对象" align="center" prop="gradeId" />-->
       <el-table-column label="开始时间" align="center" prop="cStarttime" width="180">
         <template slot-scope="scope" v-if="scope.row.cStarttime!=null">
           <span>{{ parseTime(scope.row.cStarttime) }}</span>
