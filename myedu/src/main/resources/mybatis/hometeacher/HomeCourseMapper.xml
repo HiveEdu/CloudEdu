@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectHomeCourseVo">
         select id, name, classify, reclassify_coll, is_one_to_one, stu_count, grade_id, c_starttime, c_endtime, course_cost, meals, introduce, picture, store_id, class_time, class_hour, class_all, total_cost, week, content, status, create_by, create_time, update_by, update_time, del_flag, create_by_id, region
-         from yun_course where store_id is null
+         from yun_course
     </sql>
 
     <select id="selectHomeCourseList" parameterType="HomeCourse" resultMap="HomeCourseResult">
@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stuCount != null "> and stu_count = #{stuCount}</if>
             <if test="gradeId != null  and gradeId != ''"> and grade_id = #{gradeId}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            and store_id is null
         </where>
     </select>
     
@@ -100,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="meals != null ">#{meals},</if>
             <if test="introduce != null  and introduce != ''">#{introduce},</if>
             <if test="picture != null  and picture != ''">#{picture},</if>
+            <if test="storeId != null ">#{storeId},</if>
             <if test="classTime != null  and classTime != ''">#{classTime},</if>
             <if test="classHour != null ">#{classHour},</if>
             <if test="classAll != null ">#{classAll},</if>
@@ -147,7 +149,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createById != null ">create_by_id = #{createById},</if>
             <if test="region != null  and region != ''">region = #{region},</if>
         </trim>
-        where id = #{id}
+        where id = #{id} and  store_id is null
     </update>
 
     <delete id="deleteHomeCourseById" parameterType="Long">

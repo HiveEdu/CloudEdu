@@ -55,7 +55,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="meals != null "> and yc.meals = #{meals}</if>
             <if test="introduce != null  and introduce != ''"> and yc.introduce = #{introduce}</if>
             <if test="picture != null  and picture != ''"> and yc.picture = #{picture}</if>
-            <if test="storeId != null "> and yc.store_id = #{storeId}</if>
             <if test="classTime != null "> and yc.class_time = #{classTime}</if>
             <if test="classHour != null "> and yc.class_hour = #{classHour}</if>
             <if test="classAll != null "> and yc.class_all = #{classAll}</if>
@@ -64,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="content != null  and content != ''"> and yc.content = #{content}</if>
             <if test="status != null  and status != ''"> and yc.status = #{status}</if>
             <if test="createById != null "> and yc.create_by_id = #{createById}</if>
+            and yc.store_id is not null
         </where>
     </select>
     
