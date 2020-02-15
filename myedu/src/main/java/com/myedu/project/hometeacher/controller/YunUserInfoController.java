@@ -4,6 +4,8 @@ import java.util.List;
 import com.myedu.project.dataBasic.domain.SysCourse;
 import com.myedu.project.dataBasic.service.ISysCourseService;
 import com.myedu.project.hometeacher.domain.vo.YunUserInfoVo;
+import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.enums.StoreStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -122,4 +124,48 @@ public class YunUserInfoController extends BaseController
     {
         return toAjax(yunUserInfoService.deleteYunUserInfoByIds(ids));
     }
+
+
+    /*
+     * @Description :更改课程状态下线
+     * @Author : 梁少鹏
+     * @Date : 2020/1/21 16:30
+     */
+    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOff')")
+    @Log(title = "课程", businessType = BusinessType.UPDATE)
+    @GetMapping("/changeStatusOff/{ids}")
+    public AjaxResult changeStatusOff(@PathVariable Long[] ids)
+    {
+        int rows=0;
+        for (Long id:ids) {
+            YunUserInfo yunUserInfo= yunUserInfoService.selectYunUserInfoById(id);
+            if(yunUserInfo!=null){
+                yunUserInfo.setStatus(StoreStatus.OFFLINE.getCode());
+                rows=yunUserInfoService.updateYunUserInfo(yunUserInfo);
+            }
+        }
+        return toAjax(rows);
+    }
+
+    /*
+     * @Description :更改课程状态在售
+     * @Author : 梁少鹏
+     * @Date : 2020/1/21 16:30
+     */
+    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOn')")
+    @Log(title = "课程", businessType = BusinessType.UPDATE)
+    @GetMapping("/changeStatusOn/{ids}")
+    public AjaxResult changeStatusOn(@PathVariable Long[] ids)
+    {
+        int rows=0;
+        for (Long id:ids) {
+            YunUserInfo yunUserInfo= yunUserInfoService.selectYunUserInfoById(id);
+            if(yunUserInfo!=null){
+                yunUserInfo.setStatus(StoreStatus.ONLINE.getCode());
+                rows=yunUserInfoService.updateYunUserInfo(yunUserInfo);
+            }
+        }
+        return toAjax(rows);
+    }
+
 }

@@ -75,8 +75,111 @@ public class YunUserInfo extends BaseEntity
     @Excel(name = "证书")
     private String credentials;
 
+    /** 教师地图坐标经纬度详情x */
+    @ApiModelProperty("纬度")
+    private Double mapX;
+
+    /** 教师地图坐标经纬度详情y */
+    @ApiModelProperty("纬度")
+    private Double mapY;
+
+    /** 省 */
+    @ApiModelProperty("省")
+    @Excel(name = "省")
+    private String province;
+
+    /** 市 */
+    @ApiModelProperty("市")
+    @Excel(name = "市")
+    private String city;
+
+    /** 区 */
+    @ApiModelProperty("区")
+    @Excel(name = "区")
+    private String area;
+
+    /** 详细地址 */
+    @ApiModelProperty("详细地址")
+    @Excel(name = "详细地址")
+    private String address;
+
+    /** 状态（0待审核1审核通过2审核驳回） */
+    @ApiModelProperty("状态")
+    @Excel(name = "审核状态", readConverterExp = "0=可用1不可用")
+    private String status;
+
+    /** 驳回原因 */
+    @ApiModelProperty("驳回原因")
+    @Excel(name = "驳回原因")
+    private String rejectResion;
+
+    public Double getMapX() {
+        return mapX;
+    }
+
+    public void setMapX(Double mapX) {
+        this.mapX = mapX;
+    }
+
+    public Double getMapY() {
+        return mapY;
+    }
+
+    public void setMapY(Double mapY) {
+        this.mapY = mapY;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getRejectResion() {
+        return rejectResion;
+    }
+
+    public void setRejectResion(String rejectResion) {
+        this.rejectResion = rejectResion;
+    }
+
     public String getEducation() {
         return education;
+
     }
 
     public void setEducation(String education) {
@@ -229,8 +332,14 @@ public class YunUserInfo extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
-            .append("delFlag", getDelFlag())
-                .append("education", getEducation())
+                .append("mapX", getMapX())
+                .append("mapY", getMapY())
+                .append("province", getProvince())
+                .append("city", getCity())
+                .append("area", getArea())
+                .append("address", getAddress())
+                .append("status", getStatus())
+                .append("rejectResion", getRejectResion())
             .toString();
     }
 }
