@@ -51,3 +51,18 @@ export function exportInfo(query) {
     params: query
   })
 }
+//更改课程状态下线
+export function changeStatusOff(id) {
+  return request({
+    url: '/hometeacher/info/changeStatusOff/' + id,
+    method: 'get',
+  })
+}
+
+//更改课程状态在售
+export function changeStatusOn(id) {
+  return request({
+    url: '/hometeacher/info/changeStatusOn/' + id,
+    method: 'get',
+  })
+}

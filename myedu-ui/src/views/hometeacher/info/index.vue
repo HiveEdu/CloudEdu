@@ -10,15 +10,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学校" prop="school">
-        <el-input
-          v-model="queryParams.school"
-          placeholder="请输入学校"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+       <el-form-item label="状态" prop="status">
+          <el-select v-model="queryParams.status" placeholder="请选择状态">
+            <el-option
+              v-for="dict in checkStatusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -80,12 +81,13 @@
       <el-table-column label="学校" align="center" prop="school" />
       <el-table-column label="学历" align="center" prop="education" :formatter="EducationFormat"/>
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
+       <el-table-column label="审核状态" align="center" prop="status" :formatter="checkFormat" />
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button  size="mini" type="primary"  @click="openDatail(scope.row)">详情</el-button>
            <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
-            <el-dropdown-menu slot="dropdown">
+               <el-dropdown-menu slot="dropdown">
               <el-button
                 size="mini"
                 type="success"
@@ -103,6 +105,34 @@
                 v-hasPermi="['hometeacher:info:remove']"
                 style="margin-top: 10px"
               >删除</el-button>
+              <br v-if="scope.row.status==0">
+              <el-button
+                v-if="scope.row.status==0"
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="openReview(scope.row)"
+                style="margin-top: 10px"
+              >审核</el-button>
+              <br  v-if="scope.row.status==3">
+              <el-button
+                v-if="scope.row.status==3"
+                size="mini"
+                type="warning"
+                icon="el-icon-edit"
+                @click="changeStatus(scope.row,4)"
+                style="margin-top: 10px"
+              >下线</el-button>
+              <br v-if="scope.row.status==4 || scope.row.status==1">
+              <el-button
+                v-if="scope.row.status==4 || scope.row.status==1"
+                size="mini"
+                type="warning"
+                icon="el-icon-edit"
+                @click="changeStatus(scope.row,3)"
+                style="margin-top: 10px"
+              >上线</el-button>
+              <br>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -117,7 +147,8 @@
       @pagination="getList"
     />
     
-
+    <!--审核页面-->
+    <reviewModal ref="reviewModal" :review="review" :currentData="currentData" @closeReview="closeReview"></reviewModal>
      <!--课程详情-->
     <DetailModal ref="DetailModal" :infoDetail="infoDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <!-- 添加或修改家教老师表对话框 -->
@@ -270,13 +301,18 @@
 </template>
 
 <script>
-import { listInfo, getInfo, delInfo, addInfo, updateInfo, exportInfo } from "@/api/hometeacher/info";
+import { listInfo, getInfo, delInfo, addInfo, changeStatusOff,changeStatusOn,updateInfo, exportInfo } from "@/api/hometeacher/info";
 import { getToken } from '@/utils/auth'
 import DetailModal from '../modal/DetailModal'
+import reviewModal from '../modal/reviewModal'
 export default {
-  components: {DetailModal},
+  components: {reviewModal,DetailModal},
   data() {
     return {
+      //审核页面默认不打开
+      review:false,
+       // 审核状态字典
+      checkStatusOptions: [],
       infoDetail:false,
       dialogImageUrl: '',
       dialogVisible: false,
@@ -345,6 +381,9 @@ export default {
   },
   created() {
     this.getList();
+     this.getDicts("yun_store_check_status").then(response => {
+      this.checkStatusOptions = response.data;
+    });
     this.getDicts("sys_user_sex").then(response => {
       this.gendelOptions = response.data;
     });
@@ -356,18 +395,32 @@ export default {
      });
   },
   methods: {
+    //打开审核页面
+    openReview(row){
+      this.currentData=row;
+      this.review=true;
+    },
+    //关闭审核页面
+    closeReview(){
+      this.review=false;
+      this.getList();
+    },
      // 老师性别字典翻译
     gendelFormat(row, column) {
       return this.selectDictLabel(this.gendelOptions, row.sex);
     },
-     //打开门店详情页面
+     //打开老师详情页面
     openDatail(row){
       this.currentData=row;
       this.infoDetail=true;
     },
-    //关闭门店详情页面
+    //关闭教师详情页面
     closeDetail(){
       this.infoDetail=false;
+    },
+     // 审核状态字典翻译
+    checkFormat(row, column) {
+      return this.selectDictLabel(this.checkStatusOptions, row.status);
     },
     // 是否一对一字典翻译
     isOneToOneFormat(row, column) {
@@ -413,6 +466,32 @@ export default {
         delFlag: undefined
       };
       this.resetForm("form");
+    },
+
+     /** 更改课程状态 */
+    changeStatus(row,status) {
+      const ids = row.id || this.ids;
+      let courseStatus=null;
+      if(status==3){
+        courseStatus="上线"
+      }else if(status==4){
+        courseStatus="下线"
+      }
+      this.$confirm('是否确认'+courseStatus+'教师编号为"' + ids + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        if(status==3){
+          return changeStatusOn(ids);
+        }else if(status==4){
+          return changeStatusOff(ids);
+        }
+
+      }).then(() => {
+        this.getList();
+        this.msgSuccess(courseStatus+"成功");
+      }).catch(function() {});
     },
     //证书上传开始
     beforeUploadLogo(file){
