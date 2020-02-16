@@ -77,7 +77,7 @@
       </el-table-column>
       <el-table-column label="昵称" align="center" prop="nickName" />
       <el-table-column label="性别" align="center" prop="sex" :formatter="gendelFormat"/>
-      <el-table-column label="地址" align="center" prop="address" />
+      <el-table-column label="地址" align="center" prop="province" />
       <el-table-column label="学校" align="center" prop="school" />
       <el-table-column label="学历" align="center" prop="education" :formatter="EducationFormat"/>
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
@@ -152,7 +152,7 @@
      <!--课程详情-->
     <DetailModal ref="DetailModal" :infoDetail="infoDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <!-- 添加或修改家教老师表对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
+    <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-steps :active="active">
           <el-step title="基本信息" icon="el-icon-edit" @click.native="stepClick(1)"></el-step>
@@ -170,6 +170,53 @@
                   ></el-option>
                 </el-select>
         </el-form-item>
+         <el-row>
+           <el-col :span="8">
+              <el-form-item label="地址" prop="province">
+                <el-cascader
+                  :options="addressOptions"
+                  v-model="cities"
+                  @change="onChangeCitys"
+                ></el-cascader>
+              </el-form-item>
+           </el-col>
+           <el-col :span="16">
+              <el-form-item label="街道" prop="address">
+                <el-input v-model="form.address" placeholder="请输入门店详细地址" />
+              </el-form-item>
+           </el-col>
+          </el-row>
+            <el-row>
+            <el-col :span="8">
+              <el-form-item label="经度" prop="address">
+                <el-input v-model="centerStr.lng" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="16">
+              <el-form-item label="纬度" prop="address">
+                <el-input v-model="centerStr.lat" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+             <el-col :span="12">
+              <el-form-item label="地图">
+                <baidu-map class="map" :center="centerStr" :zoom="zoom"
+                           :scroll-wheel-zoom="true"
+                           @ready="handler"
+                           @click="mapclick">
+                  <bm-local-search :keyword="keyword" :location="location" :auto-viewport="autoViewport":panel="panel" :select-first-result="selectFirstResult":pagecapacity="pageCapacity"></bm-local-search>
+                  <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT"></bm-navigation>
+                  <bm-geolocation
+                    anchor="BMAP_ANCHOR_BOTTOM_RIGHT"
+                    :showAddressBar="true"
+                    :autoLocation="true"
+                    :show="false"
+                   ></bm-geolocation>
+                </baidu-map>
+              </el-form-item>
+            </el-col>
+          </el-row>
         <el-form-item label="成功案例" prop="experience">
           <el-input v-model="form.experience" type="textarea" placeholder="请输入教学经历" />
         </el-form-item>
@@ -303,12 +350,33 @@
 <script>
 import { listInfo, getInfo, delInfo, addInfo, changeStatusOff,changeStatusOn,updateInfo, exportInfo } from "@/api/hometeacher/info";
 import { getToken } from '@/utils/auth'
+import {addressOptions} from '@/api/addressOptions'
 import DetailModal from '../modal/DetailModal'
 import reviewModal from '../modal/reviewModal'
+import BaiduMap from 'vue-baidu-map'
+import Vue from 'vue'
+Vue.use(BaiduMap, {
+  ak: '7ddN7rl0MKnrRAhxmZzEHVPObhlDUcdb'
+});
 export default {
   components: {reviewModal,DetailModal},
   data() {
     return {
+      mapForAdd:false,
+      keyword: "", //百度地图搜索值
+      location: "", //百度地图默认优先检索地区
+      autoViewport:true,//百度地图检索结束后是否自动调整地图视野
+      panel:false,//百度地图是否选展现检索结果面板
+      selectFirstResult:true,//百度地图是否选择第一个检索结果
+      pageCapacity:1,
+      zoom:15,
+      centerStr: {
+        lng: "",
+        lat: ""
+      },
+       //省市区文件数据
+      addressOptions: addressOptions,
+      cities:[],
       //审核页面默认不打开
       review:false,
        // 审核状态字典
@@ -395,6 +463,9 @@ export default {
      });
   },
   methods: {
+    onChangeCitys(value){
+      this.cities = value;
+    },
     //打开审核页面
     openReview(row){
       this.currentData=row;
@@ -463,11 +534,52 @@ export default {
         createTime: undefined,
         updateBy: undefined,
         updateTime: undefined,
+        province: undefined,
+        city: undefined,
+        area: undefined,
+        address: undefined,
+        mapX: undefined,
+        mapY: undefined,
         delFlag: undefined
       };
       this.resetForm("form");
     },
-
+     handler({BMap, map}) {
+      var geolocation = new BMap.Geolocation();
+      let _this = this;
+      geolocation.getCurrentPosition(function (r) {
+        _this.centerStr.lat=r.latitude;
+        _this.centerStr.lng=r.longitude;
+        // _this.cities=[];
+        // _this.cities.push(rs.address.province);
+        // _this.cities.push(rs.address.city);
+        // _this.cities.push(rs.address.district);
+      })
+    },
+    mapclick(e){
+      const { lng, lat } = e.target.getCenter();
+      this.centerStr.lng = lng;
+      this.centerStr.lat = lat;
+      this.zoom = e.target.getZoom();
+      let geocoder= new BMap.Geocoder();  //创建地址解析器的实例
+      geocoder.getLocation(e.point,rs=>{
+        //地址描述(string)=
+        // console.log(rs.address);    //这里打印可以看到里面的详细地址信息，可以根据需求选择想要的
+        // console.log(rs.addressComponents);//结构化的地址描述(object)
+        // console.log(rs.addressComponents.province); //省
+        // console.log(rs.addressComponents.city); //城市
+        // console.log(rs.addressComponents.district); //区县
+        // console.log(rs.addressComponents.street); //街道
+        // console.log(rs.addressComponents.streetNumber); //门牌号
+        // console.log(rs.surroundingPois); //附近的POI点(array)
+        // console.log(rs.business); //商圈字段，代表此点所属的商圈(string)
+        this.form.address=rs.addressComponents.street+rs.addressComponents.streetNumber;
+        this.cities=[];
+        this.cities.push(rs.addressComponents.province);
+        this.cities.push(rs.addressComponents.city);
+        this.cities.push(rs.addressComponents.district);
+      });
+    },
      /** 更改课程状态 */
     changeStatus(row,status) {
       const ids = row.id || this.ids;
@@ -619,6 +731,7 @@ export default {
       const id = row.id || this.ids
       getInfo(id).then(response => {
         this.form = response.data;
+        this.cities=JSON.parse(this.form.province);
         this.form.courseId=JSON.parse(this.form.courseId);
         this.sysCourses = response.sysCourses;
         this.photosList=JSON.parse(this.form.photos);
@@ -630,6 +743,8 @@ export default {
           }
          }
         }
+        this.centerStr.lng=this.form.mapX;
+        this.centerStr.lat=this.form.mapY;
         this.open = true;
         this.title = "修改家教老师表";
       });
@@ -640,7 +755,10 @@ export default {
         if (valid) {
           this.form.courseId=JSON.stringify(this.form.courseId);
           if (this.form.id != undefined) {
+            this.form.province=JSON.stringify(this.cities);
             this.form.photos=JSON.stringify(this.photosListNew);
+            this.form.mapX=this.centerStr.lng;
+            this.form.mapY=this.centerStr.lat;
             updateInfo(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -651,6 +769,10 @@ export default {
               }
             });
           } else {
+            this.form.province=JSON.stringify(this.cities);
+            this.form.photos=JSON.stringify(this.photosListNew);
+            this.form.mapX=this.centerStr.lng;
+            this.form.mapY=this.centerStr.lat;
             this.form.photos=JSON.stringify(this.photosListNew);
             addInfo(this.form).then(response => {
               if (response.code === 200) {
@@ -703,6 +825,10 @@ export default {
 };
 </script>
 <style scoped>
+ .map {
+    width: 200%;
+    height: 400px;
+  }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
