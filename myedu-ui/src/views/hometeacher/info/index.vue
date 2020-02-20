@@ -77,7 +77,7 @@
       </el-table-column>
       <el-table-column label="昵称" align="center" prop="nickName" />
       <el-table-column label="性别" align="center" prop="sex" :formatter="gendelFormat"/>
-      <el-table-column label="地址" align="center" prop="province" />
+      <el-table-column label="省/市/区" align="center" prop="province" />
       <el-table-column label="学校" align="center" prop="school" />
       <el-table-column label="学历" align="center" prop="education" :formatter="EducationFormat"/>
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
@@ -171,7 +171,7 @@
                 </el-select>
         </el-form-item>
          <el-row>
-           <el-col :span="8">
+           <el-col :span="16">
               <el-form-item label="地址" prop="province">
                 <el-cascader
                   :options="addressOptions"
@@ -182,7 +182,7 @@
            </el-col>
            <el-col :span="16">
               <el-form-item label="街道" prop="address">
-                <el-input v-model="form.address" placeholder="请输入门店详细地址" />
+                <el-input v-model="form.address" placeholder="请输入您的详细地址" />
               </el-form-item>
            </el-col>
           </el-row>
