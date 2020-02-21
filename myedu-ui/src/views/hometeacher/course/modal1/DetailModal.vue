@@ -114,7 +114,7 @@
 </template>
 
 <script>
-  import { getCourse } from "@/api/store/course";
+  import { getCourse } from "@/api/hometeacher/course";
     export default {
         name: "DetailModal",
         props: {
