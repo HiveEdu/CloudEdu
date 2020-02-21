@@ -73,19 +73,23 @@ public class YunUserInfoController extends BaseController
     public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
         AjaxResult ajax = AjaxResult.success();
+        //获取课程列表信息
+        SysCourse sysCourse = new SysCourse();
+        ajax.put("sysCourses", sysCourseService.selectSysCourseList(sysCourse));
         if(id!=null){
-            //获取课程列表信息
-            SysCourse sysCourse = new SysCourse();
-            ajax.put("sysCourses", sysCourseService.selectSysCourseList(sysCourse));
             ajax.put(AjaxResult.DATA_TAG,yunUserInfoService.selectYunUserInfoById(id));
             return ajax;
         }else{
             YunUserInfo yunUserInfo=new YunUserInfo();
             List<YunUserInfoVo> yunUserInfos=  yunUserInfoService.selectYunUserInfoList(yunUserInfo);
             if(yunUserInfos.size()>0){
-                return AjaxResult.error(204,"您的个人信息已经存在");
+                ajax.put("CODE_TAG",204);
+                ajax.put("MSG_TAG","您的个人信息已经存在");
+                return ajax;
             }else{
-                return AjaxResult.success("您的个人信息创建成功");
+                ajax.put("CODE_TAG",200);
+                ajax.put("MSG_TAG","您可以创建个人信息");
+                return ajax;
             }
         }
 
