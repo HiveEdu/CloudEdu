@@ -2,6 +2,8 @@ package com.myedu.project.system.domain;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
@@ -13,6 +15,7 @@ import com.myedu.framework.web.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SysRole extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

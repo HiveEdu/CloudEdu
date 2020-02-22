@@ -2,6 +2,8 @@ package com.myedu.framework.security;
 
 import java.util.Collection;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +14,7 @@ import com.myedu.project.system.domain.SysUser;
  * 
  * @author ruoyi
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginUser implements UserDetails
 {
     private static final long serialVersionUID = 1L;

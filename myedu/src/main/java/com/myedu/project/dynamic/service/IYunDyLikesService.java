@@ -1,6 +1,10 @@
 package com.myedu.project.dynamic.service;
 
+import com.myedu.project.dynamic.domain.DyLikedCountDTO;
 import com.myedu.project.dynamic.domain.YunDyLikes;
+import com.myedu.project.thumbsup.domain.LikedCountDTO;
+import com.myedu.project.thumbsup.domain.UserLike;
+
 import java.util.List;
 
 /**
@@ -58,4 +62,61 @@ public interface IYunDyLikesService
      * @return 结果
      */
     public int deleteYunDyLikesById(Long id);
+
+
+
+    /**
+     * 点赞。状态为1
+     * @param likedUserId
+     * @param likedDynamicId
+     */
+    void saveLiked2Redis(Long likedDynamicId, Long likedUserId);
+
+    /**
+     * 取消点赞。将状态改变为0
+     * @param likedUserId
+     * @param likedDynamicId
+     */
+    void unlikeFromRedis(Long likedDynamicId, Long likedUserId);
+
+    /**
+     * 从Redis中删除一条点赞数据
+     * @param likedUserId
+     * @param likedDynamicId
+     */
+    void deleteLikedFromRedis(Long likedDynamicId, Long likedUserId);
+
+    /**
+     * 该动态的点赞数加1
+     * @param likedDynamicId
+     */
+    void incrementLikedCount(Long likedDynamicId);
+
+    /**
+     * 该动态的点赞数减1
+     * @param likedDynamicId
+     */
+    void decrementLikedCount(Long likedDynamicId);
+
+    /**
+     * 获取Redis中存储的所有动态点赞数据
+     * @return
+     */
+    List<YunDyLikes> getLikedDataFromRedis();
+
+    /**
+     * 获取Redis中存储的所有点赞数量
+     * @return
+     */
+    List<DyLikedCountDTO> getLikedCountFromRedis();
+
+    /**
+     * 将Redis里的点赞数据存入数据库中
+     */
+    void transLikedFromRedis2DB();
+
+    /**
+     * 将Redis中的点赞数量数据存入数据库
+     */
+    void transLikedCountFromRedis2DB();
 }

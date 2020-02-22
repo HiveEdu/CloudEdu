@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -23,6 +24,7 @@ import com.myedu.framework.web.domain.BaseEntity;
  * @author ruoyi
  */
 @ApiModel("用户实体")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

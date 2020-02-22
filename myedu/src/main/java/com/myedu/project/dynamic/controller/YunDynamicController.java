@@ -11,6 +11,7 @@ import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.file.FileUploadUtils;
 import com.myedu.framework.config.MyEduConfig;
 import com.myedu.framework.security.LoginUser;
+import com.myedu.project.dynamic.service.IYunDyLikesService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
@@ -41,7 +42,8 @@ public class YunDynamicController extends BaseController
 {
     @Autowired
     private IYunDynamicService yunDynamicService;
-
+    @Autowired
+    private IYunDyLikesService yunDyLikesService;
     /**
      * 查询云托管动态管理列表
      */
@@ -113,4 +115,34 @@ public class YunDynamicController extends BaseController
         return toAjax(yunDynamicService.deleteYunDynamicByIds(ids));
     }
 
+
+
+
+    /**
+     * 动态点赞
+     */
+    @PreAuthorize("@ss.hasPermi('dynamic:dynamic:like')")
+    @GetMapping(value = "/like/{id}")
+    public AjaxResult like(@PathVariable("id") Long id)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        //先把数据存到Redis里,再定时存回数据库
+        yunDyLikesService.saveLiked2Redis(id, SecurityUtils.getUserId());
+        yunDyLikesService.incrementLikedCount(id);
+        return ajax;
+    }
+
+    /**
+     * 动态取消点赞
+     */
+    @PreAuthorize("@ss.hasPermi('dynamic:dynamic:unlike')")
+    @GetMapping(value = "/unlike/{id}")
+    public AjaxResult unlike(@PathVariable("id") Long id)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        //先把数据存到Redis里,再定时存回数据库
+        yunDyLikesService.unlikeFromRedis(id, SecurityUtils.getUserId());
+        yunDyLikesService.decrementLikedCount(id);
+        return ajax;
+    }
 }

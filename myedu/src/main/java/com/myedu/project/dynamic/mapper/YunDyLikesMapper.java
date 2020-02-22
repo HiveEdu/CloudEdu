@@ -58,4 +58,11 @@ public interface YunDyLikesMapper
      * @return 结果
      */
     public int deleteYunDyLikesByIds(Long[] ids);
+
+    /*
+     * @Description :根据动态ID以及用用户id查询
+     * @Author : 梁少鹏
+     * @Date : 2020/2/22 13:03
+     */
+    public YunDyLikes getByDyIdAndUserId(Long dyId,Long createById);
 }

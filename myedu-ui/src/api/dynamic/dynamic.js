@@ -17,6 +17,22 @@ export function getDynamic(id) {
   })
 }
 
+//点赞
+export function like(id) {
+  return request({
+    url: '/dynamic/dynamic/like/' + id,
+    method: 'get'
+  })
+}
+
+//取消点赞
+export function unlike(id) {
+  return request({
+    url: '/dynamic/dynamic/unlike/' + id,
+    method: 'get'
+  })
+}
+
 // 新增云托管动态管理
 export function addDynamic(data) {
   return request({

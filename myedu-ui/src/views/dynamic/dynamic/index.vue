@@ -83,27 +83,53 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="用户" align="center" prop="createBy" />
       <el-table-column label="动态类型" align="center" prop="type" :formatter="typeFormat" />
+      <el-table-column label="点赞数" align="center" prop="likes" />
+      <el-table-column label="评论数" align="center" prop="comments" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column  label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['dynamic:dynamic:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['dynamic:dynamic:remove']"
-          >删除</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
+            <el-dropdown-menu slot="dropdown">
+              <el-button
+                size="mini"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['order:order:edit']"
+              >修改</el-button>
+              <br>
+              <el-button
+                style="margin-top: 10px"
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['order:order:remove']"
+              >删除</el-button>
+              <br >
+              <el-button
+                style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
+                size="mini"
+                type="success"
+                icon="el-icon-success"
+                @click="like(scope.row)"
+              >点赞</el-button>
+              <br >
+              <el-button
+                style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
+                size="mini"
+                type="success"
+                icon="el-icon-success"
+                @click="unlike(scope.row)"
+              >取消点赞</el-button>
+
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -187,7 +213,7 @@
 </template>
 
 <script>
-import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic } from "@/api/dynamic/dynamic";
+import { listDynamic, getDynamic, delDynamic, addDynamic, updateDynamic, exportDynamic,like,unlike} from "@/api/dynamic/dynamic";
 import { getToken } from '@/utils/auth'
 import { formatTime } from '@/utils/index'
 // 工具栏配置
@@ -368,6 +394,20 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!=1
       this.multiple = !selection.length
+    },
+    //点赞
+    like(row){
+      like(row.id).then(response => {
+        this.msgSuccess("点赞成功");
+        this.getList();
+      });
+    },
+    //取消点赞
+    unlike(row){
+      unlike(row.id).then(response => {
+        this.msgSuccess("取消点赞成功");
+        this.getList();
+      });
     },
     /** 新增按钮操作 */
     handleAdd() {
