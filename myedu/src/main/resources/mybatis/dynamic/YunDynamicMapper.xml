@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.dynamic.mapper.YunDynamicMapper">
     
-    <resultMap type="YunDynamic" id="YunDynamicResult">
+    <resultMap type="YunDynamicVo" id="YunDynamicResult">
         <result property="id"    column="id"    />
         <result property="content"    column="content"    />
         <result property="picture"    column="picture"    />
@@ -20,28 +20,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunDynamicVo">
-        select id, content, picture, type, likes, comments, create_by_id, create_by, create_time, update_by, update_time, del_flag from yun_dynamic
+        select yd.*,ydl.create_by_id as likeUserId,ydl.status,su.nick_name as nickName
+        from yun_dynamic yd left join  yun_dy_likes ydl on yd.id=ydl.dy_id
+        left join sys_user su on  su.user_id=ydl.create_by_id
     </sql>
 
     <select id="selectYunDynamicList" parameterType="YunDynamic" resultMap="YunDynamicResult">
         <include refid="selectYunDynamicVo"/>
         <where>  
-            <if test="type != null  and type != ''"> and type = #{type}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="type != null  and type != ''"> and yd.type = #{type}</if>
+            <if test="createById != null "> and yd.create_by_id = #{createById}</if>
+            <if test="createBy != null  and createBy != ''"> and yd.create_by = #{createBy}</if>
             <!--<if test="createTime != null "> and create_time = #{createTime}</if>-->
             <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-                and date_format(create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+                and date_format(yd.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
             </if>
             <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-                and date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+                and date_format(yd.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
             </if>
         </where>
     </select>
     
     <select id="selectYunDynamicById" parameterType="Long" resultMap="YunDynamicResult">
         <include refid="selectYunDynamicVo"/>
-        where id = #{id}
+        where yd.id = #{id}
     </select>
         
     <insert id="insertYunDynamic" parameterType="YunDynamic" useGeneratedKeys="true" keyProperty="id">

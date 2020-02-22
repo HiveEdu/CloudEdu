@@ -111,16 +111,18 @@
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['order:order:remove']"
               >删除</el-button>
-              <br >
+              <br v-if="scope.row.status==null||scope.row.status==0">
               <el-button
+                v-if="scope.row.status==null||scope.row.status==0"
                 style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
                 size="mini"
                 type="success"
                 icon="el-icon-success"
                 @click="like(scope.row)"
               >点赞</el-button>
-              <br >
+              <br v-if="scope.row.status==1">
               <el-button
+                v-if="scope.row.status==1"
                 style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
                 size="mini"
                 type="success"

@@ -1,6 +1,9 @@
 package com.myedu.project.dynamic.service;
 
+import com.myedu.project.dynamic.domain.YunDyLikes;
 import com.myedu.project.dynamic.domain.YunDynamic;
+import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +20,7 @@ public interface IYunDynamicService
      * @param id 云托管动态管理ID
      * @return 云托管动态管理
      */
-    public YunDynamic selectYunDynamicById(Long id);
+    public YunDynamicVo selectYunDynamicById(Long id);
 
     /**
      * 查询云托管动态管理列表
@@ -25,7 +28,7 @@ public interface IYunDynamicService
      * @param yunDynamic 云托管动态管理
      * @return 云托管动态管理集合
      */
-    public List<YunDynamic> selectYunDynamicList(YunDynamic yunDynamic);
+    public List<YunDynamicVo> selectYunDynamicList(YunDynamicVo yunDynamic);
 
     /**
      * 新增云托管动态管理
@@ -58,4 +61,6 @@ public interface IYunDynamicService
      * @return 结果
      */
     public int deleteYunDynamicById(Long id);
+
+
 }

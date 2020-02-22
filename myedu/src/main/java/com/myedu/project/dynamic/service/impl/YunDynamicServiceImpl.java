@@ -2,6 +2,7 @@ package com.myedu.project.dynamic.service.impl;
 
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.dynamic.mapper.YunDynamicMapper;
@@ -27,7 +28,7 @@ public class YunDynamicServiceImpl implements IYunDynamicService
      * @return 云托管动态管理
      */
     @Override
-    public YunDynamic selectYunDynamicById(Long id)
+    public YunDynamicVo selectYunDynamicById(Long id)
     {
         return yunDynamicMapper.selectYunDynamicById(id);
     }
@@ -39,7 +40,7 @@ public class YunDynamicServiceImpl implements IYunDynamicService
      * @return 云托管动态管理
      */
     @Override
-    public List<YunDynamic> selectYunDynamicList(YunDynamic yunDynamic)
+    public List<YunDynamicVo> selectYunDynamicList(YunDynamicVo yunDynamic)
     {
         return yunDynamicMapper.selectYunDynamicList(yunDynamic);
     }

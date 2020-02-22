@@ -175,7 +175,30 @@ public class YunDyLikesServiceImpl implements IYunDyLikesService
         }
         return list;
     }
-
+    @Override
+    public List<YunDyLikes> getLikedDataFromRedisList() {
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, ScanOptions.NONE);
+        List<YunDyLikes> list = new ArrayList<>();
+        while (cursor.hasNext()){
+            Map.Entry<Object, Object> entry = cursor.next();
+            System.out.println(entry.getKey());
+            String key = String.valueOf(entry.getKey());
+            //分离出 likedDynamicId ，likedUserId
+            String[] split = key.split("::");
+            System.out.println("split.length"+split.length);
+            if(split.length==2){
+                Long likedDynamicId = Long.valueOf(split[0]);
+                Long likedUserId = Long.valueOf(split[1]);
+                Integer value = (Integer) entry.getValue();
+                //组装成 YunDyLikes 对象
+                YunDyLikes yunDyLikes = new YunDyLikes(likedDynamicId, likedUserId, String.valueOf(value));
+                list.add(yunDyLikes);
+//                //存到 list 后从 Redis 中删除
+//                redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, key);
+            }
+        }
+        return list;
+    }
     @Override
     public List<DyLikedCountDTO> getLikedCountFromRedis()  {
         Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, ScanOptions.NONE);
@@ -189,6 +212,23 @@ public class YunDyLikesServiceImpl implements IYunDyLikesService
             list.add(dto);
             //从Redis中删除这条记录
             redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, map.getKey());
+        }
+        return list;
+    }
+
+    @Override
+    public List<DyLikedCountDTO> getLikedCountFromRedisList()  {
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, ScanOptions.NONE);
+        List<DyLikedCountDTO> list = new ArrayList<>();
+        while (cursor.hasNext()){
+            Map.Entry<Object, Object> map = cursor.next();
+            //将点赞数量存储在 DyLikedCountDTO
+            System.out.println("map.getKey()____"+map.getKey());
+            String key = String.valueOf(map.getKey());
+            DyLikedCountDTO dto = new DyLikedCountDTO(Long.valueOf(key),(Integer) map.getValue());
+            list.add(dto);
+//            //从Redis中删除这条记录
+//            redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, map.getKey());
         }
         return list;
     }

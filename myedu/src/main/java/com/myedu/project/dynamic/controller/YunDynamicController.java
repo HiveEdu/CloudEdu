@@ -3,14 +3,20 @@ package com.myedu.project.dynamic.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.file.FileUploadUtils;
 import com.myedu.framework.config.MyEduConfig;
 import com.myedu.framework.security.LoginUser;
+import com.myedu.project.dynamic.domain.DyLikedCountDTO;
+import com.myedu.project.dynamic.domain.YunDyLikes;
+import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
 import com.myedu.project.dynamic.service.IYunDyLikesService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +55,37 @@ public class YunDynamicController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('dynamic:dynamic:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunDynamic yunDynamic)
+    public TableDataInfo list(YunDynamicVo yunDynamic)
     {
         startPage();
-        List<YunDynamic> list = yunDynamicService.selectYunDynamicList(yunDynamic);
-        return getDataTable(list);
+        List<YunDynamicVo> list = yunDynamicService.selectYunDynamicList(yunDynamic);
+        List<YunDynamicVo> listNew =new ArrayList<>();
+        //将redis中的数据与数据库中数据相结合
+        list.stream().forEach(p ->{
+            List<YunDyLikes> yunDyLikes = yunDyLikesService.getLikedDataFromRedisList();
+            for (YunDyLikes like : yunDyLikes) {
+                YunDyLikes ul = yunDyLikesService.getByDyIdAndUserId(like.getDyId(), like.getCreateById());
+                if (ul != null) {
+                    if(p.getId()==ul.getDyId()){
+                        p.setStatus(like.getStatus());
+                    }
+                }
+            }
+            List<DyLikedCountDTO> dyLikedCountDTOS = yunDyLikesService.getLikedCountFromRedisList();
+            for (DyLikedCountDTO dto : dyLikedCountDTOS) {
+                YunDynamicVo yunDynamicVo = yunDynamicService.selectYunDynamicById(dto.getId());
+                //点赞数量属于无关紧要的操作，出错无需抛异常
+                if (yunDynamicVo != null) {
+                    if(yunDynamicVo.getLikes()==null){yunDynamicVo.setLikes((long) 0);}
+                    Long likeNum = yunDynamicVo.getLikes() + dto.getCount();
+                    if(p.getId()==yunDynamicVo.getId()){
+                        p.setLikes(likeNum);
+                    }
+                }
+            }
+            listNew.add(p);
+        });
+        return getDataTable(listNew);
     }
 
     /**
@@ -62,10 +94,10 @@ public class YunDynamicController extends BaseController
     @PreAuthorize("@ss.hasPermi('dynamic:dynamic:export')")
     @Log(title = "云托管动态管理", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunDynamic yunDynamic)
+    public AjaxResult export(YunDynamicVo yunDynamic)
     {
-        List<YunDynamic> list = yunDynamicService.selectYunDynamicList(yunDynamic);
-        ExcelUtil<YunDynamic> util = new ExcelUtil<YunDynamic>(YunDynamic.class);
+        List<YunDynamicVo> list = yunDynamicService.selectYunDynamicList(yunDynamic);
+        ExcelUtil<YunDynamicVo> util = new ExcelUtil<YunDynamicVo>(YunDynamicVo.class);
         return util.exportExcel(list, "dynamic");
     }
 

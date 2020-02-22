@@ -103,12 +103,21 @@ public interface IYunDyLikesService
      * @return
      */
     List<YunDyLikes> getLikedDataFromRedis();
-
+    /**
+     * 获取Redis中存储的所有动态点赞数据(列表展示用)
+     * @return
+     */
+    List<YunDyLikes> getLikedDataFromRedisList();
     /**
      * 获取Redis中存储的所有点赞数量
      * @return
      */
     List<DyLikedCountDTO> getLikedCountFromRedis();
+    /**
+     * 获取Redis中存储的所有点赞数量(列表展示用)
+     * @return
+     */
+    List<DyLikedCountDTO> getLikedCountFromRedisList();
 
     /**
      * 将Redis里的点赞数据存入数据库中
@@ -119,4 +128,6 @@ public interface IYunDyLikesService
      * 将Redis中的点赞数量数据存入数据库
      */
     void transLikedCountFromRedis2DB();
+
+    YunDyLikes getByDyIdAndUserId(Long dyId,Long createById);
 }
