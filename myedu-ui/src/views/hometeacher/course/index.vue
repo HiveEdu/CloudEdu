@@ -419,7 +419,7 @@ export default {
         region: undefined
       };
       this.resetForm("form");
-    },
+},
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;

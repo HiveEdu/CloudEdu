@@ -51,6 +51,7 @@
         },
       methods: {
         handleClose() {
+          this.resetForm("form");
           this.$emit('closeCommentModal', false);
         },
         /** 提交按钮 */
@@ -60,6 +61,7 @@
               comment(this.form).then(response => {
                 if (response.code === 200) {
                   this.msgSuccess("评论成功");
+                  this.resetForm("form");
                   this.$emit('closeCommentModal', false);
                 } else {
                   this.msgError(response.msg);
