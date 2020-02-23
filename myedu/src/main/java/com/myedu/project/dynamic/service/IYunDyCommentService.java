@@ -58,4 +58,6 @@ public interface IYunDyCommentService
      * @return 结果
      */
     public int deleteYunDyCommentById(Long id);
+
+    public int deleteYunDyCommentByDyId(Long dyId);
 }

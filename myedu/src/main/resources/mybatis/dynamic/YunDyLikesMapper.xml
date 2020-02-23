@@ -77,10 +77,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <delete id="deleteYunDyLikesByDyId" parameterType="Long">
+        delete from yun_dy_likes where dy_id = #{dyId}
+    </delete>
+
     <delete id="deleteYunDyLikesById" parameterType="Long">
         delete from yun_dy_likes where id = #{id}
     </delete>
-
     <delete id="deleteYunDyLikesByIds" parameterType="String">
         delete from yun_dy_likes where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">

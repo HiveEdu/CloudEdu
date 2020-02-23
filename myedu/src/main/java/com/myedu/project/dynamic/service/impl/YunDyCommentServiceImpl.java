@@ -93,4 +93,9 @@ public class YunDyCommentServiceImpl implements IYunDyCommentService
     {
         return yunDyCommentMapper.deleteYunDyCommentById(id);
     }
+
+    @Override
+    public int deleteYunDyCommentByDyId(Long dyId) {
+        return yunDyCommentMapper.deleteYunDyCommentByDyId(dyId);
+    }
 }

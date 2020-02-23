@@ -6,9 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collector;
 
 import com.myedu.common.utils.DateUtils;
+import com.myedu.common.utils.DyRedisKeyUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.file.FileUploadUtils;
@@ -20,6 +22,9 @@ import com.myedu.project.dynamic.domain.YunDyLikes;
 import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
 import com.myedu.project.dynamic.service.IYunDyCommentService;
 import com.myedu.project.dynamic.service.IYunDyLikesService;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
@@ -54,6 +59,8 @@ public class YunDynamicController extends BaseController
     private IYunDyLikesService yunDyLikesService;
     @Autowired
     private IYunDyCommentService yunDyCommentService;
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 查询云托管动态管理列表
      */
@@ -145,6 +152,34 @@ public class YunDynamicController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
+        for (int i = 0; i < ids.length; i++) {
+            yunDyLikesService.deleteYunDyLikesByDyId(ids[i]);
+            yunDyCommentService.deleteYunDyCommentByDyId(ids[i]);
+            //删除redis中缓存的点赞数据
+            Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, ScanOptions.NONE);
+            while (cursor.hasNext()){
+                Map.Entry<Object, Object> entry = cursor.next();
+                String key = String.valueOf(entry.getKey());
+                String[] split = key.split("::");
+                System.out.println("split.length"+split.length);
+                Long likedDynamicId = Long.valueOf(split[0]);
+                //存到 list 后从 Redis 中删除
+                if(ids[i]==likedDynamicId){
+                    redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, key);
+                }
+            }
+            Cursor<Map.Entry<Object, Object>> cursor2 = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, ScanOptions.NONE);
+            while (cursor2.hasNext()){
+                Map.Entry<Object, Object> map = cursor2.next();
+                //将点赞数量存储在 DyLikedCountDTO
+                System.out.println("map.getKey()____"+map.getKey());
+                String key = String.valueOf(map.getKey());
+                if(ids[i]==Long.valueOf(key)){
+                    //从Redis中删除这条记录
+                    redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, map.getKey());
+                }
+            }
+        }
         return toAjax(yunDynamicService.deleteYunDynamicByIds(ids));
     }
 

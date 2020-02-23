@@ -130,4 +130,6 @@ public interface IYunDyLikesService
     void transLikedCountFromRedis2DB();
 
     YunDyLikes getByDyIdAndUserId(Long dyId,Long createById);
+
+    public int deleteYunDyLikesByDyId(Long dyId);
 }

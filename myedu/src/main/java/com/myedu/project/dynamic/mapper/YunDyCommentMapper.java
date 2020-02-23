@@ -51,6 +51,7 @@ public interface YunDyCommentMapper
      */
     public int deleteYunDyCommentById(Long id);
 
+    public int deleteYunDyCommentByDyId(Long dyId);
     /**
      * 批量删除动态评论
      * 

@@ -51,6 +51,7 @@ public interface YunDyLikesMapper
      */
     public int deleteYunDyLikesById(Long id);
 
+    public int deleteYunDyLikesByDyId(Long dyId);
     /**
      * 批量删除动态点赞
      * 

@@ -235,6 +235,12 @@ public class YunDyLikesServiceImpl implements IYunDyLikesService
     public  YunDyLikes getByDyIdAndUserId(Long dyId,Long createById){
        return  yunDyLikesMapper.getByDyIdAndUserId(dyId,createById);
     }
+
+    @Override
+    public int deleteYunDyLikesByDyId(Long dyId) {
+        return yunDyLikesMapper.deleteYunDyLikesByDyId(dyId);
+    }
+
     @Override
     public void transLikedFromRedis2DB() {
         List<YunDyLikes> list = this.getLikedDataFromRedis();
