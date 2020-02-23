@@ -83,8 +83,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="用户" align="center" prop="createBy" />
       <el-table-column label="动态类型" align="center" prop="type" :formatter="typeFormat" />
-      <el-table-column label="点赞数" align="center" prop="likes" />
-      <el-table-column label="评论数" align="center" prop="comments" />
+      <el-table-column label="点赞数" align="center" prop="likes"  >
+        <template slot-scope="scope">
+          <span>{{ scope.row.likes }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="评论数" align="center" prop="comments" >
+        <template slot-scope="scope">
+          <span>{{ scope.row.comments }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTimeBefore(scope.row.createTime) }}</span>

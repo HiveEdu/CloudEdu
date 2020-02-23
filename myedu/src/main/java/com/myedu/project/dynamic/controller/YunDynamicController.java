@@ -68,11 +68,8 @@ public class YunDynamicController extends BaseController
         list.stream().forEach(p ->{
             List<YunDyLikes> yunDyLikes = yunDyLikesService.getLikedDataFromRedisList();
             for (YunDyLikes like : yunDyLikes) {
-                YunDyLikes ul = yunDyLikesService.getByDyIdAndUserId(like.getDyId(), like.getCreateById());
-                if (ul != null) {
-                    if(p.getId()==ul.getDyId()){
-                        p.setStatus(like.getStatus());
-                    }
+                if(p.getId()==like.getDyId()){
+                    p.setStatus(like.getStatus());
                 }
             }
             List<DyLikedCountDTO> dyLikedCountDTOS = yunDyLikesService.getLikedCountFromRedisList();
