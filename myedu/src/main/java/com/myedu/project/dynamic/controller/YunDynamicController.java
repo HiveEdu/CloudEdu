@@ -15,8 +15,10 @@ import com.myedu.common.utils.file.FileUploadUtils;
 import com.myedu.framework.config.MyEduConfig;
 import com.myedu.framework.security.LoginUser;
 import com.myedu.project.dynamic.domain.DyLikedCountDTO;
+import com.myedu.project.dynamic.domain.YunDyComment;
 import com.myedu.project.dynamic.domain.YunDyLikes;
 import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
+import com.myedu.project.dynamic.service.IYunDyCommentService;
 import com.myedu.project.dynamic.service.IYunDyLikesService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,8 @@ public class YunDynamicController extends BaseController
     private IYunDynamicService yunDynamicService;
     @Autowired
     private IYunDyLikesService yunDyLikesService;
+    @Autowired
+    private IYunDyCommentService yunDyCommentService;
     /**
      * 查询云托管动态管理列表
      */
@@ -176,5 +180,23 @@ public class YunDynamicController extends BaseController
         yunDyLikesService.unlikeFromRedis(id, SecurityUtils.getUserId());
         yunDyLikesService.decrementLikedCount(id);
         return ajax;
+    }
+
+
+    /**
+     * 新增云托管动态管理
+     */
+    @PreAuthorize("@ss.hasPermi('dynamic:dynamic:comment')")
+    @Log(title = "云托管动态管理", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/comment")
+    public AjaxResult comment(@RequestBody YunDyComment yunDyComment)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        yunDyComment.setCreateById(SecurityUtils.getUserId());
+        yunDyComment.setCreateBy(SecurityUtils.getUsername());
+        yunDyCommentService.insertYunDyComment(yunDyComment);
+        YunDynamic  yunDynamic=yunDynamicService.selectYunDynamicById(yunDyComment.getDyId());
+        yunDynamic.setComments(yunDynamic.getComments()+1);
+        return toAjax(yunDynamicService.updateYunDynamic(yunDynamic));
     }
 }

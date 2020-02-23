@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="80px">
         <el-form-item label="类型" prop="type">
         <el-select v-model="queryParams.type" placeholder="请选择动态类型" clearable size="small">
           <el-option
@@ -117,7 +117,7 @@
                 style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
                 size="mini"
                 type="success"
-                icon="el-icon-success"
+                icon="el-icon-thumb"
                 @click="like(scope.row)"
               >点赞</el-button>
               <br v-if="scope.row.status==1">
@@ -126,10 +126,17 @@
                 style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
                 size="mini"
                 type="success"
-                icon="el-icon-success"
+                icon="el-icon-thumb"
                 @click="unlike(scope.row)"
               >取消点赞</el-button>
-
+              <br>
+              <el-button
+                style="margin-top: 10px;background-color: rgba(249, 20, 179, 0.98);border-color:rgb(63, 18, 241);"
+                size="mini"
+                type="success"
+                icon="el-icon-notebook-2"
+                @click="openComment(scope.row)"
+              >评论</el-button>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -143,7 +150,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
+    <!-- 评论页面-->
+    <CommentModal ref="CommentModal" :comment="comment" :currentData="currentData" @closeCommentModal="closeCommentModal"></CommentModal>
     <!-- 添加或修改云托管动态管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="70%">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -239,6 +247,7 @@ import Quill from 'quill'
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
+import CommentModal from './modal/CommentModal'
 Quill.register('modules/imageResize', imageResize)
 // Quill.register('modules/imageDrop', ImageDrop);
 export default {
@@ -253,9 +262,11 @@ export default {
       default: 4000 //kb
     }
   },
-  components: {quillEditor},
+  components: {quillEditor,CommentModal},
   data() {
     return {
+      comment:false,
+      currentData:null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -339,6 +350,16 @@ export default {
     });
   },
   methods: {
+    //打开评论页面
+    openComment(row){
+      this.currentData=row;
+      this.comment=true;
+    },
+    //关闭评论页面
+    closeCommentModal(){
+      this.comment=false;
+      this.getList();
+    },
     parseTimeBefore(e){
       return formatTime((new Date(e)).getTime() / 1000);
     },

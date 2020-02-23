@@ -33,6 +33,14 @@ export function unlike(id) {
   })
 }
 
+//评论
+export function comment(data) {
+  return request({
+    url: '/dynamic/dynamic/comment',
+    method: 'post',
+    data: data
+  })
+}
 // 新增云托管动态管理
 export function addDynamic(data) {
   return request({
