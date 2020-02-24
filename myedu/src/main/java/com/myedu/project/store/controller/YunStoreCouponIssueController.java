@@ -1,6 +1,8 @@
 package com.myedu.project.store.controller;
 
 import java.util.List;
+
+import com.myedu.project.store.domain.vo.YunStoreCouponIssueVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,10 +40,10 @@ public class YunStoreCouponIssueController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('store:publishCoupon:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunStoreCouponIssue yunStoreCouponIssue)
+    public TableDataInfo list(YunStoreCouponIssueVo yunStoreCouponIssue)
     {
         startPage();
-        List<YunStoreCouponIssue> list = yunStoreCouponIssueService.selectYunStoreCouponIssueList(yunStoreCouponIssue);
+        List<YunStoreCouponIssueVo> list = yunStoreCouponIssueService.selectYunStoreCouponIssueList(yunStoreCouponIssue);
         return getDataTable(list);
     }
 
@@ -51,10 +53,10 @@ public class YunStoreCouponIssueController extends BaseController
     @PreAuthorize("@ss.hasPermi('store:publishCoupon:export')")
     @Log(title = "店铺优惠券发布", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunStoreCouponIssue yunStoreCouponIssue)
+    public AjaxResult export(YunStoreCouponIssueVo yunStoreCouponIssue)
     {
-        List<YunStoreCouponIssue> list = yunStoreCouponIssueService.selectYunStoreCouponIssueList(yunStoreCouponIssue);
-        ExcelUtil<YunStoreCouponIssue> util = new ExcelUtil<YunStoreCouponIssue>(YunStoreCouponIssue.class);
+        List<YunStoreCouponIssueVo> list = yunStoreCouponIssueService.selectYunStoreCouponIssueList(yunStoreCouponIssue);
+        ExcelUtil<YunStoreCouponIssueVo> util = new ExcelUtil<YunStoreCouponIssueVo>(YunStoreCouponIssueVo.class);
         return util.exportExcel(list, "issue");
     }
 

@@ -3,6 +3,7 @@ package com.myedu.project.store.service.impl;
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.store.domain.vo.YunStoreCouponIssueVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.store.mapper.YunStoreCouponIssueMapper;
@@ -28,7 +29,7 @@ public class YunStoreCouponIssueServiceImpl implements IYunStoreCouponIssueServi
      * @return 店铺优惠券发布
      */
     @Override
-    public YunStoreCouponIssue selectYunStoreCouponIssueById(Integer id)
+    public YunStoreCouponIssueVo selectYunStoreCouponIssueById(Integer id)
     {
         return yunStoreCouponIssueMapper.selectYunStoreCouponIssueById(id);
     }
@@ -40,7 +41,7 @@ public class YunStoreCouponIssueServiceImpl implements IYunStoreCouponIssueServi
      * @return 店铺优惠券发布
      */
     @Override
-    public List<YunStoreCouponIssue> selectYunStoreCouponIssueList(YunStoreCouponIssue yunStoreCouponIssue)
+    public List<YunStoreCouponIssueVo> selectYunStoreCouponIssueList(YunStoreCouponIssueVo yunStoreCouponIssue)
     {
         return yunStoreCouponIssueMapper.selectYunStoreCouponIssueList(yunStoreCouponIssue);
     }

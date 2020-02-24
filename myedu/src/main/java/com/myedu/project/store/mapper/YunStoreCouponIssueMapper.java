@@ -1,6 +1,8 @@
 package com.myedu.project.store.mapper;
 
 import com.myedu.project.store.domain.YunStoreCouponIssue;
+import com.myedu.project.store.domain.vo.YunStoreCouponIssueVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface YunStoreCouponIssueMapper
      * @param id 店铺优惠券发布ID
      * @return 店铺优惠券发布
      */
-    public YunStoreCouponIssue selectYunStoreCouponIssueById(Integer id);
+    public YunStoreCouponIssueVo selectYunStoreCouponIssueById(Integer id);
 
     /**
      * 查询店铺优惠券发布列表
@@ -25,7 +27,7 @@ public interface YunStoreCouponIssueMapper
      * @param yunStoreCouponIssue 店铺优惠券发布
      * @return 店铺优惠券发布集合
      */
-    public List<YunStoreCouponIssue> selectYunStoreCouponIssueList(YunStoreCouponIssue yunStoreCouponIssue);
+    public List<YunStoreCouponIssueVo> selectYunStoreCouponIssueList(YunStoreCouponIssueVo yunStoreCouponIssue);
 
     /**
      * 新增店铺优惠券发布

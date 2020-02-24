@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.store.mapper.YunStoreCouponIssueMapper">
     
-    <resultMap type="YunStoreCouponIssue" id="YunStoreCouponIssueResult">
+    <resultMap type="YunStoreCouponIssueVo" id="YunStoreCouponIssueResult">
         <result property="id"    column="id"    />
         <result property="cid"    column="cid"    />
         <result property="cname"    column="cname"    />
@@ -26,33 +26,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStoreCouponIssueVo">
-        select id, cid, cname, lead_start_time, lead_end_time, total_count, remain_count, is_permanent, status, end_time_date, start_time_date, create_by, create_time, update_by, update_time, del_flag, create_by_id,lead_count from yun_store_coupon_issue
+        select ysci.*,
+        yscr.status as receiveStatus
+        from yun_store_coupon_issue ysci left join  yun_store_coupon_receive yscr on ysci.id=yscr.sci_id
     </sql>
 
     <select id="selectYunStoreCouponIssueList" parameterType="YunStoreCouponIssue" resultMap="YunStoreCouponIssueResult">
         <include refid="selectYunStoreCouponIssueVo"/>
         <where>  
-            <if test="cid != null "> and cid = #{cid}</if>
-            <if test="cname != null  and cname != ''"> and cname like concat('%', #{cname}, '%')</if>
-            <if test="leadStartTime != null "> and lead_start_time = #{leadStartTime}</if>
-            <if test="leadEndTime != null "> and lead_end_time = #{leadEndTime}</if>
-            <if test="totalCount != null "> and total_count = #{totalCount}</if>
-            <if test="remainCount != null "> and remain_count = #{remainCount}</if>
-            <if test="isPermanent != null "> and is_permanent = #{isPermanent}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="endTimeDate != null "> and end_time_date = #{endTimeDate}</if>
-            <if test="startTimeDate != null "> and start_time_date = #{startTimeDate}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="createTime != null "> and create_time = #{createTime}</if>
-            <if test="delFlag != null  and delFlag != ''"> and del_flag = #{delFlag}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
-            <if test="leadCount != null "> and lead_count = #{leadCount}</if>
+            <if test="cid != null "> and ysci.cid = #{cid}</if>
+            <if test="cname != null  and cname != ''"> and ysci.cname like concat('%', #{cname}, '%')</if>
+            <if test="leadStartTime != null "> and ysci.lead_start_time = #{leadStartTime}</if>
+            <if test="leadEndTime != null "> and ysci.lead_end_time = #{leadEndTime}</if>
+            <if test="totalCount != null "> and ysci.total_count = #{totalCount}</if>
+            <if test="remainCount != null "> and ysci.remain_count = #{remainCount}</if>
+            <if test="isPermanent != null "> and ysci.is_permanent = #{isPermanent}</if>
+            <if test="status != null "> and ysci.status = #{status}</if>
+            <if test="endTimeDate != null "> and ysci.end_time_date = #{endTimeDate}</if>
+            <if test="startTimeDate != null "> and ysci.start_time_date = #{startTimeDate}</if>
+            <if test="createBy != null  and createBy != ''"> and ysci.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and ysci.create_time = #{createTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and ysci.del_flag = #{delFlag}</if>
+            <if test="createById != null "> and ysci.create_by_id = #{createById}</if>
+            <if test="leadCount != null "> and ysci.lead_count = #{leadCount}</if>
         </where>
     </select>
     
     <select id="selectYunStoreCouponIssueById" parameterType="Integer" resultMap="YunStoreCouponIssueResult">
         <include refid="selectYunStoreCouponIssueVo"/>
-        where id = #{id}
+        where ysci.id = #{id}
     </select>
         
     <insert id="insertYunStoreCouponIssue" parameterType="YunStoreCouponIssue" useGeneratedKeys="true" keyProperty="id">
