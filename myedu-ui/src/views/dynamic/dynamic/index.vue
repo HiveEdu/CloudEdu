@@ -100,6 +100,7 @@
       </el-table-column>
       <el-table-column  label="操作" width="200" align="center">
         <template slot-scope="scope">
+          <el-button  size="mini" type="primary"  @click="openDatail(scope.row)">详情</el-button>
           <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
             <el-dropdown-menu slot="dropdown">
@@ -158,6 +159,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+     <!--课程详情-->
+    <dyDetailModal ref="dyDetailModal" :dyDetail="dyDetail" :currentData="currentData" @closeDetail="closeDetail"></dyDetailModal>
     <!-- 评论页面-->
     <CommentModal ref="CommentModal" :comment="comment" :currentData="currentData" @closeCommentModal="closeCommentModal"></CommentModal>
     <!-- 添加或修改云托管动态管理对话框 -->
@@ -256,6 +259,7 @@ import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import CommentModal from './modal/CommentModal'
+import dyDetailModal from './modal/dyDetailModal'
 Quill.register('modules/imageResize', imageResize)
 // Quill.register('modules/imageDrop', ImageDrop);
 export default {
@@ -270,9 +274,10 @@ export default {
       default: 4000 //kb
     }
   },
-  components: {quillEditor,CommentModal},
+  components: {quillEditor,CommentModal,dyDetailModal},
   data() {
     return {
+      dyDetail:false,
       comment:false,
       currentData:null,
       // 遮罩层
@@ -358,6 +363,15 @@ export default {
     });
   },
   methods: {
+    //打开动态详情页面
+    openDatail(row){
+      this.currentData=row;
+      this.dyDetail=true;
+    },
+    //关闭动态详情页面
+    closeDetail(){
+      this.dyDetail=false;
+    },
     //打开评论页面
     openComment(row){
       this.currentData=row;
