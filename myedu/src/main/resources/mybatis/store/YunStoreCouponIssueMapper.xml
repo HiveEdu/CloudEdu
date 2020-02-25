@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectYunStoreCouponIssueById" parameterType="Integer" resultMap="YunStoreCouponIssueResult">
+    <select id="selectYunStoreCouponIssueById" parameterType="Long" resultMap="YunStoreCouponIssueResult">
         <include refid="selectYunStoreCouponIssueVo"/>
         where ysci.id = #{id}
     </select>
@@ -123,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteYunStoreCouponIssueById" parameterType="Integer">
+    <delete id="deleteYunStoreCouponIssueById" parameterType="Long">
         delete from yun_store_coupon_issue where id = #{id}
     </delete>
 

@@ -90,9 +90,9 @@
         </template>
       </el-table-column>
       <el-table-column label="限量" align="center" prop="isPermanent" :formatter="isPermanentFormat"/>
-      <el-table-column label="优惠券领取数量" align="center" prop="totalCount" />
+      <el-table-column label="优惠券总数量" align="center" prop="totalCount" />
       <el-table-column label="优惠券剩余领取数量" align="center" prop="remainCount" />
-      <el-table-column label="优惠券剩已取数量" align="center" prop="leadCount" />
+      <el-table-column label="优惠券剩领取数量" align="center" prop="leadCount" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -100,22 +100,40 @@
           <span>{{ parseTimeBefore(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['store:issue:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['store:issue:remove']"
-          >删除</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
+            <el-dropdown-menu slot="dropdown">
+              <el-button
+                size="mini"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['store:issue:edit']"
+                style="margin-top: 10px"
+              >修改</el-button>
+              <br>
+              <el-button
+                v-if="scope.row.receiveStatus==null"
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['store:issue:remove']"
+                style="margin-top: 10px"
+              >删除</el-button>
+              <br>
+              <el-button
+                v-if="scope.row.receiveStatus==null"
+                size="mini"
+                type="danger"
+                icon="el-icon-notebook-2"
+                @click="receive(scope.row)"
+                style="margin-top: 10px;background-color: rgba(249, 20, 179, 0.98);border-color:rgb(63, 18, 241);"
+              >领用</el-button>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -150,7 +168,7 @@
 </template>
 
 <script>
-import { listIssue, getIssue, delIssue, addIssue, updateIssue, exportIssue } from "@/api/store/couponIssue";
+import { listIssue, getIssue, delIssue, addIssue, updateIssue, exportIssue,receive } from "@/api/store/couponIssue";
 import { formatTime } from '@/utils/index'
 export default {
   data() {
@@ -330,6 +348,18 @@ export default {
           this.getList();
           this.msgSuccess("删除成功");
         }).catch(function() {});
+    },
+    receive(row){
+      const id = row.id || this.ids;
+      receive(id).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess("领用成功");
+          this.getList();
+        }else{
+          this.msgSuccess(response.msg);
+          this.getList();
+        }
+      });
     },
     /** 导出按钮操作 */
     handleExport() {

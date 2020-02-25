@@ -29,7 +29,7 @@ public class YunStoreCouponIssueServiceImpl implements IYunStoreCouponIssueServi
      * @return 店铺优惠券发布
      */
     @Override
-    public YunStoreCouponIssueVo selectYunStoreCouponIssueById(Integer id)
+    public YunStoreCouponIssueVo selectYunStoreCouponIssueById(Long id)
     {
         return yunStoreCouponIssueMapper.selectYunStoreCouponIssueById(id);
     }

@@ -8,18 +8,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="sciId"    column="sci_id"    />
         <result property="createBy"    column="create_by"    />
+        <result property="createById"    column="create_by_id"    />
         <result property="createTime"    column="create_time"    />
         <result property="status"    column="status"    />
     </resultMap>
 
     <sql id="selectYunStoreCouponReceiveVo">
-        select id, sci_id, create_by, create_time, status from yun_store_coupon_receive
+        select id, sci_id, create_by,create_by_id,  create_time, status from yun_store_coupon_receive
     </sql>
 
     <select id="selectYunStoreCouponReceiveList" parameterType="YunStoreCouponReceive" resultMap="YunStoreCouponReceiveResult">
         <include refid="selectYunStoreCouponReceiveVo"/>
         <where>  
             <if test="sciId != null "> and sci_id = #{sciId}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
             <if test="createBy != null "> and create_by = #{createBy}</if>
             <if test="createTime != null "> and create_time = #{createTime}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
@@ -36,12 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sciId != null ">sci_id,</if>
             <if test="createBy != null ">create_by,</if>
+            <if test="createById != null ">create_by_id,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="status != null  and status != ''">status,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="sciId != null ">#{sciId},</if>
             <if test="createBy != null ">#{createBy},</if>
+            <if test="createById != null ">#{createById},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="status != null  and status != ''">#{status},</if>
          </trim>
@@ -52,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="sciId != null ">sci_id = #{sciId},</if>
             <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="status != null  and status != ''">status = #{status},</if>
         </trim>

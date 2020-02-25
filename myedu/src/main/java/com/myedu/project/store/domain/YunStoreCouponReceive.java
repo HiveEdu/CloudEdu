@@ -25,6 +25,8 @@ public class YunStoreCouponReceive extends BaseEntity
     @Excel(name = "0未使用1已使用")
     private String status;
 
+    @Excel(name = "领取用户id")
+    private Long  createById;
     public void setId(Long id) 
     {
         this.id = id;
@@ -53,6 +55,14 @@ public class YunStoreCouponReceive extends BaseEntity
         return status;
     }
 
+    public Long getCreateById() {
+        return createById;
+    }
+
+    public void setCreateById(Long createById) {
+        this.createById = createById;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -61,6 +71,7 @@ public class YunStoreCouponReceive extends BaseEntity
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("status", getStatus())
+                .append("createById", getCreateById())
             .toString();
     }
 }

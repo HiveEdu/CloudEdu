@@ -50,16 +50,16 @@ public class YunStoreCouponIssue extends BaseEntity
     @Excel(name = "是否限量")
     private String isPermanent;
 
-    /** 1 正常 0 未开启 -1 已无效 */
-    @Excel(name = "1 正常 0 未开启 -1 已无效")
+    /** 1 开启 2 关闭 3 已无效*/
+    @Excel(name = "1 开启 2 关闭 3 已无效")
     private String status;
 
     /** $column.columnComment */
-    @Excel(name = "1 正常 0 未开启 -1 已无效", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTimeDate;
 
     /** $column.columnComment */
-    @Excel(name = "1 正常 0 未开启 -1 已无效", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date startTimeDate;
 
     /** 删除标志（0代表存在 1代表删除） */

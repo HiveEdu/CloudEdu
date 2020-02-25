@@ -19,7 +19,7 @@ public interface IYunStoreCouponIssueService
      * @param id 店铺优惠券发布ID
      * @return 店铺优惠券发布
      */
-    public YunStoreCouponIssueVo selectYunStoreCouponIssueById(Integer id);
+    public YunStoreCouponIssueVo selectYunStoreCouponIssueById(Long id);
 
     /**
      * 查询店铺优惠券发布列表

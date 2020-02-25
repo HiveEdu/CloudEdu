@@ -51,3 +51,10 @@ export function exportIssue(query) {
     params: query
   })
 }
+//领用优惠券
+export function receive(id) {
+  return request({
+    url: '/store/publishCoupon/receive/' + id,
+    method: 'get'
+  })
+}

@@ -1,8 +1,14 @@
 package com.myedu.project.store.controller;
 
+import java.util.Date;
 import java.util.List;
 
+import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.store.domain.YunStoreCouponReceive;
 import com.myedu.project.store.domain.vo.YunStoreCouponIssueVo;
+import com.myedu.project.store.enums.CouponIssueStatus;
+import com.myedu.project.store.enums.receiveStatus;
+import com.myedu.project.store.service.IYunStoreCouponReceiveService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +41,9 @@ public class YunStoreCouponIssueController extends BaseController
     @Autowired
     private IYunStoreCouponIssueService yunStoreCouponIssueService;
 
+    @Autowired
+    private IYunStoreCouponReceiveService yunStoreCouponReceiveService;
+
     /**
      * 查询店铺优惠券发布列表
      */
@@ -65,9 +74,48 @@ public class YunStoreCouponIssueController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('store:publishCoupon:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Integer id)
+    public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return AjaxResult.success(yunStoreCouponIssueService.selectYunStoreCouponIssueById(id));
+    }
+
+    /**
+     * 领用店铺优惠券
+     */
+    @PreAuthorize("@ss.hasPermi('store:publishCoupon:receive')")
+    @GetMapping(value = "/receive/{id}")
+    public AjaxResult receive(@PathVariable("id") Long id)
+    {
+        YunStoreCouponIssue yunStoreCouponIssue=yunStoreCouponIssueService.selectYunStoreCouponIssueById(id);
+        if(yunStoreCouponIssue.getStatus().equals(CouponIssueStatus.CLOSE.getCode())){
+            return AjaxResult.error(500,"此优惠卷未开启");
+        }else if(yunStoreCouponIssue.getStatus().equals(CouponIssueStatus.INVA.getCode())){
+            return AjaxResult.error(500,"此优惠卷已失效");
+        }else if(yunStoreCouponIssue.getLeadStartTime().getTime()>new Date().getTime()){
+            return AjaxResult.error(500,"此优惠卷开始时间还未到");
+        }else if(yunStoreCouponIssue.getLeadEndTime().getTime()<new Date().getTime()){
+            return AjaxResult.error(500,"此优惠卷已经过期");
+        }else if(yunStoreCouponIssue.getIsPermanent().equals("0")&&yunStoreCouponIssue.getTotalCount()==0){
+            return AjaxResult.error(500,"此优惠卷已经领取完毕");//0是限量1不限量
+        }else{
+            YunStoreCouponReceive yunStoreCouponReceive=new YunStoreCouponReceive();
+            yunStoreCouponReceive.setSciId(id);
+            yunStoreCouponReceive.setCreateById(SecurityUtils.getUserId());
+            yunStoreCouponReceive.setCreateBy(SecurityUtils.getUsername());
+            yunStoreCouponReceive.setCreateTime(new Date());
+            yunStoreCouponReceive.setStatus(receiveStatus.STORE.getCode());//未使用
+            int row= yunStoreCouponReceiveService.insertYunStoreCouponReceive(yunStoreCouponReceive);
+            if(row>=1){
+                yunStoreCouponIssue.setLeadCount(yunStoreCouponIssue.getLeadCount()+1);
+                if(yunStoreCouponIssue.getIsPermanent().equals(0)){
+                    yunStoreCouponIssue.setRemainCount(yunStoreCouponIssue.getTotalCount()-1);
+                }
+                yunStoreCouponIssueService.updateYunStoreCouponIssue(yunStoreCouponIssue);
+                return AjaxResult.success("领取成功");
+            }else{
+                return  AjaxResult.error(500,"系统错误");
+            }
+        }
     }
 
     /**
