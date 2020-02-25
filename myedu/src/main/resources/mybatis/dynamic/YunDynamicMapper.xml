@@ -25,6 +25,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_user su on  su.user_id=ydl.create_by_id
     </sql>
 
+    <sql id="selectYunDynamicPo">
+        select yd.*,ydc.create_by_id as commentuserId,ydc.content as commentContent,ydc.create_time as commentTime
+         su.nick_name as nickName
+        from yun_dynamic yd left join  yun_dy_comment ydc on yd.id=ydc.dy_id
+        left join sys_user su on  su.user_id=ydl.create_by_id
+    </sql>
+
     <select id="selectYunDynamicList" parameterType="YunDynamic" resultMap="YunDynamicResult">
         <include refid="selectYunDynamicVo"/>
         <where>  
@@ -39,6 +46,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and date_format(yd.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
             </if>
         </where>
+    </select>
+
+    <select id="selectYunDyCommentList" parameterType="YunDynamic" resultMap="YunDynamicResult">
+        <include refid="selectYunDynamicPo"/>
     </select>
     
     <select id="selectYunDynamicById" parameterType="Long" resultMap="YunDynamicResult">
