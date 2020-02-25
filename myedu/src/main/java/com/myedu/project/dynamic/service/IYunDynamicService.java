@@ -31,6 +31,15 @@ public interface IYunDynamicService
     public List<YunDynamicVo> selectYunDynamicList(YunDynamicVo yunDynamic);
 
     /**
+     * 查询动态评论列表
+     *
+     * @param yunDynamic 动态评论列表
+     * @return 动态评论列表
+     */
+    public List<YunDynamicVo> selectYunDyCommentList(YunDynamicVo yunDynamic);
+
+
+    /**
      * 新增云托管动态管理
      * 
      * @param yunDynamic 云托管动态管理

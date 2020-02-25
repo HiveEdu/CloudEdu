@@ -46,6 +46,18 @@ public class YunDynamicServiceImpl implements IYunDynamicService
     }
 
     /**
+     * 查询动态评论列表
+     *
+     * @param yunDynamic 查询动态评论列表
+     * @return 查询动态评论列表
+     */
+    @Override
+    public List<YunDynamicVo> selectYunDyCommentList(YunDynamicVo yunDynamic)
+    {
+        return yunDynamicMapper.selectYunDynamicList(yunDynamic);
+    }
+
+    /**
      * 新增云托管动态管理
      * 
      * @param yunDynamic 云托管动态管理

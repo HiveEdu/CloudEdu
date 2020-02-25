@@ -110,6 +110,21 @@ public class YunDynamicController extends BaseController
     }
 
     /**
+     * 查询动态评论列表
+     */
+    @PreAuthorize("@ss.hasPermi('dynamic:dynamic:export')")
+    @Log(title = "动态评论列表", businessType = BusinessType.EXPORT)
+    @GetMapping("/commentlist")
+    public List<YunDynamicVo> commentlist(YunDynamicVo yunDynamic)
+    {
+        List<YunDynamicVo> list = yunDynamicService.selectYunDynamicList(yunDynamic);
+
+        return list;
+    }
+
+
+
+    /**
      * 获取云托管动态管理详细信息
      */
     @PreAuthorize("@ss.hasPermi('dynamic:dynamic:query')")
@@ -231,4 +246,7 @@ public class YunDynamicController extends BaseController
         yunDynamic.setComments(yunDynamic.getComments()+1);
         return toAjax(yunDynamicService.updateYunDynamic(yunDynamic));
     }
+
+
+
 }
