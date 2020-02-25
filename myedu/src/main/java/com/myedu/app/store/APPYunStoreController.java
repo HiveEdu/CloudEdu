@@ -34,8 +34,8 @@ import java.util.List;
  */
 @Api("门店管理")
 @RestController
-@RequestMapping("/store/store")
-public class YunStoreController extends BaseController
+@RequestMapping("/app/store/store")
+public class APPYunStoreController extends BaseController
 {
     @Autowired
     private IYunStoreService yunStoreService;
