@@ -64,7 +64,8 @@
           </e-row>
         </el-col>
         <el-col :span="8" style="height: 250px;">
-          <video v-if="form.video !=null" :src="imageView+'/'+form.video" class="avatar" controls="controls" style="width: 100%;height: 100%;margin-top: -8%;"></video>
+          <video v-if="form.video!=null" :src="imageView+'/'+form.video" class="avatar" controls="controls" style="width: 100%;height: 100%;margin-top: -8%;"></video>
+          <img  v-else src="error" :onerror="defaultImg" alt="" height="100%" width="100%">
         </el-col>
       </el-row>
     </el-card>
