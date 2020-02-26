@@ -68,7 +68,7 @@ public class AppUserController extends BaseController {
 
     @Autowired
     private ISysRoleService roleService;
-  /*
+    /**
    * @Description :
    * @Author : 梁少鹏
    * @Date : 2019/12/21 7:48
@@ -87,7 +87,7 @@ public class AppUserController extends BaseController {
         return toAjax(userService.insertUser(user));
     }
 
-    /*
+    /**
      * @Description :修改用户
      * @Author : 梁少鹏
      * @Date : 2019/12/21 7:48
@@ -107,7 +107,7 @@ public class AppUserController extends BaseController {
         return toAjax(userService.updateUser(user));
     }
 
-   /*
+   /**
     * @Description :App登录方法
     * @Author : 梁少鹏
     * @Date : 2019/12/28 18:42
@@ -140,7 +140,7 @@ public class AppUserController extends BaseController {
         ajax.put("permissions", permissions);
         return ajax;
     }
-    /*
+    /**
      * @Description :获取用户详情
      * @Author : 梁少鹏
      * @Date : 2020/2/1 20:07
@@ -162,7 +162,7 @@ public class AppUserController extends BaseController {
         ajax.put("permissions", permissions);
         return ajax;
     }
-    /*
+    /**
      * @Description :获取角色列表
      * @Author : 梁少鹏
      * @Date : 2020/2/1 20:15
@@ -177,7 +177,7 @@ public class AppUserController extends BaseController {
         ajax.put("roleList", list);
         return ajax;
     }
-    /*
+    /**
      * @Description 生成APP登录验证码
      * @Author : 梁少鹏
      * @Date : 2019/12/28 19:32
@@ -217,7 +217,7 @@ public class AppUserController extends BaseController {
     }
 
 
-    /*
+    /**
      * @Description :token校验
      * @Author : 梁少鹏
      * @Date : 2020/2/1 19:35
@@ -237,7 +237,7 @@ public class AppUserController extends BaseController {
         return  ajax;
     }
 
-    /*
+    /**
      * @Description :token刷新
      * @Author : 梁少鹏
      * @Date : 2020/2/1 19:35
