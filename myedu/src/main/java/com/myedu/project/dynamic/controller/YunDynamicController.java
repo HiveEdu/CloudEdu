@@ -109,19 +109,6 @@ public class YunDynamicController extends BaseController
         return util.exportExcel(list, "dynamic");
     }
 
-    /**
-     * 查询动态评论列表
-     */
-    @PreAuthorize("@ss.hasPermi('dynamic:dynamic:export')")
-    @Log(title = "动态评论列表", businessType = BusinessType.EXPORT)
-    @GetMapping("/commentlist")
-    public List<YunDynamicVo> commentlist(YunDynamicVo yunDynamic)
-    {
-        List<YunDynamicVo> list = yunDynamicService.selectYunDynamicList(yunDynamic);
-
-        return list;
-    }
-
 
 
     /**
@@ -131,7 +118,13 @@ public class YunDynamicController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(yunDynamicService.selectYunDynamicById(id));
+        AjaxResult ajax = AjaxResult.success();
+        YunDyComment yunDyComment=new YunDyComment();
+        yunDyComment.setDyId(id);
+        List<YunDyComment> yunDyComments=yunDyCommentService.selectYunDyCommentList(yunDyComment);
+        ajax.put("yunDyComments", yunDyComments);
+        ajax.put(AjaxResult.DATA_TAG, yunDynamicService.selectYunDynamicById(id));
+        return ajax;
     }
 
     /**

@@ -28,13 +28,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createById != null "> and create_by_id = #{createById}</if>
             <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
         </where>
+        order  by  create_time desc
     </select>
     
     <select id="selectYunDyCommentById" parameterType="Long" resultMap="YunDyCommentResult">
         <include refid="selectYunDyCommentVo"/>
         where id = #{id}
     </select>
-        
     <insert id="insertYunDyComment" parameterType="YunDyComment" useGeneratedKeys="true" keyProperty="id">
         insert into yun_dy_comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
