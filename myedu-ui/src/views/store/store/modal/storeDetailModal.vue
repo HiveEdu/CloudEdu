@@ -2,76 +2,114 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogVisible"
-    width="50%"
+    width="70%"
     @close="handleClose">
     <el-card>
       <div slot="header">
         <span>门店基本信息</span>
       </div>
       <el-row>
-        <el-col :span="8" style="height: 200px;">
-          <a :href="imageView+'/'+form.logo"  target="_blank"><img   :src="imageView+'/'+form.logo" alt="" height="100%" width="100%"></a>
+        <el-col :span="8" style="height: 250px;">
+          <img   :src="imageView+'/'+form.logo" :onerror="defaultImg" alt="" height="100%" width="100%" style="border-radius:10px">
         </el-col>
-        <el-col :span="16" >
-          <div class="text item" style="margin-left: 5%">门店名称:{{ form.name }}</div>
-        </el-col>
-        <br><br>
-        <el-col :span="16">
-          <div class="text item" style="margin-left: 5%">负责人: {{ form.manager }}</div>
-        </el-col>
-        <br><br>
-        <el-col :span="16">
-          <div class="text item" style="margin-left: 5%">负责人电话: {{ form.managerPhone }}</div>
-        </el-col>
-        <br><br>
-        <el-col :span="16">
-          <div class="text item" style="margin-left: 5%">类型:
-            <span v-for="item in storeTypes">
+        <el-col :span="8" >
+          <el-row>
+             <div class="text item" style="margin-left: 5%">门店名称:{{ form.name }}</div>
+          </el-row>
+          <br>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item" style="margin-left: 10%">负责人: {{ form.manager }}</div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item" style="margin-left: 5%">负责人电话: {{ form.managerPhone }}</div>
+            </el-col>
+          </el-row>
+          <br>
+          <e-row>
+            <div class="text item" style="margin-left: 5%">类型:
+              <span v-for="item in storeTypes">
                <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
                  {{ item.name }}
                </span>
             </span>
-          </div>
-        </el-col>
-        <br><br>
-        <el-col :span="16">
-          <div class="text item" style="margin-left: 5%">标贴:
-            <span v-for="item in storeLabels">
+            </div>
+          </e-row>
+          <br>
+          <e-row>
+            <div class="text item" style="margin-left: 5%">标贴:
+              <span v-for="item in storeLabels">
                <span v-for="item1 in form.storeTypeIds" v-if="item1==item.id">
                  {{ item.name }}
                </span>
             </span>
-          </div>
+            </div>
+          </e-row>
+          <br>
+          <e-row>
+            <div class="text item" style="margin-left: 5%">地址: {{ form.province }}</div>
+          </e-row>
+          <br>
+          <e-row>
+            <div class="text item" style="margin-left: 5%">街道: {{ form.address }}</div>
+          </e-row>
+          <br>
+          <e-row>
+            <el-col :span="12">
+              <div class="text item" style="margin-left: 10%">经度:{{ form.mapX }}</div>
+            </el-col>
+            <el-col :span="12">
+              <div class="text item" style="margin-left: 10%">纬度: {{ form.mapY }}</div>
+            </el-col>
+          </e-row>
         </el-col>
-        <br><br>
-        <el-col :span="16">
-          <div class="text item" style="margin-left: 5%">地址: {{ form.province }}</div>
-        </el-col>
-        <br><br>
-        <el-col :span="16">
-          <div class="text item" style="margin-left: 5%">街道: {{ form.address }}</div>
-        </el-col>
-        <br><br>
-
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <div class="text item" style="margin-left: 10%">经度:{{ form.mapX }}</div>
-        </el-col>
-        <el-col :span="8">
-          <div class="text item" style="margin-left: 10%">纬度: {{ form.mapY }}</div>
+        <el-col :span="8" style="height: 250px;">
+          <video v-if="form.video !=null" :src="imageView+'/'+form.video" class="avatar" controls="controls" style="width: 100%;height: 100%;margin-top: -8%;"></video>
         </el-col>
       </el-row>
     </el-card>
     <el-card>
-      <div slot="header">
-        <span>营业执照</span>
-      </div>
-        <el-carousel >
-          <el-carousel-item v-for="item in licenseList" :key="item">
-            <img  :src="imageView+'/'+item.url" alt="" height="100%" width="100%">
-          </el-carousel-item>
-        </el-carousel>
+      <el-row>
+        <el-col :span="8" >
+          <el-card>
+            <div slot="header">
+              <span>营业执照</span>
+            </div>
+            <el-carousel v-if="licenseList!=null&&licenseList.length>0">
+              <el-carousel-item v-for="item in licenseList" :key="item">
+                <img  :src="imageView+'/'+item.url" :onerror="defaultImg"  alt="" height="100%" width="100%">
+              </el-carousel-item>
+            </el-carousel>
+            <img  v-else src="error" :onerror="defaultImg" alt="" height="297px" width="100%">
+          </el-card>
+        </el-col>
+        <el-col :span="8" >
+          <el-card>
+            <div slot="header">
+              <span>健康证</span>
+            </div>
+            <el-carousel v-if="healthsList!=null&&healthsList.length>0">
+              <el-carousel-item v-for="item in healthsList" :key="item">
+                <img  :src="imageView+'/'+item.url" :onerror="defaultImg" alt="" height="100%" width="100%">
+              </el-carousel-item>
+            </el-carousel>
+            <img  v-else src="33" :onerror="defaultImg" alt="" height="297px" width="100%">
+          </el-card>
+        </el-col>
+        <el-col :span="8" >
+          <el-card>
+            <div slot="header">
+              <span>照片墙</span>
+            </div>
+            <el-carousel v-if="photosList!=null&&photosList.length>0">
+              <el-carousel-item v-for="item in photosList" :key="item">
+                <img  :src="imageView+'/'+item.url" :onerror="defaultImg" alt="" height="100%" width="100%">
+              </el-carousel-item>
+            </el-carousel>
+            <img  v-else src="33" :onerror="defaultImg" alt="" height="297px" width="100%">
+          </el-card>
+        </el-col>
+      </el-row>
     </el-card>
     <span slot="footer" class="dialog-footer">
     <el-button @click="handleClose">取 消</el-button>
@@ -99,6 +137,8 @@
               this.form.storeTypeIds = response.storeTypeIds;
               this.form.storeLabelIds = response.storeLabelIds;
               this.licenseList=JSON.parse(this.form.license);
+              this.photosList=JSON.parse(this.form.photos);
+              this.healthsList=JSON.parse(this.form.healths);
             });
           },
         },
@@ -106,6 +146,7 @@
           return {
             title:"门店详情",
             dialogVisible:false,
+            defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
             //门店类型列表
             storeTypes:[],
             //标签类型列表
@@ -113,6 +154,10 @@
             imageView: process.env.VUE_APP_BASE_API,
             //营业执照列表
             licenseList:[],
+            //照片墙
+            photosList:[],
+            //健康证
+            healthsList:[],
             //表单参数
             form:{}
           }

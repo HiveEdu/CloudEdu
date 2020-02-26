@@ -38,6 +38,9 @@ public class YunStore extends BaseEntity
     /** 门店照片墙 */
     private String photos;
 
+    /** 健康证 */
+    private String healths;
+
     /** 门店宣传视频地址 */
     private String video;
 
@@ -220,6 +223,14 @@ public class YunStore extends BaseEntity
         return mapX;
     }
 
+    public String getHealths() {
+        return healths;
+    }
+
+    public void setHealths(String healths) {
+        this.healths = healths;
+    }
+
     @Override
     public String toString() {
         return "YunStore{" +
@@ -229,6 +240,7 @@ public class YunStore extends BaseEntity
                 ", manager='" + manager + '\'' +
                 ", managerPhone='" + managerPhone + '\'' +
                 ", photos='" + photos + '\'' +
+                ", healths='" + healths + '\'' +
                 ", video='" + video + '\'' +
                 ", license='" + license + '\'' +
                 ", province='" + province + '\'' +

@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="manager"    column="manager"    />
         <result property="managerPhone"    column="manager_phone"    />
         <result property="photos"    column="photos"    />
+        <result property="healths"    column="healths"    />
         <result property="video"    column="video"    />
         <result property="license"    column="license"    />
         <result property="province"    column="province"    />
@@ -30,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStoreVo">
-        select id, name, reject_resion,logo, status,manager, manager_phone, photos, video, license, province, city, area, address, map_x, map_y, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_store
+        select id, name, reject_resion,logo, status,manager, manager_phone, photos, healths,video, license, province, city, area, address, map_x, map_y, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_store
     </sql>
 
     <select id="selectYunStoreList" parameterType="YunStore" resultMap="YunStoreResult">
@@ -57,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="manager != null  and manager != ''">manager,</if>
             <if test="managerPhone != null  and managerPhone != ''">manager_phone,</if>
             <if test="photos != null  and photos != ''">photos,</if>
+            <if test="healths != null  and healths != ''">healths,</if>
             <if test="video != null  and video != ''">video,</if>
             <if test="license != null  and license != ''">license,</if>
             <if test="province != null  and province != ''">province,</if>
@@ -78,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="manager != null  and manager != ''">#{manager},</if>
             <if test="managerPhone != null  and managerPhone != ''">#{managerPhone},</if>
             <if test="photos != null  and photos != ''">#{photos},</if>
+            <if test="healths != null  and healths != ''">#{healths},</if>
             <if test="video != null  and video != ''">#{video},</if>
             <if test="license != null  and license != ''">#{license},</if>
             <if test="province != null  and province != ''">#{province},</if>
@@ -103,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="manager != null  and manager != ''">manager = #{manager},</if>
             <if test="managerPhone != null  and managerPhone != ''">manager_phone = #{managerPhone},</if>
             <if test="photos != null  and photos != ''">photos = #{photos},</if>
+            <if test="healths != null  and healths != ''">healths = #{healths},</if>
             <if test="video != null  and video != ''">video = #{video},</if>
             <if test="license != null  and license != ''">license = #{license},</if>
             <if test="province != null  and province != ''">province = #{province},</if>

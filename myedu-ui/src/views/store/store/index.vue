@@ -89,7 +89,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column ref="table" prop="logo" label="logo" width="60">
         <template slot-scope="scope">
-          <a :href="imageView+'/'+scope.row.logo" style="color: #42b983" target="_blank"><img :src="imageView+'/'+scope.row.logo" alt="点击打开" class="el-avatar" style="border-radius:10px"></a>
+            <img  :src="imageView+'/'+scope.row.logo" :onerror="defaultImg" alt="点击打开" class="el-avatar" style="border-radius:10px">
         </template>
       </el-table-column>
       <el-table-column label="名称" align="center" prop="name" />
@@ -327,6 +327,28 @@
               <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
           </el-form-item>
+          <el-form-item label="健康证" style="margin-top: 80px">
+            <el-upload
+              ref="upload"
+              :action="uploadImgUrl"
+              list-type="picture-card"
+              content-type="false"
+              :headers="headers"
+              :file-list="healthsList"
+              :show-file-list="true"
+              :before-upload="beforeUploadh"
+              :on-change="onChangeh"
+              :on-success="onSuccessh"
+              :on-preview="handlePictureCardPreviewh"
+              :on-remove="handleRemoveh"
+              accept='.jpg,.jpeg,.png,.gif'
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisibleh">
+              <img width="100%" :src="dialogImageUrlh" alt="">
+            </el-dialog>
+          </el-form-item>
         </div>
         <div v-if="active==3" style="margin-top: 30px">
           <el-form-item label="照片墙" style="margin-top: 80px">
@@ -394,6 +416,7 @@ export default {
   components: { reviewModal,storeDetailModal },
   data() {
     return {
+      defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
       storeDetail:false,
        //审核页面默认不打开
       review:false,
@@ -424,6 +447,9 @@ export default {
       //营业执照列表
       licenseList:[],
       licenseListNew:[],
+      //健康证
+      healthsList:[],
+      healthsListNew:[],
       //照片墙列表
       photosList:[],
       photosListNew:[],
@@ -463,6 +489,8 @@ export default {
       },
       dialogImageUrl: '',
       dialogVisible: false,
+      dialogImageUrlh: '',
+      dialogVisibleh: false,
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       imageView: process.env.VUE_APP_BASE_API,
       headers: {
@@ -525,6 +553,7 @@ export default {
         manager: undefined,
         managerPhone: undefined,
         photos: undefined,
+        healths: undefined,
         video: undefined,
         license: undefined,
         province: undefined,
@@ -567,6 +596,8 @@ export default {
       this.licenseListNew=[];
       this.photosList=[];
       this.photosListNew=[];
+      this.photosList=[];
+      this.photosListNew=[];
       this.active=1;
       getStore().then(response => {
         this.storeTypes = response.storeTypes;
@@ -581,19 +612,34 @@ export default {
       const id = row.id || this.ids
       getStore(id).then(response => {
         this.form = response.data;
-        this.cities=JSON.parse(this.form.province);
-        this.licenseList=JSON.parse(this.form.license);
-        this.licenseListNew=JSON.parse(this.form.license);
-        this.photosList=JSON.parse(this.form.photos);
-        this.photosListNew=JSON.parse(this.form.photos);
-        for(let i=0;i<this.licenseList.length;i++) {
-          if(this.licenseList[i].url!=null){
-            this.licenseList[i].url=this.imageView+"/"+this.licenseList[i].url;
+        if(this.form.province!=null){
+          this.cities=JSON.parse(this.form.province);
+        }
+        if(this.form.photos!=null){
+          this.photosList=JSON.parse(this.form.photos);
+          this.photosListNew=JSON.parse(this.form.photos);
+          for(let i=0;i<this.photosList.length;i++) {
+            if(this.photosList[i].url!=null){
+              this.photosList[i].url=this.imageView+"/"+this.photosList[i].url;
+            }
           }
         }
-        for(let i=0;i<this.photosList.length;i++) {
-          if(this.photosList[i].url!=null){
-            this.photosList[i].url=this.imageView+"/"+this.photosList[i].url;
+        if(this.form.license!=null){
+          this.licenseList=JSON.parse(this.form.license);
+          this.licenseListNew=JSON.parse(this.form.license);
+          for(let i=0;i<this.licenseList.length;i++) {
+            if(this.licenseList[i].url!=null){
+              this.licenseList[i].url=this.imageView+"/"+this.licenseList[i].url;
+            }
+          }
+        }
+        if(this.form.healths!=null){
+          this.healthsList=JSON.parse(this.form.healths);
+          this.healthsListNew=JSON.parse(this.form.healths);
+          for(let i=0;i<this.healthsList.length;i++) {
+            if(this.healthsList[i].url!=null){
+              this.healthsList[i].url=this.imageView+"/"+this.healthsList[i].url;
+            }
           }
         }
         this.storeTypes = response.storeTypes;
@@ -614,6 +660,7 @@ export default {
             this.form.province=JSON.stringify(this.cities);
             this.form.license=JSON.stringify(this.licenseListNew);
             this.form.photos=JSON.stringify(this.photosListNew);
+            this.form.healths=JSON.stringify(this.healthsListNew);
             this.form.mapX=this.centerStr.lng;
             this.form.mapY=this.centerStr.lat;
             updateStore(this.form).then(response => {
@@ -629,6 +676,7 @@ export default {
             this.form.province=JSON.stringify(this.cities);
             this.form.license=JSON.stringify(this.licenseListNew);
             this.form.photos=JSON.stringify(this.photosListNew);
+            this.form.healths=JSON.stringify(this.healthsListNew);
             this.form.mapX=this.centerStr.lng;
             this.form.mapY=this.centerStr.lat;
             addStore(this.form).then(response => {
@@ -754,6 +802,34 @@ export default {
       this.dialogVisible = true;
     },
     //营业执照上传结束
+    //健康证上传开始
+    beforeUploadh(file){
+    },
+    onChangeh(file, fileList){
+    },
+    onSuccessh(res,file, fileList){
+      if(res.code=="200"){
+        this.healthsList=fileList
+        this.healthsListNew.push({uid:file.uid,name:file.name,status:file.status,url:res.fileName})
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemoveh(file, fileList) {
+      console.log(file, fileList);
+      this.healthsList=fileList;
+      for(let i=0;i<this.healthsListNew.length;i++) {
+        if (this.healthsListNew[i].uid === file.uid) {
+          this.healthsListNew.splice(i);
+        }
+      }
+    },
+    handlePictureCardPreviewh(file) {
+      this.dialogImageUrlh = file.url;
+      this.dialogVisibleh = true;
+    },
+    //健康证上传结束
     //照片墙上传开始
     beforeUpload1(file){
     },
