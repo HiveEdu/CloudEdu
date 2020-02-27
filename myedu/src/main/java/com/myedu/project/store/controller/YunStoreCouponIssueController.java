@@ -76,7 +76,12 @@ public class YunStoreCouponIssueController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(yunStoreCouponIssueService.selectYunStoreCouponIssueById(id));
+        AjaxResult ajax = AjaxResult.success();
+        YunStoreCouponReceive yunStoreCouponReceive=new YunStoreCouponReceive();
+        yunStoreCouponReceive.setSciId(id);
+        ajax.put("yunStoreCouponReceives", yunStoreCouponReceiveService.selectYunStoreCouponReceiveList(yunStoreCouponReceive));
+        ajax.put(AjaxResult.DATA_TAG, yunStoreCouponIssueService.selectYunStoreCouponIssueById(id));
+        return ajax;
     }
 
     /**

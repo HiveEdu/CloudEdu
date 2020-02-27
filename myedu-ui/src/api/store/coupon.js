@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询店铺优惠券列表
 export function listCoupon(query) {
   return request({
@@ -12,7 +12,15 @@ export function listCoupon(query) {
 // 查询店铺优惠券详细
 export function getCoupon(id) {
   return request({
-    url: '/store/coupon/' + id,
+    url: '/store/coupon/' + praseStrEmpty(id),
+    method: 'get'
+  })
+}
+
+// 校验是否可以发布
+export function ispublish(id) {
+  return request({
+    url: '/store/coupon/ispublish/' + praseStrEmpty(id),
     method: 'get'
   })
 }

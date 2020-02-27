@@ -91,7 +91,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="封面" width="55" >
         　　<template slot-scope="scope">
-        　　　　<img :src="viewImage+'/'+scope.row.picture" width="50" height="50" class="head_pic"/>
+        　　　　<img :onerror="defaultImg" :src="viewImage+'/'+scope.row.picture" width="50" height="50" class="head_pic"/>
         　　</template>
       </el-table-column>
       <el-table-column label="名称" align="center" prop="name" />
@@ -185,6 +185,7 @@
               <el-select v-model="form.storeId"  placeholder="请选择所属门店"  style="width: 100%;">
                 <el-option
                   v-for="item in stores"
+                  v-if="item.status==3"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
@@ -431,6 +432,7 @@ export default {
   components: { signUpModal,DetailModal},
   data() {
     return {
+      defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
       courseDetail:false,
       signUp:false,
       courseData:null,

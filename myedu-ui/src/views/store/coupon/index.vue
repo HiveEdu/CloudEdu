@@ -136,10 +136,27 @@
     <publishModal ref="publishModal" :publish="publish" :courseData="courseData" @closePublish="closePublish"></publishModal>
     <!-- 添加或修改店铺优惠券对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="优惠券名称" prop="title">
-          <el-input v-model="form.title" placeholder="请输入优惠券名称" />
-        </el-form-item>
+      <el-form ref="form" :model="form" :rules="rules" label-width="130px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="所属门店" prop="storeId">
+              <el-select v-model="form.storeId"  placeholder="请选择所属门店"  style="width: 100%;">
+                <el-option
+                  v-for="item in stores"
+                  v-if="item.status==3"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="优惠券名称" prop="title">
+            <el-input v-model="form.title" placeholder="请输入优惠券名称" />
+          </el-form-item>
+        </el-row>
         <el-row>
           <el-col :span="23">
             <el-form-item label="优惠券面值" prop="couponPrice">
@@ -189,7 +206,7 @@
 </template>
 
 <script>
-import { listCoupon, getCoupon, delCoupon, addCoupon, updateCoupon, exportCoupon } from "@/api/store/coupon";
+import { listCoupon, getCoupon, delCoupon, addCoupon, updateCoupon, exportCoupon ,ispublish} from "@/api/store/coupon";
 import { formatTime } from '@/utils/index'
 import publishModal from './modal/publishModal'
 export default {
@@ -216,6 +233,8 @@ export default {
       open: false,
       // 状态字典
       statusOptions: [],
+      //门店列表
+      stores:[],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -237,6 +256,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        storeId: [
+          { required: true, message: "所属门店不能为空", trigger: "blur" }
+        ],
         title: [
           { required: true, message: "优惠券名称不能为空", trigger: "blur" }
         ],
@@ -264,8 +286,15 @@ export default {
   methods: {
     //打开优惠券发布页面
     couponPublish(row){
-      this.courseData=row;
-      this.publish=true;
+      ispublish(row.id).then(response => {
+        if(response.code === 200){
+          this.courseData=row;
+          this.publish=true;
+        }else{
+          this.msgError(response.msg);
+        }
+      });
+
     },
     //关闭优惠券发布页面
     closePublish(){
@@ -333,9 +362,13 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.form.status="1";
-      this.title = "添加店铺优惠券";
+      getCoupon().then(response => {
+        this.open = true;
+        this.stores=response.stores;
+        this.form.status="1";
+        this.title = "添加店铺优惠券";
+      });
+
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -343,6 +376,7 @@ export default {
       const id = row.id || this.ids
       getCoupon(id).then(response => {
         this.form = response.data;
+        this.stores=response.stores;
         this.open = true;
         this.title = "修改店铺优惠券";
       });

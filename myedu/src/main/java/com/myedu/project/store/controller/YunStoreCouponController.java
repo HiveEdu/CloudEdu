@@ -1,9 +1,17 @@
 package com.myedu.project.store.controller;
 
+import java.util.Date;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
+import com.myedu.common.utils.DateUtils;
+import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.StringUtils;
+import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.YunStoreCouponIssue;
+import com.myedu.project.store.enums.CouponIssueStatus;
 import com.myedu.project.store.service.IYunStoreCouponIssueService;
+import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +45,8 @@ public class YunStoreCouponController extends BaseController
     private IYunStoreCouponService yunStoreCouponService;
     @Autowired
     private IYunStoreCouponIssueService yunStoreCouponIssueService;
+    @Autowired
+    private IYunStoreService yunStoreService;
     /**
      * 查询店铺优惠券列表
      */
@@ -66,10 +76,19 @@ public class YunStoreCouponController extends BaseController
      * 获取店铺优惠券详细信息
      */
     @PreAuthorize("@ss.hasPermi('store:coupon:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
-        return AjaxResult.success(yunStoreCouponService.selectYunStoreCouponById(id));
+        AjaxResult ajax = AjaxResult.success();
+        YunStore yunStore=new YunStore();
+        yunStore.setCreateById(SecurityUtils.getUserId());
+        List<YunStore> stores=yunStoreService.selectYunStoreList(yunStore);
+        ajax.put("stores", stores);
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG,yunStoreCouponService.selectYunStoreCouponById(id));
+        }
+        return ajax;
     }
 
     /**
@@ -108,14 +127,44 @@ public class YunStoreCouponController extends BaseController
 
 
     @PreAuthorize("@ss.hasPermi('store:coupon:publish')")
-    @Log(title = "店铺优惠券", businessType = BusinessType.INSERT)
+    @Log(title = "店铺优惠券发布", businessType = BusinessType.INSERT)
     @PostMapping("/publish")
     public AjaxResult publish(@RequestBody YunStoreCouponIssue yunStoreCouponIssue)
     {
         Long couponId=yunStoreCouponIssue.getCid();
         YunStoreCoupon yunStoreCoupon=yunStoreCouponService.selectYunStoreCouponById(couponId);
-        yunStoreCoupon.setPublishNum(yunStoreCoupon.getPublishNum()+1);
-        yunStoreCouponService.updateYunStoreCoupon(yunStoreCoupon);
-        return toAjax(yunStoreCouponIssueService.insertYunStoreCouponIssue(yunStoreCouponIssue));
+        if(yunStoreCoupon.getStatus().equals(CouponIssueStatus.CLOSE.getCode())){
+            return AjaxResult.error(500,"此优惠卷未开启");
+        }else if(yunStoreCoupon.getStatus().equals(CouponIssueStatus.INVA.getCode())){
+            return AjaxResult.error(500,"此优惠卷无效");
+        }else if(DateUtils.getDay(new Date(),yunStoreCoupon.getCreateTime())>yunStoreCoupon.getCouponTime() ){
+            return AjaxResult.error(500,"此优惠卷已经过期");
+        }else{
+            yunStoreCoupon.setPublishNum(yunStoreCoupon.getPublishNum()+1);
+            yunStoreCouponService.updateYunStoreCoupon(yunStoreCoupon);
+            yunStoreCouponIssueService.insertYunStoreCouponIssue(yunStoreCouponIssue);
+            return AjaxResult.success("发布成功");
+        }
+    }
+
+    /*
+     * @Description :校验是否可以发布
+     * @Author : 梁少鹏
+     * @Date : 2020/2/27 17:24
+     */
+    @PreAuthorize("@ss.hasPermi('store:coupon:ispublish')")
+    @GetMapping(value = { "/ispublish", "/ispublish/{id}" })
+    public AjaxResult ispublish(@PathVariable(value = "id", required = false) Long id)
+    {
+        YunStoreCoupon yunStoreCoupon=yunStoreCouponService.selectYunStoreCouponById(id);
+        if(yunStoreCoupon.getStatus().equals(CouponIssueStatus.CLOSE.getCode())){
+            return AjaxResult.error(500,"此优惠卷未开启");
+        }else if(yunStoreCoupon.getStatus().equals(CouponIssueStatus.INVA.getCode())){
+            return AjaxResult.error(500,"此优惠卷无效");
+        }else if(DateUtils.getDay(new Date(),yunStoreCoupon.getCreateTime())>yunStoreCoupon.getCouponTime() ){
+            return AjaxResult.error(500,"此优惠卷已经过期");
+        }else{
+            return AjaxResult.success("可以发布");
+        }
     }
 }

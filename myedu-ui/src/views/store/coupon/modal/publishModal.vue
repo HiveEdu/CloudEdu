@@ -72,6 +72,9 @@
             publishForm:{},
             // 表单校验
             publishFormRules: {
+              status: [
+                { required: true, message: "状态不能为空", trigger: "blur" }
+              ],
               leadStartTime: [
                 { required: true, message: "领卷开启时间不能为空", trigger: "blur" }
               ],
