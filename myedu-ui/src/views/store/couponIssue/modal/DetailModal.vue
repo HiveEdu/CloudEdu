@@ -7,7 +7,7 @@
     <el-card>
       <e-row >
         <el-col :span="12" >
-           <el-card>
+           <el-card style="height: 377px;overflow: auto;">
             <div slot="header">
               <span>优惠券信息</span>
             </div>
