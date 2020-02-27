@@ -75,7 +75,8 @@
         >导出</el-button>
       </el-col>
     </el-row>
-
+     <!-- 详情页面-->
+    <DetailModal ref="DetailModal" :issueDetail="issueDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <el-table v-loading="loading" :data="issueList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="优惠券名称" align="center" prop="cname" />
@@ -102,6 +103,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
+          <el-button  size="mini" type="primary" @click="openDatail(scope.row)">详情</el-button>
           <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
             <el-dropdown-menu slot="dropdown">
@@ -170,9 +172,12 @@
 <script>
 import { listIssue, getIssue, delIssue, addIssue, updateIssue, exportIssue,receive } from "@/api/store/couponIssue";
 import { formatTime } from '@/utils/index'
+import DetailModal from './modal/DetailModal'
 export default {
+  components: {DetailModal},
   data() {
     return {
+      issueDetail:false,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -224,6 +229,15 @@ export default {
     });
   },
   methods: {
+     //打开订单详情页面
+    openDatail(row){
+      this.currentData=row;
+      this.issueDetail=true;
+    },
+    //关闭订单详情页面
+    closeDetail(){
+      this.issueDetail=false;
+    },
     parseTimeBefore(e){
       return formatTime((new Date(e)).getTime() / 1000);
     },
