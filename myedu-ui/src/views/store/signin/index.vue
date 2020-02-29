@@ -106,7 +106,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学生" prop="stuId">
-           <el-select v-model="form.stuId"  multiple placeholder="请选择学生">
+           <el-select v-model="form.stuId"  placeholder="请选择学生">
             <el-option
               v-for="item in studentList"
               :key="item.id"
@@ -271,7 +271,6 @@ export default {
         this.form = response.data;
         this.studentList= response.studentLists;
         this.open = true;
-        this.form.stuId=JSON.parse(this.form.stuId);
         this.title = "修改点名签到";
       });
     },
@@ -279,7 +278,6 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.stuId=JSON.stringify(this.form.stuId);
           if (this.form.id != undefined) {
             updateSignin(this.form).then(response => {
               if (response.code === 200) {
