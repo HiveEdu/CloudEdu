@@ -65,29 +65,47 @@
         >导出</el-button>
       </el-col>
     </el-row>
-
+    <!--答复页面-->
+    <replyModal ref="replyModal" :reply="reply" :currentData="currentData" @closeReply="closeReply"></replyModal>
     <el-table v-loading="loading" :data="complaintList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键ID" align="center" prop="id" />
       <el-table-column label="投诉谁" align="center" prop="complaint" />
       <el-table-column label="投诉理由" align="center" prop="reason" />
-      <el-table-column label="投诉证据" align="center" prop="evidentImg" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"/>
+      <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['parents:complaint:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['parents:complaint:remove']"
-          >删除</el-button>
+          <el-button  size="mini" type="primary"  @click="openStoreDatail(scope.row)">详情</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
+            <el-dropdown-menu slot="dropdown">
+              <el-button
+                size="mini"
+                type="success"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['parents:complaint:edit']"
+                style="margin-top: 10px"
+              >修改</el-button>
+              <br>
+              <el-button
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['parents:complaint:remove']"
+                style="margin-top: 10px"
+              >删除</el-button>
+              <br v-if="scope.row.status==0">
+              <el-button
+                v-if="scope.row.status==0"
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="openReply(scope.row)"
+                style="margin-top: 10px"
+              >答复</el-button>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -123,10 +141,15 @@
 
 <script>
 import { listComplaint, getComplaint, delComplaint, addComplaint, updateComplaint, exportComplaint } from "@/api/parents/complaint";
-
+import replyModal from './modal/replyModal'
 export default {
+  components: { replyModal},
   data() {
     return {
+       //回复页面默认不打开
+      reply:false,
+      //当前行记录为空
+      currentData:null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -143,10 +166,13 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+       // 1 正常 0 未开启 -1 已无效字典
+      statusOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        status: undefined,
         complaint: undefined,
         reason: undefined,
         evidentImg: undefined,
@@ -165,9 +191,26 @@ export default {
     };
   },
   created() {
-    this.getList();
+      this.getList();
+      this.getDicts("complaint_status").then(response => {
+      this.statusOptions = response.data;
+    });
   },
   methods: {
+     //打开答复页面
+    openReply(row){
+      this.currentData=row;
+      this.reply=true;
+    },
+    //关闭答复页面
+    closeReply(){
+      this.reply=false;
+      this.getList();
+    },
+     // 0 投诉中 1 已答复 
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.statusOptions, row.status);
+    },
     /** 查询投诉列表 */
     getList() {
       this.loading = true;
