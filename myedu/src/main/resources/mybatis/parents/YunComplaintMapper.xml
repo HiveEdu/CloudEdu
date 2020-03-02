@@ -15,10 +15,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createById"    column="create_by_id"    />
+        <result property="replyBy"    column="reply_by"    />
+        <result property="replyTime"    column="reply_time"    />
+        <result property="status"    column="status"    />
+        <result property="replyContent"    column="reply_content"    />
     </resultMap>
 
     <sql id="selectYunComplaintVo">
-        select id, complaint, reason, evident_img, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_complaint
+        select id,reply_by, reply_time, status,reply_content,complaint, reason, evident_img, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_complaint
     </sql>
 
     <select id="selectYunComplaintList" parameterType="YunComplaint" resultMap="YunComplaintResult">
@@ -44,6 +48,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="evidentImg != null  and evidentImg != ''">evident_img,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
+            <if test="replyBy != null  and replyBy != ''">reply_by,</if>
+            <if test="replyTime != null  and replyTime != ''">reply_time,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="replyContent != null  and replyContent != ''">reply_content,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
@@ -60,6 +68,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createById != null ">#{createById},</if>
+            <if test="replyBy != null ">#{replyBy},</if>
+            <if test="replyTime != null ">#{replyTime},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="replyContent != null ">#{replyContent},</if>
          </trim>
     </insert>
 
@@ -75,6 +87,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="replyBy != null ">reply_by = #{replyBy},</if>
+            <if test="replyTime != null ">reply_time = #{replyTime},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="replyContent != null ">reply_content = #{replyContent},</if>
         </trim>
         where id = #{id}
     </update>

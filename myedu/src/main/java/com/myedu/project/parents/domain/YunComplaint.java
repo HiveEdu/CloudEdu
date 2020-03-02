@@ -6,6 +6,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
+
 /**
  * 投诉对象 yun_complaint
  * 
@@ -44,6 +47,59 @@ public class YunComplaint extends BaseEntity
     /** 创建人Id */
     @ApiModelProperty("创建人Id")
     private Long createById;
+
+    /** 答复人 */
+    @ApiModelProperty("答复人")
+    @Excel(name = "答复人")
+    private String replyBy;
+
+    /** 答复时间 */
+    @ApiModelProperty("答复时间")
+    @Excel(name = "答复时间")
+    private Date replyTime;
+
+    public String getReplyBy() {
+        return replyBy;
+    }
+
+    public void setReplyBy(String replyBy) {
+        this.replyBy = replyBy;
+    }
+
+    public Date getReplyTime() {
+        return replyTime;
+    }
+
+    public void setReplyTime(Date replyTime) {
+        this.replyTime = replyTime;
+    }
+
+    public String getReplyContent() {
+        return replyContent;
+    }
+
+    public void setReplyContent(String replyContent) {
+        this.replyContent = replyContent;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /** 答复内容 */
+
+    @ApiModelProperty("答复内容")
+    @Excel(name = "答复内容")
+    private String replyContent;
+
+    /** 状态 */
+    @ApiModelProperty("状态")
+    @Excel(name = "0 开启 1 已答复")
+    private String status;
 
     public void setId(Long id) 
     {
@@ -106,6 +162,10 @@ public class YunComplaint extends BaseEntity
             .append("id", getId())
             .append("complaint", getComplaint())
             .append("reason", getReason())
+            .append("replyBy", getReplyBy())
+            .append("replyTime", getReplyTime())
+            .append("status", getStatus())
+            .append("replyContent", getReplyContent())
             .append("evidentImg", getEvidentImg())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
