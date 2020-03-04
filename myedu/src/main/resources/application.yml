@@ -9,7 +9,7 @@ myedu:
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/myedu/uploadPath，Linux配置 /home/myedu/uploadPath）
-  profile: /Users/a10.11.5/Pictures/myedu/
+  profile: D:/myedu/uploadPath
   # 获取ip地址开关
   addressEnabled: true
 

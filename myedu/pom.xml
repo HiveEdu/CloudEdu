@@ -177,7 +177,13 @@
 			<artifactId>jjwt</artifactId>
 			<version>${jwt.version}</version>
 		</dependency>
-		
+		<!--百度AI SDK-->
+		<dependency>
+			<groupId>com.baidu.aip</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>4.8.0</version>
+		</dependency>
+
 		<!-- swagger2-->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -272,6 +278,16 @@
 			<groupId>com.alipay.sdk</groupId>
 			<artifactId>alipay-sdk-java</artifactId>
 			<version>${alipay.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.baidu.aip</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>4.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.baidu.aip</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>4.8.0</version>
 		</dependency>
 	</dependencies>
 

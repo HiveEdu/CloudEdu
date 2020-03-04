@@ -13,9 +13,12 @@ import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.order.domain.YunOrder;
 import com.myedu.project.order.domain.vo.YunOrderVo;
+import com.myedu.project.order.enums.StoreStuStatus;
 import com.myedu.project.order.service.IYunOrderService;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStudentService;
+import com.myedu.project.store.domain.YunStoreStu;
+import com.myedu.project.store.service.IYunStoreStuService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,6 +44,8 @@ public class YunOrderController extends BaseController
     private IYunStudentService yunStudentService;
     @Autowired
     private ISysGradeService sysGradeService;
+    @Autowired
+    private IYunStoreStuService yunStoreStuService;
     /**
      * 查询订单列表
      */
@@ -94,6 +99,16 @@ public class YunOrderController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunOrder yunOrder)
     {
+        if(yunOrder.getStoreId()!=null){
+            //报名给这个门店添加学生
+            YunStoreStu yunStoreStu=new YunStoreStu();
+            yunStoreStu.setStoreId(yunOrder.getStoreId());
+            yunStoreStu.setStuId(yunOrder.getStudentId());
+            yunStoreStu.setCreateById(SecurityUtils.getUserId());
+            yunStoreStu.setCreateBy(SecurityUtils.getUsername());
+            yunStoreStu.setStatus(StoreStuStatus.SIGNUP.getCode());
+            yunStoreStuService.insertYunStoreStu(yunStoreStu);
+        }
         return toAjax(yunOrderService.insertYunOrder(yunOrder));
     }
 

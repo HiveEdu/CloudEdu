@@ -97,6 +97,11 @@
 
     <el-table v-loading="loading" :data="studentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column ref="table" prop="logo" label="logo" width="60">
+        <template slot-scope="scope">
+          <img  :src="imageView+'/'+scope.row.avatar" :onerror="defaultImg" alt="点击打开" class="el-avatar" style="border-radius:10px">
+        </template>
+      </el-table-column>
       <el-table-column label="姓名" align="center" prop="name" />
       <el-table-column label="性别" align="center" prop="gendel" :formatter="gendelFormat" />
       <el-table-column label="学校" align="center" prop="school" />
@@ -151,7 +156,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="头像">
+        <el-form-item label="人脸注册">
           <el-upload
             class="avatar-uploader"
             ref="upload"
@@ -163,7 +168,7 @@
             :on-remove="handleRemove"
             :on-preview="handlePictureCardPreview"
             :before-upload="beforeUpload">
-            <img v-if="form.avatar" :src="viewImage+'/'+form.avatar" class="avatar">
+            <img v-if="form.avatar" :src="viewImage+'/'+form.avatar" :onerror="defaultImg" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -195,6 +200,7 @@ import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
+      defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
       //年级列表
       gradeLists:[],
       // 遮罩层
