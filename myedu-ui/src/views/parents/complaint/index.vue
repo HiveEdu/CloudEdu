@@ -65,6 +65,8 @@
         >导出</el-button>
       </el-col>
     </el-row>
+     <!-- 详情页面-->
+    <cDetailModal ref="cDetailModal" :copmDetail="copmDetail" :currentData="currentData" @closeDetail="closeDetail"></cDetailModal>
     <!--答复页面-->
     <replyModal ref="replyModal" :reply="reply" :currentData="currentData" @closeReply="closeReply"></replyModal>
     <el-table v-loading="loading" :data="complaintList" @selection-change="handleSelectionChange">
@@ -74,7 +76,7 @@
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"/>
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button  size="mini" type="primary"  @click="openStoreDatail(scope.row)">详情</el-button>
+          <el-button  size="mini" type="primary"  @click="openDatail(scope.row)">详情</el-button>
           <el-dropdown size="mini" split-button type="primary" trigger="click">
             操作
             <el-dropdown-menu slot="dropdown">
@@ -142,10 +144,12 @@
 <script>
 import { listComplaint, getComplaint, delComplaint, addComplaint, updateComplaint, exportComplaint } from "@/api/parents/complaint";
 import replyModal from './modal/replyModal'
+import cDetailModal from './modal/cDetailModal'
 export default {
-  components: { replyModal},
+  components: { replyModal,cDetailModal},
   data() {
     return {
+       copmDetail:false,
        //回复页面默认不打开
       reply:false,
       //当前行记录为空
@@ -197,6 +201,15 @@ export default {
     });
   },
   methods: {
+     //打开订单详情页面
+    openDatail(row){
+      this.currentData=row;
+      this.copmDetail=true;
+    },
+    //关闭订单详情页面
+    closeDetail(){
+      this.copmDetail=false;
+    },
      //打开答复页面
     openReply(row){
       this.currentData=row;
