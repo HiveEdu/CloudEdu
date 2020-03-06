@@ -51,3 +51,35 @@ export function exportStoreStudent(query) {
     params: query
   })
 }
+
+//更改学生状态状态离校
+export function changeStatusOff(id) {
+  return request({
+    url: '/store/storeStudent/changeStatusOff/' + id,
+    method: 'get',
+  })
+}
+
+//更改学生状态状态在校
+export function changeStatusOn(id) {
+  return request({
+    url: '/store/storeStudent/changeStatusOn/' + id,
+    method: 'get',
+  })
+}
+//签到
+export function sigint(id) {
+  return request({
+    url: '/store/storeStudent/sigint/' + id,
+    method: 'get',
+  })
+}
+
+//签退
+export function sigout(id) {
+  return request({
+    url: '/store/storeStudent/sigout/' + id,
+    method: 'get',
+  })
+}
+

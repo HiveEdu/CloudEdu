@@ -2,6 +2,7 @@ package com.myedu.project.store.service.impl;
 
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.project.store.domain.vo.YunStoreSigninVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.store.mapper.YunStoreSigninMapper;
@@ -27,7 +28,7 @@ public class YunStoreSigninServiceImpl implements IYunStoreSigninService
      * @return 点名签到
      */
     @Override
-    public YunStoreSignin selectYunStoreSigninById(Long id)
+    public YunStoreSigninVo selectYunStoreSigninById(Long id)
     {
         return yunStoreSigninMapper.selectYunStoreSigninById(id);
     }
@@ -39,7 +40,7 @@ public class YunStoreSigninServiceImpl implements IYunStoreSigninService
      * @return 点名签到
      */
     @Override
-    public List<YunStoreSignin> selectYunStoreSigninList(YunStoreSignin yunStoreSignin)
+    public List<YunStoreSigninVo> selectYunStoreSigninList(YunStoreSigninVo yunStoreSignin)
     {
         return yunStoreSigninMapper.selectYunStoreSigninList(yunStoreSignin);
     }

@@ -90,13 +90,15 @@
       <el-table-column label="门店" align="center" prop="storeName" />
       <el-table-column label="学生" align="center" prop="studentName" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
+      <el-table-column label="签到次数" align="center" prop="sigin" />
+      <el-table-column label="签退次数" align="center" prop="sigout" />
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
 <!--          <el-button-->
 <!--            size="mini"-->
@@ -105,13 +107,57 @@
 <!--            @click="handleUpdate(scope.row)"-->
 <!--            v-hasPermi="['store:storeStudent:edit']"-->
 <!--          >修改</el-button>-->
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['store:storeStudent:remove']"
-          >删除</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item  v-if="scope.row.status!=2">
+                <el-button
+                  size="mini"
+                  type="success"
+                  icon="el-icon-edit"
+                  @click="changeStatus(scope.row,2)"
+                  style="margin-top: 10px"
+                >在校</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item  v-if="scope.row.status==2">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  icon="el-icon-edit"
+                  @click="changeStatus(scope.row,3)"
+                  style="margin-top: 10px"
+                >离校</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item  v-if="scope.row.status==2">
+                <el-button
+                  size="mini"
+                  type="warning"
+                  icon="el-icon-edit"
+                  @click="sign(scope.row,2)"
+                  style="margin-top: 10px"
+                >签到</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item  v-if="scope.row.status==2">
+                <el-button
+                  size="mini"
+                  type="warning"
+                  icon="el-icon-edit"
+                  @click="sign(scope.row,3)"
+                  style="margin-top: 10px"
+                >签退</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item  v-if="scope.row.status==3">
+                <el-button
+                  size="mini"
+                  type="danger"
+                  icon="el-icon-delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['store:storeStudent:remove']"
+                  style="margin-top: 10px"
+                >删除</el-button>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -165,7 +211,8 @@
 </template>
 
 <script>
-import { listStoreStudent, getStoreStudent, delStoreStudent, addStoreStudent, updateStoreStudent, exportStoreStudent } from "@/api/store/storeStudent";
+import { listStoreStudent, getStoreStudent, delStoreStudent, addStoreStudent, updateStoreStudent, exportStoreStudent,
+  changeStatusOff,changeStatusOn,sigint,sigout} from "@/api/store/storeStudent";
 
 export default {
   data() {
@@ -218,6 +265,56 @@ export default {
     });
   },
   methods: {
+    /** 更改门店学生状态 */
+    changeStatus(row,status) {
+      const ids = row.id || this.ids;
+      let studentStatus=null;
+      if(status==2){
+        studentStatus="在校"
+      }else if(status==3){
+        studentStatus="离校"
+      }
+      this.$confirm('是否确认'+studentStatus+'门店编号为"' + ids + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        if(status==2){
+          return changeStatusOn(ids);
+        }else if(status==3){
+          return changeStatusOff(ids);
+        }
+
+      }).then(() => {
+        this.getList();
+        this.msgSuccess(studentStatus+"成功");
+      }).catch(function() {});
+    },
+    //签到签退
+    sign(row,status){
+      const ids = row.id || this.ids;
+      let studentStatus=null;
+      if(status==2){
+        studentStatus="签到"
+      }else if(status==3){
+        studentStatus="签退"
+      }
+      this.$confirm('是否确认'+studentStatus+'学生编为"' + row.studentName + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        if(status==2){
+          return sigint(ids);
+        }else if(status==3){
+          return sigout(ids);
+        }
+
+      }).then(() => {
+        this.getList();
+        this.msgSuccess(studentStatus+"成功");
+      }).catch(function() {});
+    },
     /** 查询门店学生管理列表 */
     getList() {
       this.loading = true;
@@ -344,3 +441,12 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+</style>

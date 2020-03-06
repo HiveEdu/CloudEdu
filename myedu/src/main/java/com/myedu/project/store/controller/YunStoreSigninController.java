@@ -6,6 +6,7 @@ import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStudentService;
+import com.myedu.project.store.domain.vo.YunStoreSigninVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,10 +45,10 @@ public class YunStoreSigninController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('store:signin:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunStoreSignin yunStoreSignin)
+    public TableDataInfo list(YunStoreSigninVo yunStoreSignin)
     {
         startPage();
-        List<YunStoreSignin> list = yunStoreSigninService.selectYunStoreSigninList(yunStoreSignin);
+        List<YunStoreSigninVo> list = yunStoreSigninService.selectYunStoreSigninList(yunStoreSignin);
         return getDataTable(list);
     }
 
@@ -57,10 +58,10 @@ public class YunStoreSigninController extends BaseController
     @PreAuthorize("@ss.hasPermi('store:signin:export')")
     @Log(title = "点名签到", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunStoreSignin yunStoreSignin)
+    public AjaxResult export(YunStoreSigninVo yunStoreSignin)
     {
-        List<YunStoreSignin> list = yunStoreSigninService.selectYunStoreSigninList(yunStoreSignin);
-        ExcelUtil<YunStoreSignin> util = new ExcelUtil<YunStoreSignin>(YunStoreSignin.class);
+        List<YunStoreSigninVo> list = yunStoreSigninService.selectYunStoreSigninList(yunStoreSignin);
+        ExcelUtil<YunStoreSigninVo> util = new ExcelUtil<YunStoreSigninVo>(YunStoreSigninVo.class);
         return util.exportExcel(list, "signin");
     }
 

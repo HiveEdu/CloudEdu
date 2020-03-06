@@ -1,6 +1,8 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreSignin;
+import com.myedu.project.store.domain.vo.YunStoreSigninVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface IYunStoreSigninService
      * @param id 点名签到ID
      * @return 点名签到
      */
-    public YunStoreSignin selectYunStoreSigninById(Long id);
+    public YunStoreSigninVo selectYunStoreSigninById(Long id);
 
     /**
      * 查询点名签到列表
@@ -25,7 +27,7 @@ public interface IYunStoreSigninService
      * @param yunStoreSignin 点名签到
      * @return 点名签到集合
      */
-    public List<YunStoreSignin> selectYunStoreSigninList(YunStoreSignin yunStoreSignin);
+    public List<YunStoreSigninVo> selectYunStoreSigninList(YunStoreSigninVo yunStoreSignin);
 
     /**
      * 新增点名签到

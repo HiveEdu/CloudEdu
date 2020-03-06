@@ -1,17 +1,25 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-        <el-form-item label="名单标题" prop="nameTitle">
-        <el-select v-model="queryParams.nameTitle" placeholder="请选择名单标题" clearable size="small">
-          <el-option
-            v-for="dict in nameTitleOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
+      <el-form-item label="门店" prop="storeName">
+        <el-input
+          v-model="queryParams.storeName"
+          placeholder="请输入门店名称"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
-        <el-form-item label="签到类型" prop="signinType">
+      <el-form-item label="学生" prop="studentName">
+        <el-input
+          v-model="queryParams.studentName"
+          placeholder="请输入学生姓名"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+        <el-form-item label="类型" prop="signinType">
         <el-select v-model="queryParams.signinType" placeholder="请选择签到类型" clearable size="small">
           <el-option
             v-for="dict in signinTypeOptions"
@@ -28,25 +36,25 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['store:signin:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['store:signin:edit']"
-        >修改</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="primary"-->
+<!--          icon="el-icon-plus"-->
+<!--          size="mini"-->
+<!--          @click="handleAdd"-->
+<!--          v-hasPermi="['store:signin:add']"-->
+<!--        >新增</el-button>-->
+<!--      </el-col>-->
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="success"-->
+<!--          icon="el-icon-edit"-->
+<!--          size="mini"-->
+<!--          :disabled="single"-->
+<!--          @click="handleUpdate"-->
+<!--          v-hasPermi="['store:signin:edit']"-->
+<!--        >修改</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -70,19 +78,24 @@
 
     <el-table v-loading="loading" :data="signinList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="门店" align="center" prop="storeName" />
       <el-table-column label="学生" align="center" prop="studentName" />
-      <el-table-column label="名单标题" align="center" prop="nameTitle" :formatter="nameTitleFormat" />
       <el-table-column label="签到类型" align="center" prop="signinType" :formatter="signinTypeFormat" />
-      <el-table-column label="创建人Id" align="center" prop="createById" />
+      <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['store:signin:edit']"
-          >修改</el-button>
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-edit"-->
+<!--            @click="handleUpdate(scope.row)"-->
+<!--            v-hasPermi="['store:signin:edit']"-->
+<!--          >修改</el-button>-->
           <el-button
             size="mini"
             type="text"
@@ -125,7 +138,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="签到类型">
+        <el-form-item label="类型">
           <el-select v-model="form.signinType" placeholder="请选择签到类型">
             <el-option
               v-for="dict in signinTypeOptions"
@@ -191,10 +204,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_name_title").then(response => {
+    this.getDicts("singn_type").then(response => {
       this.nameTitleOptions = response.data;
     });
-    this.getDicts("sys_signin_type").then(response => {
+    this.getDicts("is_signin").then(response => {
       this.signinTypeOptions = response.data;
     });
   },

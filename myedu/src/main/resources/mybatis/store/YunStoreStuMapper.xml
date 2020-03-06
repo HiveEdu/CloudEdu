@@ -17,6 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createById"    column="create_by_id"    />
+        <result property="sigin"    column="sigin"    />
+        <result property="sigout"    column="sigout"    />
     </resultMap>
 
     <sql id="selectYunStoreStuVo">
@@ -62,6 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createById != null ">create_by_id,</if>
+            <if test="sigin != null ">sigin,</if>
+            <if test="sigout != null ">sigout,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="storeId != null ">#{storeId},</if>
@@ -75,6 +79,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createById != null ">#{createById},</if>
+            <if test="sigin != null  and sigin != ''">#{sigin},</if>
+            <if test="sigout != null ">#{sigout},</if>
          </trim>
     </insert>
 
@@ -92,6 +98,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="sigin != null ">sigin = #{sigin},</if>
+            <if test="sigout != null  and sigout != ''">sigout = #{sigout},</if>
         </trim>
         where id = #{id}
     </update>

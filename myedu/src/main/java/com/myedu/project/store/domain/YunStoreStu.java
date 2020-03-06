@@ -45,6 +45,15 @@ public class YunStoreStu extends BaseEntity
     @Excel(name = "创建人Id")
     private Long createById;
 
+
+    /** 签到次数  */
+    @Excel(name = "签到次数")
+    private Long sigin;
+
+    /** 签退次数  */
+    @Excel(name = "签退次数")
+    private Long sigout;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -118,6 +127,22 @@ public class YunStoreStu extends BaseEntity
         return createById;
     }
 
+    public Long getSigin() {
+        return sigin;
+    }
+
+    public void setSigin(Long sigin) {
+        this.sigin = sigin;
+    }
+
+    public Long getSigout() {
+        return sigout;
+    }
+
+    public void setSigout(Long sigout) {
+        this.sigout = sigout;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -133,6 +158,8 @@ public class YunStoreStu extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
             .append("createById", getCreateById())
+                .append("sigin", getSigin())
+                .append("sigout", getSigout())
             .toString();
     }
 }

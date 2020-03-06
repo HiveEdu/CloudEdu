@@ -17,6 +17,9 @@ public class YunStoreSignin extends BaseEntity
     /** 主键id */
     private Long id;
 
+    /** 门店id */
+    @Excel(name = "门店id")
+    private Long storeId;
     /** 学生id */
     @Excel(name = "学生id")
     private Long stuId;
@@ -91,10 +94,19 @@ public class YunStoreSignin extends BaseEntity
         return createById;
     }
 
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
+            .append("storeId", getStoreId())
             .append("stuId", getStuId())
             .append("nameTitle", getNameTitle())
             .append("signinType", getSigninType())

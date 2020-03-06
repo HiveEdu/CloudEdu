@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="YunStoreSigninVo" id="YunStoreSigninResult">
         <result property="id"    column="id"    />
         <result property="stuId"    column="stu_id"    />
+        <result property="storeId"    column="store_id"    />
         <result property="nameTitle"    column="name_title"    />
         <result property="signinType"    column="signin_type"    />
         <result property="createBy"    column="create_by"    />
@@ -18,9 +19,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStoreSigninVo">
-        select yss.*, ys.name as studentName
+        select yss.*, ys.name as studentName,yst.name as storeName
         from yun_store_signin yss
         LEFT  JOIN yun_student ys ON yss.stu_id=ys.id
+        LEFT  JOIN yun_store yst ON yss.store_id=yst.id
+
+        order by yss.create_time desc
     </sql>
 
     <select id="selectYunStoreSigninList" parameterType="YunStoreSigninVo" resultMap="YunStoreSigninResult">
@@ -30,6 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nameTitle != null  and nameTitle != ''"> and name_title like concat('%', #{nameTitle}, '%')</if>
             <if test="signinType != null  and signinType != ''"> and signin_type like concat('%', #{signinType}, '%')</if>
             <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="storeName != null  and storeName != ''"> and yst.name like concat('%', #{storeName}, '%')</if>
+            <if test="studentName != null  and studentName != ''"> and ys.name like concat('%', #{studentName}, '%')</if>
         </where>
     </select>
     
@@ -42,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into yun_store_signin
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="stuId != null ">stu_id,</if>
+            <if test="storeId != null ">store_id,</if>
             <if test="nameTitle != null  and nameTitle != ''">name_title,</if>
             <if test="signinType != null  and signinType != ''">signin_type,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
@@ -53,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="stuId != null ">#{stuId},</if>
+            <if test="storeId != null ">#{storeId},</if>
             <if test="nameTitle != null  and nameTitle != ''">#{nameTitle},</if>
             <if test="signinType != null  and signinType != ''">#{signinType},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
@@ -68,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update yun_store_signin
         <trim prefix="SET" suffixOverrides=",">
             <if test="stuId != null ">stu_id = #{stuId},</if>
+            <if test="storeId != null ">store_id = #{storeId},</if>
             <if test="nameTitle != null  and nameTitle != ''">name_title = #{nameTitle},</if>
             <if test="signinType != null  and signinType != ''">signin_type = #{signinType},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
