@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询投诉列表
 export function listComplaint(query) {
   return request({
@@ -12,7 +12,7 @@ export function listComplaint(query) {
 // 查询投诉详细
 export function getComplaint(id) {
   return request({
-    url: '/parents/complaint/' + id,
+    url: '/parents/complaint/' + praseStrEmpty(id),
     method: 'get'
   })
 }
