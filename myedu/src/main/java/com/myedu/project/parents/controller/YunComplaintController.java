@@ -2,7 +2,11 @@ package com.myedu.project.parents.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.parents.enums.ComplaintStatus;
+import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.enums.StoreStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,5 +107,29 @@ public class YunComplaintController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(yunComplaintService.deleteYunComplaintByIds(ids));
+    }
+
+    /**
+     * @Description :答复投诉
+     * @Author : 梁龙飞
+     * @Date : 2020/3/8 16:30
+     */
+    @PreAuthorize("@ss.hasPermi('parents:complaint:changeStatusOn')")
+    @Log(title = "答复", businessType = BusinessType.UPDATE)
+    @GetMapping("/changeStatusOn/{ids}")
+    public AjaxResult changeStatusOn(@PathVariable Long[] ids,String replyContent)
+    {
+        int rows=0;
+        for (Long id:ids) {
+            YunComplaint yunComplaint= yunComplaintService.selectYunComplaintById(id);
+            if(yunComplaint!=null){
+                yunComplaint.setStatus("1");//已回复
+                yunComplaint.setReplyContent(replyContent);
+                yunComplaint.setReplyBy(SecurityUtils.getUsername());//回复人
+                yunComplaint.setReplyTime(DateUtils.getNowDate());//回复时间
+                rows=yunComplaintService.updateYunComplaint(yunComplaint);
+            }
+        }
+        return toAjax(rows);
     }
 }
