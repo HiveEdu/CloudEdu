@@ -26,6 +26,8 @@ export function addComplaint(data) {
   })
 }
 
+
+
 // 修改投诉
 export function updateComplaint(data) {
   return request({
@@ -49,5 +51,13 @@ export function exportComplaint(query) {
     url: '/parents/complaint/export',
     method: 'get',
     params: query
+  })
+}
+
+//回复投诉
+export function changeStatusOn(id) {
+  return request({
+    url: '/parents/complaint/changeStatusOn/' + id,
+    method: 'get',
   })
 }

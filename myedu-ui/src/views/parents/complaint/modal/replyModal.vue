@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {updateComplaint } from "@/api/parents/complaint";
+import {updateComplaint,changeStatusOn} from "@/api/parents/complaint";
     export default {
         name: "replyModal", 
         props: {
@@ -59,7 +59,7 @@ import {updateComplaint } from "@/api/parents/complaint";
           submitForm: function() {
             this.$refs["replyForm"].validate(valid => {
             if (valid) {
-                updateComplaint(this.replyForm).then(response => {
+                changeStatusOn(this.replyForm).then(response => {
                   if (response.code === 200) {
                     this.msgSuccess("答复成功");
                     this.handleClose();
