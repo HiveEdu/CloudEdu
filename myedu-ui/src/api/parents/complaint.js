@@ -55,9 +55,10 @@ export function exportComplaint(query) {
 }
 
 //回复投诉
-export function changeStatusOn(id) {
+export function reply(data) {
   return request({
-    url: '/parents/complaint/changeStatusOn/' + id,
-    method: 'get',
+    url: '/parents/complaint/reply/',
+    method: 'put',
+    data: data
   })
 }

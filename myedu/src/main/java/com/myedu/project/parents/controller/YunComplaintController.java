@@ -106,27 +106,41 @@ public class YunComplaintController extends BaseController
         return toAjax(yunComplaintService.deleteYunComplaintByIds(ids));
     }
 
+//    /**
+//     * @Description :答复投诉
+//     * @Author : 梁龙飞
+//     * @Date : 2020/3/8 16:30
+//     */
+//    @PreAuthorize("@ss.hasPermi('parents:complaint:changeStatusOn')")
+//    @Log(title = "答复", businessType = BusinessType.UPDATE)
+//    @GetMapping("/changeStatusOn/{ids}")
+//    public AjaxResult changeStatusOn(@PathVariable Long[] ids,String replyContent)
+//    {
+//        int rows=0;
+//        for (Long id:ids) {
+//            YunComplaint yunComplaint= yunComplaintService.selectYunComplaintById(id);
+//            if(yunComplaint!=null){
+//                yunComplaint.setStatus("1");//已回复
+//                yunComplaint.setReplyContent(replyContent);
+//                yunComplaint.setReplyBy(SecurityUtils.getUsername());//回复人
+//                yunComplaint.setReplyTime(DateUtils.getNowDate());//回复时间
+//                rows=yunComplaintService.updateYunComplaint(yunComplaint);
+//            }
+//        }
+//        return toAjax(rows);
+//    }
+
     /**
-     * @Description :答复投诉
-     * @Author : 梁龙飞
-     * @Date : 2020/3/8 16:30
+     * 投诉回复
      */
-    @PreAuthorize("@ss.hasPermi('parents:complaint:changeStatusOn')")
-    @Log(title = "答复", businessType = BusinessType.UPDATE)
-    @GetMapping("/changeStatusOn/{ids}")
-    public AjaxResult changeStatusOn(@PathVariable Long[] ids,String replyContent)
+    @PreAuthorize("@ss.hasPermi('parents:complaint:reply')")
+    @Log(title = "投诉", businessType = BusinessType.UPDATE)
+    @PutMapping("/reply")
+    public AjaxResult reply(@RequestBody YunComplaint yunComplaint)
     {
-        int rows=0;
-        for (Long id:ids) {
-            YunComplaint yunComplaint= yunComplaintService.selectYunComplaintById(id);
-            if(yunComplaint!=null){
-                yunComplaint.setStatus("1");//已回复
-                yunComplaint.setReplyContent(replyContent);
-                yunComplaint.setReplyBy(SecurityUtils.getUsername());//回复人
-                yunComplaint.setReplyTime(DateUtils.getNowDate());//回复时间
-                rows=yunComplaintService.updateYunComplaint(yunComplaint);
-            }
-        }
-        return toAjax(rows);
+        yunComplaint.setStatus("1");//已回复
+        yunComplaint.setReplyBy(SecurityUtils.getUsername());//回复人
+        yunComplaint.setReplyTime(DateUtils.getNowDate());//回复时间
+        return toAjax(yunComplaintService.updateYunComplaint(yunComplaint));
     }
 }
