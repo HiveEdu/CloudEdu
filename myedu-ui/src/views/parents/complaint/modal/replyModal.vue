@@ -8,12 +8,6 @@
         <el-form-item label="答复内容" prop="replyContent" style="margin-top:10px">
                 <el-input v-model="replyForm.replyContent" placeholder="请输入答复内容" type="textarea"></el-input>
         </el-form-item> 
-        <el-form-item label="答复状态" prop="status" style="margin-top:10px">
-                <el-radio-group v-model="replyForm.status" > 
-                  <el-radio key="0" label="0" border>投诉中</el-radio>
-                  <el-radio key="1" label="1" border>已回复</el-radio>
-                </el-radio-group>
-        </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
     <el-button @click="handleClose">取 消</el-button>

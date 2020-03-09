@@ -26,7 +26,7 @@
       </div>
       <el-row>
         <el-col :span="8" >
-             <div class="text item">答复状态: 
+            <div class="text item">答复状态:
             <span v-for="item in statusOptions">
                <span v-if="form.status==item.dictValue">
                  {{ item.dictLabel }}
