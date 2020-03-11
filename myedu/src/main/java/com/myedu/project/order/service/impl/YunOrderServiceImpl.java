@@ -3,6 +3,7 @@ package com.myedu.project.order.service.impl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.security.cert.Certificate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +13,8 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.alipay.api.request.AlipayEcapiprodDrawndnPaymentscheduleGetRequest;
-import com.alipay.api.request.AlipayOfflineMarketShopCreateRequest;
-import com.alipay.api.request.AlipayTradeOrderSettleRequest;
-import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.*;
+import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.alipay.api.response.AlipayOfflineMarketShopCreateResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
 import com.myedu.common.utils.DateUtils;
@@ -37,7 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import com.alipay.api.CertAlipayRequest;
 /**
  * 订单Service业务层处理
  * 
@@ -315,54 +314,44 @@ public class YunOrderServiceImpl implements IYunOrderService
     }
 
     public static void main(String[] args) {
-
-//        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do","app_id","your private_key","json","GBK","alipay_public_key","RSA2");
-                AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do","2016102100728796","MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCR+IlGP/WSR1xoeiqgMsJ6OSWMst0MNajfhj2OafVLhwlRYC8QkshuORvJY2aG6KEQL7qJybMbqaXlD/8OLUiMYK0BD7CSdbF9oMAx2dHc87u0JwhBi7n7DInGam9v7iZhq5Pj0ME8CDuRDxPCnZQFh09jcKnIAWOrcEk8S9GCyQn8qYlxd/Gex9y3b51UhMtpURmUIFRszvFiWDMGIO//vq2cCOb4Pm2w6v5eCEABqtenvotmncotVoRn4H6yLfJW0putMTPql0YCLhplceA5m5e/VSKv3/Vmu1Is/EtB20p/dQtth72fResyabpaBAEZX+yOQkaJ/bXYrLaATVqxAgMBAAECggEAO6kbYk0N78We7UzRUzyr5AyrXkBUvILKDOHvEuAX09DTbCEl215C8VoCE2O/KfC2s8juMxbvT6UdGuxY0NCNUGLLEx34i0PzUWd8ZmOitO4hj9ZMN44Ga6eKQECMX3E02sKn5XsTH5g10GobJ3YEY+YT+o63tflrZUy1giFy9kLavmjjw5MrHmJtwvQflSgwDDfcjOBcM5Yuosj4cm42o11eOFeIZ/m2LetW2qKYcDyOfCVCeNiS2oF5C2W/6agqnK9aMw7KReUTJxiD0h+19R+o1iCcXGYYgSDUbbQnH0puINtMHrAuUwplnQjDwozS+XbtAdwRJks9r4iIRU/oAQKBgQDMjezFwF95gOmLYd/tuc4u+reHwNG4QziITyb91yO6QliPyXPXa+Nx0RSOW5nhEWipWLEeToxClqcWjgoe3ROaIVJHWHVIxnQ29tYxyL7TAj3yf38RJqmI5CJTt+bOIFVicsRAJxHZABKVplc0mZAFTI0gbskO6eW+zgvr713UwQKBgQC2rsFUxB/qzsbwd9DD/LwHLrN7Q2eZ9vzmaxp4CFVWJJQl6SinzLZx8quEp0KqOPD5y27FLCXVAtAK7N4pGCL2bi0O8QrszC2tKFL35cdLBkOwPgGp9tRlcflzJWPjb9bcm1jqX+YkgoWdnTbjw2QfhbMQFiKoSFXbmtg5n2dR8QKBgQCQKlK+iLeBXd67km6NEFAFgkRJVBc6w32bbBWx/6e5hTr/k96l6+7v74iKUHriSi+2csDZ+EgYQi9e0RrG588B6QwhJnH6qYuMlWkeyznaY5EfUMZQYyxHQ2oCEPGFQvqKmRJBmIeWpdtzRznc44HCilJIkmv3q9d1I6j5TsmVwQKBgQCslWg8BpUIpZS4NNlbbnbMakhRmRpVEEtX+7Mj1uuX2DLFpgIslG+AMvvq9IE8g1LVCmV5jP2owWF+EMzJEe5l1SxoQzxI/ZPhVIkdfUzMCf0EkW/M/E0oEYbSS26UvWHFRFW6BiNMNqq4foAOqNb8GLlT5zWSudOzBhRkS722YQKBgEvmTa5B344fo9PFIWuH6MnUaQQNN2A3tqXNF1uF/mx2MrpkZ6CBx7KJDYF889OMrVUrUi5iFAx0UmGfOqt6S0q5lTAFXk+6rJDqk4kAW36O7oerEHBL815WYNWuZ7n3ERt1iouz21B2TdB5mZbzmsEKb5V0dGRIa+NmVxD4Ql+e",
-                "json","GBK","+Lgx2OAAULZ4s0TMTCnbEKz60fVENwLxBV51Ic28tIW/DZbB4Iy4ut17aIrnNCusN/m3b0AOjg3Ykdb387lr8Zy5IRjQVKND0j1eTHPd0/EOGDaJJN9Ku4CTKw2+PwIDAQAB","RSA2");
-        AlipayOfflineMarketShopCreateRequest request = new AlipayOfflineMarketShopCreateRequest();
-        request.setBizContent("{" +
-                "\"store_id\":\"hz001\"," +
-                "\"category_id\":\"2015050700000018\"," +
-                "\"brand_name\":\"肯德基\"," +
-                "\"brand_logo\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
-                "\"main_shop_name\":\"海底捞\"," +
-                "\"branch_shop_name\":\"万塘路店\"," +
-                "\"province_code\":\"110000\"," +
-                "\"city_code\":\"140500\"," +
-                "\"district_code\":\"140521\"," +
-                "\"address\":\"万塘路18号黄龙时代广场\"," +
-                "\"longitude\":114.266418," +
-                "\"latitude\":\"30.548828\"," +
-                "\"contact_number\":\"13612344321,021-12336754\"," +
-                "\"notify_mobile\":\"13867498729\"," +
-                "\"main_image\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
-                "\"audit_images\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC,4Q8Pp00AT7eo9NoAJkMR3AAAACMAAUYT\"," +
-                "\"business_time\":\"周一-周五 09:00-20:00,周六-周日 10:00-22:00\"," +
-                "\"wifi\":\"T\"," +
-                "\"parking\":\"F\"," +
-                "\"value_added\":\"免费茶水、免费糖果\"," +
-                "\"isv_uid\":\"2088001969784501\"," +
-                "\"licence\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
-                "\"licence_code\":\"H001232\"," +
-                "\"licence_name\":\"来伊份上海分公司\"," +
-                "\"business_certificate\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
-                "\"business_certificate_expires\":\"2020-03-20\"," +
-                "\"auth_letter\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
-                "\"is_operating_online\":\"T\"," +
-                "\"online_url\":\"http://www.******.com/shop/21831830\"," +
-                "\"operate_notify_url\":\"http://abc.com\"," +
-                "\"implement_id\":\"HU002,HT002\"," +
-                "\"no_smoking\":\"T\"," +
-                "\"box\":\"T\"," +
-                "\"request_id\":\"2015123235324534\"," +
-                "\"other_authorization\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC,1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
-                "\"licence_expires\":\"2020-10-20\"," +
-                "\"op_role\":\"ISV\"," +
-                "\"biz_version\":\"2.0\"" +
-                "  }");
-        AlipayOfflineMarketShopCreateResponse response = null;
+        //单笔转账到支付宝账户
+        CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
+        certAlipayRequest.setServerUrl("https://openapi.alipay.com/gateway.do");
+        certAlipayRequest.setAppId("2021001141615718");
+        certAlipayRequest.setPrivateKey("MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCDXeZL15XDePyu9Q82kpxMGabwhXWanGzL37EKqLIxzKKMflxNOVc463pHxqo7MCm+8Gz4CWcRhIppvk1ZrbCOEyaczFImg3jAbuu/tSjfMAScIGKKBIPQfIbvOZqLynF9PZGeTLY7b9sQnnaE1HeF6a59Zo79RuSAPEJ2kZZfYqAV8rBxSH+/9vqZI0U7p/mmsNApyx+OQxdZyZfcA3fZTTQ17goIqkKjS+HTPERuT/n68H049wgnr/kw60kbWiybgdmKb0y9GrM0TPYHzkcmowwN+EiLD2aaMmiwdeVV30NnRAh34+BVEmwon0s0qpRXEF81o76He8a3sxVYYVOBAgMBAAECggEBAINc35ERuNoqXwuZVKguvYq/0BcObga4y3anboOJI//2cMlrBmPWpijuGG4z9ECRrf0YsO7rgBydXEfXm8PEkxvPfLoo+zE2IQbVJHuk7YUZoFJ7c+4uC53tGIWaJbgKLaiea8JPVZ9kADzDKSM0z3yiq/EMIIqXXKH7ID8u4J7qMhsQvP5l0jNL/cxOIvPfXf2V8q6X8voxW77SBcinAXZ6UvpQfBSz4YHIusEdVLz3sv81t3Y3+HrvY1EB9TJUbC8kJ5k5a2d/rxbGokwaIb3ewfZkn2UUXnHpb4OO+7dcOeFFnsILJUBLY+3GBZOTfH/dVrpGgw69+9wPxJY/KP0CgYEAxNB/A75QWTLA+jI6er2YWLQ+V+9Yg7drYfo/xjAf7UJWYU12BghlBXVuKpB4L/Fqgg+dk2ztpQ9jyZtiM9T5FKYYuLbZyW0SXp3XhG9IXXZ3kivlJMgQhGzP641/tOGimaTGUmm3P0fcTVANKMXvCC7wVy03o2xBiXGaoqiolb8CgYEAqt8AbjCW05LE1N1xUcSUlZpzL/aftnHN+mWhEyh4PQ4tgKqCT6Vg7BPiYL2VeXP9/wzxVL6E5uDoGfEOKpcsyj2LEjgl4z99LXTYlujuzEENiu79muPCP2p32MtTWYsNz1YjyayWWCt8mOXiPGU8cpWsnv1l0r+w1yKmrpfw5r8CgYAdk9vSuzImBYuczhmdwop3ojbQTkb2HIWFxu74oNjbdiG3I8X96BsOc/Rnbyiww84m16PtuOwJ50Mu1Cww7+uy37dNYyVdsQeWso/l9jdg3GHh1LjuCyb4T8X7d1te2p3uCyZG0l5YozsHX2Vq4Dwo9azm3QPEiota1XjQwxn6zwKBgAYFJ1m6goXfxOmPB8AOwgFnWKmW8deWuOAalos7QMk956KB32d49yo6JR6tb0fBK3DB/vqyX7JWuDa5xHsBqoVRl8XDjqosAXgJhtwCRu+RVy3O78Z2QdDEKobL2xrriEgGy+n+F6nxlkk4yDjChFexKEzNtrmvIUbjJKZAGi+3AoGAQ7zMhX5kyTkcBuMuaL/VijcfBFbT9zmbIEfW/DbZ1lMqpGqDnsU9doFPqiVn4saTohEpMo2U3ZiLKMsahkUOdi2MFYxyfuDYsXxQkHR3LAgOAmGtkXfo5i56sXsxWemFaHld1ArvdI8nomWGwKRXirb6aWIVJ5jcxg+c1oYlErM=");
+        certAlipayRequest.setFormat("json");
+        certAlipayRequest.setCharset("utf-8");
+        certAlipayRequest.setSignType("RSA2");
+        //请更换为您的应用公钥证书文件路径
+        certAlipayRequest.setCertPath("G:\\MyProject\\MyEdu\\appCertPublicKey_2021001141615718.crt");
+        //请更换您的支付宝公钥证书文件路径
+        certAlipayRequest.setAlipayPublicCertPath("G:\\MyProject\\MyEdu\\alipayCertPublicKey_RSA2.crt");
+        //更换为支付宝根证书文件路径
+        certAlipayRequest.setRootCertPath("G:\\MyProject\\MyEdu\\alipayRootCert.crt");
+        DefaultAlipayClient alipayClient =null;
         try {
-            response = alipayClient.execute(request);
+            alipayClient = new DefaultAlipayClient(certAlipayRequest);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+        AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
+        request.setBizContent("{" +
+                "\"out_biz_no\":\"201806300001\"," +
+                "\"trans_amount\":1.68," +
+                "\"product_code\":\"TRANS_ACCOUNT_NO_PWD\"," +
+                "\"biz_scene\":\"DIRECT_TRANSFER\"," +
+                "\"order_title\":\"201905代发\"," +
+                "\"payee_info\":{" +
+                "\"identity\":\"2088123412341234\"," +
+                "\"identity_type\":\"ALIPAY_USER_ID\"," +
+                "\"name\":\"黄龙国际有限公司\"," +
+                "    }," +
+                "\"remark\":\"201905代发\"," +
+                "\"business_params\":\"{\\\"payer_show_name\\\":\\\"服务代理\\\"}\"," +
+                "  }");
+        AlipayFundTransUniTransferResponse response = null;
+        try {
+            response = alipayClient.certificateExecute(request);
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
@@ -370,10 +359,14 @@ public class YunOrderServiceImpl implements IYunOrderService
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");
-
         }
-//        AlipayClient alipayClient = new DefaultAlipayClient("https://openasyncapi.alipay.com/gateway.do","2016102100728796","MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCR+IlGP/WSR1xoeiqgMsJ6OSWMst0MNajfhj2OafVLhwlRYC8QkshuORvJY2aG6KEQL7qJybMbqaXlD/8OLUiMYK0BD7CSdbF9oMAx2dHc87u0JwhBi7n7DInGam9v7iZhq5Pj0ME8CDuRDxPCnZQFh09jcKnIAWOrcEk8S9GCyQn8qYlxd/Gex9y3b51UhMtpURmUIFRszvFiWDMGIO//vq2cCOb4Pm2w6v5eCEABqtenvotmncotVoRn4H6yLfJW0putMTPql0YCLhplceA5m5e/VSKv3/Vmu1Is/EtB20p/dQtth72fResyabpaBAEZX+yOQkaJ/bXYrLaATVqxAgMBAAECggEAO6kbYk0N78We7UzRUzyr5AyrXkBUvILKDOHvEuAX09DTbCEl215C8VoCE2O/KfC2s8juMxbvT6UdGuxY0NCNUGLLEx34i0PzUWd8ZmOitO4hj9ZMN44Ga6eKQECMX3E02sKn5XsTH5g10GobJ3YEY+YT+o63tflrZUy1giFy9kLavmjjw5MrHmJtwvQflSgwDDfcjOBcM5Yuosj4cm42o11eOFeIZ/m2LetW2qKYcDyOfCVCeNiS2oF5C2W/6agqnK9aMw7KReUTJxiD0h+19R+o1iCcXGYYgSDUbbQnH0puINtMHrAuUwplnQjDwozS+XbtAdwRJks9r4iIRU/oAQKBgQDMjezFwF95gOmLYd/tuc4u+reHwNG4QziITyb91yO6QliPyXPXa+Nx0RSOW5nhEWipWLEeToxClqcWjgoe3ROaIVJHWHVIxnQ29tYxyL7TAj3yf38RJqmI5CJTt+bOIFVicsRAJxHZABKVplc0mZAFTI0gbskO6eW+zgvr713UwQKBgQC2rsFUxB/qzsbwd9DD/LwHLrN7Q2eZ9vzmaxp4CFVWJJQl6SinzLZx8quEp0KqOPD5y27FLCXVAtAK7N4pGCL2bi0O8QrszC2tKFL35cdLBkOwPgGp9tRlcflzJWPjb9bcm1jqX+YkgoWdnTbjw2QfhbMQFiKoSFXbmtg5n2dR8QKBgQCQKlK+iLeBXd67km6NEFAFgkRJVBc6w32bbBWx/6e5hTr/k96l6+7v74iKUHriSi+2csDZ+EgYQi9e0RrG588B6QwhJnH6qYuMlWkeyznaY5EfUMZQYyxHQ2oCEPGFQvqKmRJBmIeWpdtzRznc44HCilJIkmv3q9d1I6j5TsmVwQKBgQCslWg8BpUIpZS4NNlbbnbMakhRmRpVEEtX+7Mj1uuX2DLFpgIslG+AMvvq9IE8g1LVCmV5jP2owWF+EMzJEe5l1SxoQzxI/ZPhVIkdfUzMCf0EkW/M/E0oEYbSS26UvWHFRFW6BiNMNqq4foAOqNb8GLlT5zWSudOzBhRkS722YQKBgEvmTa5B344fo9PFIWuH6MnUaQQNN2A3tqXNF1uF/mx2MrpkZ6CBx7KJDYF889OMrVUrUi5iFAx0UmGfOqt6S0q5lTAFXk+6rJDqk4kAW36O7oerEHBL815WYNWuZ7n3ERt1iouz21B2TdB5mZbzmsEKb5V0dGRIa+NmVxD4Ql+e",
-//                "json","GBK","+Lgx2OAAULZ4s0TMTCnbEKz60fVENwLxBV51Ic28tIW/DZbB4Iy4ut17aIrnNCusN/m3b0AOjg3Ykdb387lr8Zy5IRjQVKND0j1eTHPd0/EOGDaJJN9Ku4CTKw2+PwIDAQAB","RSA2");
+
+
+
+        //收单资金结算到银行账户，结算成功的异步通知测试开始
+//        AlipayClient alipayClient = new DefaultAlipayClient("https://openasyncapi.alipay.com/gateway.do",
+//                "2021001141615718","MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCDXeZL15XDePyu9Q82kpxMGabwhXWanGzL37EKqLIxzKKMflxNOVc463pHxqo7MCm+8Gz4CWcRhIppvk1ZrbCOEyaczFImg3jAbuu/tSjfMAScIGKKBIPQfIbvOZqLynF9PZGeTLY7b9sQnnaE1HeF6a59Zo79RuSAPEJ2kZZfYqAV8rBxSH+/9vqZI0U7p/mmsNApyx+OQxdZyZfcA3fZTTQ17goIqkKjS+HTPERuT/n68H049wgnr/kw60kbWiybgdmKb0y9GrM0TPYHzkcmowwN+EiLD2aaMmiwdeVV30NnRAh34+BVEmwon0s0qpRXEF81o76He8a3sxVYYVOBAgMBAAECggEBAINc35ERuNoqXwuZVKguvYq/0BcObga4y3anboOJI//2cMlrBmPWpijuGG4z9ECRrf0YsO7rgBydXEfXm8PEkxvPfLoo+zE2IQbVJHuk7YUZoFJ7c+4uC53tGIWaJbgKLaiea8JPVZ9kADzDKSM0z3yiq/EMIIqXXKH7ID8u4J7qMhsQvP5l0jNL/cxOIvPfXf2V8q6X8voxW77SBcinAXZ6UvpQfBSz4YHIusEdVLz3sv81t3Y3+HrvY1EB9TJUbC8kJ5k5a2d/rxbGokwaIb3ewfZkn2UUXnHpb4OO+7dcOeFFnsILJUBLY+3GBZOTfH/dVrpGgw69+9wPxJY/KP0CgYEAxNB/A75QWTLA+jI6er2YWLQ+V+9Yg7drYfo/xjAf7UJWYU12BghlBXVuKpB4L/Fqgg+dk2ztpQ9jyZtiM9T5FKYYuLbZyW0SXp3XhG9IXXZ3kivlJMgQhGzP641/tOGimaTGUmm3P0fcTVANKMXvCC7wVy03o2xBiXGaoqiolb8CgYEAqt8AbjCW05LE1N1xUcSUlZpzL/aftnHN+mWhEyh4PQ4tgKqCT6Vg7BPiYL2VeXP9/wzxVL6E5uDoGfEOKpcsyj2LEjgl4z99LXTYlujuzEENiu79muPCP2p32MtTWYsNz1YjyayWWCt8mOXiPGU8cpWsnv1l0r+w1yKmrpfw5r8CgYAdk9vSuzImBYuczhmdwop3ojbQTkb2HIWFxu74oNjbdiG3I8X96BsOc/Rnbyiww84m16PtuOwJ50Mu1Cww7+uy37dNYyVdsQeWso/l9jdg3GHh1LjuCyb4T8X7d1te2p3uCyZG0l5YozsHX2Vq4Dwo9azm3QPEiota1XjQwxn6zwKBgAYFJ1m6goXfxOmPB8AOwgFnWKmW8deWuOAalos7QMk956KB32d49yo6JR6tb0fBK3DB/vqyX7JWuDa5xHsBqoVRl8XDjqosAXgJhtwCRu+RVy3O78Z2QdDEKobL2xrriEgGy+n+F6nxlkk4yDjChFexKEzNtrmvIUbjJKZAGi+3AoGAQ7zMhX5kyTkcBuMuaL/VijcfBFbT9zmbIEfW/DbZ1lMqpGqDnsU9doFPqiVn4saTohEpMo2U3ZiLKMsahkUOdi2MFYxyfuDYsXxQkHR3LAgOAmGtkXfo5i56sXsxWemFaHld1ArvdI8nomWGwKRXirb6aWIVJ5jcxg+c1oYlErM=",
+//                "json","GBK","MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAg13mS9eVw3j8rvUPNpKcTBmm8IV1mpxsy9+xCqiyMcyijH5cTTlXOOt6R8aqOzApvvBs+AlnEYSKab5NWa2wjhMmnMxSJoN4wG7rv7Uo3zAEnCBiigSD0HyG7zmai8pxfT2Rnky2O2/bEJ52hNR3hemufWaO/UbkgDxCdpGWX2KgFfKwcUh/v/b6mSNFO6f5prDQKcsfjkMXWcmX3AN32U00Ne4KCKpCo0vh0zxEbk/5+vB9OPcIJ6/5MOtJG1osm4HZim9MvRqzNEz2B85HJqMMDfhIiw9mmjJosHXlVd9DZ0QId+PgVRJsKJ9LNKqUVxBfNaO+h3vGt7MVWGFTgQIDAQAB","RSA2");
 //        AlipayTradeOrderSettleRequest request = new AlipayTradeOrderSettleRequest();
 //        request.setBizContent("{" +
 //                "\"settle_time\":\"2009-05-06 10:07:41\"," +
@@ -398,5 +391,122 @@ public class YunOrderServiceImpl implements IYunOrderService
 //        } else {
 //            System.out.println("调用失败");
 //        }
+        //收单资金结算到银行账户，结算成功的异步通知测试结束
+
+
+//        CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
+//        certAlipayRequest.setServerUrl("https://openapi.alipay.com/gateway.do");
+//        certAlipayRequest.setAppId("2021001141615718");
+//        //应用私匙
+//        certAlipayRequest.setPrivateKey("MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCDXeZL15XDePyu9Q82kpxMGabwhXWanGzL37EKqLIxzKKMflxNOVc463pHxqo7MCm+8Gz4CWcRhIppvk1ZrbCOEyaczFImg3jAbuu/tSjfMAScIGKKBIPQfIbvOZqLynF9PZGeTLY7b9sQnnaE1HeF6a59Zo79RuSAPEJ2kZZfYqAV8rBxSH+/9vqZI0U7p/mmsNApyx+OQxdZyZfcA3fZTTQ17goIqkKjS+HTPERuT/n68H049wgnr/kw60kbWiybgdmKb0y9GrM0TPYHzkcmowwN+EiLD2aaMmiwdeVV30NnRAh34+BVEmwon0s0qpRXEF81o76He8a3sxVYYVOBAgMBAAECggEBAINc35ERuNoqXwuZVKguvYq/0BcObga4y3anboOJI//2cMlrBmPWpijuGG4z9ECRrf0YsO7rgBydXEfXm8PEkxvPfLoo+zE2IQbVJHuk7YUZoFJ7c+4uC53tGIWaJbgKLaiea8JPVZ9kADzDKSM0z3yiq/EMIIqXXKH7ID8u4J7qMhsQvP5l0jNL/cxOIvPfXf2V8q6X8voxW77SBcinAXZ6UvpQfBSz4YHIusEdVLz3sv81t3Y3+HrvY1EB9TJUbC8kJ5k5a2d/rxbGokwaIb3ewfZkn2UUXnHpb4OO+7dcOeFFnsILJUBLY+3GBZOTfH/dVrpGgw69+9wPxJY/KP0CgYEAxNB/A75QWTLA+jI6er2YWLQ+V+9Yg7drYfo/xjAf7UJWYU12BghlBXVuKpB4L/Fqgg+dk2ztpQ9jyZtiM9T5FKYYuLbZyW0SXp3XhG9IXXZ3kivlJMgQhGzP641/tOGimaTGUmm3P0fcTVANKMXvCC7wVy03o2xBiXGaoqiolb8CgYEAqt8AbjCW05LE1N1xUcSUlZpzL/aftnHN+mWhEyh4PQ4tgKqCT6Vg7BPiYL2VeXP9/wzxVL6E5uDoGfEOKpcsyj2LEjgl4z99LXTYlujuzEENiu79muPCP2p32MtTWYsNz1YjyayWWCt8mOXiPGU8cpWsnv1l0r+w1yKmrpfw5r8CgYAdk9vSuzImBYuczhmdwop3ojbQTkb2HIWFxu74oNjbdiG3I8X96BsOc/Rnbyiww84m16PtuOwJ50Mu1Cww7+uy37dNYyVdsQeWso/l9jdg3GHh1LjuCyb4T8X7d1te2p3uCyZG0l5YozsHX2Vq4Dwo9azm3QPEiota1XjQwxn6zwKBgAYFJ1m6goXfxOmPB8AOwgFnWKmW8deWuOAalos7QMk956KB32d49yo6JR6tb0fBK3DB/vqyX7JWuDa5xHsBqoVRl8XDjqosAXgJhtwCRu+RVy3O78Z2QdDEKobL2xrriEgGy+n+F6nxlkk4yDjChFexKEzNtrmvIUbjJKZAGi+3AoGAQ7zMhX5kyTkcBuMuaL/VijcfBFbT9zmbIEfW/DbZ1lMqpGqDnsU9doFPqiVn4saTohEpMo2U3ZiLKMsahkUOdi2MFYxyfuDYsXxQkHR3LAgOAmGtkXfo5i56sXsxWemFaHld1ArvdI8nomWGwKRXirb6aWIVJ5jcxg+c1oYlErM=");
+//        certAlipayRequest.setFormat("json");
+//        certAlipayRequest.setCharset("utf-8");
+//        certAlipayRequest.setSignType("RSA2");
+//        //请更换为您的应用公钥证书文件路径
+//        certAlipayRequest.setCertPath("G:\\MyProject\\MyEdu\\appCertPublicKey_2021001141615718.crt");
+//        //请更换您的支付宝公钥证书文件路径
+//        certAlipayRequest.setAlipayPublicCertPath("G:\\MyProject\\MyEdu\\alipayCertPublicKey_RSA2.crt");
+//        //更换为支付宝根证书文件路径
+//        certAlipayRequest.setRootCertPath("G:\\MyProject\\MyEdu\\alipayRootCert.crt");
+//        DefaultAlipayClient alipayClient = null;
+//        try {
+//            alipayClient = new DefaultAlipayClient(certAlipayRequest);
+//        } catch (AlipayApiException e) {
+//            e.printStackTrace();
+//        }
+//        AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
+//        request.setBizContent("{" +
+//                "\"out_biz_no\":\"201806300001\"," +
+//                "\"trans_amount\":1.68," +
+//                "\"product_code\":\"TRANS_BANKCARD_NO_PWD\"," +
+//                "\"biz_scene\":\"DIRECT_TRANSFER\"," +
+//                "\"order_title\":\"201905代发\"," +
+//                "\"payee_info\":{" +
+//                "\"identity\":\"6226732518263115\"," +
+//                "\"identity_type\":\"BANKCARD_ACCOUNT\"," +
+//                "\"name\":\"黄龙国际有限公司\"," +
+//                "\"bankcard_ext_info\": \"{" +
+//                "\\\"inst_branch_name\\\": \\\"上海市支行\\\","+
+//                "\\\"inst_name\\\": \\\"中国光大银行\\\","+
+//                "\\\"inst_city\\\": \\\"上海市\\\","+
+//                "\\\"inst_province\\\": \\\"上海市\\\","+
+//                "\\\"bank_code\\\": \\\"123456\\\","+
+//                "\\\"account_type\\\": \\\"1\\\","+
+//                "            }, " +
+//                "    }," +
+//                "\"remark\":\"201905代发\"," +
+//                "\"business_params\":\"{\\\"payer_show_name\\\":\\\"服务代理\\\"}\"," +
+//                "  }");
+//        AlipayFundTransUniTransferResponse response = null;
+//        try {
+//            response = alipayClient.certificateExecute(request);
+//        } catch (AlipayApiException e) {
+//            e.printStackTrace();
+//        }
+//        if(response.isSuccess()){
+//            System.out.println("调用成功");
+//        } else {
+//            System.out.println("调用失败");
+//        }
+
+
+
+
+//                AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do","2016102100728796","MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCR+IlGP/WSR1xoeiqgMsJ6OSWMst0MNajfhj2OafVLhwlRYC8QkshuORvJY2aG6KEQL7qJybMbqaXlD/8OLUiMYK0BD7CSdbF9oMAx2dHc87u0JwhBi7n7DInGam9v7iZhq5Pj0ME8CDuRDxPCnZQFh09jcKnIAWOrcEk8S9GCyQn8qYlxd/Gex9y3b51UhMtpURmUIFRszvFiWDMGIO//vq2cCOb4Pm2w6v5eCEABqtenvotmncotVoRn4H6yLfJW0putMTPql0YCLhplceA5m5e/VSKv3/Vmu1Is/EtB20p/dQtth72fResyabpaBAEZX+yOQkaJ/bXYrLaATVqxAgMBAAECggEAO6kbYk0N78We7UzRUzyr5AyrXkBUvILKDOHvEuAX09DTbCEl215C8VoCE2O/KfC2s8juMxbvT6UdGuxY0NCNUGLLEx34i0PzUWd8ZmOitO4hj9ZMN44Ga6eKQECMX3E02sKn5XsTH5g10GobJ3YEY+YT+o63tflrZUy1giFy9kLavmjjw5MrHmJtwvQflSgwDDfcjOBcM5Yuosj4cm42o11eOFeIZ/m2LetW2qKYcDyOfCVCeNiS2oF5C2W/6agqnK9aMw7KReUTJxiD0h+19R+o1iCcXGYYgSDUbbQnH0puINtMHrAuUwplnQjDwozS+XbtAdwRJks9r4iIRU/oAQKBgQDMjezFwF95gOmLYd/tuc4u+reHwNG4QziITyb91yO6QliPyXPXa+Nx0RSOW5nhEWipWLEeToxClqcWjgoe3ROaIVJHWHVIxnQ29tYxyL7TAj3yf38RJqmI5CJTt+bOIFVicsRAJxHZABKVplc0mZAFTI0gbskO6eW+zgvr713UwQKBgQC2rsFUxB/qzsbwd9DD/LwHLrN7Q2eZ9vzmaxp4CFVWJJQl6SinzLZx8quEp0KqOPD5y27FLCXVAtAK7N4pGCL2bi0O8QrszC2tKFL35cdLBkOwPgGp9tRlcflzJWPjb9bcm1jqX+YkgoWdnTbjw2QfhbMQFiKoSFXbmtg5n2dR8QKBgQCQKlK+iLeBXd67km6NEFAFgkRJVBc6w32bbBWx/6e5hTr/k96l6+7v74iKUHriSi+2csDZ+EgYQi9e0RrG588B6QwhJnH6qYuMlWkeyznaY5EfUMZQYyxHQ2oCEPGFQvqKmRJBmIeWpdtzRznc44HCilJIkmv3q9d1I6j5TsmVwQKBgQCslWg8BpUIpZS4NNlbbnbMakhRmRpVEEtX+7Mj1uuX2DLFpgIslG+AMvvq9IE8g1LVCmV5jP2owWF+EMzJEe5l1SxoQzxI/ZPhVIkdfUzMCf0EkW/M/E0oEYbSS26UvWHFRFW6BiNMNqq4foAOqNb8GLlT5zWSudOzBhRkS722YQKBgEvmTa5B344fo9PFIWuH6MnUaQQNN2A3tqXNF1uF/mx2MrpkZ6CBx7KJDYF889OMrVUrUi5iFAx0UmGfOqt6S0q5lTAFXk+6rJDqk4kAW36O7oerEHBL815WYNWuZ7n3ERt1iouz21B2TdB5mZbzmsEKb5V0dGRIa+NmVxD4Ql+e",
+//                "json","GBK","+Lgx2OAAULZ4s0TMTCnbEKz60fVENwLxBV51Ic28tIW/DZbB4Iy4ut17aIrnNCusN/m3b0AOjg3Ykdb387lr8Zy5IRjQVKND0j1eTHPd0/EOGDaJJN9Ku4CTKw2+PwIDAQAB","RSA2");
+//        AlipayOfflineMarketShopCreateRequest request = new AlipayOfflineMarketShopCreateRequest();
+//        request.setBizContent("{" +
+//                "\"store_id\":\"hz001\"," +
+//                "\"category_id\":\"2015050700000018\"," +
+//                "\"brand_name\":\"肯德基\"," +
+//                "\"brand_logo\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
+//                "\"main_shop_name\":\"海底捞\"," +
+//                "\"branch_shop_name\":\"万塘路店\"," +
+//                "\"province_code\":\"110000\"," +
+//                "\"city_code\":\"140500\"," +
+//                "\"district_code\":\"140521\"," +
+//                "\"address\":\"万塘路18号黄龙时代广场\"," +
+//                "\"longitude\":114.266418," +
+//                "\"latitude\":\"30.548828\"," +
+//                "\"contact_number\":\"13612344321,021-12336754\"," +
+//                "\"notify_mobile\":\"13867498729\"," +
+//                "\"main_image\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
+//                "\"audit_images\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC,4Q8Pp00AT7eo9NoAJkMR3AAAACMAAUYT\"," +
+//                "\"business_time\":\"周一-周五 09:00-20:00,周六-周日 10:00-22:00\"," +
+//                "\"wifi\":\"T\"," +
+//                "\"parking\":\"F\"," +
+//                "\"value_added\":\"免费茶水、免费糖果\"," +
+//                "\"isv_uid\":\"2088001969784501\"," +
+//                "\"licence\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
+//                "\"licence_code\":\"H001232\"," +
+//                "\"licence_name\":\"来伊份上海分公司\"," +
+//                "\"business_certificate\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
+//                "\"business_certificate_expires\":\"2020-03-20\"," +
+//                "\"auth_letter\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
+//                "\"is_operating_online\":\"T\"," +
+//                "\"online_url\":\"http://www.******.com/shop/21831830\"," +
+//                "\"operate_notify_url\":\"http://abc.com\"," +
+//                "\"implement_id\":\"HU002,HT002\"," +
+//                "\"no_smoking\":\"T\"," +
+//                "\"box\":\"T\"," +
+//                "\"request_id\":\"2015123235324534\"," +
+//                "\"other_authorization\":\"1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC,1T8Pp00AT7eo9NoAJkMR3AAAACMAAQEC\"," +
+//                "\"licence_expires\":\"2020-10-20\"," +
+//                "\"op_role\":\"ISV\"," +
+//                "\"biz_version\":\"2.0\"" +
+//                "  }");
+//        AlipayOfflineMarketShopCreateResponse response = null;
+//        try {
+//            response = alipayClient.execute(request);
+//        } catch (AlipayApiException e) {
+//            e.printStackTrace();
+//        }
+//        if(response.isSuccess()){
+//            System.out.println("调用成功");
+//        } else {
+//            System.out.println("调用失败");
+//
+//        }
+
     }
 }
