@@ -42,6 +42,26 @@ public class YunStudent extends BaseEntity
     @ApiModelProperty("学生就读所在学校")
     private String school;
 
+    /** 学生出生日期 */
+    @Excel(name = "学生出生日期")
+    @ApiModelProperty("学生出生日期")
+    private String birthday;
+
+    /** 紧急联系人 */
+    @Excel(name = "紧急联系人")
+    @ApiModelProperty("紧急联系人")
+    private String aidPerson;
+
+    /** 紧急联系人联系方式 */
+    @Excel(name = "紧急联系人联系方式")
+    @ApiModelProperty("紧急联系人联系方式")
+    private String aidPhone;
+
+    /** 学生就读学校区域 */
+    @Excel(name = "学生就读学校区域")
+    @ApiModelProperty("学生就读学校")
+    private String schoolArea;
+
     /** 关联年级Id */
     @Excel(name = "关联年级Id")
     @ApiModelProperty("关联年级Id")
@@ -61,12 +81,46 @@ public class YunStudent extends BaseEntity
     @ApiModelProperty("删除标志")
     private String delFlag;
 
-    public void setId(Long id) 
+    public String getAidPerson() {
+        return aidPerson;
+    }
+
+    public void setAidPerson(String aidPerson) {
+        this.aidPerson = aidPerson;
+    }
+
+    public String getAidPhone() {
+        return aidPhone;
+    }
+
+    public void setAidPhone(String aidPhone) {
+        this.aidPhone = aidPhone;
+    }
+
+    public String getSchoolArea() {
+        return schoolArea;
+    }
+
+    public void setSchoolArea(String schoolArea) {
+        this.schoolArea = schoolArea;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+
+
+    public Long getId()
     {
         return id;
     }
@@ -156,6 +210,11 @@ public class YunStudent extends BaseEntity
             .append("createById", getCreateById())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
+            .append("updateBy", getUpdateBy())
+            .append("birthday", getBirthday())
+            .append("schoolArea", getSchoolArea())
+            .append("aidPerson", getAidPerson())
+            .append("aidPhone", getAidPhone())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())

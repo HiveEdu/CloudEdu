@@ -17,6 +17,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="aidPerson"    column="aid_person"    />
+        <result property="aidPhone"    column="aid_Phone"    />
+        <result property="schoolArea"    column="school_area"    />
     </resultMap>
 
     <sql id="selectYunStudentVo">
@@ -51,6 +55,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gendel != null  and gendel != ''">gendel,</if>
             <if test="avatar != null  and avatar != ''">avatar,</if>
             <if test="school != null  and school != ''">school,</if>
+            <if test="birthday != null  and birthday != ''">birthday,</if>
+            <if test="aidPerson != null  and aidPerson != ''">aid_person,</if>
+            <if test="aidPhone != null  and aidPhone != ''">aid_Phone,</if>
+            <if test="schoolArea != null  and schoolArea != ''">school_area,</if>
             <if test="gradeId != null ">grade_id,</if>
             <if test="parentId != null ">parent_id,</if>
             <if test="createById != null ">create_by_id,</if>
@@ -72,6 +80,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="birthday != null ">#{birthday},</if>
+            <if test="aidPerson != null ">#{aidPerson},</if>
+            <if test="aidPhone != null ">#{aidPhone},</if>
+            <if test="schoolArea != null ">#{schoolArea},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
          </trim>
     </insert>
@@ -90,6 +102,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="birthday != null ">birthday = #{birthday},</if>
+            <if test="aidPerson != null ">aid_person = #{aidPerson},</if>
+            <if test="aidPhone != null ">aid_Phone = #{aidPhone},</if>
+            <if test="schoolArea != null ">school_area = #{schoolArea},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
         </trim>
         where id = #{id}
