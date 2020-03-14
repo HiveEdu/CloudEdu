@@ -1,5 +1,5 @@
 <template>
- <el-dialog :title="title"   :visible.sync="dialogVisible" width="500px">
+ <el-dialog :title="title"   :visible.sync="dialogVisible" @close="handleClose" width="500px">
       <!-- <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="课程id" prop="courseId">
           <el-input v-model="form.courseId" placeholder="请输入课程id" />
@@ -105,7 +105,7 @@
       </el-form> -->
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
       </div>
     </el-dialog>
 </template>
