@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.activity.mapper.YunStoreBargainMapper">
+    
+    <resultMap type="YunStoreBargain" id="YunStoreBargainResult">
+        <result property="id"    column="id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="title"    column="title"    />
+        <result property="image"    column="image"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="stock"    column="stock"    />
+        <result property="sales"    column="sales"    />
+        <result property="images"    column="images"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="stopTime"    column="stop_time"    />
+        <result property="startTimeDate"    column="start_time_date"    />
+        <result property="endTimeDate"    column="end_time_date"    />
+        <result property="storeName"    column="store_name"    />
+        <result property="price"    column="price"    />
+        <result property="minPrice"    column="min_price"    />
+        <result property="num"    column="num"    />
+        <result property="bargainMaxPrice"    column="bargain_max_price"    />
+        <result property="bargainMinPrice"    column="bargain_min_price"    />
+        <result property="bargainNum"    column="bargain_num"    />
+        <result property="status"    column="status"    />
+        <result property="description"    column="description"    />
+        <result property="giveIntegral"    column="give_integral"    />
+        <result property="info"    column="info"    />
+        <result property="cost"    column="cost"    />
+        <result property="sort"    column="sort"    />
+        <result property="isHot"    column="is_hot"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="rule"    column="rule"    />
+        <result property="look"    column="look"    />
+        <result property="share"    column="share"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectYunStoreBargainVo">
+        select id, course_id, title, image, unit_name, stock, sales, images, start_time, stop_time, start_time_date, end_time_date, store_name, price, min_price, num, bargain_max_price, bargain_min_price, bargain_num, status, description, give_integral, info, cost, sort, is_hot, del_flag, create_time, rule, look, share, create_by_id, create_by, update_by, update_time from yun_store_bargain
+    </sql>
+
+    <select id="selectYunStoreBargainList" parameterType="YunStoreBargain" resultMap="YunStoreBargainResult">
+        <include refid="selectYunStoreBargainVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="unitName != null  and unitName != ''"> and unit_name like concat('%', #{unitName}, '%')</if>
+            <if test="stock != null "> and stock = #{stock}</if>
+            <if test="sales != null "> and sales = #{sales}</if>
+            <if test="images != null "> and images = #{images}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="stopTime != null "> and stop_time = #{stopTime}</if>
+            <if test="status != null  and status != ''"> and status like concat('%', #{status}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStoreBargainById" parameterType="Long" resultMap="YunStoreBargainResult">
+        <include refid="selectYunStoreBargainVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStoreBargain" parameterType="YunStoreBargain" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_store_bargain
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">course_id,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="image != null ">image,</if>
+            <if test="unitName != null  and unitName != ''">unit_name,</if>
+            <if test="stock != null ">stock,</if>
+            <if test="sales != null ">sales,</if>
+            <if test="images != null ">images,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="stopTime != null ">stop_time,</if>
+            <if test="startTimeDate != null ">start_time_date,</if>
+            <if test="endTimeDate != null ">end_time_date,</if>
+            <if test="storeName != null  and storeName != ''">store_name,</if>
+            <if test="price != null ">price,</if>
+            <if test="minPrice != null ">min_price,</if>
+            <if test="num != null ">num,</if>
+            <if test="bargainMaxPrice != null ">bargain_max_price,</if>
+            <if test="bargainMinPrice != null ">bargain_min_price,</if>
+            <if test="bargainNum != null ">bargain_num,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="description != null ">description,</if>
+            <if test="giveIntegral != null ">give_integral,</if>
+            <if test="info != null  and info != ''">info,</if>
+            <if test="cost != null ">cost,</if>
+            <if test="sort != null ">sort,</if>
+            <if test="isHot != null ">is_hot,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="rule != null  and rule != ''">rule,</if>
+            <if test="look != null ">look,</if>
+            <if test="share != null ">share,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">#{courseId},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="image != null ">#{image},</if>
+            <if test="unitName != null  and unitName != ''">#{unitName},</if>
+            <if test="stock != null ">#{stock},</if>
+            <if test="sales != null ">#{sales},</if>
+            <if test="images != null ">#{images},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="stopTime != null ">#{stopTime},</if>
+            <if test="startTimeDate != null ">#{startTimeDate},</if>
+            <if test="endTimeDate != null ">#{endTimeDate},</if>
+            <if test="storeName != null  and storeName != ''">#{storeName},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="minPrice != null ">#{minPrice},</if>
+            <if test="num != null ">#{num},</if>
+            <if test="bargainMaxPrice != null ">#{bargainMaxPrice},</if>
+            <if test="bargainMinPrice != null ">#{bargainMinPrice},</if>
+            <if test="bargainNum != null ">#{bargainNum},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="description != null ">#{description},</if>
+            <if test="giveIntegral != null ">#{giveIntegral},</if>
+            <if test="info != null  and info != ''">#{info},</if>
+            <if test="cost != null ">#{cost},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="isHot != null ">#{isHot},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="rule != null  and rule != ''">#{rule},</if>
+            <if test="look != null ">#{look},</if>
+            <if test="share != null ">#{share},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreBargain" parameterType="YunStoreBargain">
+        update yun_store_bargain
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null ">course_id = #{courseId},</if>
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="image != null ">image = #{image},</if>
+            <if test="unitName != null  and unitName != ''">unit_name = #{unitName},</if>
+            <if test="stock != null ">stock = #{stock},</if>
+            <if test="sales != null ">sales = #{sales},</if>
+            <if test="images != null ">images = #{images},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="stopTime != null ">stop_time = #{stopTime},</if>
+            <if test="startTimeDate != null ">start_time_date = #{startTimeDate},</if>
+            <if test="endTimeDate != null ">end_time_date = #{endTimeDate},</if>
+            <if test="storeName != null  and storeName != ''">store_name = #{storeName},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="minPrice != null ">min_price = #{minPrice},</if>
+            <if test="num != null ">num = #{num},</if>
+            <if test="bargainMaxPrice != null ">bargain_max_price = #{bargainMaxPrice},</if>
+            <if test="bargainMinPrice != null ">bargain_min_price = #{bargainMinPrice},</if>
+            <if test="bargainNum != null ">bargain_num = #{bargainNum},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="description != null ">description = #{description},</if>
+            <if test="giveIntegral != null ">give_integral = #{giveIntegral},</if>
+            <if test="info != null  and info != ''">info = #{info},</if>
+            <if test="cost != null ">cost = #{cost},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="isHot != null ">is_hot = #{isHot},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="rule != null  and rule != ''">rule = #{rule},</if>
+            <if test="look != null ">look = #{look},</if>
+            <if test="share != null ">share = #{share},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStoreBargainById" parameterType="Long">
+        delete from yun_store_bargain where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStoreBargainByIds" parameterType="String">
+        delete from yun_store_bargain where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

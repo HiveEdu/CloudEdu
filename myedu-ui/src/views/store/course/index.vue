@@ -159,7 +159,13 @@
                 style="margin-top: 10px"
               >上线</el-button>
               <br>
-
+               <el-button
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="openBargain(scope.row)"
+                style="margin-top: 10px"
+              >开始砍价</el-button>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -173,6 +179,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+     <!--开始砍价-->
+    <bargainModal ref="bargainModal" :courseBargain="courseBargain" :currentData="currentData" @closeBargain="closeBargain"></bargainModal>
      <!--课程详情-->
     <DetailModal ref="DetailModal" :courseDetail="courseDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <signUpModal ref="signUpModal" :signUp="signUp" :courseData="courseData" @closeSignUp="closeSignUp"></signUpModal>
@@ -427,13 +435,15 @@ import { listCourse, getCourse, delCourse, changeStatusOff,changeStatusOn,addCou
 import { getToken } from '@/utils/auth'
 import signUpModal from './modal/signUpModal'
 import DetailModal from './modal/DetailModal'
+import bargainModal from './modal/bargainModal'
 const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
-  components: { signUpModal,DetailModal},
+  components: { signUpModal,DetailModal,bargainModal},
   data() {
     return {
       defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
       courseDetail:false,
+      courseBargain:false,
       signUp:false,
       courseData:null,
       // 招生对象选择
@@ -538,6 +548,15 @@ export default {
     });
   },
   methods: {
+    //打开砍价页面
+    openBargain(row){
+      this.currentData=row;
+      this.courseBargain=true;
+    },
+    //关闭砍价页面
+    closeBargain(){
+      this.courseBargain=false;
+    },
       //打开门店详情页面
     openDatail(row){
       this.currentData=row;
