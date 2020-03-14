@@ -1,54 +1,35 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="姓名" prop="name">
+      <el-form-item label="名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入学生姓名"
+          placeholder="请输入会员名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-        <el-form-item label="性别" prop="gendel">
-        <el-select v-model="queryParams.gendel" placeholder="请选择学生性别" clearable size="small">
+        <el-form-item label="类型" prop="type">
+        <el-select v-model="queryParams.type" placeholder="请选择会员类型" clearable size="small">
           <el-option
-            v-for="dict in gendelOptions"
+            v-for="dict in typeOptions"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="学校" prop="school">
+      <el-form-item label="等级" prop="grade">
         <el-input
-          v-model="queryParams.school"
-          placeholder="请输入学生就读所在学校"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="年级" prop="gradeName">
-        <el-input
-          v-model="queryParams.gradeName"
-          placeholder="请选择年级"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建人" prop="createBy">
-        <el-input
-          v-model="queryParams.createBy"
-          placeholder="请输入家长姓名"
+          v-model="queryParams.grade"
+          placeholder="请输入会员等级"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
@@ -61,7 +42,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['parents:student:add']"
+          v-hasPermi="['dataBasic:memberLevel:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -71,7 +52,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['parents:student:edit']"
+          v-hasPermi="['dataBasic:memberLevel:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -81,7 +62,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['parents:student:remove']"
+          v-hasPermi="['dataBasic:memberLevel:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -90,28 +71,24 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['parents:student:export']"
+          v-hasPermi="['dataBasic:memberLevel:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="studentList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="memberLevelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column ref="table" prop="logo" label="logo" width="60">
+      <el-table-column ref="table" prop="图标" label="图标" width="60">
         <template slot-scope="scope">
-          <img  :src="viewImage+'/'+scope.row.avatar" :onerror="defaultImg" alt="点击打开" class="el-avatar" style="border-radius:10px">
+          <img  :src="imageView+'/'+scope.row.icon" :onerror="defaultImg" alt="点击打开" class="el-avatar" style="border-radius:10px">
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="性别" align="center" prop="gendel" :formatter="gendelFormat" />
-      <el-table-column label="学校" align="center" prop="school" />
-      <el-table-column label="年级" align="center" prop="gradeName" />
-      <el-table-column label="创建人" align="center" prop="createBy" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="名称" align="center" prop="name" />
+      <el-table-column label="有效时间(天)" align="center" prop="validDate" />
+      <el-table-column label="类型" align="center" prop="type" :formatter="typeFormat" />
+      <el-table-column label="永久会员" align="center" prop="isForever" :formatter="isForeverFormat" />
+      <el-table-column label="会员等级" align="center" prop="grade" />
+      <el-table-column label="享受折扣" align="center" prop="discount" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -119,14 +96,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['parents:student:edit']"
+            v-hasPermi="['dataBasic:memberLevel:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['parents:student:remove']"
+            v-hasPermi="['dataBasic:memberLevel:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -140,50 +117,81 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改学生数据对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入学生名称" />
-        </el-form-item>
-        <el-form-item label="性别" prop="gendel">
-          <el-select v-model="form.gendel" placeholder="请选择学生性别">
-            <el-option
-              v-for="dict in gendelOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="人脸注册">
+    <!-- 添加或修改会员等级对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="50%">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="名称" prop="name">
+              <el-input v-model="form.name" placeholder="请输入会员名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="类型" prop="type">
+              <el-select v-model="form.type" placeholder="请选择会员类型">
+                <el-option
+                  v-for="dict in typeOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="有效时间(天)" prop="validDate">
+              <el-input-number :min="0" controls-position="right" v-model="form.validDate" placeholder="请输入有效时间(天)" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label=" 永久会员" prop="isForever">
+              <el-select v-model="form.isForever" placeholder="请选择是否为永久会员">
+                <el-option
+                  v-for="dict in isForeverOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="会员等级" prop="grade">
+              <el-input-number :min="0" controls-position="right" v-model="form.grade" placeholder="请输入会员等级" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="享受折扣" prop="discount">
+              <el-input-number :min="0" controls-position="right"  v-model="form.discount" placeholder="请输入享受折扣" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+<!--        <el-form-item label="会员卡背景" prop="image">-->
+<!--          <el-input v-model="form.image" placeholder="请输入会员卡背景" />-->
+<!--        </el-form-item>-->
+        <el-form-item label="会员图标" prop="icon">
+<!--          <el-input v-model="form.icon" placeholder="请输入会员图标" />-->
           <el-upload
             class="avatar-uploader"
             ref="upload"
             :headers="headers"
             :action="uploadImgUrl"
-            :data="{'type':'stuAvatar'}"
+            :data="{'type':'memberLeave'}"
             :show-file-list="false"
             :on-success="onSuccess"
             :on-remove="handleRemove"
             :on-preview="handlePictureCardPreview"
             :before-upload="beforeUpload">
-            <img v-if="form.avatar" :src="viewImage+'/'+form.avatar" :onerror="defaultImg" class="avatar">
+            <img v-if="form.icon" :src="imageView+'/'+form.icon" :onerror="defaultImg" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="学校" prop="school">
-          <el-input v-model="form.school" placeholder="请输入学生就读所在学校" />
-        </el-form-item>
-        <el-form-item label="年级" prop="gradeId">
-          <el-select v-model="form.gradeId"  placeholder="请选择">
-            <el-option
-              v-for="item in gradeLists"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+        <el-form-item label="说明" prop="note">
+          <el-input v-model="form.note" placeholder="请输入说明" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -195,14 +203,12 @@
 </template>
 
 <script>
-import { listStudent, getStudent, delStudent, addStudent, updateStudent, exportStudent } from "@/api/parents/student";
+import { listMemberLevel, getMemberLevel, delMemberLevel, addMemberLevel, updateMemberLevel, exportMemberLevel } from "@/api/dataBasic/memberLevel";
 import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
       defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
-      //年级列表
-      gradeLists:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -213,81 +219,108 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 学生数据表格数据
-      studentList: [],
+      // 会员等级表格数据
+      memberLevelList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
-      // 学生性别字典
-      gendelOptions: [],
+      // 1门店会员2普通用户会员字典
+      typeOptions: [],
+      // 是否为永久会员字典
+      isForeverOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         name: undefined,
-        gendel: undefined,
-        avatar: undefined,
-        school: undefined,
-        gradeName: undefined,
-        createBy: undefined,
-        createById: undefined,
-      },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-        name: [
-          { required: true, message: "学生姓名不能为空", trigger: "blur" }
-        ],
-        gendel: [
-          { required: true, message: "学生性别不能为空", trigger: "blur" }
-        ],
+        validDate: undefined,
+        type: undefined,
+        isForever: undefined,
+        grade: undefined,
+        discount: undefined,
+        image: undefined,
+        icon: undefined,
+        note: undefined,
       },
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
-      viewImage: process.env.VUE_APP_BASE_API,
+      imageView: process.env.VUE_APP_BASE_API,
       headers: {
         Authorization: 'Bearer ' + getToken()
       },
       dialogImageUrl: '',
       dialogVisible: false,
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+        name: [
+          { required: true, message: "会员名称不能为空", trigger: "blur" }
+        ],        validDate: [
+          { required: true, message: "有效时间(天)不能为空", trigger: "change" }
+        ],        type: [
+          { required: true, message: "会员类型不能为空", trigger: "blur" }
+        ],        grade: [
+          { required: true, message: "会员等级不能为空", trigger: "change" }
+        ],        discount: [
+          { required: true, message: "享受折扣不能为空", trigger: "change" }
+        ],              type: [
+          { required: true, message: "类型不能为空", trigger: "blur" }
+        ],         isForever: [
+          { required: true, message: "永久会员不能为空", trigger: "blur" }
+        ], }
     };
+
   },
   created() {
     this.getList();
-    this.getDicts("sys_user_sex").then(response => {
-      this.gendelOptions = response.data;
+    this.getDicts("member_type").then(response => {
+      this.typeOptions = response.data;
+    });
+    this.getDicts("isno").then(response => {
+      this.isForeverOptions = response.data;
     });
   },
   methods: {
-    /** 查询学生数据列表 */
+    /** 查询会员等级列表 */
     getList() {
       this.loading = true;
-      listStudent(this.queryParams).then(response => {
-        this.studentList = response.rows;
+      listMemberLevel(this.queryParams).then(response => {
+        this.memberLevelList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
     },
-    // 学生性别字典翻译
-    gendelFormat(row, column) {
-      return this.selectDictLabel(this.gendelOptions, row.gendel);
+    // 1门店会员2普通用户会员字典翻译
+    typeFormat(row, column) {
+      return this.selectDictLabel(this.typeOptions, row.type);
+    },
+    // 是否为永久会员字典翻译
+    isForeverFormat(row, column) {
+      return this.selectDictLabel(this.isForeverOptions, row.isForever);
     },
     // 取消按钮
     cancel() {
       this.open = false;
       this.reset();
-      this.$refs.upload.clearFiles();
     },
     // 表单重置
     reset() {
       this.form = {
+        id: undefined,
         name: undefined,
-        gendel: undefined,
-        school: undefined,
-        avatar: undefined,
-        gradeId: undefined,
-        createBy: undefined
+        validDate: undefined,
+        type: undefined,
+        isForever: undefined,
+        grade: undefined,
+        discount: undefined,
+        image: undefined,
+        icon: undefined,
+        note: undefined,
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined
       };
       this.resetForm("form");
     },
@@ -311,20 +344,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加学生数据";
-      getStudent().then(response => {
-        this.gradeLists=response.gradeLists;
-      });
+      this.title = "添加会员等级";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getStudent(id).then(response => {
-        this.gradeLists=response.gradeLists;
+      getMemberLevel(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改学生数据";
+        this.title = "修改会员等级";
       });
     },
     /** 提交按钮 */
@@ -332,7 +361,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateStudent(this.form).then(response => {
+            updateMemberLevel(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -342,7 +371,7 @@ export default {
               }
             });
           } else {
-            addStudent(this.form).then(response => {
+            addMemberLevel(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -358,12 +387,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除学生数据编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除会员等级编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delStudent(ids);
+          return delMemberLevel(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
@@ -372,12 +401,12 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有学生数据数据项?', "警告", {
+      this.$confirm('是否确认导出所有会员等级数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return exportStudent(queryParams);
+          return exportMemberLevel(queryParams);
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
@@ -386,8 +415,8 @@ export default {
     },
     onSuccess(res,file, fileList){
       if(res.code=="200"){
-       //this.form.avatar=res.url
-        this.form.avatar=res.fileName
+        //this.form.avatar=res.url
+        this.form.icon=res.fileName
         this.msgSuccess("上传成功");
       }else{
         this.msgError("上传失败");
@@ -395,7 +424,7 @@ export default {
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
-      this.form.avatar=null;
+      this.form.icon=null;
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.dataBasic.mapper.SysMemberLevelMapper">
+    
+    <resultMap type="SysMemberLevel" id="SysMemberLevelResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="validDate"    column="valid_date"    />
+        <result property="type"    column="type"    />
+        <result property="isForever"    column="is_forever"    />
+        <result property="grade"    column="grade"    />
+        <result property="discount"    column="discount"    />
+        <result property="image"    column="image"    />
+        <result property="icon"    column="icon"    />
+        <result property="note"    column="note"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysMemberLevelVo">
+        select id, name, valid_date, type, is_forever, grade, discount, image, icon, note, create_by, create_time, update_by, update_time from sys_member_level
+    </sql>
+
+    <select id="selectSysMemberLevelList" parameterType="SysMemberLevel" resultMap="SysMemberLevelResult">
+        <include refid="selectSysMemberLevelVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="validDate != null "> and valid_date = #{validDate}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="isForever != null  and isForever != ''"> and is_forever = #{isForever}</if>
+            <if test="grade != null "> and grade = #{grade}</if>
+            <if test="discount != null "> and discount = #{discount}</if>
+            <if test="image != null  and image != ''"> and image = #{image}</if>
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysMemberLevelById" parameterType="Long" resultMap="SysMemberLevelResult">
+        <include refid="selectSysMemberLevelVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysMemberLevel" parameterType="SysMemberLevel" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_member_level
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="validDate != null ">valid_date,</if>
+            <if test="type != null  and type != ''">type,</if>
+            <if test="isForever != null  and isForever != ''">is_forever,</if>
+            <if test="grade != null ">grade,</if>
+            <if test="discount != null ">discount,</if>
+            <if test="image != null  and image != ''">image,</if>
+            <if test="icon != null  and icon != ''">icon,</if>
+            <if test="note != null  and note != ''">note,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="validDate != null ">#{validDate},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="isForever != null  and isForever != ''">#{isForever},</if>
+            <if test="grade != null ">#{grade},</if>
+            <if test="discount != null ">#{discount},</if>
+            <if test="image != null  and image != ''">#{image},</if>
+            <if test="icon != null  and icon != ''">#{icon},</if>
+            <if test="note != null  and note != ''">#{note},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysMemberLevel" parameterType="SysMemberLevel">
+        update sys_member_level
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="validDate != null ">valid_date = #{validDate},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="isForever != null  and isForever != ''">is_forever = #{isForever},</if>
+            <if test="grade != null ">grade = #{grade},</if>
+            <if test="discount != null ">discount = #{discount},</if>
+            <if test="image != null  and image != ''">image = #{image},</if>
+            <if test="icon != null  and icon != ''">icon = #{icon},</if>
+            <if test="note != null  and note != ''">note = #{note},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysMemberLevelById" parameterType="Long">
+        delete from sys_member_level where id = #{id}
+    </delete>
+
+    <delete id="deleteSysMemberLevelByIds" parameterType="String">
+        delete from sys_member_level where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
