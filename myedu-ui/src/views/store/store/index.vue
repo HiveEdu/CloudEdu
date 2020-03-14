@@ -100,6 +100,7 @@
 <!--      <el-table-column label="区" align="center" prop="area" />-->
       <el-table-column label="门店详细地址" align="center" prop="address" />
       <el-table-column label="审核状态" align="center" prop="status" :formatter="checkFormat" />
+      <el-table-column label="VIP" align="center" prop="level" />
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">

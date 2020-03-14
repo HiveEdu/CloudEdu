@@ -9,6 +9,7 @@ import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.YunStoreCouponIssue;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.CouponIssueStatus;
 import com.myedu.project.store.service.IYunStoreCouponIssueService;
 import com.myedu.project.store.service.IYunStoreService;
@@ -80,9 +81,9 @@ public class YunStoreCouponController extends BaseController
     public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
         AjaxResult ajax = AjaxResult.success();
-        YunStore yunStore=new YunStore();
+        YunStoreVo yunStore=new YunStoreVo();
         yunStore.setCreateById(SecurityUtils.getUserId());
-        List<YunStore> stores=yunStoreService.selectYunStoreList(yunStore);
+        List<YunStoreVo> stores=yunStoreService.selectYunStoreList(yunStore);
         ajax.put("stores", stores);
         if (StringUtils.isNotNull(id))
         {

@@ -4,6 +4,7 @@ import java.util.List;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.mapper.YunStoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,9 +58,9 @@ public class YunStoreCouponServiceImpl implements IYunStoreCouponService
     @Override
     public int insertYunStoreCoupon(YunStoreCoupon yunStoreCoupon)
     {
-        YunStore yunStore=new YunStore();
+        YunStoreVo yunStore=new YunStoreVo();
         yunStore.setCreateById(SecurityUtils.getUserId());
-        List<YunStore> yunStores=yunStoreMapper.selectYunStoreList(yunStore);
+        List<YunStoreVo> yunStores=yunStoreMapper.selectYunStoreList(yunStore);
         Long storeId=null;
         if(!yunStores.isEmpty()){
             storeId=yunStores.get(0).getId();

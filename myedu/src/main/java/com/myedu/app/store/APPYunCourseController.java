@@ -13,6 +13,7 @@ import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunCourseVo;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.CourseType;
 import com.myedu.project.store.service.IYunCourseService;
 import com.myedu.project.store.service.IYunStoreService;
@@ -86,9 +87,9 @@ public class APPYunCourseController extends BaseController
         AjaxResult ajax = AjaxResult.success();
         SysGrade sysGrade=new SysGrade();
         ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
-        YunStore yunStore=new YunStore();
+        YunStoreVo yunStore=new YunStoreVo();
         yunStore.setCreateById(SecurityUtils.getUserId());
-        List<YunStore> stores=yunStoreService.selectYunStoreList(yunStore);
+        List<YunStoreVo> stores=yunStoreService.selectYunStoreList(yunStore);
         ajax.put("stores", stores);
         if (StringUtils.isNotNull(id))
         {

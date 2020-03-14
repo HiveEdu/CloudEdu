@@ -28,26 +28,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createById"    column="create_by_id"    />
         <result property="status"    column="status"    />
         <result property="rejectResion"    column="reject_resion"    />
+        <result property="beginExperienceTime"    column="begin_experience_time"    />
+        <result property="endExperienceTime"    column="end_experience_time"    />
+        <result property="vipLevelId"    column="vip_level_id"    />
     </resultMap>
 
     <sql id="selectYunStoreVo">
-        select id, name, reject_resion,logo, status,manager, manager_phone, photos, healths,video, license, province, city, area, address, map_x, map_y, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_store
+        select ys.id, ys.name, ys.reject_resion,ys.logo, ys.status,ys.manager, ys.manager_phone, ys.photos, ys.healths,ys.video, ys.license, ys.province, ys.city, ys.area, ys.address, ys.map_x, ys.map_y, ys.create_by, ys.create_time, ys.update_by, ys.update_time, ys.del_flag, ys.create_by_id,
+         ys.begin_experience_time,ys.end_experience_time,ys.vip_level_id,
+         sml.grade as level
+         from yun_store ys
+         left  join  sys_member_level sml on sml.id=ys.vip_level_id
     </sql>
 
     <select id="selectYunStoreList" parameterType="YunStore" resultMap="YunStoreResult">
         <include refid="selectYunStoreVo"/>
         <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="manager != null  and manager != ''"> and manager like concat('%', #{manager}, '%')</if>
-            <if test="status != null  and status != ''"> and status like concat('%', #{status}, '%')</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="name != null  and name != ''"> and ys.name like concat('%', #{name}, '%')</if>
+            <if test="manager != null  and manager != ''"> and ys.manager like concat('%', #{manager}, '%')</if>
+            <if test="status != null  and status != ''"> and ys.status like concat('%', #{status}, '%')</if>
+            <if test="createBy != null  and createBy != ''"> and ys.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createById != null "> and ys.create_by_id = #{createById}</if>
         </where>
     </select>
     
     <select id="selectYunStoreById" parameterType="Long" resultMap="YunStoreResult">
         <include refid="selectYunStoreVo"/>
-        where id = #{id}
+        where ys.id = #{id}
     </select>
         
     <insert id="insertYunStore" parameterType="YunStore" useGeneratedKeys="true" keyProperty="id">
@@ -73,6 +80,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createById != null ">create_by_id,</if>
+            <if test="beginExperienceTime != null ">begin_experience_time,</if>
+            <if test="endExperienceTime != null ">end_experience_time,</if>
+            <if test="vipLevelId != null ">vip_level_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
@@ -95,6 +105,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createById != null ">#{createById},</if>
+            <if test="beginExperienceTime != null ">#{beginExperienceTime},</if>
+            <if test="endExperienceTime != null  ">#{endExperienceTime},</if>
+            <if test="vipLevelId != null ">#{vipLevelId},</if>
          </trim>
     </insert>
 
@@ -123,6 +136,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
             <if test="rejectResion != null ">reject_resion = #{rejectResion},</if>
+            <if test="beginExperienceTime != null ">begin_experience_time = #{beginExperienceTime},</if>
+            <if test="endExperienceTime != null ">end_experience_time = #{endExperienceTime},</if>
+            <if test="vipLevelId != null ">vip_level_id = #{vipLevelId},</if>
         </trim>
         where id = #{id}
     </update>

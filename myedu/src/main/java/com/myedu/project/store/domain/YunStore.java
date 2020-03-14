@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * 门店对象 yun_store
@@ -88,6 +89,16 @@ public class YunStore extends BaseEntity
     /** 驳回原因 */
     @Excel(name = "驳回原因")
     private String rejectResion;
+
+    /** 体验开始时间 */
+    private Date beginExperienceTime;
+
+    /** 体验结束时间 */
+    private Date endExperienceTime;
+
+    /** 门店等级关联id */
+    private Long vipLevelId;
+
 
     public String getRejectResion() {
         return rejectResion;
@@ -231,6 +242,30 @@ public class YunStore extends BaseEntity
         this.healths = healths;
     }
 
+    public Date getBeginExperienceTime() {
+        return beginExperienceTime;
+    }
+
+    public void setBeginExperienceTime(Date beginExperienceTime) {
+        this.beginExperienceTime = beginExperienceTime;
+    }
+
+    public Date getEndExperienceTime() {
+        return endExperienceTime;
+    }
+
+    public void setEndExperienceTime(Date endExperienceTime) {
+        this.endExperienceTime = endExperienceTime;
+    }
+
+    public Long getVipLevelId() {
+        return vipLevelId;
+    }
+
+    public void setVipLevelId(Long vipLevelId) {
+        this.vipLevelId = vipLevelId;
+    }
+
     @Override
     public String toString() {
         return "YunStore{" +
@@ -255,6 +290,9 @@ public class YunStore extends BaseEntity
                 ", storeLabelIds=" + Arrays.toString(storeLabelIds) +
                 ", status='" + status + '\'' +
                 ", rejectResion='" + rejectResion + '\'' +
+                ", beginExperienceTime='" + beginExperienceTime + '\'' +
+                ", endExperienceTime='" + endExperienceTime + '\'' +
+                ", vipLevelId='" + vipLevelId + '\'' +
                 '}';
     }
 

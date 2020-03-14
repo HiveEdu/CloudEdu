@@ -5,6 +5,7 @@ import com.myedu.common.utils.StringUtils;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.YunStoreLabel;
 import com.myedu.project.store.domain.YunStoreType;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.mapper.YunStoreLabelMapper;
 import com.myedu.project.store.mapper.YunStoreMapper;
 import com.myedu.project.store.mapper.YunStoreTypeMapper;
@@ -38,7 +39,7 @@ public class YunStoreServiceImpl implements IYunStoreService
      * @return 门店
      */
     @Override
-    public YunStore selectYunStoreById(Long id)
+    public YunStoreVo selectYunStoreById(Long id)
     {
         return yunStoreMapper.selectYunStoreById(id);
     }
@@ -50,7 +51,7 @@ public class YunStoreServiceImpl implements IYunStoreService
      * @return 门店
      */
     @Override
-    public List<YunStore> selectYunStoreList(YunStore yunStore)
+    public List<YunStoreVo> selectYunStoreList(YunStoreVo yunStore)
     {
         return yunStoreMapper.selectYunStoreList(yunStore);
     }

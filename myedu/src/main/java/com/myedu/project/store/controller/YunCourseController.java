@@ -8,6 +8,7 @@ import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunCourseVo;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.CourseType;
 import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -80,9 +81,9 @@ public class YunCourseController extends BaseController
         AjaxResult ajax = AjaxResult.success();
         SysGrade sysGrade=new SysGrade();
         ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
-        YunStore yunStore=new YunStore();
+        YunStoreVo yunStore=new YunStoreVo();
         yunStore.setCreateById(SecurityUtils.getUserId());
-        List<YunStore> stores=yunStoreService.selectYunStoreList(yunStore);
+        List<YunStoreVo> stores=yunStoreService.selectYunStoreList(yunStore);
         ajax.put("stores", stores);
         if (StringUtils.isNotNull(id))
         {

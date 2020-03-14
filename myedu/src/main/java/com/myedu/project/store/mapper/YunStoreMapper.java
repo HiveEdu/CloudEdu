@@ -1,6 +1,8 @@
 package com.myedu.project.store.mapper;
 
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.vo.YunStoreVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface YunStoreMapper
      * @param id 门店ID
      * @return 门店
      */
-    public YunStore selectYunStoreById(Long id);
+    public YunStoreVo selectYunStoreById(Long id);
 
     /**
      * 查询门店列表
@@ -25,7 +27,7 @@ public interface YunStoreMapper
      * @param yunStore 门店
      * @return 门店集合
      */
-    public List<YunStore> selectYunStoreList(YunStore yunStore);
+    public List<YunStoreVo> selectYunStoreList(YunStoreVo yunStore);
 
     /**
      * 新增门店

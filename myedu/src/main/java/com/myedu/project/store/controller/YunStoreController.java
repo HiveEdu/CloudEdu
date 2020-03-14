@@ -14,6 +14,7 @@ import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.CourseType;
 import com.myedu.project.store.enums.StoreStatus;
 import com.myedu.project.store.enums.StoryType;
@@ -48,10 +49,10 @@ public class YunStoreController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('store:store:list')")
     @GetMapping("/list")
-    public TableDataInfo list(YunStore yunStore)
+    public TableDataInfo list(YunStoreVo yunStore)
     {
         startPage();
-        List<YunStore> list = yunStoreService.selectYunStoreList(yunStore);
+        List<YunStoreVo> list = yunStoreService.selectYunStoreList(yunStore);
         return getDataTable(list);
     }
 
@@ -61,10 +62,10 @@ public class YunStoreController extends BaseController
     @PreAuthorize("@ss.hasPermi('store:store:export')")
     @Log(title = "门店", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(YunStore yunStore)
+    public AjaxResult export(YunStoreVo yunStore)
     {
-        List<YunStore> list = yunStoreService.selectYunStoreList(yunStore);
-        ExcelUtil<YunStore> util = new ExcelUtil<YunStore>(YunStore.class);
+        List<YunStoreVo> list = yunStoreService.selectYunStoreList(yunStore);
+        ExcelUtil<YunStoreVo> util = new ExcelUtil<YunStoreVo>(YunStoreVo.class);
         return util.exportExcel(list, "store");
     }
 
