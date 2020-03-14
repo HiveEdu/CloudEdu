@@ -1,5 +1,5 @@
 <template>
- <el-dialog :title="title" :visible.sync="open" width="500px">
+ <el-dialog :title="title"   :visible.sync="dialogVisible" width="500px">
       <!-- <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="课程id" prop="courseId">
           <el-input v-model="form.courseId" placeholder="请输入课程id" />

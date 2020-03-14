@@ -165,7 +165,7 @@
                 icon="el-icon-edit"
                 @click="openBargain(scope.row)"
                 style="margin-top: 10px"
-              >开始砍价</el-button>
+              >砍价</el-button>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
