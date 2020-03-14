@@ -100,7 +100,7 @@
       <el-table-column label="每次购买的砍价产品数量" align="center" prop="num" />
       <el-table-column label="用户每次砍价的最大金额" align="center" prop="bargainMaxPrice" />
       <el-table-column label="用户每次砍价的最小金额" align="center" prop="bargainMinPrice" />
-      <el-table-column label="用户每次砍价的最小金额" align="center" prop="bargainNum" />
+      <el-table-column label="用户每次砍价的次数" align="center" prop="bargainNum" />
       <el-table-column label="砍价状态 " align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="砍价状态 " align="center" prop="description" />
       <el-table-column label="返多少积分" align="center" prop="giveIntegral" />
@@ -207,8 +207,8 @@
         <el-form-item label="用户每次砍价的最小金额" prop="bargainMinPrice">
           <el-input v-model="form.bargainMinPrice" placeholder="请输入用户每次砍价的最小金额" />
         </el-form-item>
-        <el-form-item label="用户每次砍价的最小金额" prop="bargainNum">
-          <el-input v-model="form.bargainNum" placeholder="请输入用户每次砍价的最小金额" />
+        <el-form-item label="用户每次砍价的次数" prop="bargainNum">
+          <el-input v-model="form.bargainNum" placeholder="请输入用户每次砍价的次数" />
         </el-form-item>
         <el-form-item label="砍价状态 ">
           <el-radio-group v-model="form.status">
@@ -231,8 +231,14 @@
         <el-form-item label="排序" prop="sort">
           <el-input v-model="form.sort" placeholder="请输入排序" />
         </el-form-item>
-        <el-form-item label="是否推荐0不推荐1推荐" prop="isHot">
-          <el-input v-model="form.isHot" placeholder="请输入是否推荐0不推荐1推荐" />
+        <el-form-item label="是否推荐" prop="isHot">
+          <el-radio-group v-model="form.isHot">
+            <el-radio
+              v-for="dict in isRecommendOptions"
+              :key="dict.dictValue"
+              :label="dict.dictValue"
+            >{{dict.dictLabel}}</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="砍价规则" prop="rule">
           <el-input v-model="form.rule" type="textarea" placeholder="请输入砍价规则" />
@@ -276,6 +282,8 @@ export default {
       open: false,
       // 砍价状态 字典
       statusOptions: [],
+      // 是否推荐字典
+      isRecommendOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -301,6 +309,9 @@ export default {
     this.getDicts("brgain_status").then(response => {
       this.statusOptions = response.data;
     });
+    this.getDicts("IsRecommend").then(response => {
+      this.isRecommendOptions = response.data;
+    });
   },
   methods: {
     /** 查询门店砍价活动列表 */
@@ -315,6 +326,10 @@ export default {
     // 砍价状态 字典翻译
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    // 是否推荐字典翻译
+    isRecommendFormat(row, column) {
+      return this.selectDictLabel(this.isRecommendOptions, row.status);
     },
     // 取消按钮
     cancel() {
