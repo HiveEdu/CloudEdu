@@ -225,6 +225,7 @@
           currentData:function (e) {
             getCourse(e.id).then(response => {
               this.form.courseId = response.data.id;
+              this.form.storeName=response.data.name;
               this.gradeId = response.data.name;
               this.sysGrades = response.sysGrades;
               this.stores=response.sysGrades;
@@ -248,6 +249,7 @@
             stores:[],
            // 表单参数
             form: {
+              storeName:null,
               // giveIntegral: 0,
               // sort: 0
             },

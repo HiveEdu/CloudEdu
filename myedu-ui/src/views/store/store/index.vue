@@ -19,7 +19,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="负责人" prop="createBy">
+      <el-form-item label="创建人" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
           placeholder="请输入创建者用户"
@@ -201,7 +201,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="24">
                 <el-form-item label="类型">
                   <el-checkbox-group v-model="form.storeTypeIds">
                     <el-checkbox-button
@@ -215,7 +215,7 @@
           </el-row>
 
            <el-row>
-            <el-col :span="8">
+            <el-col :span="24">
                 <el-form-item label="标签">
                   <el-checkbox-group v-model="form.storeLabelIds">
                     <el-checkbox-button
@@ -227,7 +227,30 @@
                 </el-form-item>
             </el-col>
           </el-row>
-
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="开始时间" prop="beginExperienceTime">
+                <el-date-picker clearable size="small"
+                                v-model="form.beginExperienceTime"
+                                type="date"
+                                style="width: 100%;"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择开始时间">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="结束时间" prop="endExperienceTime">
+                <el-date-picker clearable size="small"
+                                v-model="form.endExperienceTime"
+                                style="width: 100%;"
+                                type="date"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择结束时间">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-row>
            <el-col :span="8">
               <el-form-item label="地址" prop="province">
@@ -298,7 +321,7 @@
                   :on-remove="handleRemoveLogo"
                   :on-preview="handlePictureCardPreviewLogo"
                   :before-upload="beforeUploadLogo">
-                  <img v-if="form.logo" :src="imageView+'/'+form.logo" class="avatar">
+                  <img v-if="form.logo" :src="imageView+'/'+form.logo" class="avatar" :onerror="defaultImg">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
@@ -325,7 +348,7 @@
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
+              <img width="100%" :src="dialogImageUrl" alt="" :onerror="defaultImg">
             </el-dialog>
           </el-form-item>
           <el-form-item label="健康证" style="margin-top: 80px">
@@ -347,7 +370,7 @@
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="dialogVisibleh">
-              <img width="100%" :src="dialogImageUrlh" alt="">
+              <img width="100%" :src="dialogImageUrlh" alt="" :onerror="defaultImg">
             </el-dialog>
           </el-form-item>
         </div>
@@ -371,7 +394,7 @@
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible1">
-              <img width="100%" :src="dialogImageUrl1" alt="">
+              <img width="100%" :src="dialogImageUrl1" alt="" :onerror="defaultImg">
             </el-dialog>
           </el-form-item>
           <el-form-item label="视频上传" prop="video">
@@ -487,6 +510,27 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        name:[
+          { required: true, message: "门店名称不能为空", trigger: "blur" }
+        ],
+        manager:[
+          { required: true, message: "门店负责人不能为空", trigger: "blur" }
+        ],
+        managerPhone:[
+          { required: true, message: "门店负责人联系方式不能为空", trigger: "blur" }
+        ],
+        province:[
+          { required: true, message: "门店地址不能为空", trigger: "blur" }
+        ],
+        address:[
+          { required: true, message: "门店街道不能为空", trigger: "blur" }
+        ],
+        mapX:[
+          { required: true, message: "门店经度不能为空", trigger: "blur" }
+        ],
+        mapY:[
+          { required: true, message: "门店纬度不能为空", trigger: "blur" }
+        ],
       },
       dialogImageUrl: '',
       dialogVisible: false,
