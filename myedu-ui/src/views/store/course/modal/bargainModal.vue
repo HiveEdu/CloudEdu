@@ -4,7 +4,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="砍价课程名称" prop="title">
-              <el-input v-model="form.name" placeholder="请输入砍价活动名称" style="width: 500px;"/>
+              <el-input v-model="form.title" placeholder="请输入砍价活动名称" style="width: 500px;"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -79,7 +79,7 @@
          </el-col>
          <el-col :span="12">
           <el-form-item label="砍价金额" prop="price">
-            <el-input-number v-model="form.courseCost" placeholder="请输入砍价金额" />
+            <el-input-number v-model="form.price" placeholder="请输入砍价金额" />
           </el-form-item>
          </el-col>
         </el-row>
@@ -225,7 +225,7 @@
           currentData:function (e) {
             getCourse(e.id).then(response => {
               this.form.courseId = response.data.id;
-              this.gradeId = response.gradeId;
+              this.gradeId = response.data.name;
               this.sysGrades = response.sysGrades;
               this.stores=response.sysGrades;
             });
