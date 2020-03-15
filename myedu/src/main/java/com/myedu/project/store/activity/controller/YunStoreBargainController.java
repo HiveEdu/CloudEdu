@@ -70,17 +70,17 @@ public class YunStoreBargainController extends BaseController
     {
         return AjaxResult.success(yunStoreBargainService.selectYunStoreBargainById(id));
     }
-//
-//    /**
-//     * 新增门店砍价活动
-//     */
-//    @PreAuthorize("@ss.hasPermi('store:bargain:add')")
-//    @Log(title = "门店砍价活动", businessType = BusinessType.INSERT)
-//    @PostMapping
-//    public AjaxResult add(@RequestBody YunStoreBargain yunStoreBargain)
-//    {
-//        return toAjax(yunStoreBargainService.insertYunStoreBargain(yunStoreBargain));
-//    }
+
+    /**
+     * 新增门店砍价活动
+     */
+    @PreAuthorize("@ss.hasPermi('store:bargain:add')")
+    @Log(title = "门店砍价活动", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult add(@RequestBody YunStoreBargain yunStoreBargain)
+    {
+        return toAjax(yunStoreBargainService.insertYunStoreBargain(yunStoreBargain));
+    }
 
     /**
      * 修改门店砍价活动

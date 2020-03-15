@@ -67,22 +67,22 @@
       <el-table-column label="库存" align="center" prop="stock" />
       <el-table-column label="销量" align="center" prop="sales" />
       <el-table-column label="砍价开启时间" align="center" prop="startTime" width="180">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.startTime!=null">
           <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="砍价结束时间" align="center" prop="stopTime" width="180">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.stopTime!=null">
           <span>{{ parseTime(scope.row.stopTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="开始时间" align="center" prop="startTimeDate" width="180">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.startTimeDate!=null">
           <span>{{ parseTime(scope.row.startTimeDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="结束时间" align="center" prop="endTimeDate" width="180">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.endTimeDate!=null">
           <span>{{ parseTime(scope.row.endTimeDate) }}</span>
         </template>
       </el-table-column>

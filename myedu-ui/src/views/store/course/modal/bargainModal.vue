@@ -224,7 +224,7 @@
           },
           currentData:function (e) {
             getCourse(e.id).then(response => {
-              this.form = response.data;
+              this.form.courseId = response.data.id;
               this.gradeId = response.gradeId;
               this.sysGrades = response.sysGrades;
               this.stores=response.sysGrades;
@@ -264,28 +264,17 @@
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != undefined) {
-            updateBargain(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-              } else {
-                this.msgError(response.msg);
-              }
-            });
-          } else {
             addBargain(this.form).then(response => {
               if (response.code === 200) {
-                this.msgSuccess("新增成功");
+                this.msgSuccess("新增砍价成功");
                 this.open = false;
-                this.getList();
+                this.$emit('closeBargain', false);
               } else {
                 this.msgError(response.msg);
               }
             });
           }
-        }
+
       });
     },
       }
