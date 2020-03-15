@@ -1,10 +1,12 @@
 package com.myedu.project.store.controller;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.config.Experience;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -115,6 +118,23 @@ public class YunStoreController extends BaseController
     public AjaxResult edit(@RequestBody YunStore yunStore)
     {
         yunStore.setUpdateBy(SecurityUtils.getUsername());
+        return toAjax(yunStoreService.updateYunStore(yunStore));
+    }
+    /**
+     * 门店审核
+     */
+    @PreAuthorize("@ss.hasPermi('store:store:checkStore')")
+    @Log(title = "门店", businessType = BusinessType.UPDATE)
+    @PutMapping(value = "checkStore")
+    public AjaxResult checkStore(@RequestBody YunStore yunStore)
+    {
+        yunStore.setUpdateBy(SecurityUtils.getUsername());
+        if(yunStore.getStatus().equals(StoreStatus.APPROVE.getCode())){
+            yunStore.setBeginExperienceTime(new Date());
+            Integer day=Experience.getTime();//获取初始体验时间
+            Date endExperienceTime= DateUtils.getAfterDayTime(yunStore.getBeginExperienceTime(),day);
+            yunStore.setEndExperienceTime(endExperienceTime);
+        }
         return toAjax(yunStoreService.updateYunStore(yunStore));
     }
 

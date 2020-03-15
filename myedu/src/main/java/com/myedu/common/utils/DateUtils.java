@@ -3,6 +3,7 @@ package com.myedu.common.utils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -173,5 +174,28 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
         return day;
+    }
+
+    /**
+     * 获取指定时间后延长多少天的具体时间
+     */
+    public static Date getAfterDayTime(Date date,Integer day)
+    {
+        // 时间格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        // 现在的时间
+        Date now = new Date();
+        // 计算某一月份的最大天数  
+        Calendar cal = Calendar.getInstance();
+        // Date转化为Calendar  
+        cal.setTime(now);
+        // 一月后的1天前 
+        cal.add(java.util.Calendar.DAY_OF_MONTH, 30);
+        System.out.println(new Date(String.valueOf(cal.getTime())));
+        return new Date(String.valueOf(cal.getTime()));
+    }
+
+    public static void main(String[] args) {
+        getAfterDayTime(new Date(),30);
     }
 }

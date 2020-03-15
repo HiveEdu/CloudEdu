@@ -2,7 +2,7 @@ package com.myedu.project.store.enums;
 
 public enum StoreStatus {
 
-    ONLINE("3", "在售"), OFFLINE("4", "下线");
+    APPROVE("1", "审核通过"),REJECTED("2", "审核驳回"), ONLINE("3", "在售"), OFFLINE("4", "下线");
 
     private final String code;
     private final String info;

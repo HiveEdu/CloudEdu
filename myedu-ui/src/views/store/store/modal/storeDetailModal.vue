@@ -62,13 +62,14 @@
               <div class="text item" style="margin-left: 10%">纬度: {{ form.mapY }}</div>
             </el-col>
           </e-row>
-        </el-col>
-        <el-col :span="8" style="height: 250px;">
+          <br><br>
           <e-row>
-            <el-col :span="12">
-              <div class="text item" style="margin-left: 10%">经度:{{ form.mapX }}</div>
+            <el-col :span="24">
+              <div class="text item" style="margin-left: 5%" v-if="form.endExperienceTime!=null">体验结束日期: {{ parseTime(form.endExperienceTime) }} </div>
             </el-col>
           </e-row>
+        </el-col>
+        <el-col :span="8" style="height: 250px;">
           <video v-if="form.video!=null" :src="imageView+'/'+form.video" class="avatar" controls="controls" style="width: 100%;height: 100%;margin-top: -8%;"></video>
           <img  v-else src="error" :onerror="defaultImg" alt="" height="100%" width="100%">
         </el-col>

@@ -34,7 +34,14 @@ export function updateStore(data) {
     data: data
   })
 }
-
+// 门店审核
+export function checkStore(data) {
+  return request({
+    url: '/store/store/checkStore',
+    method: 'put',
+    data: data
+  })
+}
 // 删除门店
 export function delStore(id) {
   return request({

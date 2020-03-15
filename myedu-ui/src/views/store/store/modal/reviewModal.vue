@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {updateStore } from "@/api/store/store";
+import {checkStore } from "@/api/store/store";
     export default {
         name: "reviewModal",
        
@@ -69,7 +69,7 @@ import {updateStore } from "@/api/store/store";
           submitForm: function() {
             this.$refs["reviewForm"].validate(valid => {
             if (valid) {
-                updateStore(this.reviewForm).then(response => {
+              checkStore(this.reviewForm).then(response => {
                   if (response.code === 200) {
                     this.msgSuccess("审核成功");
                     this.handleClose();

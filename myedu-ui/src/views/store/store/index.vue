@@ -613,6 +613,8 @@ export default {
         updateTime: undefined,
         delFlag: undefined,
         createById: undefined,
+        beginExperienceTime:undefined,
+        endExperienceTime:undefined,
         storeTypeIds:[],
         storeLabelIds:[],
       };
