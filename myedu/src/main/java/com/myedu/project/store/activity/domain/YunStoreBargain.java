@@ -1,11 +1,18 @@
 package com.myedu.project.store.activity.domain;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.Min;
+
 /**
  * 门店砍价活动对象 yun_store_bargain
  * 
@@ -69,39 +76,42 @@ public class YunStoreBargain extends BaseEntity
 
     /** 砍价金额 */
     @Excel(name = "砍价金额")
-    private Long price;
+    private BigDecimal price;
 
     /** 砍价商品最低价 */
     @Excel(name = "砍价商品最低价")
-    private Long minPrice;
+    private BigDecimal minPrice;
 
     /** 每次购买的砍价产品数量 */
     @Excel(name = "每次购买的砍价产品数量")
+    @Min(value = 0,message = "砍价商品最低价必须大于等于0")
     private Long num;
 
     /** 用户每次砍价的最大金额 */
     @Excel(name = "用户每次砍价的最大金额")
-    private Long bargainMaxPrice;
+    private BigDecimal bargainMaxPrice;
 
     /** 用户每次砍价的最小金额 */
     @Excel(name = "用户每次砍价的最小金额")
-    private Long bargainMinPrice;
+    @Min(value = 0,message = "砍价商品最低价必须大于等于0")
+    private BigDecimal bargainMinPrice;
 
-    /** $column.columnComment */
-    @Excel(name = "用户每次砍价的最小金额")
+    /** 用户每次砍价的次数 */
+    @Excel(name = "用户每次砍价的次数")
+    @Min(value = 0,message = "砍价商品最低价必须大于等于0")
     private Long bargainNum;
 
     /** 砍价状态  */
     @Excel(name = "砍价状态 ")
     private String status;
 
-    /** $column.columnComment */
+    /** 砍价状态 */
     @Excel(name = "砍价状态 ")
     private String description;
 
     /** 返多少积分 */
     @Excel(name = "返多少积分")
-    private Long giveIntegral;
+    private BigDecimal giveIntegral;
 
     /** 砍价活动简介 */
     @Excel(name = "砍价活动简介")
@@ -109,7 +119,7 @@ public class YunStoreBargain extends BaseEntity
 
     /** 成本价 */
     @Excel(name = "成本价")
-    private Long cost;
+    private BigDecimal cost;
 
     /** 排序 */
     @Excel(name = "排序")
@@ -122,7 +132,7 @@ public class YunStoreBargain extends BaseEntity
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
 
-    /** $column.columnComment */
+    /** 是否推荐0不推荐1推荐 */
     @Excel(name = "是否推荐0不推荐1推荐")
     private String rule;
 
@@ -255,24 +265,8 @@ public class YunStoreBargain extends BaseEntity
     {
         return storeName;
     }
-    public void setPrice(Long price) 
-    {
-        this.price = price;
-    }
 
-    public Long getPrice() 
-    {
-        return price;
-    }
-    public void setMinPrice(Long minPrice) 
-    {
-        this.minPrice = minPrice;
-    }
 
-    public Long getMinPrice() 
-    {
-        return minPrice;
-    }
     public void setNum(Long num) 
     {
         this.num = num;
@@ -282,24 +276,8 @@ public class YunStoreBargain extends BaseEntity
     {
         return num;
     }
-    public void setBargainMaxPrice(Long bargainMaxPrice) 
-    {
-        this.bargainMaxPrice = bargainMaxPrice;
-    }
 
-    public Long getBargainMaxPrice() 
-    {
-        return bargainMaxPrice;
-    }
-    public void setBargainMinPrice(Long bargainMinPrice) 
-    {
-        this.bargainMinPrice = bargainMinPrice;
-    }
 
-    public Long getBargainMinPrice() 
-    {
-        return bargainMinPrice;
-    }
     public void setBargainNum(Long bargainNum) 
     {
         this.bargainNum = bargainNum;
@@ -327,15 +305,7 @@ public class YunStoreBargain extends BaseEntity
     {
         return description;
     }
-    public void setGiveIntegral(Long giveIntegral) 
-    {
-        this.giveIntegral = giveIntegral;
-    }
 
-    public Long getGiveIntegral() 
-    {
-        return giveIntegral;
-    }
     public void setInfo(String info) 
     {
         this.info = info;
@@ -345,15 +315,7 @@ public class YunStoreBargain extends BaseEntity
     {
         return info;
     }
-    public void setCost(Long cost) 
-    {
-        this.cost = cost;
-    }
 
-    public Long getCost() 
-    {
-        return cost;
-    }
     public void setSort(Long sort) 
     {
         this.sort = sort;
@@ -418,6 +380,54 @@ public class YunStoreBargain extends BaseEntity
         return createById;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(BigDecimal minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public BigDecimal getBargainMaxPrice() {
+        return bargainMaxPrice;
+    }
+
+    public void setBargainMaxPrice(BigDecimal bargainMaxPrice) {
+        this.bargainMaxPrice = bargainMaxPrice;
+    }
+
+    public BigDecimal getBargainMinPrice() {
+        return bargainMinPrice;
+    }
+
+    public void setBargainMinPrice(BigDecimal bargainMinPrice) {
+        this.bargainMinPrice = bargainMinPrice;
+    }
+
+    public BigDecimal getGiveIntegral() {
+        return giveIntegral;
+    }
+
+    public void setGiveIntegral(BigDecimal giveIntegral) {
+        this.giveIntegral = giveIntegral;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -457,5 +467,8 @@ public class YunStoreBargain extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .toString();
+    }
+    public void copy(YunStoreBargain source){
+        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }

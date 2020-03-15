@@ -2,6 +2,7 @@ package com.myedu.project.store.activity.service.impl;
 
 import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.store.activity.mapper.YunStoreBargainMapper;
@@ -54,6 +55,7 @@ public class YunStoreBargainServiceImpl implements IYunStoreBargainService
     public int insertYunStoreBargain(YunStoreBargain yunStoreBargain)
     {
         yunStoreBargain.setCreateTime(DateUtils.getNowDate());
+        yunStoreBargain.setCreateBy(SecurityUtils.getUsername());
         return yunStoreBargainMapper.insertYunStoreBargain(yunStoreBargain);
     }
 
@@ -67,6 +69,7 @@ public class YunStoreBargainServiceImpl implements IYunStoreBargainService
     public int updateYunStoreBargain(YunStoreBargain yunStoreBargain)
     {
         yunStoreBargain.setUpdateTime(DateUtils.getNowDate());
+        yunStoreBargain.setUpdateBy(SecurityUtils.getUsername());
         return yunStoreBargainMapper.updateYunStoreBargain(yunStoreBargain);
     }
 

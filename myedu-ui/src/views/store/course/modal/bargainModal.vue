@@ -4,7 +4,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="砍价课程名称" prop="title">
-              <el-input v-model="form.name" placeholder="请输入砍价活动名称" />
+              <el-input v-model="form.name" placeholder="请输入砍价活动名称" style="width: 500px;"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -18,7 +18,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="库存" prop="stock">
-              <el-input-number v-model="form.classAll" placeholder="请输入库存" />
+              <el-input-number v-model="form.stock" placeholder="请输入库存" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -74,7 +74,7 @@
         <el-row>
          <el-col :span="12">
             <el-form-item label="砍价产品名称" prop="storeName">
-              <el-input v-model="form.storeName" placeholder="请输入砍价产品名称" />
+              <el-input v-model="form.storeName" placeholder="请输入砍价产品名称" style="width: 300px;"/>
             </el-form-item>
          </el-col>
          <el-col :span="12">
@@ -98,7 +98,7 @@
         <el-row>
          <el-col :span="12">
           <el-form-item label="用户每次砍价的最大金额" prop="bargainMaxPrice">
-            <el-input-number min="1" v-model="form.bargainMaxPrice" placeholder="请输入用户每次砍价的最大金额" />
+            <el-input-number min="0.1" v-model="form.bargainMaxPrice" placeholder="请输入用户每次砍价的最大金额" />
           </el-form-item>
          </el-col>
          <el-col :span="12">
@@ -135,7 +135,7 @@
         <el-row>
          <el-col :span="24"> 
             <el-form-item label="砍价活动简介" prop="info">
-              <el-input v-model="form.content" placeholder="请输入砍价活动简介" />
+              <el-input v-model="form.content" placeholder="请输入砍价活动简介" style="width: 500px;"/>
             </el-form-item>
          </el-col>
         </el-row>
@@ -167,7 +167,7 @@
         <el-row>
          <el-col :span="24"> 
             <el-form-item label="砍价规则" prop="rule">
-              <el-input v-model="form.rule" type="textarea" placeholder="请输入砍价规则" />
+              <el-input v-model="form.rule" type="textarea" placeholder="请输入砍价规则" style="width: 500px;"/>
             </el-form-item>
          </el-col>
         </el-row>
@@ -235,19 +235,22 @@
           return {
             title:"开始砍价",
             dialogVisible:false,
-             sysGrades: [],
-            // 课程类型字典
-            classifyOptions: [],
-            // 托管类型字典
-            reclassifyCollOptions: [],
-            // 是否一对一字典
-            isOneToOneOptions: [],
+            //  sysGrades: [],
+            // // 课程类型字典
+            // classifyOptions: [],
+            // // 托管类型字典
+            // reclassifyCollOptions: [],
+            // // 是否一对一字典
+            // isOneToOneOptions: [],
             // 课程状态字典
             statusOptions: [],
             //门店列表
             stores:[],
            // 表单参数
-            form: {},
+            form: {
+              // giveIntegral: 0,
+              // sort: 0
+            },
             // 表单校验
             rules: {
             }
