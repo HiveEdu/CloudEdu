@@ -3,7 +3,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="砍价课程名称" prop="title">
+            <el-form-item label="活动名称" prop="title">
               <el-input v-model="form.title" placeholder="请输入砍价活动名称" style="width: 500px;"/>
             </el-form-item>
           </el-col>
@@ -49,7 +49,7 @@
             </el-form-item>
          </el-col>
         </el-row>
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12">
             <el-form-item label="开始时间" prop="startTimeDate">
               <el-date-picker clearable size="small" style="width: 200px"
@@ -70,7 +70,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
          <el-col :span="12">
             <el-form-item label="砍价产品名称" prop="storeName">
@@ -135,7 +135,7 @@
         <el-row>
          <el-col :span="24"> 
             <el-form-item label="砍价活动简介" prop="info">
-              <el-input v-model="form.content" placeholder="请输入砍价活动简介" style="width: 500px;"/>
+              <el-input v-model="form.info" type="textarea" placeholder="请输入砍价活动简介" style="width: 500px;"/>
             </el-form-item>
          </el-col>
         </el-row>
@@ -212,9 +212,6 @@
           this.getDicts("is-one-to-one").then(response => {
             this.isOneToOneOptions = response.data;
           });
-          this.getDicts("course_status").then(response => {
-            this.statusOptions = response.data;
-          });
            this.getDicts("brgain_status").then(response => {
            this.statusOptions = response.data;
           });
@@ -226,7 +223,7 @@
             getCourse(e.id).then(response => {
               this.form.courseId = response.data.id;
               this.form.storeName=response.data.name;
-              this.gradeId = response.data.name;
+              this.form.info = response.data.introduce;
               this.sysGrades = response.sysGrades;
               this.stores=response.sysGrades;
             });
@@ -236,22 +233,29 @@
           return {
             title:"开始砍价",
             dialogVisible:false,
-            //  sysGrades: [],
-            // // 课程类型字典
-            // classifyOptions: [],
-            // // 托管类型字典
-            // reclassifyCollOptions: [],
-            // // 是否一对一字典
-            // isOneToOneOptions: [],
-            // 课程状态字典
-            statusOptions: [],
+            isRecommendOptions:[],
             //门店列表
             stores:[],
            // 表单参数
             form: {
+              stock: '',
               storeName:null,
-              // giveIntegral: 0,
-              // sort: 0
+              giveIntegral: 0,
+              sort: 0,
+              status: "1",
+              bargainMinPrice:0.1,
+              price: '',
+              minPrice: '',
+              num: '',
+              bargainMaxPrice: '',
+              bargainMinPrice: '',
+              bargainNum: '',
+              cost: '',
+              look:'',
+              share:'',
+              isHot:'1',
+              unitName:'节'
+
             },
             // 表单校验
             rules: {

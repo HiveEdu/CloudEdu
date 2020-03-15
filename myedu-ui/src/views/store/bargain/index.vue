@@ -76,33 +76,8 @@
           <span>{{ parseTime(scope.row.stopTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="开始时间" align="center" prop="startTimeDate" width="180">
-        <template slot-scope="scope" v-if="scope.row.startTimeDate!=null">
-          <span>{{ parseTime(scope.row.startTimeDate) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="结束时间" align="center" prop="endTimeDate" width="180">
-        <template slot-scope="scope" v-if="scope.row.endTimeDate!=null">
-          <span>{{ parseTime(scope.row.endTimeDate) }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="砍价产品名称" align="center" prop="storeName" />
       <el-table-column label="砍价金额" align="center" prop="price" />
-      <el-table-column label="砍价商品最低价" align="center" prop="minPrice" />
-      <el-table-column label="每次购买的砍价产品数量" align="center" prop="num" />
-      <el-table-column label="用户每次砍价的最大金额" align="center" prop="bargainMaxPrice" />
-      <el-table-column label="用户每次砍价的最小金额" align="center" prop="bargainMinPrice" />
-      <el-table-column label="用户每次砍价的次数" align="center" prop="bargainNum" />
-      <el-table-column label="砍价状态 " align="center" prop="status" :formatter="statusFormat" />
-      <el-table-column label="砍价状态 " align="center" prop="description" />
-      <el-table-column label="返多少积分" align="center" prop="giveIntegral" />
-      <el-table-column label="砍价活动简介" align="center" prop="info" />
-      <el-table-column label="成本价" align="center" prop="cost" />
-      <el-table-column label="排序" align="center" prop="sort" />
-      <el-table-column label="是否推荐0不推荐1推荐" align="center" prop="isHot" />
-      <el-table-column label="创建时间" align="center" prop="rule" />
-      <el-table-column label="砍价产品浏览量" align="center" prop="look" />
-      <el-table-column label="砍价产品分享量" align="center" prop="share" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
