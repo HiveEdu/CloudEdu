@@ -143,20 +143,30 @@ public class AppUserController extends BaseController {
      * @Date : 2020/2/1 20:07
      */
     @ApiOperation("获取用户详情")
-    @ApiImplicitParam(name = "HttpServletRequest", value = "获取用户详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "token", required = true, dataType = "string", paramType = "form"),
+    })
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo()
     {
+        // 获取请求携带的令牌
+        String token = tokenService.getToken(ServletUtils.getRequest());
+        System.out.println("token____________"+token);
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        SysUser user = loginUser.getUser();
-        // 角色集合
-        Set<String> roles = permissionService.getRolePermission(user);
-        // 权限集合
-        Set<String> permissions = permissionService.getMenuPermission(user);
         AjaxResult ajax = AjaxResult.success();
-        ajax.put("user", user);
-        ajax.put("roles", roles);
-        ajax.put("permissions", permissions);
+        if(loginUser!=null){
+            SysUser user = loginUser.getUser();
+            // 角色集合
+            Set<String> roles = permissionService.getRolePermission(user);
+            // 权限集合
+            Set<String> permissions = permissionService.getMenuPermission(user);
+
+            ajax.put("user", user);
+            ajax.put("roles", roles);
+            ajax.put("permissions", permissions);
+        }else{
+            ajax.put("user", null);
+        }
         return ajax;
     }
     /**
