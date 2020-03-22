@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -77,6 +78,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      * authenticated       |   用户登录后可访问
      */
     @Override
+    public void configure(WebSecurity web) throws Exception{
+        web.ignoring().antMatchers("/login","/index.html","/prod-api/**","/favicon.ico","/css/**","/js/**","/img/**","/fonts/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception
     {
         httpSecurity
@@ -90,6 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 // 对于登录login 验证码captchaImage 允许匿名访问
                 .antMatchers("/login", "/captchaImage").anonymous()
+                .antMatchers("/index.html","/prod-api/**","/favicon.ico","/css/**","/js/**","/img/**","/fonts/**","/static/**").anonymous()
                 .antMatchers(
                         HttpMethod.GET,
                         "/*.html",

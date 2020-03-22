@@ -1,0 +1,78 @@
+Manifest-Version: 1.0
+Class-Path: spring-boot-starter-security-2.1.3.RELEASE.jar oshi-core-3
+ .9.1.jar fastjson-1.2.47.jar lang-mustache-client-6.4.3.jar lucene-qu
+ eries-7.4.0.jar springfox-spring-web-2.9.2.jar spring-tx-5.1.5.RELEAS
+ E.jar jna-4.5.1.jar classmate-1.4.0.jar netty-common-4.1.33.Final.jar
+  json-20160810.jar hutool-all-4.0.12.jar spring-context-5.1.5.RELEASE
+ .jar HikariCP-3.2.0.jar dom4j-2.1.1.jar commons-lang3-3.8.1.jar poi-o
+ oxml-schemas-3.17.jar netty-resolver-4.1.33.Final.jar lucene-backward
+ -codecs-7.4.0.jar mapstruct-1.2.0.Final.jar commons-codec-1.11.jar sp
+ ring-boot-starter-aop-2.1.3.RELEASE.jar mybatis-spring-boot-autoconfi
+ gure-1.3.2.jar lucene-spatial3d-7.4.0.jar validation-api-2.0.1.Final.
+ jar byte-buddy-1.9.10.jar spring-security-config-5.1.4.RELEASE.jar ht
+ tpasyncclient-4.1.4.jar spring-boot-starter-json-2.1.3.RELEASE.jar my
+ batis-spring-1.3.2.jar log4j-api-2.11.2.jar jackson-databind-2.9.8.ja
+ r spring-context-support-5.1.5.RELEASE.jar joda-time-2.10.1.jar sprin
+ g-oxm-5.1.5.RELEASE.jar lombok-1.18.6.jar hppc-0.7.1.jar hibernate-co
+ mmons-annotations-5.0.4.Final.jar netty-transport-4.1.33.Final.jar dr
+ uid-1.1.14.jar compiler-0.9.3.jar spring-jdbc-5.1.5.RELEASE.jar httpc
+ ore-nio-4.4.11.jar springfox-swagger-ui-2.9.2.jar aspectjweaver-1.9.2
+ .jar elasticsearch-rest-client-6.4.3.jar jna-4.5.2.jar rank-eval-clie
+ nt-6.4.3.jar netty-codec-http-4.1.33.Final.jar commons-io-2.5.jar ela
+ sticsearch-x-content-6.4.3.jar HdrHistogram-2.1.9.jar spring-boot-dev
+ tools-2.1.3.RELEASE.jar stax-api-1.0.1.jar transport-6.4.3.jar poi-3.
+ 17.jar guava-20.0.jar hibernate-validator-6.0.14.Final.jar lucene-spa
+ tial-extras-7.4.0.jar spring-plugin-core-1.2.0.RELEASE.jar logback-co
+ re-1.2.3.jar httpclient-4.5.7.jar spring-data-keyvalue-2.1.5.RELEASE.
+ jar commons-logging-1.1.1.jar druid-spring-boot-starter-1.1.14.jar an
+ tlr-2.7.7.jar log4j-1.2.17.jar javax.persistence-api-2.2.jar spring-b
+ oot-starter-2.1.3.RELEASE.jar jackson-module-parameter-names-2.9.8.ja
+ r jackson-dataformat-yaml-2.9.8.jar elasticsearch-secure-sm-6.4.3.jar
+  httpcore-4.4.11.jar xmlbeans-2.6.0.jar slf4j-api-1.7.25.jar javassis
+ t-3.23.1-GA.jar spring-data-elasticsearch-3.1.5.RELEASE.jar spring-ex
+ pression-5.1.5.RELEASE.jar commons-fileupload-1.3.3.jar mybatis-3.4.6
+ .jar lucene-grouping-7.4.0.jar lucene-misc-7.4.0.jar jul-to-slf4j-1.7
+ .25.jar snakeyaml-1.23.jar hibernate-core-5.3.7.Final.jar log4j-to-sl
+ f4j-2.11.2.jar elasticsearch-core-6.4.3.jar javax.annotation-api-1.3.
+ 2.jar spring-core-5.1.5.RELEASE.jar commons-lang-2.4.jar spring-orm-5
+ .1.5.RELEASE.jar spring-data-commons-2.1.5.RELEASE.jar elasticsearch-
+ cli-6.4.3.jar jopt-simple-5.0.2.jar tomcat-embed-core-9.0.16.jar User
+ AgentUtils-1.19.jar jackson-dataformat-smile-2.9.8.jar netty-codec-4.
+ 1.33.Final.jar spring-boot-starter-data-elasticsearch-2.1.3.RELEASE.j
+ ar t-digest-3.2.jar lucene-core-7.4.0.jar bcprov-jdk15on-1.62.jar luc
+ ene-analyzers-common-7.4.0.jar commons-collections4-4.1.jar spring-we
+ bmvc-5.1.5.RELEASE.jar jackson-core-2.9.8.jar tomcat-embed-websocket-
+ 9.0.16.jar springfox-schema-2.9.2.jar transport-netty4-client-6.4.3.j
+ ar jsqlparser-1.0.jar spring-plugin-metadata-1.2.0.RELEASE.jar reinde
+ x-client-6.4.3.jar parent-join-client-6.4.3.jar spring-boot-autoconfi
+ gure-2.1.3.RELEASE.jar mysql-connector-java-8.0.15.jar jna-platform-4
+ .5.2.jar pagehelper-spring-boot-starter-1.2.5.jar lucene-join-7.4.0.j
+ ar jackson-dataformat-cbor-2.9.8.jar spring-security-core-5.1.4.RELEA
+ SE.jar spring-data-redis-2.1.5.RELEASE.jar spring-aspects-5.1.5.RELEA
+ SE.jar lucene-memory-7.4.0.jar spring-boot-2.1.3.RELEASE.jar commons-
+ pool2-2.6.1.jar logback-classic-1.2.3.jar spring-boot-starter-quartz-
+ 2.1.3.RELEASE.jar jackson-annotations-2.9.0.jar mchange-commons-java-
+ 0.2.11.jar reactor-core-3.2.6.RELEASE.jar spring-boot-starter-logging
+ -2.1.3.RELEASE.jar lucene-suggest-7.4.0.jar spring-web-5.1.5.RELEASE.
+ jar spring-jcl-5.1.5.RELEASE.jar springfox-swagger-common-2.9.2.jar s
+ pring-data-jpa-2.1.5.RELEASE.jar quartz-2.3.0.jar spring-boot-starter
+ -data-jpa-2.1.3.RELEASE.jar javax.activation-api-1.2.0.jar pagehelper
+ -5.1.4.jar jjwt-0.9.0.jar jackson-datatype-jsr310-2.9.8.jar percolato
+ r-client-6.4.3.jar spring-security-web-5.1.4.RELEASE.jar poi-ooxml-3.
+ 17.jar commons-collections-3.2.1.jar netty-handler-4.1.33.Final.jar c
+ urvesapi-1.04.jar jboss-logging-3.3.2.Final.jar swagger-annotations-1
+ .5.21.jar java-sdk-4.8.0.jar swagger-models-1.5.21.jar spring-aop-5.1
+ .5.RELEASE.jar mybatis-spring-boot-starter-1.3.2.jar spring-boot-star
+ ter-tomcat-2.1.3.RELEASE.jar lucene-highlighter-7.4.0.jar spring-boot
+ -starter-web-2.1.3.RELEASE.jar lucene-sandbox-7.4.0.jar springfox-spi
+ -2.9.2.jar javax.transaction-api-1.3.jar reactive-streams-1.0.2.jar s
+ pring-beans-5.1.5.RELEASE.jar velocity-1.7.jar lettuce-core-5.1.4.REL
+ EASE.jar pagehelper-spring-boot-autoconfigure-1.2.5.jar spring-boot-s
+ tarter-jdbc-2.1.3.RELEASE.jar jackson-datatype-jdk8-2.9.8.jar jandex-
+ 2.0.5.Final.jar lucene-queryparser-7.4.0.jar netty-buffer-4.1.33.Fina
+ l.jar spring-boot-starter-data-redis-2.0.4.RELEASE.jar tomcat-embed-e
+ l-9.0.16.jar jaxb-api-2.3.1.jar alipay-sdk-java-4.9.71.ALL.jar elasti
+ csearch-6.4.3.jar springfox-swagger2-2.9.2.jar lucene-spatial-7.4.0.j
+ ar springfox-core-2.9.2.jar
+Main-Class: com.myedu.MyEduApplication
+
