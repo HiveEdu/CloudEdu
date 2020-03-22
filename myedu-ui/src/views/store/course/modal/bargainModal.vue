@@ -3,18 +3,30 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="活动名称" prop="title">
-              <el-input v-model="form.title" placeholder="请输入砍价活动名称" style="width: 500px;"/>
+            <el-form-item label="砍价标题" prop="title">
+              <el-input v-model="form.title" placeholder="请输入砍价标题" style="width: 500px;"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
+            <el-form-item label="库存" prop="stock">
+              <el-input-number v-model="form.stock" placeholder="请输入库存" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="单位名称" prop="unitName">
               <el-input v-model="form.unitName" placeholder="请输入单位名称" style="width: 200px"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12"> 
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="销量必填" prop="sales">
+              <el-input-number v-model="form.sales" placeholder="请输入销量必填" />
+            </el-form-item>
+          </el-col>
+           <el-col :span="12"> 
           <el-form-item label="是否推荐" prop="isHot">
             <el-radio-group v-model="form.isHot">
             <el-radio
@@ -27,20 +39,8 @@
          </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="库存" prop="stock">
-              <el-input-number v-model="form.stock" placeholder="请输入库存" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="销量必填" prop="sales">
-              <el-input-number v-model="form.sales" placeholder="请输入销量必填" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
          <el-col :span="12">
-            <el-form-item label="砍价开启时间" prop="startTime">
+            <el-form-item label="开启时间" prop="startTime">
               <el-date-picker clearable size="small" style="width: 200px"
                 v-model="form.startTime"
                 type="date"
@@ -50,7 +50,7 @@
             </el-form-item>
          </el-col>
          <el-col :span="12">
-            <el-form-item label="砍价结束时间" prop="stopTime">
+            <el-form-item label="结束时间" prop="stopTime">
               <el-date-picker clearable size="small" style="width: 200px"
                 v-model="form.stopTime"
                 type="date"
@@ -60,31 +60,9 @@
             </el-form-item>
          </el-col>
         </el-row>
-        <!-- <el-row>
-          <el-col :span="12">
-            <el-form-item label="开始时间" prop="startTimeDate">
-              <el-date-picker clearable size="small" style="width: 200px"
-                v-model="form.startTimeDate"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="选择开始时间">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="结束时间" prop="endTimeDate">
-              <el-date-picker clearable size="small" style="width: 200px"
-                v-model="form.endTimeDate"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="选择结束时间">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row> -->
         <el-row>
          <el-col :span="12">
-            <el-form-item label="砍价产品名称" prop="storeName">
+            <el-form-item label="砍价名称" prop="storeName">
               <el-input v-model="form.storeName" placeholder="请输入砍价产品名称" style="width: 300px;"/>
             </el-form-item>
          </el-col>
@@ -163,23 +141,43 @@
          </el-col>
         </el-row>
         <el-row>
-         <el-col :span="24"> 
-            <el-form-item label="砍价规则" prop="rule">
-              <el-input v-model="form.rule" type="textarea" placeholder="请输入砍价规则" style="width: 500px;"/>
-            </el-form-item>
-         </el-col>
-        </el-row>
+            <el-col :span="12"> 
+                <el-form-item label="浏览量" prop="look">
+                  <el-input-number  v-model="form.look" placeholder="请输入砍价产品浏览量" />
+                </el-form-item>
+            </el-col>
+            <el-col :span="12"> 
+                <el-form-item label="分享量" prop="share">
+                  <el-input-number  v-model="form.share" placeholder="请输入砍价产品分享量" />
+                </el-form-item>
+            </el-col>
+            </el-row>
         <el-row>
-         <el-col :span="12"> 
-            <el-form-item label="砍价产品浏览量" prop="look">
-              <el-input-number  v-model="form.look" placeholder="请输入砍价产品浏览量" />
-            </el-form-item>
-         </el-col>
-         <el-col :span="12"> 
-            <el-form-item label="砍价产品分享量" prop="share">
-              <el-input-number  v-model="form.share" placeholder="请输入砍价产品分享量" />
-            </el-form-item>
-         </el-col>
+          <el-form-item label="砍价规则" prop="rule">
+              <!-- 图片上传组件辅助 -->
+              <el-upload
+                class="avatar-uploader quill-img"
+                :action="uploadImgUrl"
+                name="file"
+                :headers="headers"
+                :show-file-list="false"
+                :on-success="quillImgSuccess"
+                :on-error="uploadError"
+                :before-upload="quillImgBefore"
+                accept='.jpg,.jpeg,.png,.gif'
+              ></el-upload>
+
+              <!-- 富文本组件 -->
+              <quill-editor
+                class="editor"
+                v-model="form.rule"
+                ref="quillEditor"
+                :options="editorOption"
+                @blur="onEditorBlur($event)"
+                @focus="onEditorFocus($event)"
+                @change="onEditorChange($event)"
+              ></quill-editor>
+          </el-form-item>
         </el-row>
              <el-form-item label="砍价详情" prop="description">
             <!-- 图片上传组件辅助 -->
@@ -280,8 +278,8 @@
               this.form.courseId = response.data.id;
               this.form.storeName=response.data.name;
               this.form.info = response.data.introduce;
-              this.sysGrades = response.sysGrades;
-              this.stores=response.sysGrades;
+              this.form.stock = response.data.classAll;
+              this.form.price=response.data.courseCost;
             });
           },
         },
@@ -310,8 +308,9 @@
               look:0,
               share:0,
               isHot:'1',
-              unitName:'节'
-
+              unitName:'节',
+              description: this.value,
+              rule: this.value,
             },
             // 表单校验
             rules: {
@@ -368,7 +367,8 @@
       this.$message.error("图片插入失败");
     },
     //富文本事件结束
-         /** 提交按钮 */
+    
+    /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
