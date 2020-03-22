@@ -16,6 +16,7 @@ import com.myedu.project.system.domain.SysRole;
 import com.myedu.project.system.domain.SysUser;
 import com.myedu.project.system.service.ISysRoleService;
 import com.myedu.project.system.service.ISysUserService;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -143,16 +144,20 @@ public class AppUserController extends BaseController {
      * @Date : 2020/2/1 20:07
      */
     @ApiOperation("获取用户详情")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "authorization", value = "token", required = true, dataType = "string", paramType = "form"),
-    })
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo()
     {
         // 获取请求携带的令牌
         String token = tokenService.getToken(ServletUtils.getRequest());
-        System.out.println("token____________"+token);
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        LoginUser loginUser =null;
+        if (StringUtils.isNotEmpty(token))
+        {
+            Claims claims = tokenService.parseToken(token);
+            // 解析对应的权限以及用户信息
+            String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+            String userKey = tokenService.getTokenKey(uuid);
+            loginUser = redisCache.getCacheObject(userKey);
+        }
         AjaxResult ajax = AjaxResult.success();
         if(loginUser!=null){
             SysUser user = loginUser.getUser();
