@@ -16,15 +16,16 @@ import com.myedu.project.system.domain.SysRole;
 import com.myedu.project.system.domain.SysUser;
 import com.myedu.project.system.service.ISysRoleService;
 import com.myedu.project.system.service.ISysUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +36,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import io.swagger.annotations.ApiImplicitParams;
-
+import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Created with IntelliJ IDEA.
  * User: 梁少鹏
@@ -144,23 +144,19 @@ public class AppUserController extends BaseController {
      */
     @ApiOperation("获取用户详情")
     @ApiImplicitParam(name = "HttpServletRequest", value = "获取用户详情")
-    @GetMapping("/getUserInfo/{userId}")
-    public AjaxResult getUserInfo(@PathVariable Long userId)
-    { AjaxResult ajax = AjaxResult.success();
-        if (StringUtils.isNotNull(userId))
-        {
-            SysUser user = userService.selectUserById(userId);
-            // 角色集合
-            Set<String> roles = permissionService.getRolePermission(user);
-            // 权限集合
-            Set<String> permissions = permissionService.getMenuPermission(user);
-
-            ajax.put("user", user);
-            ajax.put("roles", roles);
-            ajax.put("permissions", permissions);
-        }
-//        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-//        SysUser user = loginUser.getUser();
+    @GetMapping("/getUserInfo")
+    public AjaxResult getUserInfo()
+    {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        SysUser user = loginUser.getUser();
+        // 角色集合
+        Set<String> roles = permissionService.getRolePermission(user);
+        // 权限集合
+        Set<String> permissions = permissionService.getMenuPermission(user);
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("user", user);
+        ajax.put("roles", roles);
+        ajax.put("permissions", permissions);
         return ajax;
     }
     /**
