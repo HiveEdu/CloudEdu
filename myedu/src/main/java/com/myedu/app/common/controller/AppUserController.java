@@ -235,14 +235,23 @@ public class AppUserController extends BaseController {
      * @Date : 2020/2/1 19:35
      */
     @ApiOperation("token校验")
-    @ApiImplicitParam(name = "HttpServletRequest", value = "token校验")
     @GetMapping("/CheckToken")
-    public AjaxResult CheckToken(HttpServletRequest request) throws IOException
+    public AjaxResult CheckToken() throws IOException
     {
-        String token=tokenService.getToken(request);
+        // 获取请求携带的令牌
+        String token = tokenService.getToken(ServletUtils.getRequest());
+        LoginUser loginUser =null;
+        if (StringUtils.isNotEmpty(token))
+        {
+            Claims claims = tokenService.parseToken(token);
+            // 解析对应的权限以及用户信息
+            String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+            String userKey = tokenService.getTokenKey(uuid);
+            loginUser = redisCache.getCacheObject(userKey);
+        }
         AjaxResult ajax = AjaxResult.success();
-        if(token.isEmpty()){
-            ajax.error("token为空");
+        if(loginUser==null){
+            ajax.error("token无效");
         }else{
             ajax.put(Constants.TOKEN, token);
         }
@@ -255,11 +264,20 @@ public class AppUserController extends BaseController {
      * @Date : 2020/2/1 19:35
      */
     @ApiOperation("token刷新")
-    @ApiImplicitParam(name = "HttpServletRequest", value = "token刷新")
     @GetMapping("/verifyToken")
-    public AjaxResult verifyToken(HttpServletRequest request) throws IOException
+    public AjaxResult verifyToken() throws IOException
     {
-        LoginUser loginUser = tokenService.getLoginUser(request);
+        // 获取请求携带的令牌
+        String token = tokenService.getToken(ServletUtils.getRequest());
+        LoginUser loginUser =null;
+        if (StringUtils.isNotEmpty(token))
+        {
+            Claims claims = tokenService.parseToken(token);
+            // 解析对应的权限以及用户信息
+            String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+            String userKey = tokenService.getTokenKey(uuid);
+            loginUser = redisCache.getCacheObject(userKey);
+        }
         if (StringUtils.isNotNull(loginUser) && StringUtils.isNull(SecurityUtils.getAuthentication()))
         {
             tokenService.verifyToken(loginUser);
