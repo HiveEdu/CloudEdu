@@ -45,8 +45,8 @@ public class AppStudentController extends BaseController {
     public TableDataInfo getMyStudent(YunStudentVo yunStudentVo)
     {
         startPage();
-        List<YunStudentVo> list = (List<YunStudentVo>) yunStudentService.selectYunStudentList(yunStudentVo).
-                stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
+        List<YunStudentVo> list = (List<YunStudentVo>) yunStudentService.selectYunStudentList(yunStudentVo);
+//                stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
         return getDataTable(list);
     }
     /*
