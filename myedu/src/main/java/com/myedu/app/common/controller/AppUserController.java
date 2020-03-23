@@ -182,11 +182,15 @@ public class AppUserController extends BaseController {
     @ApiOperation("获取角色列表")
     @ApiImplicitParam(name = "HttpServletResponse", value = "获取角色列表")
     @GetMapping("/getRoleList")
-    public AjaxResult getRoleList()
-    {
+    public AjaxResult getRoleList() throws IOException {
         AjaxResult ajax = AjaxResult.success();
-        List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
-        ajax.put("roleList", list);
+        if(this.CheckTokenBen()){
+            List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
+            ajax.put("roleList", list);
+        }else{
+            ajax.error("token无效");
+        }
+
         return ajax;
     }
     /**
@@ -258,6 +262,30 @@ public class AppUserController extends BaseController {
         return  ajax;
     }
 
+    public Boolean CheckTokenBen() throws IOException
+    {
+        Boolean result=true;
+        // 获取请求携带的令牌
+        String token = tokenService.getToken(ServletUtils.getRequest());
+        LoginUser loginUser =null;
+        if (StringUtils.isNotEmpty(token))
+        {
+            Claims claims = tokenService.parseToken(token);
+            // 解析对应的权限以及用户信息
+            String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+            String userKey = tokenService.getTokenKey(uuid);
+            loginUser = redisCache.getCacheObject(userKey);
+        }
+        AjaxResult ajax = AjaxResult.success();
+        if(loginUser==null){
+            ajax.error("token无效");
+            result=false;
+        }else{
+            result=true;
+            ajax.put(Constants.TOKEN, token);
+        }
+        return  result;
+    }
     /**
      * @Description :token刷新
      * @Author : 梁少鹏
