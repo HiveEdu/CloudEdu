@@ -79,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      */
     @Override
     public void configure(WebSecurity web) throws Exception{
-        web.ignoring().antMatchers("/login","/index.html","/prod-api/**","/favicon.ico","/css/**","/js/**","/img/**","/fonts/**");
+        web.ignoring().antMatchers("/**","/login","/index.html","/prod-api/**","/favicon.ico","/css/**","/js/**","/img/**","/fonts/**","/prod-api/**");
     }
 
     @Override
@@ -96,7 +96,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 // 对于登录login 验证码captchaImage 允许匿名访问
                 .antMatchers("/login", "/captchaImage").anonymous()
-                .antMatchers("/index.html","/prod-api/**","/favicon.ico","/css/**","/js/**","/img/**","/fonts/**","/static/**").anonymous()
                 .antMatchers(
                         HttpMethod.GET,
                         "/*.html",
