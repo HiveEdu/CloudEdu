@@ -184,13 +184,14 @@ public class AppUserController extends BaseController {
     @GetMapping("/getRoleList")
     public AjaxResult getRoleList() throws IOException {
         AjaxResult ajax = AjaxResult.success();
-        if(this.CheckTokenBen()){
-            List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
-            ajax.put("roleList", list);
-        }else{
-            ajax.error("token无效");
-        }
-
+//        if(this.CheckTokenBen()){
+//            List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
+//            ajax.put("roleList", list);
+//        }else{
+//            ajax.error("token无效");
+//        }
+        List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
+        ajax.put("roleList", list);
         return ajax;
     }
     /**
