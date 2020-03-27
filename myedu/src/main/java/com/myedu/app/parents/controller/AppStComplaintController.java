@@ -1,13 +1,17 @@
 package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.parents.domain.YunComplaint;
+import com.myedu.project.parents.domain.vo.YunStuHwVo;
 import com.myedu.project.parents.service.IYunComplaintService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -31,7 +35,8 @@ public class AppStComplaintController extends BaseController
 {
     @Autowired
     private IYunComplaintService yunComplaintService;
-
+    @Autowired
+    private TokenService tokenService;
     /**
      * 查询投诉列表
      */
@@ -42,9 +47,15 @@ public class AppStComplaintController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(YunComplaint yunComplaint)
     {
-        startPage();
-        List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
-        return getDataTable(list);
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            startPage();
+            List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
+            return getDataTable(list);
+        }else {
+            return getDataTableLose(null);
+        }
+
     }
 
     /**
@@ -58,9 +69,15 @@ public class AppStComplaintController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(YunComplaint yunComplaint)
     {
-        List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
-        ExcelUtil<YunComplaint> util = new ExcelUtil<YunComplaint>(YunComplaint.class);
-        return util.exportExcel(list, "complaint");
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
+            ExcelUtil<YunComplaint> util = new ExcelUtil<YunComplaint>(YunComplaint.class);
+            return util.exportExcel(list, "complaint");
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -73,7 +90,13 @@ public class AppStComplaintController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(yunComplaintService.selectYunComplaintById(id));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return AjaxResult.success(yunComplaintService.selectYunComplaintById(id));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -87,9 +110,15 @@ public class AppStComplaintController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunComplaint yunComplaint)
     {
-        yunComplaint.setCreateById(SecurityUtils.getUserId());
-        yunComplaint.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(yunComplaintService.insertYunComplaint(yunComplaint));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunComplaint.setCreateById(SecurityUtils.getUserId());
+            yunComplaint.setCreateBy(SecurityUtils.getUsername());
+            return toAjax(yunComplaintService.insertYunComplaint(yunComplaint));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -103,7 +132,13 @@ public class AppStComplaintController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunComplaint yunComplaint)
     {
-        return toAjax(yunComplaintService.updateYunComplaint(yunComplaint));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunComplaintService.updateYunComplaint(yunComplaint));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -117,6 +152,12 @@ public class AppStComplaintController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(yunComplaintService.deleteYunComplaintByIds(ids));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunComplaintService.deleteYunComplaintByIds(ids));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 }

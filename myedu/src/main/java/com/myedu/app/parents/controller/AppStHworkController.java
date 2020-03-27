@@ -1,14 +1,18 @@
 package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.parents.domain.YunStuHwork;
+import com.myedu.project.parents.domain.vo.YunStuHwVo;
 import com.myedu.project.parents.domain.vo.YunStuHworkVo;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStuHworkService;
@@ -37,6 +41,8 @@ public class AppStHworkController extends BaseController
     private IYunStuHworkService yunStuHworkService;
     @Autowired
     private IYunStudentService yunStudentService;
+    @Autowired
+    private TokenService tokenService;
     /**
      * 查询学生作业列表
      */
@@ -47,9 +53,15 @@ public class AppStHworkController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(YunStuHworkVo yunStuHwork)
     {
-        startPage();
-        List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
-        return getDataTable(list);
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            startPage();
+            List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
+            return getDataTable(list);
+        }else {
+            return getDataTableLose(null);
+        }
+
     }
 
     /**
@@ -63,9 +75,14 @@ public class AppStHworkController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(YunStuHworkVo yunStuHwork)
     {
-        List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
-        ExcelUtil<YunStuHworkVo> util = new ExcelUtil<YunStuHworkVo>(YunStuHworkVo.class);
-        return util.exportExcel(list, "hwork");
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
+            ExcelUtil<YunStuHworkVo> util = new ExcelUtil<YunStuHworkVo>(YunStuHworkVo.class);
+            return util.exportExcel(list, "hwork");
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
 
     /**
@@ -79,15 +96,21 @@ public class AppStHworkController extends BaseController
     public AjaxResult getInfo(@PathVariable(value ="id", required = false) Long id)
     {
         AjaxResult ajax = AjaxResult.success();
-        YunStudentVo yunStudentVo=new YunStudentVo();
-        yunStudentVo.setCreateById(SecurityUtils.getUserId());
-        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
-        ajax.put("studentLists", list);
-        if (StringUtils.isNotNull(id))
-        {
-            ajax.put(AjaxResult.DATA_TAG, yunStuHworkService.selectYunStuHworkById(id));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            YunStudentVo yunStudentVo=new YunStudentVo();
+            yunStudentVo.setCreateById(SecurityUtils.getUserId());
+            List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+            ajax.put("studentLists", list);
+            if (StringUtils.isNotNull(id))
+            {
+                ajax.put(AjaxResult.DATA_TAG, yunStuHworkService.selectYunStuHworkById(id));
+            }
+            return ajax;
+        }else{
+            return AjaxResult.error("token无效");
         }
-        return ajax;
+
     }
 
     /**
@@ -100,9 +123,16 @@ public class AppStHworkController extends BaseController
     @Log(title = "学生作业", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuHwork yunStuHwork)
-    {   yunStuHwork.setCreateById(SecurityUtils.getUserId());
-        yunStuHwork.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(yunStuHworkService.insertYunStuHwork(yunStuHwork));
+    {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStuHwork.setCreateById(SecurityUtils.getUserId());
+            yunStuHwork.setCreateBy(SecurityUtils.getUsername());
+            return toAjax(yunStuHworkService.insertYunStuHwork(yunStuHwork));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -116,7 +146,12 @@ public class AppStHworkController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuHwork yunStuHwork)
     {
-        return toAjax(yunStuHworkService.updateYunStuHwork(yunStuHwork));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunStuHworkService.updateYunStuHwork(yunStuHwork));
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
 
     /**
@@ -130,6 +165,11 @@ public class AppStHworkController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(yunStuHworkService.deleteYunStuHworkByIds(ids));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunStuHworkService.deleteYunStuHworkByIds(ids));
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
 }

@@ -45,7 +45,7 @@ public class AppStudentController extends BaseController {
 
     @Autowired
     private RedisCache redisCache;
-    /*
+    /**
      * @Description :查询当前用户下的学生
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:28
@@ -65,7 +65,7 @@ public class AppStudentController extends BaseController {
             return getDataTableLose(null);
         }
     }
-    /*
+    /**
      * @Description :获取学生详情
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:32
@@ -83,7 +83,7 @@ public class AppStudentController extends BaseController {
         }
 
     }
-    /*
+    /**
      * @Description :家长端增加学生
      * @Author : 梁少鹏
      * @Date : 2019/12/28 18:49
@@ -105,7 +105,7 @@ public class AppStudentController extends BaseController {
 
 
     }
-    /*
+    /**
      * @Description :修改学生数据
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:35
@@ -119,7 +119,7 @@ public class AppStudentController extends BaseController {
         yunStudent.setUpdateBy(SecurityUtils.getUseNickName());
         return toAjax(yunStudentService.updateYunStudent(yunStudent));
     }
-    /*
+    /**
      * @Description :删除学生
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:39
