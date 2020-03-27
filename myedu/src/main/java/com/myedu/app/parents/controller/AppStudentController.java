@@ -59,6 +59,7 @@ public class AppStudentController extends BaseController {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null){
             startPage();
+            yunStudentVo.setCreateById(loginUser.getUser().getUserId());
             List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
             return getDataTable(list);
         }else{
