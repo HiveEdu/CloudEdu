@@ -30,7 +30,9 @@ public class TableDataInfo implements Serializable
     public TableDataInfo()
     {
     }
-
+    public TableDataInfo(int code)
+    {
+    }
     /**
      * 分页
      * 

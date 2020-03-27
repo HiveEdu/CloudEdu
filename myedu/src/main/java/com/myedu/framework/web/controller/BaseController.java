@@ -72,6 +72,14 @@ public class BaseController
         return rspData;
     }
 
+    protected TableDataInfo getDataTableLose(List<?> list)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.ERROR);
+        rspData.setRows(list);
+        rspData.setTotal(0);
+        return rspData;
+    }
     /**
      * 响应返回结果
      * 

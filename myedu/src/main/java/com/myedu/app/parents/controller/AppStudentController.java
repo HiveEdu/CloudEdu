@@ -54,12 +54,16 @@ public class AppStudentController extends BaseController {
     @ApiImplicitParam(name = "yunStudentVo", value = "查询当前用户下的学生",
             dataType = "YunStudentVo")
     @GetMapping("/getMyStudent")
-    public TableDataInfo getMyStudent(YunStudentVo yunStudentVo)
+    public TableDataInfo  getMyStudent(YunStudentVo yunStudentVo)
     {
-        startPage();
-        List<YunStudentVo> list = (List<YunStudentVo>) yunStudentService.selectYunStudentList(yunStudentVo);
-//                stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
-        return getDataTable(list);
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null){
+            startPage();
+            List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
     }
     /*
      * @Description :获取学生详情
@@ -71,7 +75,13 @@ public class AppStudentController extends BaseController {
     @GetMapping(value = "/getStudnetById/{id}")
     public AjaxResult getStudnetById(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(yunStudentService.selectYunStudentById(id));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if(loginUser!=null){
+            return AjaxResult.success(yunStudentService.selectYunStudentById(id));
+        }else{
+            return AjaxResult.error("token无效");
+        }
+
     }
     /*
      * @Description :家长端增加学生
