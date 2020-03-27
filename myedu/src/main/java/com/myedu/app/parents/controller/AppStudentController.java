@@ -20,6 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,9 +73,9 @@ public class AppStudentController extends BaseController {
      * @Date : 2019/12/28 20:32
      */
     @ApiOperation("获取学生详情")
-    @ApiImplicitParam(name = "id", value = "获取学生详情", dataType = "Long")
-    @GetMapping(value = "/getStudnetById/{id}")
-    public AjaxResult getStudnetById(@PathVariable("id") Long id)
+    @ApiImplicitParam(name = "id", value = "获取学生详情", required = true, dataType = "Long", paramType = "path")
+    @GetMapping(value = "/getStudnetById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public AjaxResult getStudnetById(@PathVariable Long id)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if(loginUser!=null){
