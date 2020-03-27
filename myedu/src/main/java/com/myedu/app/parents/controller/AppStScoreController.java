@@ -1,16 +1,20 @@
 package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.dataBasic.domain.SysCourse;
 import com.myedu.project.dataBasic.service.ISysCourseService;
 import com.myedu.project.parents.domain.YunStuScore;
+import com.myedu.project.parents.domain.vo.YunStuMistakeVo;
 import com.myedu.project.parents.domain.vo.YunStuScoreVo;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStuScoreService;
@@ -42,6 +46,8 @@ public class AppStScoreController extends BaseController
 
     @Autowired
     private ISysCourseService sysCourseService;
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * 查询学生成绩列表
@@ -53,9 +59,15 @@ public class AppStScoreController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(YunStuScoreVo yunStuScore)
     {
-        startPage();
-        List<YunStuScoreVo> list = yunStuScoreService.selectYunStuScoreList(yunStuScore);
-        return getDataTable(list);
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            startPage();
+            List<YunStuScoreVo> list = yunStuScoreService.selectYunStuScoreList(yunStuScore);
+            return getDataTable(list);
+        }else {
+            return getDataTableLose(null);
+        }
+
     }
 
     /**
@@ -69,9 +81,15 @@ public class AppStScoreController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(YunStuScoreVo yunStuScore)
     {
-        List<YunStuScoreVo> list = yunStuScoreService.selectYunStuScoreList(yunStuScore);
-        ExcelUtil<YunStuScoreVo> util = new ExcelUtil<YunStuScoreVo>(YunStuScoreVo.class);
-        return util.exportExcel(list, "score");
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            List<YunStuScoreVo> list = yunStuScoreService.selectYunStuScoreList(yunStuScore);
+            ExcelUtil<YunStuScoreVo> util = new ExcelUtil<YunStuScoreVo>(YunStuScoreVo.class);
+            return util.exportExcel(list, "score");
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -85,17 +103,21 @@ public class AppStScoreController extends BaseController
     public AjaxResult getInfo(@PathVariable(value ="scoreId", required = false)  Long scoreId)
     {
         AjaxResult ajax = AjaxResult.success();
-        List<SysCourse> list1 = sysCourseService.selectSysCourseList(new SysCourse());
-        ajax.put("courseList", list1);
-        YunStudentVo yunStudentVo=new YunStudentVo();
-        yunStudentVo.setCreateById(SecurityUtils.getUserId());
-        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
-        ajax.put("studentLists", list);
-        if (StringUtils.isNotNull(scoreId))
-        {
-            ajax.put(AjaxResult.DATA_TAG, yunStuScoreService.selectYunStuScoreById(scoreId));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            List<SysCourse> list1 = sysCourseService.selectSysCourseList(new SysCourse());
+            ajax.put("courseList", list1);
+            YunStudentVo yunStudentVo = new YunStudentVo();
+            yunStudentVo.setCreateById(SecurityUtils.getUserId());
+            List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+            ajax.put("studentLists", list);
+            if (StringUtils.isNotNull(scoreId)) {
+                ajax.put(AjaxResult.DATA_TAG, yunStuScoreService.selectYunStuScoreById(scoreId));
+            }
+            return ajax;
+        }else {
+            return AjaxResult.error("token无效");
         }
-        return ajax;
     }
 
     /**
@@ -108,9 +130,16 @@ public class AppStScoreController extends BaseController
     @Log(title = "学生成绩", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuScore yunStuScore)
-    {   yunStuScore.setCreateById(SecurityUtils.getUserId());
-        yunStuScore.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(yunStuScoreService.insertYunStuScore(yunStuScore));
+    {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStuScore.setCreateById(SecurityUtils.getUserId());
+            yunStuScore.setCreateBy(SecurityUtils.getUsername());
+            return toAjax(yunStuScoreService.insertYunStuScore(yunStuScore));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -123,8 +152,15 @@ public class AppStScoreController extends BaseController
     @Log(title = "学生成绩", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuScore yunStuScore)
-    {   yunStuScore.setUpdateBy(SecurityUtils.getUsername());
-        return toAjax(yunStuScoreService.updateYunStuScore(yunStuScore));
+    {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStuScore.setUpdateBy(SecurityUtils.getUsername());
+            return toAjax(yunStuScoreService.updateYunStuScore(yunStuScore));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
     /**
@@ -138,6 +174,12 @@ public class AppStScoreController extends BaseController
 	@DeleteMapping("/{scoreIds}")
     public AjaxResult remove(@PathVariable Long[] scoreIds)
     {
-        return toAjax(yunStuScoreService.deleteYunStuScoreByIds(scoreIds));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunStuScoreService.deleteYunStuScoreByIds(scoreIds));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 }

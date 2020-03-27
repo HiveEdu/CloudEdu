@@ -24,4 +24,5 @@ public class Location {
     private GeoPoint location;//位置坐标 lon经度 lat纬度
     private String address;//地址
     private String distanceMeters;//距离多少米
+    private String storeid;//门店id
 }

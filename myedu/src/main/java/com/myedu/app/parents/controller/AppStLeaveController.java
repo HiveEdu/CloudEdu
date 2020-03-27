@@ -1,11 +1,15 @@
 package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.parents.domain.YunStuLeave;
 import com.myedu.project.parents.domain.YunStudent;
+import com.myedu.project.parents.domain.vo.YunStuHworkVo;
 import com.myedu.project.parents.domain.vo.YunStuLeaveVo;
 import com.myedu.project.parents.service.IYunStuLeaveService;
 import io.swagger.annotations.Api;
@@ -27,8 +31,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/parents/stLeave")
 public class AppStLeaveController extends BaseController {
+
     @Autowired
     private IYunStuLeaveService yunStuLeaveService;
+    @Autowired
+    private TokenService tokenService;
 
     @ApiOperation("查询当前用户下的学生请假列表")
     @ApiImplicitParam(name = "yunStuLeaveVo", value = "查询当前用户下的学生请假列表",
@@ -36,13 +43,19 @@ public class AppStLeaveController extends BaseController {
     @GetMapping("/getMyStudentLeave")
     public TableDataInfo getMyStudentLeave(YunStuLeaveVo yunStuLeaveVo)
     {
-        startPage();
-        List<YunStuLeaveVo> list = (List<YunStuLeaveVo>) yunStuLeaveService.selectYunStuLeaveList(yunStuLeaveVo).
-                stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
-        return getDataTable(list);
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            startPage();
+            List<YunStuLeaveVo> list = (List<YunStuLeaveVo>) yunStuLeaveService.selectYunStuLeaveList(yunStuLeaveVo).
+                    stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
+            return getDataTable(list);
+        }else {
+            return getDataTableLose(null);
+        }
+
     }
 
-    /*
+    /**
      * @Description :查询当前用户下的学生请假详情
      * @Author : 梁少鹏
      * @Date : 2019/12/29 15:18
@@ -53,10 +66,15 @@ public class AppStLeaveController extends BaseController {
     @GetMapping("/getMyStudentLeaveById/{id}")
     public AjaxResult getMyStudentLeaveById(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(yunStuLeaveService.selectYunStuLeaveById(id));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return AjaxResult.success(yunStuLeaveService.selectYunStuLeaveById(id));
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
 
-    /*
+    /**
      * @Description :添加学生请假
      * @Author : 梁少鹏
      * @Date : 2019/12/29 15:19
@@ -67,11 +85,16 @@ public class AppStLeaveController extends BaseController {
     @PostMapping("/addStudentLeave")
     public AjaxResult addStudentLeave(@RequestBody YunStuLeave yunStuLeave)
     {
-        yunStuLeave.setCreateById(SecurityUtils.getUserId());
-        yunStuLeave.setCreateBy(SecurityUtils.getUseNickName());
-        return toAjax(yunStuLeaveService.insertYunStuLeave(yunStuLeave));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStuLeave.setCreateById(SecurityUtils.getUserId());
+            yunStuLeave.setCreateBy(SecurityUtils.getUseNickName());
+            return toAjax(yunStuLeaveService.insertYunStuLeave(yunStuLeave));
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
-    /*
+    /**
      * @Description :修改学生请假
      * @Author : 梁少鹏
      * @Date : 2019/12/29 15:29
@@ -82,10 +105,15 @@ public class AppStLeaveController extends BaseController {
     @PostMapping("/editStudentLeave")
     public AjaxResult editStudentLeave(@RequestBody YunStuLeave yunStuLeave)
     {
-        yunStuLeave.setUpdateBy(SecurityUtils.getUsername());
-        return toAjax(yunStuLeaveService.updateYunStuLeave(yunStuLeave));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStuLeave.setUpdateBy(SecurityUtils.getUsername());
+            return toAjax(yunStuLeaveService.updateYunStuLeave(yunStuLeave));
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
-    /*
+    /**
      * @Description :删除学生请假
      * @Author : 梁少鹏
      * @Date : 2019/12/29 15:31
@@ -96,6 +124,12 @@ public class AppStLeaveController extends BaseController {
     @DeleteMapping("/deletStudentLeaveByIds/{ids}")
     public AjaxResult deletStudentLeaveByIds(@PathVariable Long[] ids)
     {
-        return toAjax(yunStuLeaveService.deleteYunStuLeaveByIds(ids));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunStuLeaveService.deleteYunStuLeaveByIds(ids));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 }

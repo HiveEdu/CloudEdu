@@ -14,6 +14,7 @@ import com.myedu.project.dataBasic.domain.SysLabel;
 import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
+import com.myedu.project.elasticsearch.dao.LocationRepository;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
@@ -25,7 +26,7 @@ import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import com.myedu.project.elasticsearch.entity.Location;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,9 @@ public class YunStoreController extends BaseController
 
     @Autowired
     private ISysLabelService syslabelService;
+
+    @Autowired
+    private LocationRepository locationRepository;
     /**
      * 查询门店列表
      */
@@ -106,6 +110,12 @@ public class YunStoreController extends BaseController
     {
         yunStore.setCreateById(SecurityUtils.getUserId());
         yunStore.setCreateBy(SecurityUtils.getUsername());
+        //向位置表插入数据
+        Location loca =new Location();
+        loca.setStoreid(String.valueOf(yunStore.getId()));
+        //loca.setLocation(yunStore.getMapX(),yunStore.getMapY());
+        loca.setAddress(yunStore.getAddress());
+        locationRepository.save(loca);
         return toAjax(yunStoreService.insertYunStore(yunStore));
     }
 

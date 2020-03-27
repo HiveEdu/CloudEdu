@@ -1,6 +1,9 @@
 package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
@@ -30,8 +33,10 @@ public class AppStMistakeController extends BaseController {
 
     @Autowired
     private IYunStuMistakeService yunStuMistakeService;
+    @Autowired
+    private TokenService tokenService;
 
-    /*
+    /**
      * @Description :查询当前用户下的学生错题记录
      * @Author : 梁少鹏
      * @Date : 2019/12/29 17:24
@@ -42,10 +47,16 @@ public class AppStMistakeController extends BaseController {
     @GetMapping("/getMyStudentMistake")
     public TableDataInfo getMyStudentMistake(YunStuMistakeVo yunStuMistakeVo)
     {
-        startPage();
-        List<YunStuMistakeVo> list = (List<YunStuMistakeVo>) yunStuMistakeService.selectYunStuMistakeList(yunStuMistakeVo).
-                stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
-        return getDataTable(list);
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            startPage();
+            List<YunStuMistakeVo> list = (List<YunStuMistakeVo>) yunStuMistakeService.selectYunStuMistakeList(yunStuMistakeVo).
+                    stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
+            return getDataTable(list);
+        }else {
+            return getDataTableLose(null);
+        }
+
     }
 
     @ApiOperation("获取错题详情记录")
@@ -54,10 +65,16 @@ public class AppStMistakeController extends BaseController {
     @GetMapping(value = "/getStudentMistakeById/{id}")
     public AjaxResult getStudentMistakeById(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(yunStuMistakeService.selectYunStuMistakeById(id));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return AjaxResult.success(yunStuMistakeService.selectYunStuMistakeById(id));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
-    /*
+    /**
      * @Description :添加学生错题记录
      * @Author : 梁少鹏
      * @Date : 2019/12/29 17:26
@@ -68,11 +85,17 @@ public class AppStMistakeController extends BaseController {
     @PostMapping("/addStudentMistake")
     public AjaxResult addStudentMistake(@RequestBody YunStuMistake yunStuMistake)
     {
-        yunStuMistake.setCreateById(SecurityUtils.getUserId());
-        yunStuMistake.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(yunStuMistakeService.insertYunStuMistake(yunStuMistake));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStuMistake.setCreateById(SecurityUtils.getUserId());
+            yunStuMistake.setCreateBy(SecurityUtils.getUsername());
+            return toAjax(yunStuMistakeService.insertYunStuMistake(yunStuMistake));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
-    /*
+    /**
      * @Description :修改学生错题记录
      * @Author : 梁少鹏
      * @Date : 2019/12/29 17:31
@@ -83,10 +106,16 @@ public class AppStMistakeController extends BaseController {
     @PostMapping("/editStudentMistake")
     public AjaxResult editStudentMistake(@RequestBody YunStuMistake yunStuMistake)
     {
-        yunStuMistake.setUpdateBy(SecurityUtils.getUsername());
-        return toAjax(yunStuMistakeService.updateYunStuMistake(yunStuMistake));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStuMistake.setUpdateBy(SecurityUtils.getUsername());
+            return toAjax(yunStuMistakeService.updateYunStuMistake(yunStuMistake));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
-    /*
+    /**
      * @Description :删除学生错题记录
      * @Author : 梁少鹏
      * @Date : 2019/12/29 17:32
@@ -97,7 +126,13 @@ public class AppStMistakeController extends BaseController {
     @DeleteMapping("/deletStudentMistakeByIds/{ids}")
     public AjaxResult deletStudentMistakeByIds(@PathVariable Long[] ids)
     {
-        return toAjax(yunStuMistakeService.deleteYunStuMistakeByIds(ids));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunStuMistakeService.deleteYunStuMistakeByIds(ids));
+        }else {
+            return AjaxResult.error("token无效");
+        }
+
     }
 
 }
