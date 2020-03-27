@@ -48,7 +48,6 @@ public class AppStHwController extends BaseController
     @ApiOperation("查询学生身高体重记录列表")
     @ApiImplicitParam(name = "yunStuHw", value = "查询学生身高体重记录列表",
             dataType = "YunStuHwVo")
-    @PreAuthorize("@ss.hasPermi('parents:hw:list')")
     @GetMapping("/list")
     public TableDataInfo list(YunStuHwVo yunStuHw)
     {
@@ -69,7 +68,6 @@ public class AppStHwController extends BaseController
     @ApiOperation("导出学生身高体重记录列表")
     @ApiImplicitParam(name = "yunStuHw", value = "导出学生身高体重记录列表",
             dataType = "YunStuHwVo")
-    @PreAuthorize("@ss.hasPermi('parents:hw:export')")
     @Log(title = "学生身高体重记录", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(YunStuHwVo yunStuHw)
@@ -115,7 +113,6 @@ public class AppStHwController extends BaseController
     @ApiOperation("新增学生身高体重记录")
     @ApiImplicitParam(name = "yunStuHw", value = "新增学生身高体重记录",
             dataType = "YunStuHw")
-    @PreAuthorize("@ss.hasPermi('parents:hw:add')")
     @Log(title = "学生身高体重记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuHw yunStuHw)
@@ -138,7 +135,6 @@ public class AppStHwController extends BaseController
     @ApiOperation("修改学生身高体重记录")
     @ApiImplicitParam(name = "yunStuHw", value = "修改学生身高体重记录",
             dataType = "YunStuHw")
-    @PreAuthorize("@ss.hasPermi('parents:hw:edit')")
     @Log(title = "学生身高体重记录", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuHw yunStuHw)
@@ -158,7 +154,6 @@ public class AppStHwController extends BaseController
     @ApiOperation("删除学生身高体重记录")
     @ApiImplicitParam(name = "ids", value = "删除学生身高体重记录",
             dataType = "Long[]")
-    @PreAuthorize("@ss.hasPermi('parents:hw:remove')")
     @Log(title = "学生身高体重记录", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

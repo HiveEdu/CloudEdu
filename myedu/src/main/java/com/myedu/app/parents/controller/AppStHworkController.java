@@ -91,7 +91,6 @@ public class AppStHworkController extends BaseController
     @ApiOperation("获取学生作业详细信息")
     @ApiImplicitParam(name = "id", value = "获取学生作业详细信息",
             dataType = "Long")
-    @PreAuthorize("@ss.hasPermi('parents:hwork:query')")
     @GetMapping(value = { "/", "/{id}" })
     public AjaxResult getInfo(@PathVariable(value ="id", required = false) Long id)
     {
@@ -119,7 +118,6 @@ public class AppStHworkController extends BaseController
     @ApiOperation("新增学生作业")
     @ApiImplicitParam(name = "yunStuHwork", value = "新增学生作业",
             dataType = "YunStuHwork")
-    @PreAuthorize("@ss.hasPermi('parents:hwork:add')")
     @Log(title = "学生作业", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuHwork yunStuHwork)
@@ -141,7 +139,6 @@ public class AppStHworkController extends BaseController
     @ApiOperation("修改学生作业")
     @ApiImplicitParam(name = "yunStuHwork", value = "修改学生作业",
             dataType = "YunStuHwork")
-    @PreAuthorize("@ss.hasPermi('parents:hwork:edit')")
     @Log(title = "学生作业", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuHwork yunStuHwork)
@@ -160,7 +157,6 @@ public class AppStHworkController extends BaseController
     @ApiOperation("删除学生作业")
     @ApiImplicitParam(name = "ids", value = "删除学生作业",
             dataType = "Long[]")
-    @PreAuthorize("@ss.hasPermi('parents:hwork:remove')")
     @Log(title = "学生作业", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

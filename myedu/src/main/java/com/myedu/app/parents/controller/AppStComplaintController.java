@@ -43,7 +43,6 @@ public class AppStComplaintController extends BaseController
     @ApiOperation("查询投诉列表")
     @ApiImplicitParam(name = "yunComplaint", value = "查询投诉列表",
             dataType = "YunComplaint")
-    @PreAuthorize("@ss.hasPermi('parents:complaint:list')")
     @GetMapping("/list")
     public TableDataInfo list(YunComplaint yunComplaint)
     {
@@ -64,7 +63,6 @@ public class AppStComplaintController extends BaseController
     @ApiOperation("导出投诉列表")
     @ApiImplicitParam(name = "yunComplaint", value = "导出投诉列表",
             dataType = "YunComplaint")
-    @PreAuthorize("@ss.hasPermi('parents:complaint:export')")
     @Log(title = "投诉", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(YunComplaint yunComplaint)
@@ -86,7 +84,6 @@ public class AppStComplaintController extends BaseController
     @ApiOperation("获取投诉详细信息")
     @ApiImplicitParam(name = "id", value = "获取投诉详细信息",
             dataType = "Long")
-    @PreAuthorize("@ss.hasPermi('parents:complaint:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -105,7 +102,6 @@ public class AppStComplaintController extends BaseController
     @ApiOperation("新增投诉")
     @ApiImplicitParam(name = "yunComplaint", value = "新增投诉",
             dataType = "YunComplaint")
-    @PreAuthorize("@ss.hasPermi('parents:complaint:add')")
     @Log(title = "投诉", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunComplaint yunComplaint)
@@ -127,7 +123,6 @@ public class AppStComplaintController extends BaseController
     @ApiOperation("修改投诉")
     @ApiImplicitParam(name = "yunComplaint", value = "修改投诉",
             dataType = "YunComplaint")
-    @PreAuthorize("@ss.hasPermi('parents:complaint:edit')")
     @Log(title = "投诉", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunComplaint yunComplaint)
@@ -147,7 +142,6 @@ public class AppStComplaintController extends BaseController
     @ApiOperation("删除投诉")
     @ApiImplicitParam(name = "ids", value = "删除投诉",
             dataType = "Long[]")
-    @PreAuthorize("@ss.hasPermi('parents:complaint:remove')")
     @Log(title = "投诉", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
