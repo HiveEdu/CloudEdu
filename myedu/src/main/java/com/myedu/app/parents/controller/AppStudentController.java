@@ -114,10 +114,15 @@ public class AppStudentController extends BaseController {
     @ApiImplicitParam(name = "yunStudent", value = "修改学生", dataType = "YunStudent")
     @Log(title = "学生数据", businessType = BusinessType.UPDATE)
     @PostMapping("/editStudent")
-    public AjaxResult editStudent(@RequestBody YunStudent yunStudent)
+    public AjaxResult editStudent(YunStudent yunStudent)
     {
-        yunStudent.setUpdateBy(SecurityUtils.getUseNickName());
-        return toAjax(yunStudentService.updateYunStudent(yunStudent));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            yunStudent.setUpdateBy(loginUser.getUser().getNickName());
+            return toAjax(yunStudentService.updateYunStudent(yunStudent));
+        }else{
+            return AjaxResult.error("token无效");
+        }
     }
     /**
      * @Description :删除学生
@@ -130,7 +135,13 @@ public class AppStudentController extends BaseController {
     @DeleteMapping("/deletStudentByIds/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(yunStudentService.deleteYunStudentByIds(ids));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            return toAjax(yunStudentService.deleteYunStudentByIds(ids));
+        }else{
+            return AjaxResult.error("token无效");
+        }
+
     }
 
 }
