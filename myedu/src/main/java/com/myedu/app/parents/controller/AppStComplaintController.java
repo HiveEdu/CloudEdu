@@ -112,8 +112,8 @@ public class AppStComplaintController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunComplaint.setCreateById(SecurityUtils.getUserId());
-            yunComplaint.setCreateBy(SecurityUtils.getUsername());
+            yunComplaint.setCreateById(loginUser.getUser().getUserId());
+            yunComplaint.setCreateBy(loginUser.getUser().getNickName());
             return toAjax(yunComplaintService.insertYunComplaint(yunComplaint));
         }else {
             return AjaxResult.error("token无效");

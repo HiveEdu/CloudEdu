@@ -108,7 +108,7 @@ public class AppStScoreController extends BaseController
             List<SysCourse> list1 = sysCourseService.selectSysCourseList(new SysCourse());
             ajax.put("courseList", list1);
             YunStudentVo yunStudentVo = new YunStudentVo();
-            yunStudentVo.setCreateById(SecurityUtils.getUserId());
+            yunStudentVo.setCreateById(loginUser.getUser().getUserId());
             List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
             ajax.put("studentLists", list);
             if (StringUtils.isNotNull(scoreId)) {
@@ -133,8 +133,8 @@ public class AppStScoreController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuScore.setCreateById(SecurityUtils.getUserId());
-            yunStuScore.setCreateBy(SecurityUtils.getUsername());
+            yunStuScore.setCreateById(loginUser.getUser().getUserId());
+            yunStuScore.setCreateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuScoreService.insertYunStuScore(yunStuScore));
         }else {
             return AjaxResult.error("token无效");
@@ -155,7 +155,7 @@ public class AppStScoreController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuScore.setUpdateBy(SecurityUtils.getUsername());
+            yunStuScore.setUpdateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuScoreService.updateYunStuScore(yunStuScore));
         }else {
             return AjaxResult.error("token无效");

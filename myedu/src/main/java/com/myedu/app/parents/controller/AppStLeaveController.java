@@ -87,8 +87,8 @@ public class AppStLeaveController extends BaseController {
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuLeave.setCreateById(SecurityUtils.getUserId());
-            yunStuLeave.setCreateBy(SecurityUtils.getUseNickName());
+            yunStuLeave.setCreateById(loginUser.getUser().getUserId());
+            yunStuLeave.setCreateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuLeaveService.insertYunStuLeave(yunStuLeave));
         }else {
             return AjaxResult.error("token无效");
@@ -107,7 +107,7 @@ public class AppStLeaveController extends BaseController {
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuLeave.setUpdateBy(SecurityUtils.getUsername());
+            yunStuLeave.setUpdateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuLeaveService.updateYunStuLeave(yunStuLeave));
         }else {
             return AjaxResult.error("token无效");

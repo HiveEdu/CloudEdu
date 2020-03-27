@@ -90,7 +90,6 @@ public class AppStHwController extends BaseController
     @ApiOperation("获取学生身高体重记录详细信息")
     @ApiImplicitParam(name = "id", value = "获取学生身高体重记录详细信息",
             dataType = "Long")
-    @PreAuthorize("@ss.hasPermi('parents:hw:query')")
     @GetMapping(value = { "/", "/{id}" })
     public AjaxResult getInfo(@PathVariable(value ="id", required = false) Long id)
     {
@@ -98,7 +97,7 @@ public class AppStHwController extends BaseController
         AjaxResult ajax = AjaxResult.success();
         if (loginUser!=null) {
             YunStudentVo yunStudentVo = new YunStudentVo();
-            yunStudentVo.setCreateById(SecurityUtils.getUserId());
+            yunStudentVo.setCreateById(loginUser.getUser().getUserId());
             List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
             ajax.put("studentLists", list);
             if (StringUtils.isNotNull(id)) {
@@ -123,8 +122,8 @@ public class AppStHwController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuHw.setCreateById(SecurityUtils.getUserId());
-            yunStuHw.setCreateBy(SecurityUtils.getUsername());
+            yunStuHw.setCreateById(loginUser.getUser().getUserId());
+            yunStuHw.setCreateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuHwService.insertYunStuHw(yunStuHw));
         }else {
 

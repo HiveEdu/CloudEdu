@@ -99,7 +99,7 @@ public class AppStHworkController extends BaseController
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
             YunStudentVo yunStudentVo=new YunStudentVo();
-            yunStudentVo.setCreateById(SecurityUtils.getUserId());
+            yunStudentVo.setCreateById(loginUser.getUser().getUserId());
             List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
             ajax.put("studentLists", list);
             if (StringUtils.isNotNull(id))
@@ -126,8 +126,8 @@ public class AppStHworkController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuHwork.setCreateById(SecurityUtils.getUserId());
-            yunStuHwork.setCreateBy(SecurityUtils.getUsername());
+            yunStuHwork.setCreateById(loginUser.getUser().getUserId());
+            yunStuHwork.setCreateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuHworkService.insertYunStuHwork(yunStuHwork));
         }else {
             return AjaxResult.error("token无效");

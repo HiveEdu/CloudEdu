@@ -51,7 +51,7 @@ public class AppStMistakeController extends BaseController {
         if (loginUser!=null) {
             startPage();
             List<YunStuMistakeVo> list = (List<YunStuMistakeVo>) yunStuMistakeService.selectYunStuMistakeList(yunStuMistakeVo).
-                    stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
+                    stream().filter(item -> item.getCreateById().equals(loginUser.getUser().getUserId()));
             return getDataTable(list);
         }else {
             return getDataTableLose(null);
@@ -87,8 +87,8 @@ public class AppStMistakeController extends BaseController {
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuMistake.setCreateById(SecurityUtils.getUserId());
-            yunStuMistake.setCreateBy(SecurityUtils.getUsername());
+            yunStuMistake.setCreateById(loginUser.getUser().getUserId());
+            yunStuMistake.setCreateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuMistakeService.insertYunStuMistake(yunStuMistake));
         }else {
             return AjaxResult.error("token无效");
@@ -108,7 +108,7 @@ public class AppStMistakeController extends BaseController {
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
-            yunStuMistake.setUpdateBy(SecurityUtils.getUsername());
+            yunStuMistake.setUpdateBy(loginUser.getUser().getNickName());
             return toAjax(yunStuMistakeService.updateYunStuMistake(yunStuMistake));
         }else {
             return AjaxResult.error("token无效");
