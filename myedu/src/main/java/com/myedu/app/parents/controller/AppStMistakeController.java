@@ -10,6 +10,7 @@ import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.parents.domain.YunStuMistake;
 import com.myedu.project.parents.domain.vo.YunStuLeaveVo;
 import com.myedu.project.parents.domain.vo.YunStuMistakeVo;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStuMistakeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -50,8 +51,7 @@ public class AppStMistakeController extends BaseController {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
             startPage();
-            List<YunStuMistakeVo> list = (List<YunStuMistakeVo>) yunStuMistakeService.selectYunStuMistakeList(yunStuMistakeVo).
-                    stream().filter(item -> item.getCreateById().equals(loginUser.getUser().getUserId()));
+            List<YunStuMistakeVo> list =  yunStuMistakeService.selectYunStuMistakeList(yunStuMistakeVo);
             return getDataTable(list);
         }else {
             return getDataTableLose(null);

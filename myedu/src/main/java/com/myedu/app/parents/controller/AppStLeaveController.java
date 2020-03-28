@@ -46,8 +46,7 @@ public class AppStLeaveController extends BaseController {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
             startPage();
-            List<YunStuLeaveVo> list = (List<YunStuLeaveVo>) yunStuLeaveService.selectYunStuLeaveList(yunStuLeaveVo).
-                    stream().filter(item -> item.getCreateById().equals(SecurityUtils.getUserId()));
+            List<YunStuLeaveVo> list = yunStuLeaveService.selectYunStuLeaveList(yunStuLeaveVo);
             return getDataTable(list);
         }else {
             return getDataTableLose(null);
