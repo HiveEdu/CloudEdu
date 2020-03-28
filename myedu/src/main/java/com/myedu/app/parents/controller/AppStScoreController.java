@@ -55,7 +55,6 @@ public class AppStScoreController extends BaseController
     @ApiOperation("查询学生成绩列表")
     @ApiImplicitParam(name = "yunStuScore", value = "查询学生成绩列表",
             dataType = "YunStuScoreVo")
-    @PreAuthorize("@ss.hasPermi('parents:score:list')")
     @GetMapping("/list")
     public TableDataInfo list(YunStuScoreVo yunStuScore)
     {
@@ -76,7 +75,6 @@ public class AppStScoreController extends BaseController
     @ApiOperation("导出学生成绩列表")
     @ApiImplicitParam(name = "yunStuScore", value = "导出学生成绩列表",
             dataType = "YunStuScoreVo")
-    @PreAuthorize("@ss.hasPermi('parents:score:export')")
     @Log(title = "学生成绩", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(YunStuScoreVo yunStuScore)
@@ -98,7 +96,6 @@ public class AppStScoreController extends BaseController
     @ApiOperation("获取学生成绩详细信息")
     @ApiImplicitParam(name = "scoreId", value = "获取学生成绩详细信息",
             dataType = "Long")
-    @PreAuthorize("@ss.hasPermi('parents:score:query')")
     @GetMapping(value = { "/", "/{scoreId}" })
     public AjaxResult getInfo(@PathVariable(value ="scoreId", required = false)  Long scoreId)
     {
@@ -126,7 +123,6 @@ public class AppStScoreController extends BaseController
     @ApiOperation("新增学生成绩")
     @ApiImplicitParam(name = "yunStuScore", value = "新增学生成绩",
             dataType = "YunStuScore")
-    @PreAuthorize("@ss.hasPermi('parents:score:add')")
     @Log(title = "学生成绩", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStuScore yunStuScore)
@@ -148,7 +144,6 @@ public class AppStScoreController extends BaseController
     @ApiOperation("修改学生成绩")
     @ApiImplicitParam(name = "yunStuScore", value = "修改学生成绩",
             dataType = "YunStuScore")
-    @PreAuthorize("@ss.hasPermi('parents:score:edit')")
     @Log(title = "学生成绩", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuScore yunStuScore)
@@ -169,7 +164,6 @@ public class AppStScoreController extends BaseController
     @ApiOperation("删除学生成绩")
     @ApiImplicitParam(name = "scoreIds", value = "删除学生成绩",
             dataType = "Long[]")
-    @PreAuthorize("@ss.hasPermi('parents:score:remove')")
     @Log(title = "学生成绩", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{scoreIds}")
     public AjaxResult remove(@PathVariable Long[] scoreIds)

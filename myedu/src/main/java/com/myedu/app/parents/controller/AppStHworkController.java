@@ -49,7 +49,6 @@ public class AppStHworkController extends BaseController
     @ApiOperation("查询学生作业列表")
     @ApiImplicitParam(name = "yunStuHwork", value = "查询学生作业列表",
             dataType = "YunStuHworkVo")
-    @PreAuthorize("@ss.hasPermi('parents:hwork:list')")
     @GetMapping("/list")
     public TableDataInfo list(YunStuHworkVo yunStuHwork)
     {
@@ -70,7 +69,6 @@ public class AppStHworkController extends BaseController
     @ApiOperation("导出学生作业列表")
     @ApiImplicitParam(name = "yunStuHwork", value = "查询学生作业列表",
             dataType = "YunStuHworkVo")
-    @PreAuthorize("@ss.hasPermi('parents:hwork:export')")
     @Log(title = "学生作业", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(YunStuHworkVo yunStuHwork)

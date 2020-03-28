@@ -18,7 +18,7 @@ import com.myedu.project.elasticsearch.dao.LocationRepository;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
-import com.myedu.project.store.enums.CourseType;
+import com.myedu.common.utils.GPSUtil;
 import com.myedu.project.store.enums.StoreStatus;
 import com.myedu.project.store.enums.StoryType;
 import com.myedu.project.store.enums.labelType;
@@ -29,7 +29,8 @@ import org.springframework.web.bind.annotation.*;
 import com.myedu.project.elasticsearch.entity.Location;
 import java.util.Date;
 import java.util.List;
-
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 /**
  * 门店Controller
  * 
@@ -113,8 +114,12 @@ public class YunStoreController extends BaseController
         //向位置表插入数据
         Location loca =new Location();
         loca.setStoreid(String.valueOf(yunStore.getId()));
-        //loca.setLocation(yunStore.getMapX(),yunStore.getMapY());
+        double x=yunStore.getMapX();
+        double y=yunStore.getMapY();
+        GeoPoint gpoint=new GeoPoint(x, y);
+        loca.setLocation(gpoint);
         loca.setAddress(yunStore.getAddress());
+
         locationRepository.save(loca);
         return toAjax(yunStoreService.insertYunStore(yunStore));
     }
