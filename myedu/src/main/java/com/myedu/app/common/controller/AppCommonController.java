@@ -25,9 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 @Api("APP文件上传下载")
 @RestController
 @RequestMapping("/app")
-public class CommonController
+public class AppCommonController
 {
-    private static final Logger log = LoggerFactory.getLogger(CommonController.class);
+    private static final Logger log = LoggerFactory.getLogger(AppCommonController.class);
 
     @Autowired
     private ServerConfig serverConfig;
