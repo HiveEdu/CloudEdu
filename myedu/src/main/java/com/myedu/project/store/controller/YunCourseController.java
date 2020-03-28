@@ -2,8 +2,12 @@ package com.myedu.project.store.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.store.domain.YunStore;
@@ -46,6 +50,8 @@ public class YunCourseController extends BaseController
     private ISysGradeService sysGradeService;
     @Autowired
     private IYunStoreService yunStoreService;
+    @Autowired
+    private TokenService tokenService;
     /**
      * 查询课程列表
      */
@@ -100,6 +106,9 @@ public class YunCourseController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunCourse yunCourse)
     {
+        yunCourse.setCreateById(SecurityUtils.getUserId());
+        yunCourse.setCreateBy(SecurityUtils.getUsername());
+        yunCourse.setCreateTime(DateUtils.getNowDate());
         return toAjax(yunCourseService.insertYunCourse(yunCourse));
     }
 
@@ -111,6 +120,7 @@ public class YunCourseController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunCourse yunCourse)
     {
+        yunCourse.setUpdateTime(DateUtils.getNowDate());
         return toAjax(yunCourseService.updateYunCourse(yunCourse));
     }
 

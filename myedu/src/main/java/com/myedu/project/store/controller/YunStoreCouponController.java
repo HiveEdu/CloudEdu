@@ -100,6 +100,9 @@ public class YunStoreCouponController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunStoreCoupon yunStoreCoupon)
     {
+        yunStoreCoupon.setCreateById(SecurityUtils.getUserId());
+        yunStoreCoupon.setCreateBy(SecurityUtils.getUsername());
+        yunStoreCoupon.setCreateTime(DateUtils.getNowDate());
         return toAjax(yunStoreCouponService.insertYunStoreCoupon(yunStoreCoupon));
     }
 
@@ -111,6 +114,7 @@ public class YunStoreCouponController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunStoreCoupon yunStoreCoupon)
     {
+        yunStoreCoupon.setUpdateTime(DateUtils.getNowDate());
         return toAjax(yunStoreCouponService.updateYunStoreCoupon(yunStoreCoupon));
     }
 
@@ -132,6 +136,9 @@ public class YunStoreCouponController extends BaseController
     @PostMapping("/publish")
     public AjaxResult publish(@RequestBody YunStoreCouponIssue yunStoreCouponIssue)
     {
+        yunStoreCouponIssue.setCreateById(SecurityUtils.getUserId());
+        yunStoreCouponIssue.setCreateBy(SecurityUtils.getUsername());
+        yunStoreCouponIssue.setCreateTime(DateUtils.getNowDate());
         Long couponId=yunStoreCouponIssue.getCid();
         YunStoreCoupon yunStoreCoupon=yunStoreCouponService.selectYunStoreCouponById(couponId);
         if(yunStoreCoupon.getStatus().equals(CouponIssueStatus.CLOSE.getCode())){

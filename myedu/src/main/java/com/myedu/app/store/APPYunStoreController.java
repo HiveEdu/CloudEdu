@@ -1,10 +1,13 @@
 package com.myedu.app.store;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
@@ -22,6 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,19 +50,26 @@ public class APPYunStoreController extends BaseController
 
     @Autowired
     private ISysLabelService syslabelService;
+
+    @Autowired
+    private TokenService tokenService;
     /**
      * 查询门店列表
      */
     @ApiOperation("查询门店列表")
     @ApiImplicitParam(name = "yunStore", value = "查询门店列表",
             dataType = "YunStore")
-    @PreAuthorize("@ss.hasPermi('store:store:list')")
     @GetMapping("/list")
     public TableDataInfo list(YunStoreVo yunStore)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
         startPage();
         List<YunStoreVo> list = yunStoreService.selectYunStoreList(yunStore);
         return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
     }
 
     /**
@@ -67,7 +78,6 @@ public class APPYunStoreController extends BaseController
     @ApiOperation("导出门店列表")
     @ApiImplicitParam(name = "yunStore", value = "导出门店列表",
             dataType = "YunStore")
-    @PreAuthorize("@ss.hasPermi('store:store:export')")
     @Log(title = "门店", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(YunStoreVo yunStore)
@@ -82,11 +92,12 @@ public class APPYunStoreController extends BaseController
      */
     @ApiOperation("获取门店详细信息")
     @ApiImplicitParam(name = "id", value = "获取门店详细信息",
-            dataType = "Long")
-    @PreAuthorize("@ss.hasPermi('store:store:query')")
-    @GetMapping(value = { "/", "/{id}" })
-    public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
+            dataType = "Long", required = true, paramType = "path")
+    @GetMapping(value = { "/", "/{id}" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public AjaxResult getInfo(@PathVariable Long id)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if(loginUser!=null) {
         AjaxResult ajax = AjaxResult.success();
         SysStoreType sysStoreType=new SysStoreType();
         sysStoreType.setType(StoryType.STORE.getCode());
@@ -102,6 +113,9 @@ public class APPYunStoreController extends BaseController
             ajax.put("storeLabelIds", syslabelService.selectLabelListById(id));
         }
         return ajax;
+        }else{
+            return AjaxResult.error("token无效");
+        }
     }
 
     /**
@@ -110,14 +124,18 @@ public class APPYunStoreController extends BaseController
     @ApiOperation("新增门店")
     @ApiImplicitParam(name = "yunStore", value = "新增门店",
             dataType = "YunStore")
-    @PreAuthorize("@ss.hasPermi('store:store:add')")
     @Log(title = "门店", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStore yunStore)
+    public AjaxResult add(YunStore yunStore)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
         yunStore.setCreateById(SecurityUtils.getUserId());
         yunStore.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStoreService.insertYunStore(yunStore));
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
 
     /**
@@ -126,13 +144,17 @@ public class APPYunStoreController extends BaseController
     @ApiOperation("修改门店")
     @ApiImplicitParam(name = "yunStore", value = "修改门店",
             dataType = "YunStore")
-    @PreAuthorize("@ss.hasPermi('store:store:edit')")
     @Log(title = "门店", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody YunStore yunStore)
+    public AjaxResult edit(YunStore yunStore)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
         yunStore.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(yunStoreService.updateYunStore(yunStore));
+        }else {
+            return AjaxResult.error("token无效");
+        }
     }
 
     /**
@@ -141,12 +163,16 @@ public class APPYunStoreController extends BaseController
     @ApiOperation("删除门店")
     @ApiImplicitParam(name = "ids", value = "删除门店",
             dataType = "Long[]")
-    @PreAuthorize("@ss.hasPermi('store:store:remove')")
     @Log(title = "门店", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(yunStoreService.deleteYunStoreByIds(ids));
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+          return toAjax(yunStoreService.deleteYunStoreByIds(ids));
+        }else{
+            return AjaxResult.error("token无效");
+        }
     }
 
     /*
@@ -157,11 +183,12 @@ public class APPYunStoreController extends BaseController
     @ApiOperation("课程状态下线")
     @ApiImplicitParam(name = "ids", value = "课程状态下线",
             dataType = "Long[]")
-    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOff')")
     @Log(title = "课程", businessType = BusinessType.UPDATE)
     @GetMapping("/changeStatusOff/{ids}")
     public AjaxResult changeStatusOff(@PathVariable Long[] ids)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
         int rows=0;
         for (Long id:ids) {
             YunStore yunStore= yunStoreService.selectYunStoreById(id);
@@ -171,6 +198,9 @@ public class APPYunStoreController extends BaseController
             }
         }
         return toAjax(rows);
+        }else{
+            return AjaxResult.error("token无效");
+        }
     }
 
     /*
@@ -181,11 +211,12 @@ public class APPYunStoreController extends BaseController
     @ApiOperation("更改课程状态在售")
     @ApiImplicitParam(name = "ids", value = "更改课程状态在售",
             dataType = "Long[]")
-    @PreAuthorize("@ss.hasPermi('store:course:changeStatusOn')")
     @Log(title = "课程", businessType = BusinessType.UPDATE)
     @GetMapping("/changeStatusOn/{ids}")
     public AjaxResult changeStatusOn(@PathVariable Long[] ids)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
         int rows=0;
         for (Long id:ids) {
             YunStore yunStore= yunStoreService.selectYunStoreById(id);
@@ -195,5 +226,8 @@ public class APPYunStoreController extends BaseController
             }
         }
         return toAjax(rows);
+            }else{
+            return AjaxResult.error("token无效");
+        }
     }
 }

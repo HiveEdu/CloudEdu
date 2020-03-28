@@ -58,9 +58,6 @@ public class YunCourseServiceImpl implements IYunCourseService
     @Override
     public int insertYunCourse(YunCourse yunCourse)
     {
-        yunCourse.setCreateById(SecurityUtils.getUserId());
-        yunCourse.setCreateBy(SecurityUtils.getUsername());
-        yunCourse.setCreateTime(DateUtils.getNowDate());
         return yunCourseMapper.insertYunCourse(yunCourse);
     }
 
@@ -73,7 +70,6 @@ public class YunCourseServiceImpl implements IYunCourseService
     @Override
     public int updateYunCourse(YunCourse yunCourse)
     {
-        yunCourse.setUpdateTime(DateUtils.getNowDate());
         return yunCourseMapper.updateYunCourse(yunCourse);
     }
 

@@ -66,9 +66,6 @@ public class YunStoreCouponServiceImpl implements IYunStoreCouponService
             storeId=yunStores.get(0).getId();
             yunStoreCoupon.setStoreId(storeId);
         }
-        yunStoreCoupon.setCreateById(SecurityUtils.getUserId());
-        yunStoreCoupon.setCreateBy(SecurityUtils.getUsername());
-        yunStoreCoupon.setCreateTime(DateUtils.getNowDate());
         return yunStoreCouponMapper.insertYunStoreCoupon(yunStoreCoupon);
     }
 
@@ -81,7 +78,7 @@ public class YunStoreCouponServiceImpl implements IYunStoreCouponService
     @Override
     public int updateYunStoreCoupon(YunStoreCoupon yunStoreCoupon)
     {
-        yunStoreCoupon.setUpdateTime(DateUtils.getNowDate());
+
         return yunStoreCouponMapper.updateYunStoreCoupon(yunStoreCoupon);
     }
 

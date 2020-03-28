@@ -55,9 +55,6 @@ public class YunStoreCouponIssueServiceImpl implements IYunStoreCouponIssueServi
     @Override
     public int insertYunStoreCouponIssue(YunStoreCouponIssue yunStoreCouponIssue)
     {
-        yunStoreCouponIssue.setCreateById(SecurityUtils.getUserId());
-        yunStoreCouponIssue.setCreateBy(SecurityUtils.getUsername());
-        yunStoreCouponIssue.setCreateTime(DateUtils.getNowDate());
         return yunStoreCouponIssueMapper.insertYunStoreCouponIssue(yunStoreCouponIssue);
     }
 
