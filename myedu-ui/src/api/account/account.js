@@ -75,7 +75,7 @@ export function withdraw(data) {
 export function toAliPay(url, data) {
   return request({
     url: url,
-    data,
+    data:data,
     method: 'put'
   })
 }

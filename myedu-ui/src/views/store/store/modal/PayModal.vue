@@ -35,7 +35,7 @@
 </template>
 
 <script>
-  import {orderPay} from "@/api/order/order";
+  import {storePay} from "@/api/store/store";
     export default {
       name: "PayModal",
       props: {
@@ -76,18 +76,18 @@
         },
         changeWay(e){
           this.handleClose();
-          this.form.rechargeAmount=this.rechargeAmount;
+          this.form.totalMoney=this.rechargeAmount;
           // 先打开一个空的新窗口，再请求
           this.newWin = window.open()
           let url = ''
           if (/(Android)/i.test(navigator.userAgent)) { // 判断是否为Android手机
-            url = '/order/order/toPayAsWeb'
+            url = '/store/store/toPayAsWeb'
           } else if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { // 判断是否为苹果手机
-            url = '/order/order/toPayAsWeb'
+            url = '/store/store/toPayAsWeb'
           } else {
-            url = '/order/order/toPayAsPC'
+            url = '/store/store/toPayAsPC'
           }
-          orderPay(url, this.form).then(res => {
+          storePay(url, this.form).then(res => {
             this.loading = false
             this.url = res.url
           }).catch(err => {

@@ -15,6 +15,7 @@ import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
 import com.myedu.project.elasticsearch.dao.LocationRepository;
+import com.myedu.project.order.domain.YunOrder;
 import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
@@ -32,6 +33,10 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 门店Controller
  * 
@@ -208,13 +213,47 @@ public class YunStoreController extends BaseController
     }
 
 
-//    @PreAuthorize("@ss.hasPermi('store:store:toPayAsPC')")
-//    @Log(title = "支付宝PC网页支付")
-//    @PostMapping(value = "/toPayAsPC")
-//    public AjaxResult toPayAsPc(@RequestBody YunStore yunStore) throws Exception{
-//        AjaxResult ajax = AjaxResult.success();
-//        String payUrl = yunStoreService.toPayAsPc(yunStore);
-//        ajax.put("url",payUrl);
-//        return ajax;
-//    }
+    @PreAuthorize("@ss.hasPermi('store:store:toPayAsPC')")
+    @Log(title = "支付宝PC网页支付")
+    @PostMapping(value = "/toPayAsPC")
+    public AjaxResult toPayAsPc(@RequestBody YunOrder yunOrder) throws Exception{
+        AjaxResult ajax = AjaxResult.success();
+        YunStore yunStore=new YunStore();
+        yunStore.setId(yunOrder.getId());
+        String payUrl = yunStoreService.toPayAsPc(yunStore,yunOrder.getTotalMoney());
+        ajax.put("url",payUrl);
+        return ajax;
+    }
+
+
+    /*
+     * @Description :同步通知
+     * @Author : 梁少鹏
+     * @Date : 2020/2/12 11:35
+     */
+    @GetMapping(value = "/getReturnUrlInfo")
+    public String alipayReturnUrlInfo(HttpServletRequest request) {
+        String result=yunStoreService.synchronous(request);
+        if(result.equals("success")){
+            return "<html>\n" +
+                    "<head>\n" +
+                    "<script type=\"text/javascript\"> function load() { window.close(); } </script>\n" +
+                    "</head>\n" +
+                    "<body onload=\"" +
+                    "load()\"> </body>\n" +
+                    "</html>";
+        }else{
+            result="支付失败";
+        }
+        return result;
+    }
+    /*
+     * @Description :异步通知
+     * @Author : 梁少鹏
+     * @Date : 2020/2/12 11:35
+     */
+    @PostMapping(value = "/getNotifyUrlInfo")
+    public void alipayNotifyUrlInfo(HttpServletRequest request, HttpServletResponse response){
+        yunStoreService.notify(request,response);
+    }
 }

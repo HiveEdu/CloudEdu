@@ -73,3 +73,12 @@ export function changeStatusOn(id) {
     method: 'get',
   })
 }
+
+// 门店充值
+export function storePay(url, data) {
+  return request({
+    url:url,
+    data: data,
+    method: 'post'
+  })
+}
