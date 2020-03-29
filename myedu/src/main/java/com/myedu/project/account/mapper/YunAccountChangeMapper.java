@@ -60,18 +60,18 @@ public interface YunAccountChangeMapper
     public int deleteYunAccountChangeByIds(Long[] ids);
 
     /**
-     * 根据账户id删除账户变动表
+     * 根据用户id删除账户变动表
      *
-     * @param accountId 账户id
+     * @param userId 账户id
      * @return 结果
      */
-    public int deleteYunAccountChangeByAccountId(Long accountId);
+    public int deleteYunAccountChangeByUserId(Long userId);
 
 
     /*
-     * @Description :根据账户Id查询账单
+     * @Description :根据用户Id查询账单
      * @Author : 梁少鹏
      * @Date : 2020/2/2 17:50
      */
-    public List<YunAccountChange> selectYunAccountChangeByAccountId(Long accountId);
+    public List<YunAccountChange> selectYunAccountChangeByUserId(Long userId);
 }

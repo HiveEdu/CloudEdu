@@ -96,12 +96,12 @@ public class YunAccountChangeServiceImpl implements IYunAccountChangeService
 
 
     /*
-     * @Description :根据账户Id查询账单
+     * @Description :根据用户Id查询账单
      * @Author : 梁少鹏
      * @Date : 2020/2/2 17:50
      */
     @Override
-    public List<YunAccountChange> selectYunAccountChangeByAccountId(Long accountId) {
-        return yunAccountChangeMapper.selectYunAccountChangeByAccountId(accountId);
+    public List<YunAccountChange> selectYunAccountChangeByUserId(Long userId) {
+        return yunAccountChangeMapper.selectYunAccountChangeByUserId(userId);
     }
 }

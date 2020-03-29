@@ -106,7 +106,7 @@ public class YunAccountServiceImpl implements IYunAccountService
     {
         for (Long id: ids) {
             //删除关联账户变动表
-            yunAccountChangeMapper.deleteYunAccountChangeByAccountId(id);
+            yunAccountChangeMapper.deleteYunAccountChangeByUserId(id);
         }
         return yunAccountMapper.deleteYunAccountByIds(ids);
     }
@@ -121,7 +121,7 @@ public class YunAccountServiceImpl implements IYunAccountService
     public int deleteYunAccountById(Long id)
     {
         //删除关联账户变动表
-        yunAccountChangeMapper.deleteYunAccountChangeByAccountId(id);
+        yunAccountChangeMapper.deleteYunAccountChangeByUserId(id);
         return yunAccountMapper.deleteYunAccountById(id);
     }
 }

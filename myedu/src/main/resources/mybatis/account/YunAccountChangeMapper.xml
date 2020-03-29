@@ -44,9 +44,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <select id="selectYunAccountChangeByAccountId" parameterType="Long" resultMap="YunAccountChangeResult">
+    <select id="selectYunAccountChangeByUserId" parameterType="Long" resultMap="YunAccountChangeResult">
         <include refid="selectYunAccountChangeVo"/>
-        where account_id = #{accountId}
+        where user_id = #{userId}
     </select>
 
     <insert id="insertYunAccountChange" parameterType="YunAccountChange" useGeneratedKeys="true" keyProperty="id">
@@ -112,7 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
 
-    <delete id="deleteYunAccountChangeByAccountId" parameterType="Long">
-        delete from yun_account_change where account_id = #{accountId}
+    <delete id="deleteYunAccountChangeByUserId" parameterType="Long">
+        delete from yun_account_change where user_id = #userId}
     </delete>
 </mapper>
