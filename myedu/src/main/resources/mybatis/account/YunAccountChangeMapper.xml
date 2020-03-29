@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="YunAccountChange" id="YunAccountChangeResult">
         <result property="id"    column="id"    />
-        <result property="accountId"    column="account_id"    />
+        <result property="userId"    column="user_id"    />
         <result property="changeType"    column="change_type"    />
         <result property="preAmount"    column="pre_amount"    />
         <result property="cashAmount"    column="cash_amount"    />
@@ -21,13 +21,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunAccountChangeVo">
-        select id, account_id, change_type, pre_amount, cash_amount, uncash_amount, ref_id, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_account_change
+        select id, user_id, change_type, pre_amount, cash_amount, uncash_amount, ref_id, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_account_change
     </sql>
 
     <select id="selectYunAccountChangeList" parameterType="YunAccountChange" resultMap="YunAccountChangeResult">
         <include refid="selectYunAccountChangeVo"/>
         <where>  
-            <if test="accountId != null "> and account_id = #{accountId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
             <if test="changeType != null  and changeType != ''"> and change_type = #{changeType}</if>
             <if test="preAmount != null "> and pre_amount = #{preAmount}</if>
             <if test="cashAmount != null "> and cash_amount = #{cashAmount}</if>
@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertYunAccountChange" parameterType="YunAccountChange" useGeneratedKeys="true" keyProperty="id">
         insert into yun_account_change
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="accountId != null ">account_id,</if>
+            <if test="userId != null ">user_id,</if>
             <if test="changeType != null  and changeType != ''">change_type,</if>
             <if test="preAmount != null ">pre_amount,</if>
             <if test="cashAmount != null ">cash_amount,</if>
@@ -66,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createById != null ">create_by_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="accountId != null ">#{accountId},</if>
+            <if test="userId != null ">#{userId},</if>
             <if test="changeType != null  and changeType != ''">#{changeType},</if>
             <if test="preAmount != null ">#{preAmount},</if>
             <if test="cashAmount != null ">#{cashAmount},</if>
@@ -84,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateYunAccountChange" parameterType="YunAccountChange">
         update yun_account_change
         <trim prefix="SET" suffixOverrides=",">
-            <if test="accountId != null ">account_id = #{accountId},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
             <if test="changeType != null  and changeType != ''">change_type = #{changeType},</if>
             <if test="preAmount != null ">pre_amount = #{preAmount},</if>
             <if test="cashAmount != null ">cash_amount = #{cashAmount},</if>

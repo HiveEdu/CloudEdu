@@ -20,9 +20,9 @@ public class YunAccountChange extends BaseEntity
     /** 主键 */
     private Long id;
 
-    /** 账户id */
-    @Excel(name = "账户id")
-    private Long accountId;
+    /** 用户id */
+    @Excel(name = "用户id")
+    private Long userId;
 
     /** 类型(1.充值 2.支付 3.退款 4.提现 5.内部调账) */
     @Excel(name = "类型(1.充值 2.支付 3.退款 4.提现 5.内部调账)")
@@ -60,16 +60,16 @@ public class YunAccountChange extends BaseEntity
     {
         return id;
     }
-    public void setAccountId(Long accountId) 
-    {
-        this.accountId = accountId;
+
+    public Long getUserId() {
+        return userId;
     }
 
-    public Long getAccountId() 
-    {
-        return accountId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
-    public void setChangeType(String changeType) 
+
+    public void setChangeType(String changeType)
     {
         this.changeType = changeType;
     }
@@ -137,7 +137,7 @@ public class YunAccountChange extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
-            .append("accountId", getAccountId())
+            .append("userId", getUserId())
             .append("changeType", getChangeType())
             .append("preAmount", getPreAmount())
             .append("cashAmount", getCashAmount())

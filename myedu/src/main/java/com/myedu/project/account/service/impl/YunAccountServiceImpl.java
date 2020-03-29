@@ -69,7 +69,7 @@ public class YunAccountServiceImpl implements IYunAccountService
         int result=yunAccountMapper.insertYunAccount(yunAccount);
         if(result==1){//主表添加成功增加记录表
             YunAccountChange yunAccountChange=new YunAccountChange();
-            yunAccountChange.setAccountId(yunAccount.getId());
+            yunAccountChange.setUserId(SecurityUtils.getUserId());
             yunAccountChange.setPreAmount(new BigDecimal(0));
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
             yunAccountChange.setUncashAmount(new BigDecimal(0));

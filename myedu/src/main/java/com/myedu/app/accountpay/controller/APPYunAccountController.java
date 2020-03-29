@@ -2,9 +2,12 @@ package com.myedu.app.accountpay.controller;
 
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
@@ -38,7 +41,8 @@ public class APPYunAccountController extends BaseController
     private IYunAccountService yunAccountService;
     @Autowired
     private IYunAccountChangeService yunAccountChangeService;
-
+    @Autowired
+    private TokenService tokenService;
     /**
      * 查询账户管理列表
      */
@@ -156,13 +160,14 @@ public class APPYunAccountController extends BaseController
     @PutMapping("/racharge")
     public AjaxResult racharge(@RequestBody YunAccountVo yunAccount)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunAccount.setCaseAmount(yunAccount.getRachargeAmount().add(yunAccount.getTotalAmount()));
         yunAccount.setTotalAmount(yunAccount.getRachargeAmount().add(yunAccount.getTotalAmount()));
         YunAccount yunAccount1=yunAccountService.selectYunAccountById(yunAccount.getId());
         int result=yunAccountService.updateYunAccount(yunAccount);
         if(result==1){//主表修改成功增加记录表
             YunAccountChange yunAccountChange=new YunAccountChange();
-            yunAccountChange.setAccountId(yunAccount.getId());
+            yunAccountChange.setUserId(loginUser.getUser().getUserId());
             yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
             yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());
@@ -188,13 +193,14 @@ public class APPYunAccountController extends BaseController
     @PutMapping("/withdraw")
     public AjaxResult withdraw(@RequestBody YunAccountVo yunAccount)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunAccount.setCaseAmount(yunAccount.getTotalAmount().subtract(yunAccount.getRachargeAmount()));
         yunAccount.setTotalAmount(yunAccount.getTotalAmount().subtract(yunAccount.getRachargeAmount()));
         YunAccount yunAccount1=yunAccountService.selectYunAccountById(yunAccount.getId());
         int result=yunAccountService.updateYunAccount(yunAccount);
         if(result==1){//主表修改成功增加记录表
             YunAccountChange yunAccountChange=new YunAccountChange();
-            yunAccountChange.setAccountId(yunAccount.getId());
+            yunAccountChange.setUserId(loginUser.getUser().getUserId());
             yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
             yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());

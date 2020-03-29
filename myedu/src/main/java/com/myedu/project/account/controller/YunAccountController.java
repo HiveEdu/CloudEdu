@@ -147,7 +147,7 @@ public class YunAccountController extends BaseController
         int result=yunAccountService.updateYunAccount(yunAccount);
         if(result==1){//主表修改成功增加记录表
             YunAccountChange yunAccountChange=new YunAccountChange();
-            yunAccountChange.setAccountId(yunAccount.getId());
+            yunAccountChange.setUserId(SecurityUtils.getUserId());
             yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
             yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());
@@ -172,7 +172,7 @@ public class YunAccountController extends BaseController
         int result=yunAccountService.updateYunAccount(yunAccount);
         if(result==1){//主表修改成功增加记录表
             YunAccountChange yunAccountChange=new YunAccountChange();
-            yunAccountChange.setAccountId(yunAccount.getId());
+            yunAccountChange.setUserId(SecurityUtils.getUserId());
             yunAccountChange.setPreAmount(yunAccount1.getTotalAmount());
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
             yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());
