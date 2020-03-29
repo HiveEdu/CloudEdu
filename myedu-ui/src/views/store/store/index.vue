@@ -153,7 +153,13 @@
                 style="margin-top: 10px"
               >上线</el-button>
               <br>
-
+              <el-button
+                style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
+                size="mini"
+                type="success"
+                icon="el-icon-success"
+                @click="openPay(scope.row)"
+              >充值</el-button>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -170,6 +176,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <!-- 充值页面-->
+    <PayModal ref="PayModal" :pay="pay" :currentData="currentData" @closePayModal="closePayModal"></PayModal>
     <!--审核页面-->
     <reviewModal ref="reviewModal" :review="review" :currentData="currentData" @closeReview="closeReview"></reviewModal>
     <!--门店详情-->
@@ -430,6 +438,7 @@ import {addressOptions} from '@/api/addressOptions'
 import reviewModal from './modal/reviewModal'
 import storeDetailModal from './modal/storeDetailModal'
 import { getToken } from '@/utils/auth'
+import PayModal from './modal/PayModal'
 // import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BaiduMap from 'vue-baidu-map'
 import Vue from 'vue'
@@ -437,13 +446,14 @@ Vue.use(BaiduMap, {
   ak: '7ddN7rl0MKnrRAhxmZzEHVPObhlDUcdb'
 });
 export default {
-  components: { reviewModal,storeDetailModal },
+  components: { reviewModal,storeDetailModal,PayModal },
   data() {
     return {
       defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
       storeDetail:false,
        //审核页面默认不打开
       review:false,
+      pay:false,
       //当前行记录为空
       currentData:null,
       keyword: "", //百度地图搜索值
@@ -552,6 +562,15 @@ export default {
     });
   },
   methods: {
+    //打开充值页面
+    openPay(row){
+      this.currentData=row;
+      this.pay=true;
+    },
+    //关闭充值页面
+    closePayModal(){
+      this.pay=false;
+    },
     //打开门店详情页面
     openStoreDatail(row){
       this.currentData=row;

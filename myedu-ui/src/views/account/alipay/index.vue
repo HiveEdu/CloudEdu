@@ -77,6 +77,7 @@
 
     <el-table v-loading="loading" :data="alipayList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="配置类型" align="center" prop="status" :formatter="payMentTypeFormat" />
       <el-table-column label="appID" align="center" prop="appId" />
       <el-table-column label="商户账号" align="center" prop="sysServiceProviderId" />
       <el-table-column label="异步回调" align="center" prop="notifyUrl" :show-overflow-tooltip="true"/>
@@ -125,6 +126,16 @@
     <!-- 添加或修改支付宝配置类对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="50%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="配置类型" prop="payMentType">
+          <el-select v-model="form.payMentType" placeholder="请选择状态">
+            <el-option
+              v-for="dict in payMentTypeOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="appID" prop="appId">
           <el-input v-model="form.appId" placeholder="请输入应用ID" />
         </el-form-item>
@@ -158,6 +169,8 @@ import { listAlipay, getAlipay, delAlipay, addAlipay, updateAlipay, exportAlipay
 export default {
   data() {
     return {
+      //支付配置类型字典
+      payMentTypeOptions:[],
       url: '',
       newWin:null,
       // 遮罩层
@@ -192,7 +205,8 @@ export default {
         sysServiceProviderId: undefined,
         createBy: undefined,
         createTime: undefined,
-        createById: undefined
+        createById: undefined,
+        payMentType:undefined
       },
       // 表单参数
       form: {},
@@ -221,8 +235,15 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts("pay_ment_type").then(response => {
+      this.payMentTypeOptions = response.data;
+    });
   },
   methods: {
+    // 配置类型字典翻译
+    payMentTypeFormat(row, column) {
+      return this.selectDictLabel(this.payMentTypeOptions, row.payMentType);
+    },
     /** 查询支付宝配置类列表 */
     getList() {
       this.loading = true;

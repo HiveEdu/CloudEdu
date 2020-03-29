@@ -15,6 +15,7 @@ import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
 import com.myedu.project.elasticsearch.dao.LocationRepository;
+import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
@@ -205,4 +206,15 @@ public class YunStoreController extends BaseController
         }
         return toAjax(rows);
     }
+
+
+//    @PreAuthorize("@ss.hasPermi('store:store:toPayAsPC')")
+//    @Log(title = "支付宝PC网页支付")
+//    @PostMapping(value = "/toPayAsPC")
+//    public AjaxResult toPayAsPc(@RequestBody YunStore yunStore) throws Exception{
+//        AjaxResult ajax = AjaxResult.success();
+//        String payUrl = yunStoreService.toPayAsPc(yunStore);
+//        ajax.put("url",payUrl);
+//        return ajax;
+//    }
 }

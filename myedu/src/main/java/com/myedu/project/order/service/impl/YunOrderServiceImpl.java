@@ -24,6 +24,7 @@ import com.myedu.project.account.domain.YunAlipayConfig;
 import com.myedu.project.account.mapper.YunAlipayConfigMapper;
 import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.order.enums.OrderStatus;
+import com.myedu.project.order.enums.PaymentType;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.mapper.YunStoreMapper;
 import io.swagger.annotations.Api;
@@ -140,14 +141,12 @@ public class YunOrderServiceImpl implements IYunOrderService
      */
     @Override
     public String toPayAsPc(YunOrderVo yunOrder) throws Exception{
-        YunStore yunStore= yunStoreMapper.selectYunStoreById(yunOrder.getStoreId());
         YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
-        yunAlipayConfig.setCreateById(yunStore.getCreateById());
+        yunAlipayConfig.setPayMentType(PaymentType.PAYMENTOFANORDER.getCode());
         List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);
         if(yunAlipayConfigs!=null){
             yunAlipayConfig=yunAlipayConfigs.get(0);
         }
-
         //https://openasyncapi.alipay.com/gateway.do  (收单资金结算到银行账户，结算成功的异步通知)
         //https://openapi.alipaydev.com/gateway.do  (支付指定支付宝账户)
         AlipayClient alipayClient = new DefaultAlipayClient(yunAlipayConfig.getGatewayUrl(),

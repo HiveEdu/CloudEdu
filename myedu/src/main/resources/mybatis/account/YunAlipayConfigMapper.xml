@@ -22,10 +22,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createById"    column="create_by_id"    />
+        <result property="payMentType"    column="pay_ment_type"    />
+
     </resultMap>
 
     <sql id="selectYunAlipayConfigVo">
-        select id, app_id, charset, format, gateway_url, notify_url, private_key, public_key, return_url, sign_type, sys_service_provider_id, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_alipay_config
+        select id, app_id, charset, format, gateway_url, notify_url, private_key, public_key, return_url, sign_type, sys_service_provider_id, create_by, create_time, update_by, update_time, del_flag, create_by_id,pay_ment_type from yun_alipay_config
     </sql>
 
     <select id="selectYunAlipayConfigList" parameterType="YunAlipayConfig" resultMap="YunAlipayConfigResult">
@@ -71,6 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createById != null ">create_by_id,</if>
+            <if test="payMentType != null ">pay_ment_type,</if>
+
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="appId != null  and appId != ''">#{appId},</if>
@@ -89,6 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createById != null ">#{createById},</if>
+            <if test="payMentType != null ">#{payMentType},</if>
          </trim>
     </insert>
 
@@ -111,6 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="payMentType != null ">pay_ment_type = #{payMentType},</if>
         </trim>
         where id = #{id}
     </update>

@@ -4,6 +4,9 @@ import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
+
 /**
  * 会员等级对象 sys_member_level
  * 
@@ -52,6 +55,10 @@ public class SysMemberLevel extends BaseEntity
     /** 说明 */
     @Excel(name = "说明")
     private String note;
+
+    /** 充值规则 */
+    @Excel(name = "充值规则")
+    private BigDecimal rule;
 
     public void setId(Long id) 
     {
@@ -144,6 +151,14 @@ public class SysMemberLevel extends BaseEntity
         return note;
     }
 
+    public BigDecimal getRule() {
+        return rule;
+    }
+
+    public void setRule(BigDecimal rule) {
+        this.rule = rule;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -161,6 +176,7 @@ public class SysMemberLevel extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("rule", getRule())
             .toString();
     }
 }

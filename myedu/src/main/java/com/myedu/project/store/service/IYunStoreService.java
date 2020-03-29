@@ -1,8 +1,11 @@
 package com.myedu.project.store.service;
 
+import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -60,4 +63,20 @@ public interface IYunStoreService
      * @return 结果
      */
     public int deleteYunStoreById(Long id);
+
+//    /**
+//     * 门店充值
+//     *
+//     * @param yunStore 订单
+//     * @return 结果
+//     */
+//    public String toPayAsPc(YunStore yunStore) throws Exception;
+//
+//    String synchronous(HttpServletRequest request);
+//    /**
+//     * 付款异步通知调用地址
+//     * @param request 新增参数
+//     * @return 新增返回值
+//     */
+//    void notify(HttpServletRequest request, HttpServletResponse response);
 }

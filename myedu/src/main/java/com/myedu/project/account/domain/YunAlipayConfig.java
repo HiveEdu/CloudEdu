@@ -57,6 +57,11 @@ public class YunAlipayConfig extends BaseEntity
     @Excel(name = "商户号")
     private String sysServiceProviderId;
 
+
+    /** 支付类型 */
+    @Excel(name = "支付类型")
+    private String payMentType;
+
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
 
@@ -182,6 +187,14 @@ public class YunAlipayConfig extends BaseEntity
         return createById;
     }
 
+    public String getPayMentType() {
+        return payMentType;
+    }
+
+    public void setPayMentType(String payMentType) {
+        this.payMentType = payMentType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -202,6 +215,8 @@ public class YunAlipayConfig extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
             .append("createById", getCreateById())
+            .append("payMentType", getPayMentType())
+
             .toString();
     }
 }

@@ -19,10 +19,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="rule"    column="rule"    />
+
     </resultMap>
 
     <sql id="selectSysMemberLevelVo">
-        select id, name, valid_date, type, is_forever, grade, discount, image, icon, note, create_by, create_time, update_by, update_time from sys_member_level
+        select id, name, valid_date, type, is_forever, grade, discount, image, icon, note, create_by, create_time, update_by, update_time,rule from sys_member_level
     </sql>
 
     <select id="selectSysMemberLevelList" parameterType="SysMemberLevel" resultMap="SysMemberLevelResult">
@@ -61,6 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
+            <if test="rule != null ">rule,</if>
+
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
@@ -76,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="rule != null ">#{rule},</if>
          </trim>
     </insert>
 
@@ -95,6 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="rule != null ">rule = #{rule},</if>
         </trim>
         where id = #{id}
     </update>

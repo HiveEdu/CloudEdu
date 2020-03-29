@@ -89,6 +89,7 @@
       <el-table-column label="永久会员" align="center" prop="isForever" :formatter="isForeverFormat" />
       <el-table-column label="会员等级" align="center" prop="grade" />
       <el-table-column label="享受折扣" align="center" prop="discount" />
+      <el-table-column label="最低充值" align="center" prop="rule" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -167,6 +168,13 @@
           <el-col :span="12">
             <el-form-item label="享受折扣" prop="discount">
               <el-input-number :min="0" controls-position="right"  v-model="form.discount" placeholder="请输入享受折扣" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="充值规则(>=)" prop="rule">
+              <el-input-number :min="0" controls-position="right"  v-model="form.rule" placeholder="请输入享受折扣" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -264,6 +272,8 @@ export default {
           { required: true, message: "会员等级不能为空", trigger: "change" }
         ],        discount: [
           { required: true, message: "享受折扣不能为空", trigger: "change" }
+        ],        rule: [
+          { required: true, message: "充值规则", trigger: "change" }
         ],              type: [
           { required: true, message: "类型不能为空", trigger: "blur" }
         ],         isForever: [

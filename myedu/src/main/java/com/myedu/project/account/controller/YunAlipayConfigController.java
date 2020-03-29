@@ -78,11 +78,11 @@ public class YunAlipayConfigController extends BaseController
             YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
             yunAlipayConfig.setCreateById(SecurityUtils.getUserId());
             List<YunAlipayConfig> yunAlipayConfigs=yunAlipayConfigService.selectYunAlipayConfigList(yunAlipayConfig);
-            if(yunAlipayConfigs.size()>0){
-                return AjaxResult.error(204,"账户配置已经存在");
-            }else{
-                return AjaxResult.success("账户配置不存在可以创建");
-            }
+//            if(yunAlipayConfigs.size()>0){
+//                return AjaxResult.error(204,"账户配置已经存在");
+//            }else{
+                return AjaxResult.success("配置");
+//            }
         }
 //        return AjaxResult.success(yunAlipayConfigService.selectYunAlipayConfigById(id));
     }
