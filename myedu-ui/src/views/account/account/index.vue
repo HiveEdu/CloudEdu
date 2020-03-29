@@ -96,25 +96,25 @@
           <el-button  size="mini" type="primary"
                       @click="openAccountBill(scope.row)">
             账单</el-button>
-          <el-dropdown size="mini" split-button type="primary" trigger="click">
-            操作
-            <el-dropdown-menu slot="dropdown">
-              <el-button
-                size="mini"
-                type="success"
-                icon="el-icon-edit"
-                @click="openRecharge(scope.row)"
-              >充值</el-button>
-              <br>
-              <el-button
-                size="mini"
-                type="warning"
-                icon="el-icon-edit"
-                @click="opneWithdraw(scope.row)"
-                style="margin-top: 10px"
-              >提现</el-button>
-            </el-dropdown-menu>
-          </el-dropdown>
+<!--          <el-dropdown size="mini" split-button type="primary" trigger="click">-->
+<!--            操作-->
+<!--            <el-dropdown-menu slot="dropdown">-->
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                type="success"-->
+<!--                icon="el-icon-edit"-->
+<!--                @click="openRecharge(scope.row)"-->
+<!--              >充值</el-button>-->
+<!--              <br>-->
+<!--              <el-button-->
+<!--                size="mini"-->
+<!--                type="warning"-->
+<!--                icon="el-icon-edit"-->
+<!--                @click="opneWithdraw(scope.row)"-->
+<!--                style="margin-top: 10px"-->
+<!--              >提现</el-button>-->
+<!--            </el-dropdown-menu>-->
+<!--          </el-dropdown>-->
         </template>
       </el-table-column>
 
