@@ -6,9 +6,17 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
+import com.myedu.project.account.domain.YunAccountChange;
 import com.myedu.project.account.domain.YunAlipayConfig;
+import com.myedu.project.account.enums.AccountChangeType;
+import com.myedu.project.account.mapper.YunAccountChangeMapper;
 import com.myedu.project.account.mapper.YunAlipayConfigMapper;
+import com.myedu.project.dataBasic.domain.SysMemberLevel;
+import com.myedu.project.dataBasic.enums.LeaveType;
+import com.myedu.project.dataBasic.mapper.SysMemberLevelMapper;
+import com.myedu.project.dataBasic.service.ISysMemberLevelService;
 import com.myedu.project.order.domain.YunOrder;
 import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.order.enums.PaymentType;
@@ -50,6 +58,9 @@ public class YunStoreServiceImpl implements IYunStoreService
     private YunStoreLabelMapper yunStorelabelMapper;
     @Autowired
     private YunAlipayConfigMapper yunAlipayConfigMapper;
+    @Autowired
+    private YunAccountChangeMapper yunAccountChangeMapper;
+    private SysMemberLevelMapper sysMemberLevelMapper;
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS"; //支付成功标识
     public static final String TRADE_CLOSED = "TRADE_CLOSED";//交易关闭
     /**
@@ -235,7 +246,7 @@ public class YunStoreServiceImpl implements IYunStoreService
         request.setReturnUrl(yunAlipayConfig.getReturnUrl());
         request.setNotifyUrl(yunAlipayConfig.getNotifyUrl());
         // 填充订单参数
-        String order="Num-"+yunStore.getId()+"-"+System.currentTimeMillis();//订单号门店id+时间戳
+        String order="Num"+yunStore.getId()+"-"+System.currentTimeMillis();//订单号门店id+时间戳
         String totalAmount=String.valueOf(totalmoney);//支付金额
         String subject=yunStore.getName()+"门店充值";//商品名称
         String body=yunStore.getName()+"门店充值";//商品描述
@@ -256,7 +267,11 @@ public class YunStoreServiceImpl implements IYunStoreService
         return alipayClient.pageExecute(request, "GET").getBody();
     }
 
-
+    public static void main(String[] args) {
+        String order="Num23-"+System.currentTimeMillis();//订单号门店id+时间戳
+        String ee= order.substring(3,order.indexOf("-"));
+        System.out.println(ee);
+    }
     @Override
     public String synchronous(HttpServletRequest request) {
 
@@ -274,8 +289,9 @@ public class YunStoreServiceImpl implements IYunStoreService
         }
 
         //调用SDK验证签名
-        String order_id = request.getParameter("order_id");//订单号
-        YunStore yunStore= yunStoreMapper.selectYunStoreById(Long.valueOf(order_id.substring(12)));
+        String order_id = request.getParameter("out_trade_no");//订单号
+        System.out.println(order_id.substring(3,order_id.indexOf("-")));
+        YunStore yunStore= yunStoreMapper.selectYunStoreById(Long.valueOf(order_id.substring(3,order_id.indexOf("-"))));
         YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
         yunAlipayConfig.setPayMentType(PaymentType.storetopup.getCode());
         List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);
@@ -293,13 +309,35 @@ public class YunStoreServiceImpl implements IYunStoreService
         //——请在这里编写您的程序（以下代码仅作参考）——
         if(signVerified) {
             //付款金额
-//            String total_amount = new String(request.getParameter("total_amount"));
-//            // 修改订单状态为支付成功，已付款; 同时新增支付流水
-//            yunOrder.setPayWay("1");//支付方式支付宝支付
-//            yunOrder.setStatus("2");//已支付状态
-//            yunOrder.setTotalMoney(new BigDecimal(total_amount));
-//            yunOrderMapper.updateYunOrder(yunOrder);
-//            System.out.println("支付, 验签成功...");
+            String total_amount = new String(request.getParameter("total_amount"));
+            //充值成功增加充值记录
+            YunAccountChange yunAccountChange=new YunAccountChange();
+            yunAccountChange.setUserId(yunStore.getCreateById());
+            yunAccountChange.setCashAmount(new BigDecimal(total_amount));
+            yunAccountChange.setUncashAmount(new BigDecimal(0));
+            yunAccountChange.setChangeType(AccountChangeType.STORERECHARGE.getCode());
+            yunAccountChange.setCreateById(yunStore.getCreateById());
+            yunAccountChange.setCreateBy(yunStore.getCreateBy());
+            yunAccountChange.setCreateTime(DateUtils.getNowDate());
+            yunAccountChangeMapper.insertYunAccountChange(yunAccountChange);
+            //根据累计充值金额设置门店vip等级
+            YunAccountChange yunAccountChange1=new YunAccountChange();
+            yunAccountChange1.setUserId(yunAccountChange.getUserId());
+            yunAccountChange1.setChangeType(yunAccountChange.getChangeType());
+            List<YunAccountChange>  yunAccountChanges=yunAccountChangeMapper.selectYunAccountChangeList(yunAccountChange1);
+            BigDecimal sum=new BigDecimal(0);
+            for (YunAccountChange yunAccountChange2:yunAccountChanges) {
+                sum.add(yunAccountChange2.getCashAmount());
+            }
+            SysMemberLevel sysMemberLevel=new SysMemberLevel();
+            sysMemberLevel.setType(LeaveType.STOREVIP.getCode());
+            List<SysMemberLevel> sysMemberLevels=sysMemberLevelMapper.selectSysMemberLevelList(sysMemberLevel);
+            for (SysMemberLevel sysMemberLevel1:sysMemberLevels) {
+                if(sum.compareTo(sysMemberLevel1.getRule())==1) {
+                    yunStore.setVipLevelId(sysMemberLevel1.getId());
+                }
+            }
+            yunStoreMapper.updateYunStore(yunStore);
             return "success";
         }else {
             System.out.println("支付, 验签失败...");
@@ -325,18 +363,9 @@ public class YunStoreServiceImpl implements IYunStoreService
                 +parameters);
         String appId = request.getParameter("app_id");//appid
         String merchantOrderNo = request.getParameter("out_trade_no");//商户订单号
-
-        String orderId = request.getParameter("order_id");//orderId
-        if (orderId == null) {
-            System.out.println("orderId is null");
-        }
-        System.out.println("orderId: {}"+ orderId);
         String payState = request.getParameter("trade_status");//交易状态
         String encodeOrderNum = null;
-//        cashLogMapper.add(request.getParameter("out_trade_no"), "NOTIFY", JSON.toJSONString(parameters), new Date());
         try {
-//            encodeOrderNum = URLDecoder.decode(request.getParameter("passback_params"), "UTF-8");
-//            log.info("encodeOrderNum is [encodeOrderNum={}]", encodeOrderNum);
             YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
             yunAlipayConfig.setPayMentType(PaymentType.storetopup.getCode());
             List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);

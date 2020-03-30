@@ -42,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="publicKey != null  and publicKey != ''"> and public_key = #{publicKey}</if>
             <if test="returnUrl != null  and returnUrl != ''"> and return_url = #{returnUrl}</if>
             <if test="signType != null  and signType != ''"> and sign_type = #{signType}</if>
+            <if test="payMentType != null  and payMentType != ''"> and pay_ment_type = #{payMentType}</if>
             <if test="sysServiceProviderId != null  and sysServiceProviderId != ''"> and sys_service_provider_id = #{sysServiceProviderId}</if>
             <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
             <if test="createTime != null "> and create_time = #{createTime}</if>

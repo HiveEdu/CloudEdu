@@ -67,18 +67,18 @@ public class YunAccountServiceImpl implements IYunAccountService
         //初始添加总金额与可提金额一致
         yunAccount.setCaseAmount(yunAccount.getTotalAmount());
         int result=yunAccountMapper.insertYunAccount(yunAccount);
-        if(result==1){//主表添加成功增加记录表
-            YunAccountChange yunAccountChange=new YunAccountChange();
-            yunAccountChange.setUserId(SecurityUtils.getUserId());
-            yunAccountChange.setPreAmount(new BigDecimal(0));
-            yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
-            yunAccountChange.setUncashAmount(new BigDecimal(0));
-            yunAccountChange.setChangeType(AccountChangeType.RECHARGE.getCode());
-            yunAccountChange.setCreateById(SecurityUtils.getUserId());
-            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
-            yunAccountChange.setCreateTime(DateUtils.getNowDate());
-            yunAccountChangeMapper.insertYunAccountChange(yunAccountChange);
-        }
+//        if(result==1){//主表添加成功增加记录表
+//            YunAccountChange yunAccountChange=new YunAccountChange();
+//            yunAccountChange.setUserId(SecurityUtils.getUserId());
+//            yunAccountChange.setPreAmount(new BigDecimal(0));
+//            yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
+//            yunAccountChange.setUncashAmount(new BigDecimal(0));
+//            yunAccountChange.setChangeType(AccountChangeType.RECHARGE.getCode());
+//            yunAccountChange.setCreateById(SecurityUtils.getUserId());
+//            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
+//            yunAccountChange.setCreateTime(DateUtils.getNowDate());
+//            yunAccountChangeMapper.insertYunAccountChange(yunAccountChange);
+//        }
         return result;
     }
 
