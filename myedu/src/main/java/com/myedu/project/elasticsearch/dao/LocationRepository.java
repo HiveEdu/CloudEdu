@@ -1,6 +1,7 @@
 package com.myedu.project.elasticsearch.dao;
 
 import com.myedu.project.elasticsearch.entity.Location;
+import com.myedu.project.elasticsearch.entity.StoreLocation;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,6 @@ import org.springframework.stereotype.Component;
  * @Date: 2018/12/4 13:19
  */
 @Component
-public interface LocationRepository extends ElasticsearchRepository<Location, String> {
+public interface LocationRepository extends ElasticsearchRepository<StoreLocation, String> {
 
 }

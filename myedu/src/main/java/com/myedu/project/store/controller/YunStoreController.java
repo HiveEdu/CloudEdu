@@ -118,15 +118,8 @@ public class YunStoreController extends BaseController
         yunStore.setCreateById(SecurityUtils.getUserId());
         yunStore.setCreateBy(SecurityUtils.getUsername());
         //向位置表插入数据
-        Location loca =new Location();
-        loca.setStoreid(String.valueOf(yunStore.getId()));
-        double x=yunStore.getMapX();
-        double y=yunStore.getMapY();
-        GeoPoint gpoint=new GeoPoint(x, y);
-        loca.setLocation(gpoint);
-        loca.setAddress(yunStore.getAddress());
 
-        locationRepository.save(loca);
+
         return toAjax(yunStoreService.insertYunStore(yunStore));
     }
 

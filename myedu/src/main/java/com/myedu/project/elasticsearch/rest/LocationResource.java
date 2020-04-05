@@ -2,6 +2,7 @@ package com.myedu.project.elasticsearch.rest;
 
 import com.myedu.project.elasticsearch.dao.LocationRepository;
 import com.myedu.project.elasticsearch.entity.Location;
+import com.myedu.project.elasticsearch.entity.StoreLocation;
 import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -30,8 +31,8 @@ public class LocationResource {
     private LocationRepository locationRepository;
 
     @PostMapping("")
-    public Location save(@RequestBody Location location){
-        return locationRepository.save(location);
+    public StoreLocation save(@RequestBody StoreLocation storeLocation){
+        return locationRepository.save(storeLocation);
     }
 
     /**
@@ -43,7 +44,7 @@ public class LocationResource {
      * @return
      */
     @GetMapping("/searchNear")
-    public List<Location> searchNear(double lon, double lat, String distance, @PageableDefault Pageable pageable){
+    public List<StoreLocation> searchNear(double lon, double lat, String distance, @PageableDefault Pageable pageable){
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         //搜索字段为 location
         GeoDistanceQueryBuilder geoBuilder = new GeoDistanceQueryBuilder("location");
@@ -53,8 +54,8 @@ public class LocationResource {
 
         //可添加其他查询条件
         //qb.must(QueryBuilders.matchQuery("address", address));
-        Page<Location> page = locationRepository.search(qb, pageable);
-        List<Location> list = page.getContent();
+        Page<StoreLocation> page = locationRepository.search(qb, pageable);
+        List<StoreLocation> list = page.getContent();
         list.forEach(l -> {
             double calculate = GeoDistance.ARC.calculate(l.getLocation().getLat(), l.getLocation().getLon(), lat, lon, DistanceUnit.METERS);
             l.setDistanceMeters("距离" + (int)calculate + "m");
@@ -63,7 +64,7 @@ public class LocationResource {
     }
 
     @GetMapping("/searchNearWithOrder")
-    public List<Location> searchNearWithOrder(double lon, double lat, String distance, @PageableDefault Pageable pageable){
+    public List<StoreLocation> searchNearWithOrder(double lon, double lat, String distance, @PageableDefault Pageable pageable){
 
         //搜索字段为 location
         GeoDistanceQueryBuilder geoBuilder = new GeoDistanceQueryBuilder("location");
@@ -83,8 +84,8 @@ public class LocationResource {
 
         //可添加其他查询条件
         //qb.must(QueryBuilders.matchQuery("address", address));
-        Page<Location> page = locationRepository.search(qb.build());
-        List<Location> list = page.getContent();
+        Page<StoreLocation> page = locationRepository.search(qb.build());
+        List<StoreLocation> list = page.getContent();
         list.forEach(l -> {
             double calculate = GeoDistance.PLANE.calculate(l.getLocation().getLat(), l.getLocation().getLon(), lat, lon, DistanceUnit.METERS);
             l.setDistanceMeters("距离" + (int)calculate + "m");
