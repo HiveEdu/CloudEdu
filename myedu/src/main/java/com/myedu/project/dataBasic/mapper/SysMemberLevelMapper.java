@@ -27,6 +27,7 @@ public interface SysMemberLevelMapper
      */
     public List<SysMemberLevel> selectSysMemberLevelList(SysMemberLevel sysMemberLevel);
 
+
     /**
      * 新增会员等级
      * 

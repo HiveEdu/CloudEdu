@@ -40,6 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
             <if test="note != null  and note != ''"> and note = #{note}</if>
         </where>
+        order  by  rule asc
     </select>
     
     <select id="selectSysMemberLevelById" parameterType="Long" resultMap="SysMemberLevelResult">

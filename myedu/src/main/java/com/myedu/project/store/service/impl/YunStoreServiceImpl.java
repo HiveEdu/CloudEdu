@@ -60,6 +60,7 @@ public class YunStoreServiceImpl implements IYunStoreService
     private YunAlipayConfigMapper yunAlipayConfigMapper;
     @Autowired
     private YunAccountChangeMapper yunAccountChangeMapper;
+    @Autowired
     private SysMemberLevelMapper sysMemberLevelMapper;
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS"; //支付成功标识
     public static final String TRADE_CLOSED = "TRADE_CLOSED";//交易关闭
@@ -327,7 +328,7 @@ public class YunStoreServiceImpl implements IYunStoreService
             List<YunAccountChange>  yunAccountChanges=yunAccountChangeMapper.selectYunAccountChangeList(yunAccountChange1);
             BigDecimal sum=new BigDecimal(0);
             for (YunAccountChange yunAccountChange2:yunAccountChanges) {
-                sum.add(yunAccountChange2.getCashAmount());
+                sum=sum.add(yunAccountChange2.getCashAmount());
             }
             SysMemberLevel sysMemberLevel=new SysMemberLevel();
             sysMemberLevel.setType(LeaveType.STOREVIP.getCode());
