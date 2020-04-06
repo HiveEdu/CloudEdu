@@ -29,18 +29,15 @@ public class StoreLocation extends BaseEntity
     private Long id;
 
     /** 门店名称 */
-    @Excel(name = "门店名称")
     private String name;
 
     /** 门店logo */
     private String logo;
 
     /** 门店负责人 */
-    @Excel(name = "门店负责人")
     private String manager;
 
     /** 负责人电话 */
-    @Excel(name = "负责人电话")
     private String managerPhone;
 
     /** 门店照片墙 */
@@ -64,11 +61,9 @@ public class StoreLocation extends BaseEntity
     private String city;
 
     /** 区 */
-    @Excel(name = "区")
     private String area;
 
     /** 门店详细地址 */
-    @Excel(name = "门店详细地址")
     private String address;
 
 
@@ -81,11 +76,6 @@ public class StoreLocation extends BaseEntity
     /** 创建人Id */
     private Long createById;
 
-    /** 门店类型组 */
-    private Long[] storeTypeIds;
-
-    /** 标签类型组 */
-    private Long[] storeLabelIds;
 
     /** 状态（0待审核1审核通过2审核驳回） */
     @Excel(name = "审核状态", readConverterExp = "0=可用1不可用")
