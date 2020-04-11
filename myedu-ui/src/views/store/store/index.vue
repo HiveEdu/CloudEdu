@@ -529,9 +529,9 @@ export default {
         managerPhone:[
           { required: true, message: "门店负责人联系方式不能为空", trigger: "blur" }
         ],
-        province:[
-          { required: true, message: "门店地址不能为空", trigger: "blur" }
-        ],
+        // province:[
+        //   { required: true, message: "门店地址不能为空", trigger: "blur" }
+        // ],
         address:[
           { required: true, message: "门店街道不能为空", trigger: "blur" }
         ],

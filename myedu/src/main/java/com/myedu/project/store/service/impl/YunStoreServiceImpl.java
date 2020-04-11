@@ -28,8 +28,11 @@ import com.myedu.project.store.mapper.YunStoreLabelMapper;
 import com.myedu.project.store.mapper.YunStoreMapper;
 import com.myedu.project.store.mapper.YunStoreTypeMapper;
 import com.myedu.project.store.service.IYunStoreService;
+import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
+import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
 import com.myedu.project.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -62,6 +65,8 @@ public class YunStoreServiceImpl implements IYunStoreService
     private YunAccountChangeMapper yunAccountChangeMapper;
     @Autowired
     private SysMemberLevelMapper sysMemberLevelMapper;
+    @Autowired
+    private StoreSearchVoRepository storeSearchVoRepository;
     public static final String TRADE_SUCCESS = "TRADE_SUCCESS"; //支付成功标识
     public static final String TRADE_CLOSED = "TRADE_CLOSED";//交易关闭
     /**
@@ -104,6 +109,16 @@ public class YunStoreServiceImpl implements IYunStoreService
         insertStoreType(yunStore);
         // 新增门店门店标签关联表
         insertStoreLabel(yunStore);
+
+        //增加门店到es查询数据库中
+        StoreSearchVo storeSearchVo=new StoreSearchVo();
+        storeSearchVo.setId(yunStore.getId());
+        storeSearchVo.setName(yunStore.getName());
+        storeSearchVo.setLon(yunStore.getMapX());
+        storeSearchVo.setLat(yunStore.getMapY());
+        GeoPoint location=new GeoPoint(storeSearchVo.getLat(),storeSearchVo.getLon());
+        storeSearchVo.setLocation(location);
+        storeSearchVoRepository.save(storeSearchVo);
         return rows;
     }
 

@@ -118,8 +118,6 @@ public class YunStoreController extends BaseController
         yunStore.setCreateById(SecurityUtils.getUserId());
         yunStore.setCreateBy(SecurityUtils.getUsername());
         //向位置表插入数据
-
-
         return toAjax(yunStoreService.insertYunStore(yunStore));
     }
 
