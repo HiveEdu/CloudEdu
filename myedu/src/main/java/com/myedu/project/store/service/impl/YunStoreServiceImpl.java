@@ -141,6 +141,17 @@ public class YunStoreServiceImpl implements IYunStoreService
         insertStoreType(yunStore);
         // 新增门店标签关联表
         insertStoreLabel(yunStore);
+        //从es中删除门店信息
+        storeSearchVoRepository.deleteById(storeId);
+        //增加门店到es查询数据库中
+        StoreSearchVo storeSearchVo=new StoreSearchVo();
+        storeSearchVo.setId(yunStore.getId());
+        storeSearchVo.setName(yunStore.getName());
+        storeSearchVo.setLon(yunStore.getMapX());
+        storeSearchVo.setLat(yunStore.getMapY());
+        GeoPoint location=new GeoPoint(storeSearchVo.getLat(),storeSearchVo.getLon());
+        storeSearchVo.setLocation(location);
+        storeSearchVoRepository.save(storeSearchVo);
         return yunStoreMapper.updateYunStore(yunStore);
     }
 
@@ -159,6 +170,8 @@ public class YunStoreServiceImpl implements IYunStoreService
         {
             yunStoreTypeMapper.deleteStoreTypeByStoreId(id);
             yunStorelabelMapper.deleteYunStoreLabelById(id);
+            //从es中删除门店信息
+            storeSearchVoRepository.deleteById(id);
         }
         return yunStoreMapper.deleteYunStoreByIds(ids);
     }
@@ -176,6 +189,8 @@ public class YunStoreServiceImpl implements IYunStoreService
         yunStoreTypeMapper.deleteStoreTypeByStoreId(id);
         //删除与标签类型关联
         yunStorelabelMapper.deleteYunStoreLabelById(id);
+        //从es中删除门店信息
+        storeSearchVoRepository.deleteById(id);
         return yunStoreMapper.deleteYunStoreById(id);
     }
 
