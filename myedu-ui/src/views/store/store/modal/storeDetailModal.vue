@@ -29,7 +29,7 @@
           <e-row>
             <div class="text item" style="margin-left: 5%">类型:
               <span v-for="item in storeTypes">
-               <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
+               <span v-for="item1 in form.storeTypeIds" v-if="item1==item.id">
                  {{ item.name }}
                </span>
             </span>
@@ -39,7 +39,7 @@
           <e-row>
             <div class="text item" style="margin-left: 5%">标贴:
               <span v-for="item in storeLabels">
-               <span v-for="item1 in form.storeTypeIds" v-if="item1==item.id">
+               <span v-for="item1 in form.storeLabelIds" v-if="item1==item.id">
                  {{ item.name }}
                </span>
             </span>

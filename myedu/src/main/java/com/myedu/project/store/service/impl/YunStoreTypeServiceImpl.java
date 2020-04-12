@@ -26,9 +26,9 @@ public class YunStoreTypeServiceImpl implements IYunStoreTypeService
      * @return 门店类型关联
      */
     @Override
-    public YunStoreType selectYunStoreTypeById(Long storeId)
+    public List<YunStoreType> selectYunStoreTypeByStoreId(Long storeId)
     {
-        return yunStoreTypeMapper.selectYunStoreTypeById(storeId);
+        return yunStoreTypeMapper.selectYunStoreTypeByStoreId(storeId);
     }
 
     /**

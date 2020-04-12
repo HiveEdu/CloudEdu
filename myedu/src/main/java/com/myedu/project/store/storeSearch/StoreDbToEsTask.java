@@ -2,8 +2,10 @@ package com.myedu.project.store.storeSearch;
 
 import com.myedu.project.dynamic.service.IYunDyLikesService;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.YunStoreType;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.service.IYunStoreService;
+import com.myedu.project.store.service.IYunStoreTypeService;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
 import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,13 +24,17 @@ public class StoreDbToEsTask {
     @Autowired
     private IYunStoreService yunStoreService;
     @Autowired
+    private IYunStoreTypeService yunStoreTypeService;
+    @Autowired
     private StoreSearchVoRepository storeSearchVoRepository;
-    @Scheduled(cron="0 0 12 * * ?") //每天12点执行
+    //0 0 12 * * ?
+    @Scheduled(cron="*/5 * * * * ?") //每天12点执行
     protected void executedyInternal(){
         YunStoreVo yunStore=new YunStoreVo();
         List<YunStoreVo> yunStores=yunStoreService.selectYunStoreList(yunStore);
         for (YunStoreVo yun:
                 yunStores) {
+//            storeSearchVoRepository.deleteById(yun.getId());
             Boolean exists= storeSearchVoRepository.existsById(yun.getId());
             if(!exists){
                 //增加门店到es查询数据库中
@@ -54,7 +61,15 @@ public class StoreDbToEsTask {
                 storeSearchVo.setVideo(yun.getVideo());
                 storeSearchVo.setRejectResion(yun.getRejectResion());
                 storeSearchVo.setVipLevelId(yun.getVipLevelId());
+                List<YunStoreType>  yunStoreTypes=yunStoreTypeService.selectYunStoreTypeByStoreId(yun.getId());
+                List<Long> typeIds=new ArrayList<>();
+                for (YunStoreType storeType:
+                        yunStoreTypes) {
+                    typeIds.add(storeType.getTypeId());
+                }
+                storeSearchVo.setTypeIds(typeIds);
                 storeSearchVoRepository.save(storeSearchVo);
+
             }
         }
 

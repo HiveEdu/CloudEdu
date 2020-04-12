@@ -5,6 +5,7 @@ import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +20,11 @@ public class StoreSearchVo {
      * 主键
      */
     private Long id;
+
+    /*
+     * 门店类型id
+     */
+    private List<Long> typeIds;
     /**
      * 名称
      */
@@ -27,36 +33,6 @@ public class StoreSearchVo {
      * 经度
      */
     private Double lon;
-
-    @Override
-    public String toString() {
-        return "StoreSearchVo{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lon=" + lon +
-                ", lat=" + lat +
-                ", distanceMeters='" + distanceMeters + '\'' +
-                ", location=" + location +
-                ", logo='" + logo + '\'' +
-                ", manager='" + manager + '\'' +
-                ", managerPhone='" + managerPhone + '\'' +
-                ", photos='" + photos + '\'' +
-                ", healths='" + healths + '\'' +
-                ", video='" + video + '\'' +
-                ", license='" + license + '\'' +
-                ", province='" + province + '\'' +
-                ", city='" + city + '\'' +
-                ", area='" + area + '\'' +
-                ", address='" + address + '\'' +
-                ", delFlag='" + delFlag + '\'' +
-                ", createById=" + createById +
-                ", status='" + status + '\'' +
-                ", rejectResion='" + rejectResion + '\'' +
-                ", beginExperienceTime=" + beginExperienceTime +
-                ", endExperienceTime=" + endExperienceTime +
-                ", vipLevelId=" + vipLevelId +
-                '}';
-    }
 
     /**
      * 纬度
@@ -70,33 +46,6 @@ public class StoreSearchVo {
 
     @GeoPointField
     private GeoPoint location;
-
-    public StoreSearchVo(Long id, String name, Double lon, Double lat, String distanceMeters, GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license, String province, String city, String area, String address, String delFlag, Long createById, String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime, Long vipLevelId) {
-        this.id = id;
-        this.name = name;
-        this.lon = lon;
-        this.lat = lat;
-        this.distanceMeters = distanceMeters;
-        this.location = location;
-        this.logo = logo;
-        this.manager = manager;
-        this.managerPhone = managerPhone;
-        this.photos = photos;
-        this.healths = healths;
-        this.video = video;
-        this.license = license;
-        this.province = province;
-        this.city = city;
-        this.area = area;
-        this.address = address;
-        this.delFlag = delFlag;
-        this.createById = createById;
-        this.status = status;
-        this.rejectResion = rejectResion;
-        this.beginExperienceTime = beginExperienceTime;
-        this.endExperienceTime = endExperienceTime;
-        this.vipLevelId = vipLevelId;
-    }
 
     /** 门店logo */
     private String logo;
@@ -143,6 +92,19 @@ public class StoreSearchVo {
 
     /** 状态（0待审核1审核通过2审核驳回） */
     private String status;
+
+    /** 驳回原因 */
+
+    private String rejectResion;
+
+    /** 体验开始时间 */
+    private Date beginExperienceTime;
+
+    /** 体验结束时间 */
+    private Date endExperienceTime;
+
+    /** 门店等级关联id */
+    private Long vipLevelId;
 
     public Long getId() {
         return id;
@@ -338,21 +300,74 @@ public class StoreSearchVo {
         this.delFlag = delFlag;
     }
 
-    /** 驳回原因 */
 
-    private String rejectResion;
+    public List<Long> getTypeIds() {
+        return typeIds;
+    }
 
-    /** 体验开始时间 */
-    private Date beginExperienceTime;
-
-    /** 体验结束时间 */
-    private Date endExperienceTime;
-
-    /** 门店等级关联id */
-    private Long vipLevelId;
+    public void setTypeIds(List<Long> typeIds) {
+        this.typeIds = typeIds;
+    }
 
     public StoreSearchVo(){
 
     }
+    public StoreSearchVo(Long id,List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters, GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license, String province, String city, String area, String address, String delFlag, Long createById, String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime, Long vipLevelId) {
+        this.id = id;
+        this.typeIds = typeIds;
+        this.name = name;
+        this.lon = lon;
+        this.lat = lat;
+        this.distanceMeters = distanceMeters;
+        this.location = location;
+        this.logo = logo;
+        this.manager = manager;
+        this.managerPhone = managerPhone;
+        this.photos = photos;
+        this.healths = healths;
+        this.video = video;
+        this.license = license;
+        this.province = province;
+        this.city = city;
+        this.area = area;
+        this.address = address;
+        this.delFlag = delFlag;
+        this.createById = createById;
+        this.status = status;
+        this.rejectResion = rejectResion;
+        this.beginExperienceTime = beginExperienceTime;
+        this.endExperienceTime = endExperienceTime;
+        this.vipLevelId = vipLevelId;
+    }
 
+    @Override
+    public String toString() {
+        return "StoreSearchVo{" +
+                "id=" + id +
+                "typeIds=" + typeIds +
+                ", name='" + name + '\'' +
+                ", lon=" + lon +
+                ", lat=" + lat +
+                ", distanceMeters='" + distanceMeters + '\'' +
+                ", location=" + location +
+                ", logo='" + logo + '\'' +
+                ", manager='" + manager + '\'' +
+                ", managerPhone='" + managerPhone + '\'' +
+                ", photos='" + photos + '\'' +
+                ", healths='" + healths + '\'' +
+                ", video='" + video + '\'' +
+                ", license='" + license + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", address='" + address + '\'' +
+                ", delFlag='" + delFlag + '\'' +
+                ", createById=" + createById +
+                ", status='" + status + '\'' +
+                ", rejectResion='" + rejectResion + '\'' +
+                ", beginExperienceTime=" + beginExperienceTime +
+                ", endExperienceTime=" + endExperienceTime +
+                ", vipLevelId=" + vipLevelId +
+                '}';
+    }
 }

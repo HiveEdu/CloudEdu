@@ -65,7 +65,7 @@ public class YunStoreTypeController extends BaseController
     @GetMapping(value = "/{storeId}")
     public AjaxResult getInfo(@PathVariable("storeId") Long storeId)
     {
-        return AjaxResult.success(yunStoreTypeService.selectYunStoreTypeById(storeId));
+        return AjaxResult.success(yunStoreTypeService.selectYunStoreTypeByStoreId(storeId));
     }
 
     /**

@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectYunStoreTypeById" parameterType="Long" resultMap="YunStoreTypeResult">
+    <select id="selectYunStoreTypeByStoreId" parameterType="Long" resultMap="YunStoreTypeResult">
         <include refid="selectYunStoreTypeVo"/>
         where store_id = #{storeId}
     </select>

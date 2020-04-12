@@ -132,6 +132,13 @@ public class YunStoreServiceImpl implements IYunStoreService
         storeSearchVo.setVideo(yunStore.getVideo());
         storeSearchVo.setRejectResion(yunStore.getRejectResion());
         storeSearchVo.setVipLevelId(yunStore.getVipLevelId());
+        List<YunStoreType>  yunStoreTypes=yunStoreTypeMapper.selectYunStoreTypeByStoreId(yunStore.getId());
+        List<Long> typeIs=new ArrayList<>();
+        for (YunStoreType yun:
+                yunStoreTypes) {
+            typeIs.add(yun.getTypeId());
+        }
+        storeSearchVo.setTypeIds(typeIs);
         storeSearchVoRepository.save(storeSearchVo);
         return rows;
     }
@@ -182,6 +189,13 @@ public class YunStoreServiceImpl implements IYunStoreService
         storeSearchVo.setRejectResion(yunStore.getRejectResion());
         storeSearchVo.setVipLevelId(yunStore.getVipLevelId());
         storeSearchVoRepository.save(storeSearchVo);
+        List<YunStoreType>  yunStoreTypes=yunStoreTypeMapper.selectYunStoreTypeByStoreId(yunStore.getId());
+        List<Long> typeIs=new ArrayList<>();
+        for (YunStoreType yun:
+                yunStoreTypes) {
+            typeIs.add(yun.getTypeId());
+        }
+        storeSearchVo.setTypeIds(typeIs);
         return yunStoreMapper.updateYunStore(yunStore);
     }
 

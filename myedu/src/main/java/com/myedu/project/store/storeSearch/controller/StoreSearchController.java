@@ -7,6 +7,7 @@ import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
 import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,7 +41,7 @@ public class StoreSearchController extends BaseController {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
     @GetMapping(value = "/findAll")
-    public TableDataInfo listProducts(double lon, double lat, String distance)
+    public TableDataInfo listProducts(double lon, double lat, String distance,StoreSearchVo storeSearchVo)
     {
         startPage();
         //设定搜索半径
@@ -64,13 +67,31 @@ public class StoreSearchController extends BaseController {
         Page<StoreSearchVo> page =
                 elasticsearchTemplate.queryForPage(
                         nativeSearchQueryBuilder.build(), StoreSearchVo.class);
+        List<StoreSearchVo> storeSearchVosNew=new ArrayList<StoreSearchVo>();
         List<StoreSearchVo> storeSearchVos= page.getContent();
-        storeSearchVos.forEach(storeSearchVo -> {
-            double calculate = GeoDistance.ARC.calculate(storeSearchVo.getLocation().getLat(), storeSearchVo.getLocation().getLon(), lat, lon, DistanceUnit.METERS);
-            storeSearchVo.setDistanceMeters(String.valueOf(calculate));
+        storeSearchVos.forEach(storeSearchVo1 -> {
+            double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.METERS);
+            storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
+            List<Long> typeIds=storeSearchVo1.getTypeIds();
+            if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0){
+              Long typeId= storeSearchVo.getTypeIds().get(0);
+              Boolean iscontent=false;
+                for (Long typeIdsNew:
+                        typeIds) {
+                    if(typeIdsNew==typeId){
+                        iscontent=true;
+                        break;
+                    }
+                }
+              if(iscontent){
+                  storeSearchVosNew.add(storeSearchVo1);
+              }
+            }else{
+                  storeSearchVosNew.add(storeSearchVo1);
+            }
             System.out.println("距离" + (int)calculate + "m");
         });
-        return getDataTable(storeSearchVos);
+        return getDataTable(storeSearchVosNew);
 
 
     }

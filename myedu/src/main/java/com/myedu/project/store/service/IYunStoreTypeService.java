@@ -17,7 +17,7 @@ public interface IYunStoreTypeService
      * @param storeId 门店类型关联ID
      * @return 门店类型关联
      */
-    public YunStoreType selectYunStoreTypeById(Long storeId);
+    public List<YunStoreType> selectYunStoreTypeByStoreId(Long storeId);
 
     /**
      * 查询门店类型关联列表
