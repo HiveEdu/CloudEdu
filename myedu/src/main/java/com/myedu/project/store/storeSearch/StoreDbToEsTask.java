@@ -38,6 +38,22 @@ public class StoreDbToEsTask {
                 storeSearchVo.setLat(yun.getMapY());
                 GeoPoint location=new GeoPoint(yun.getMapY(),yun.getMapX());
                 storeSearchVo.setLocation(location);
+                storeSearchVo.setAddress(yun.getAddress());
+                storeSearchVo.setArea(yun.getArea());
+                storeSearchVo.setBeginExperienceTime(yun.getBeginExperienceTime());
+                storeSearchVo.setEndExperienceTime(yun.getEndExperienceTime());
+                storeSearchVo.setCity(yun.getCity());
+                storeSearchVo.setCreateById(yun.getCreateById());
+                storeSearchVo.setHealths(yun.getHealths());
+                storeSearchVo.setPhotos(yun.getPhotos());
+                storeSearchVo.setLogo(yun.getLogo());
+                storeSearchVo.setStatus(yun.getStatus());
+                storeSearchVo.setManager(yun.getManager());
+                storeSearchVo.setProvince(yun.getProvince());
+                storeSearchVo.setManagerPhone(yun.getManagerPhone());
+                storeSearchVo.setVideo(yun.getVideo());
+                storeSearchVo.setRejectResion(yun.getRejectResion());
+                storeSearchVo.setVipLevelId(yun.getVipLevelId());
                 storeSearchVoRepository.save(storeSearchVo);
             }
         }
