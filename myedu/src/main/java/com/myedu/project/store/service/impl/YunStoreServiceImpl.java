@@ -6,7 +6,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.myedu.common.utils.DateUtils;
-import com.myedu.common.utils.SecurityUtils;
+
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.account.domain.YunAccountChange;
 import com.myedu.project.account.domain.YunAlipayConfig;
@@ -16,9 +16,7 @@ import com.myedu.project.account.mapper.YunAlipayConfigMapper;
 import com.myedu.project.dataBasic.domain.SysMemberLevel;
 import com.myedu.project.dataBasic.enums.LeaveType;
 import com.myedu.project.dataBasic.mapper.SysMemberLevelMapper;
-import com.myedu.project.dataBasic.service.ISysMemberLevelService;
-import com.myedu.project.order.domain.YunOrder;
-import com.myedu.project.order.domain.vo.YunOrderVo;
+
 import com.myedu.project.order.enums.PaymentType;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.YunStoreLabel;
@@ -30,7 +28,7 @@ import com.myedu.project.store.mapper.YunStoreTypeMapper;
 import com.myedu.project.store.service.IYunStoreService;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
 import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
-import com.myedu.project.system.domain.SysUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Service;
@@ -118,6 +116,22 @@ public class YunStoreServiceImpl implements IYunStoreService
         storeSearchVo.setLat(yunStore.getMapY());
         GeoPoint location=new GeoPoint(storeSearchVo.getLat(),storeSearchVo.getLon());
         storeSearchVo.setLocation(location);
+        storeSearchVo.setAddress(yunStore.getAddress());
+        storeSearchVo.setArea(yunStore.getArea());
+        storeSearchVo.setBeginExperienceTime(yunStore.getBeginExperienceTime());
+        storeSearchVo.setEndExperienceTime(yunStore.getEndExperienceTime());
+        storeSearchVo.setCity(yunStore.getCity());
+        storeSearchVo.setCreateById(yunStore.getCreateById());
+        storeSearchVo.setHealths(yunStore.getHealths());
+        storeSearchVo.setPhotos(yunStore.getPhotos());
+        storeSearchVo.setLogo(yunStore.getLogo());
+        storeSearchVo.setStatus(yunStore.getStatus());
+        storeSearchVo.setManager(yunStore.getManager());
+        storeSearchVo.setProvince(yunStore.getProvince());
+        storeSearchVo.setManagerPhone(yunStore.getManagerPhone());
+        storeSearchVo.setVideo(yunStore.getVideo());
+        storeSearchVo.setRejectResion(yunStore.getRejectResion());
+        storeSearchVo.setVipLevelId(yunStore.getVipLevelId());
         storeSearchVoRepository.save(storeSearchVo);
         return rows;
     }
@@ -151,6 +165,22 @@ public class YunStoreServiceImpl implements IYunStoreService
         storeSearchVo.setLat(yunStore.getMapY());
         GeoPoint location=new GeoPoint(storeSearchVo.getLat(),storeSearchVo.getLon());
         storeSearchVo.setLocation(location);
+        storeSearchVo.setAddress(yunStore.getAddress());
+        storeSearchVo.setArea(yunStore.getArea());
+        storeSearchVo.setBeginExperienceTime(yunStore.getBeginExperienceTime());
+        storeSearchVo.setEndExperienceTime(yunStore.getEndExperienceTime());
+        storeSearchVo.setCity(yunStore.getCity());
+        storeSearchVo.setCreateById(yunStore.getCreateById());
+        storeSearchVo.setHealths(yunStore.getHealths());
+        storeSearchVo.setPhotos(yunStore.getPhotos());
+        storeSearchVo.setLogo(yunStore.getLogo());
+        storeSearchVo.setStatus(yunStore.getStatus());
+        storeSearchVo.setManager(yunStore.getManager());
+        storeSearchVo.setProvince(yunStore.getProvince());
+        storeSearchVo.setManagerPhone(yunStore.getManagerPhone());
+        storeSearchVo.setVideo(yunStore.getVideo());
+        storeSearchVo.setRejectResion(yunStore.getRejectResion());
+        storeSearchVo.setVipLevelId(yunStore.getVipLevelId());
         storeSearchVoRepository.save(storeSearchVo);
         return yunStoreMapper.updateYunStore(yunStore);
     }
