@@ -2,17 +2,12 @@ package com.myedu.project.store.storeSearch.controller;
 
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.page.TableDataInfo;
-import com.myedu.project.elasticsearch.dao.LocationRepository;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
 import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
-import org.apache.lucene.search.spans.SpanWeight;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -25,8 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**

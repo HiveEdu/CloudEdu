@@ -14,13 +14,9 @@ import com.myedu.project.dataBasic.domain.SysLabel;
 import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
-import com.myedu.project.elasticsearch.dao.LocationRepository;
 import com.myedu.project.order.domain.YunOrder;
-import com.myedu.project.order.domain.vo.YunOrderVo;
-import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
-import com.myedu.common.utils.GPSUtil;
 import com.myedu.project.store.enums.StoreStatus;
 import com.myedu.project.store.enums.StoryType;
 import com.myedu.project.store.enums.labelType;
@@ -28,14 +24,11 @@ import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.myedu.project.elasticsearch.entity.Location;
-import java.util.Date;
-import java.util.List;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 门店Controller
