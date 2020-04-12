@@ -56,8 +56,6 @@ public class YunStoreController extends BaseController
     @Autowired
     private ISysLabelService syslabelService;
 
-    @Autowired
-    private LocationRepository locationRepository;
     /**
      * 查询门店列表
      */
