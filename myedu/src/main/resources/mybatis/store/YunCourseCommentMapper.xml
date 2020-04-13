@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunCourseCommentMapper">
+    
+    <resultMap type="YunCourseComment" id="YunCourseCommentResult">
+        <result property="id"    column="id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="content"    column="content"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectYunCourseCommentVo">
+        select id, course_id, content, create_by_id, create_by, create_time, update_by, update_time, del_flag, type from yun_course_comment
+    </sql>
+
+    <select id="selectYunCourseCommentList" parameterType="YunCourseComment" resultMap="YunCourseCommentResult">
+        <include refid="selectYunCourseCommentVo"/>
+        <where>  
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunCourseCommentById" parameterType="Long" resultMap="YunCourseCommentResult">
+        <include refid="selectYunCourseCommentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunCourseComment" parameterType="YunCourseComment" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_course_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">course_id,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="type != null  and type != ''">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null ">#{courseId},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunCourseComment" parameterType="YunCourseComment">
+        update yun_course_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null ">course_id = #{courseId},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunCourseCommentById" parameterType="Long">
+        delete from yun_course_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteYunCourseCommentByIds" parameterType="String">
+        delete from yun_course_comment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
