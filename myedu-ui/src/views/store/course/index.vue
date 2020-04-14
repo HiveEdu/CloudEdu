@@ -166,6 +166,15 @@
                 @click="openBargain(scope.row)"
                 style="margin-top: 10px"
               >砍价</el-button>
+              <br>
+              <el-button
+               v-if="scope.row.status==0"
+                style="margin-top: 10px;background-color: rgba(249, 20, 179, 0.98);border-color:rgb(63, 18, 241);"
+                size="mini"
+                type="success"
+                icon="el-icon-notebook-2"
+                @click="openComment(scope.row)"
+              >评论</el-button>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -179,6 +188,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <!-- 评论页面-->
+    <CommentModal ref="CommentModal" :comment="comment" :currentData="currentData" @closeCommentModal="closeCommentModal"></CommentModal>
      <!--开始砍价-->
     <bargainModal ref="bargainModal" :courseBargain="courseBargain" :currentData="currentData" @closeBargain="closeBargain"></bargainModal>
      <!--课程详情-->
@@ -436,12 +447,14 @@ import { getToken } from '@/utils/auth'
 import signUpModal from './modal/signUpModal'
 import DetailModal from './modal/DetailModal'
 import bargainModal from './modal/bargainModal'
+import CommentModal from './modal/CommentModal'
 const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
-  components: { signUpModal,DetailModal,bargainModal},
+  components: { signUpModal,DetailModal,bargainModal,CommentModal},
   data() {
     return {
       defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
+      comment:false,
       courseDetail:false,
       courseBargain:false,
       signUp:false,
@@ -548,6 +561,11 @@ export default {
     });
   },
   methods: {
+     //打开评价页面
+    openComment(row){
+      this.currentData=row;
+      this.comment=true;
+    },
     //打开砍价页面
     openBargain(row){
       this.currentData=row;
