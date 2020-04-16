@@ -1,38 +1,30 @@
 package com.myedu.project.store.controller;
 
-import java.util.List;
-
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
-import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
-import com.myedu.framework.security.LoginUser;
+import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.Log;
+import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.service.TokenService;
+import com.myedu.framework.web.controller.BaseController;
+import com.myedu.framework.web.domain.AjaxResult;
+import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
-import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.YunCourse;
+import com.myedu.project.store.domain.YunCourseComment;
 import com.myedu.project.store.domain.vo.YunCourseVo;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.CourseType;
-import com.myedu.project.store.service.IYunStoreService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.myedu.framework.aspectj.lang.annotation.Log;
-import com.myedu.framework.aspectj.lang.enums.BusinessType;
-import com.myedu.project.store.domain.YunCourse;
+import com.myedu.project.store.service.IYunCourseCommentService;
 import com.myedu.project.store.service.IYunCourseService;
-import com.myedu.framework.web.controller.BaseController;
-import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.common.utils.poi.ExcelUtil;
-import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.store.service.IYunStoreService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 课程Controller
@@ -52,6 +44,8 @@ public class YunCourseController extends BaseController
     private IYunStoreService yunStoreService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private IYunCourseCommentService yunCourseCommentService;
     /**
      * 查询课程列表
      */
@@ -175,4 +169,24 @@ public class YunCourseController extends BaseController
         }
         return toAjax(rows);
     }
+
+
+    /**
+     * 新增课程评价管理
+     */
+    @PreAuthorize("@ss.hasPermi('store:course:comment')")
+    @Log(title = "云托管动态管理", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/comment")
+    public AjaxResult comment(@RequestBody YunCourseComment yunCourseComment)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        yunCourseComment.setCreateById(SecurityUtils.getUserId());
+        yunCourseComment.setCreateBy(SecurityUtils.getUsername());
+        yunCourseCommentService.insertYunCourseComment(yunCourseComment);
+
+        YunCourse yunCourse=yunCourseService.selectYunCourseById(yunCourseComment.getId());
+       // yunCourse.setComments(yunCourse.getComments()+1);
+        return toAjax(yunCourseService.updateYunCourse(yunCourse));
+    }
+
 }
