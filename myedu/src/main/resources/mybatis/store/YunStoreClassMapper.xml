@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreClassMapper">
+    
+    <resultMap type="YunStoreClass" id="YunStoreClassResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="classLogo"    column="class_logo"    />
+        <result property="bishopTeacher"    column="bishop_teacher"    />
+        <result property="assistantTeacher"    column="assistant_teacher"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="updateById"    column="update_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunStoreClassVo">
+        select id, name, class_logo, bishop_teacher, assistant_teacher, remark, create_by, create_time, update_by, update_time, del_flag, store_id, create_by_id, update_by_id from yun_store_class
+    </sql>
+
+    <select id="selectYunStoreClassList" parameterType="YunStoreClass" resultMap="YunStoreClassResult">
+        <include refid="selectYunStoreClassVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="bishopTeacher != null  and bishopTeacher != ''"> and bishop_teacher like concat('%', #{bishopTeacher}, '%')</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''"> and assistant_teacher like concat('%', #{assistantTeacher}, '%')</if>
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+            <if test="updateById != null "> and update_by_id = #{updateById}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStoreClassById" parameterType="Long" resultMap="YunStoreClassResult">
+        <include refid="selectYunStoreClassVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStoreClass" parameterType="YunStoreClass" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_store_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="classLogo != null  and classLogo != ''">class_logo,</if>
+            <if test="bishopTeacher != null  and bishopTeacher != ''">bishop_teacher,</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''">assistant_teacher,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="storeId != null ">store_id,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="updateById != null ">update_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="classLogo != null  and classLogo != ''">#{classLogo},</if>
+            <if test="bishopTeacher != null  and bishopTeacher != ''">#{bishopTeacher},</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''">#{assistantTeacher},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="updateById != null ">#{updateById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreClass" parameterType="YunStoreClass">
+        update yun_store_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="classLogo != null  and classLogo != ''">class_logo = #{classLogo},</if>
+            <if test="bishopTeacher != null  and bishopTeacher != ''">bishop_teacher = #{bishopTeacher},</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''">assistant_teacher = #{assistantTeacher},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="storeId != null ">store_id = #{storeId},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="updateById != null ">update_by_id = #{updateById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStoreClassById" parameterType="Long">
+        delete from yun_store_class where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStoreClassByIds" parameterType="String">
+        delete from yun_store_class where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
