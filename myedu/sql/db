@@ -1,0 +1,14 @@
+--2020-04-18增加课程评分标准字典
+  insert into sys_dict_type( dict_name, dict_type, status, remark, create_by, create_time )
+  values( "课程评分标准", "GradingPolicies", "0", "课程评分标准","admin", sysdate() )
+--2020-04-18增加课程评分标准字典项
+  insert into sys_dict_data( dict_sort, dict_label, dict_value, dict_type, status, remark, create_by, create_time )
+  values( "1","教学场地", "1", "GradingPolicies", "0", "教学场地", "admin", sysdate() )
+  insert into sys_dict_data( dict_sort, dict_label, dict_value, dict_type, status, remark, create_by, create_time )
+  values( "2","老师态度", "2", "GradingPolicies", "0", "老师态度", "admin", sysdate() )
+  insert into sys_dict_data( dict_sort, dict_label, dict_value, dict_type, status, remark, create_by, create_time )
+  values( "3","对目标有详尽清晰的了解", "3", "GradingPolicies", "0", "对目标有详尽清晰的了解", "admin", sysdate() )
+  insert into sys_dict_data( dict_sort, dict_label, dict_value, dict_type, status, remark, create_by, create_time )
+  values( "4","课程重点突出，详略得当", "4", "GradingPolicies", "0", "课程重点突出，详略得当", "admin", sysdate() )
+  insert into sys_dict_data( dict_sort, dict_label, dict_value, dict_type, status, remark, create_by, create_time )
+  values( "5","餐食健康", "5", "GradingPolicies", "0", "餐食健康", "admin", sysdate() )

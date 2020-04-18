@@ -15,10 +15,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="type"    column="type"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="scoreContent"    column="score_content"    />
+        <result property="score"    column="score"    />
     </resultMap>
 
     <sql id="selectYunCourseCommentVo">
-        select id, course_id, content, create_by_id, create_by, create_time, update_by, update_time, del_flag, type from yun_course_comment
+        select id, course_id, content, create_by_id, create_by, create_time, update_by, update_time, del_flag, type,store_id,
+        score_content, score from yun_course_comment
     </sql>
 
     <select id="selectYunCourseCommentList" parameterType="YunCourseComment" resultMap="YunCourseCommentResult">
@@ -48,6 +52,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="type != null  and type != ''">type,</if>
+            <if test="storeId != null and storeId != '' ">store_id,</if>
+            <if test="scoreContent != null">score_content,</if>
+            <if test="score != null  and score != ''">score,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="courseId != null ">#{courseId},</if>
@@ -59,6 +66,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="type != null  and type != ''">#{type},</if>
+            <if test="storeId != null and storeId != '' ">#{storeId},</if>
+            <if test="scoreContent != null">#{scoreContent},</if>
+            <if test="score != null  and score != ''">#{score},</if>
          </trim>
     </insert>
 
@@ -74,6 +84,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="storeId != null and storeId != '' ">store_id =#{storeId},</if>
+            <if test="scoreContent != null">score_content =#{scoreContent},</if>
+            <if test="score != null  and score != ''">score =#{score},</if>
         </trim>
         where id = #{id}
     </update>

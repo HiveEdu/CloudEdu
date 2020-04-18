@@ -287,6 +287,7 @@
           return {
             title:"开始砍价",
             dialogVisible:false,
+            statusOptions:[],
             isRecommendOptions:[],
             //门店列表
             stores:[],

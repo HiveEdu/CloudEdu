@@ -5,6 +5,8 @@ import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
+
 /**
  * 课程评论对象 yun_course_comment
  * 
@@ -36,6 +38,19 @@ public class YunCourseComment extends BaseEntity
     /** 评价类型 */
     @Excel(name = "评价类型")
     private String type;
+
+    /** 课程门店Id */
+    @Excel(name = "课程门店Id")
+    private Long storeId;
+
+    /** 评分内容 */
+    @Excel(name = "评分内容")
+    private String scoreContent;
+
+    /** 平均评分 */
+    @Excel(name = "平均评分")
+    private BigDecimal score;
+
 
     public void setId(Long id) 
     {
@@ -92,6 +107,30 @@ public class YunCourseComment extends BaseEntity
         return type;
     }
 
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getScoreContent() {
+        return scoreContent;
+    }
+
+    public void setScoreContent(String scoreContent) {
+        this.scoreContent = scoreContent;
+    }
+
+    public BigDecimal getScore() {
+        return score;
+    }
+
+    public void setScore(BigDecimal score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -105,6 +144,10 @@ public class YunCourseComment extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
             .append("type", getType())
+            .append("storeId", getStoreId())
+            .append("scoreContent", getScoreContent())
+            .append("score", getScore())
             .toString();
+
     }
 }
