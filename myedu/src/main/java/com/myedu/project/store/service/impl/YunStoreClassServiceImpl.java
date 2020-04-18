@@ -1,12 +1,14 @@
 package com.myedu.project.store.service.impl;
 
-import java.util.List;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.project.store.domain.YunStoreClass;
+import com.myedu.project.store.domain.vo.YunStoreClassVo;
+import com.myedu.project.store.mapper.YunStoreClassMapper;
+import com.myedu.project.store.service.IYunStoreClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.myedu.project.store.mapper.YunStoreClassMapper;
-import com.myedu.project.store.domain.YunStoreClass;
-import com.myedu.project.store.service.IYunStoreClassService;
+
+import java.util.List;
 
 /**
  * 分班管理Service业务层处理
@@ -27,7 +29,7 @@ public class YunStoreClassServiceImpl implements IYunStoreClassService
      * @return 分班管理
      */
     @Override
-    public YunStoreClass selectYunStoreClassById(Long id)
+    public YunStoreClassVo selectYunStoreClassById(Long id)
     {
         return yunStoreClassMapper.selectYunStoreClassById(id);
     }
@@ -39,7 +41,7 @@ public class YunStoreClassServiceImpl implements IYunStoreClassService
      * @return 分班管理
      */
     @Override
-    public List<YunStoreClass> selectYunStoreClassList(YunStoreClass yunStoreClass)
+    public List<YunStoreClassVo> selectYunStoreClassList(YunStoreClass yunStoreClass)
     {
         return yunStoreClassMapper.selectYunStoreClassList(yunStoreClass);
     }

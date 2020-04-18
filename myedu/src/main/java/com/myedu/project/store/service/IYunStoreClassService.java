@@ -1,6 +1,8 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreClass;
+import com.myedu.project.store.domain.vo.YunStoreClassVo;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface IYunStoreClassService
      * @param id 分班管理ID
      * @return 分班管理
      */
-    public YunStoreClass selectYunStoreClassById(Long id);
+    public YunStoreClassVo selectYunStoreClassById(Long id);
 
     /**
      * 查询分班管理列表
@@ -25,7 +27,7 @@ public interface IYunStoreClassService
      * @param yunStoreClass 分班管理
      * @return 分班管理集合
      */
-    public List<YunStoreClass> selectYunStoreClassList(YunStoreClass yunStoreClass);
+    public List<YunStoreClassVo> selectYunStoreClassList(YunStoreClass yunStoreClass);
 
     /**
      * 新增分班管理
