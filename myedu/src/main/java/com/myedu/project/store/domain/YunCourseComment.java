@@ -47,9 +47,19 @@ public class YunCourseComment extends BaseEntity
     @Excel(name = "评分内容")
     private String scoreContent;
 
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
     /** 平均评分 */
     @Excel(name = "平均评分")
     private BigDecimal score;
+
+    private String courseName;
 
 
     public void setId(Long id) 
@@ -147,6 +157,7 @@ public class YunCourseComment extends BaseEntity
             .append("storeId", getStoreId())
             .append("scoreContent", getScoreContent())
             .append("score", getScore())
+            .append("courseName", getCourseName())
             .toString();
 
     }
