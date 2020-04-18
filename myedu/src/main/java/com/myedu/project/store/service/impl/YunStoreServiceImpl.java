@@ -5,6 +5,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.myedu.common.utils.DateUtils;
 
 import com.myedu.common.utils.StringUtils;
@@ -17,6 +18,7 @@ import com.myedu.project.dataBasic.domain.SysMemberLevel;
 import com.myedu.project.dataBasic.enums.LeaveType;
 import com.myedu.project.dataBasic.mapper.SysMemberLevelMapper;
 
+import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.order.enums.PaymentType;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.YunStoreLabel;
@@ -341,6 +343,54 @@ public class YunStoreServiceImpl implements IYunStoreService
         System.out.println(alipayClient.pageExecute(request, "GET").getBody());
         return alipayClient.pageExecute(request, "GET").getBody();
     }
+
+    @Override
+    public String toPayAsWeb(YunStore yunStore  , BigDecimal totalmoney) throws Exception{
+        yunStore=yunStoreMapper.selectYunStoreById(yunStore.getId());
+        YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
+        yunAlipayConfig.setPayMentType(PaymentType.storetopup.getCode());
+        List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);
+        if(yunAlipayConfigs!=null){
+            yunAlipayConfig=yunAlipayConfigs.get(0);
+        }
+
+        //https://openasyncapi.alipay.com/gateway.do  (收单资金结算到银行账户，结算成功的异步通知)
+        //https://openapi.alipaydev.com/gateway.do  (支付指定支付宝账户)
+        AlipayClient alipayClient = new DefaultAlipayClient(yunAlipayConfig.getGatewayUrl(),
+                yunAlipayConfig.getAppId(),
+                yunAlipayConfig.getPrivateKey(),
+                yunAlipayConfig.getFormat(),
+                yunAlipayConfig.getCharset(),
+                yunAlipayConfig.getPublicKey(),
+                yunAlipayConfig.getSignType());
+        // 创建API对应的request(手机网页版)
+        AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
+        //订单完成后返回的页面和异步通知地址
+        request.setReturnUrl(yunAlipayConfig.getReturnUrl());
+        request.setNotifyUrl(yunAlipayConfig.getNotifyUrl());
+        // 填充订单参数
+        String order="Num"+yunStore.getId()+"-"+System.currentTimeMillis();//订单号门店id+时间戳
+        String totalAmount=String.valueOf(totalmoney);//支付金额
+        String subject=yunStore.getName()+"门店充值";//商品名称
+        String body=yunStore.getName()+"门店充值";//商品描述
+        String orderId="store-top-up"+yunStore.getId();
+        request.setBizContent("{" +
+                "    \"order_id\":\""+orderId+"\"," +
+                "    \"out_trade_no\":\""+order+"\"," +
+                "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," +
+                "    \"total_amount\":"+totalAmount+"," +
+                "    \"subject\":\""+subject+"\"," +
+                "    \"body\":\""+body+"\"," +
+                "    \"extend_params\":{" +
+                "    \"sys_service_provider_id\":\""+yunAlipayConfig.getSysServiceProviderId()+"\"" +
+                "    }"+
+                "  }");//填充业务参数
+        // 调用SDK生成表单, 通过GET方式，口可以获取url
+        System.out.println(alipayClient.pageExecute(request, "GET").getBody());
+        return alipayClient.pageExecute(request, "GET").getBody();
+    }
+
+
 
     public static void main(String[] args) {
         String order="Num23-"+System.currentTimeMillis();//订单号门店id+时间戳
