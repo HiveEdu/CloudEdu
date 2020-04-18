@@ -1,7 +1,16 @@
 package com.myedu.project.store.service.impl;
 
+import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.myedu.common.utils.DateUtils;
+import com.myedu.common.utils.SecurityUtils;
+import com.myedu.project.store.domain.vo.EvaluationStandard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myedu.project.store.mapper.YunCourseCommentMapper;
@@ -53,7 +62,22 @@ public class YunCourseCommentServiceImpl implements IYunCourseCommentService
     @Override
     public int insertYunCourseComment(YunCourseComment yunCourseComment)
     {
+        yunCourseComment.setCreateById(SecurityUtils.getUserId());
+        yunCourseComment.setCreateBy(SecurityUtils.getUsername());
         yunCourseComment.setCreateTime(DateUtils.getNowDate());
+        yunCourseComment.setType("1");
+        //计算平均分
+        BigDecimal sum=new BigDecimal(0);
+        BigDecimal avg=new BigDecimal(0);
+        if(yunCourseComment.getScoreContent()!=null){
+            String[] dom=yunCourseComment.getScoreContent().split(",");
+            for (int i = 0; i < dom.length; i++) {
+                sum=sum.add(new BigDecimal(dom[i].split(":")[1]));
+
+            }
+            avg=sum.divide(BigDecimal.valueOf(dom.length),2, RoundingMode.HALF_UP);
+        }
+        yunCourseComment.setScore(avg);
         return yunCourseCommentMapper.insertYunCourseComment(yunCourseComment);
     }
 

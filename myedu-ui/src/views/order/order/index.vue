@@ -125,6 +125,14 @@
                   icon="el-icon-success"
                   @click="openPay(scope.row)"
                 >付款</el-button>
+                  <br >
+                  <el-button
+                    style="margin-top: 10px;background-color: rgba(249, 20, 179, 0.98);border-color:rgb(63, 18, 241);"
+                    size="mini"
+                    type="success"
+                    icon="el-icon-notebook-2"
+                    @click="openComment(scope.row)"
+                  >评论</el-button>
               </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -138,6 +146,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <!-- 评论页面-->
+    <CommentModal ref="CommentModal" :comment="comment" :currentData="currentData" @closeCommentModal="closeCommentModal"></CommentModal>
     <!-- 详情页面-->
     <DetailModal ref="DetailModal" :orderDetail="orderDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <!-- 支付页面-->
@@ -246,12 +256,15 @@ import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } fro
 import DetailModal from './modal/DetailModal'
 import PayModal from './modal/PayModal'
 import { formatTime } from '@/utils/index'
+import CommentModal from './modal/CommentModal'
 export default {
-  components: {DetailModal,PayModal},
+  components: {DetailModal,PayModal,CommentModal},
   data() {
     return {
       pay:false,
       orderDetail:false,
+      comment:false,
+      currentData:null,
       // 年级列表
       sysGrades: [],
       // 学生列表
@@ -336,6 +349,15 @@ export default {
 
   },
   methods: {
+    //打开评价页面
+    openComment(row){
+      this.currentData=row;
+      this.comment=true;
+    },
+    //关闭评价页面
+    closeCommentModal(){
+      this.comment=false;
+    },
     //打开支付页面
     openPay(row){
       this.currentData=row;
