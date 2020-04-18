@@ -73,6 +73,8 @@ public interface IYunStoreService
      */
     public String toPayAsPc(YunStore yunStore, BigDecimal totalmoney) throws Exception;
 
+    public String  toPayAsWeb(YunStore yunStore, BigDecimal totalmoney) throws Exception;
+
     String synchronous(HttpServletRequest request);
     /**
      * 付款异步通知调用地址

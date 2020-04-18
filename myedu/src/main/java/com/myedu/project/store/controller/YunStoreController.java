@@ -15,6 +15,7 @@ import com.myedu.project.dataBasic.domain.SysStoreType;
 import com.myedu.project.dataBasic.service.ISysLabelService;
 import com.myedu.project.dataBasic.service.ISysStoreTypeService;
 import com.myedu.project.order.domain.YunOrder;
+import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.StoreStatus;
@@ -207,6 +208,17 @@ public class YunStoreController extends BaseController
         return ajax;
     }
 
+    @PreAuthorize("@ss.hasPermi('order:order:toPayAsWeb')")
+    @Log(title = "支付宝PC网页支付")
+    @PostMapping(value = "/toPayAsWeb")
+    public AjaxResult toPayAsWeb(@RequestBody YunOrderVo yunOrder) throws Exception{
+        AjaxResult ajax = AjaxResult.success();
+        YunStore yunStore=new YunStore();
+        yunStore.setId(yunOrder.getId());
+        String payUrl = yunStoreService.toPayAsWeb(yunStore,yunOrder.getTotalMoney());
+        ajax.put("url",payUrl);
+        return ajax;
+    }
 
     /*
      * @Description :同步通知

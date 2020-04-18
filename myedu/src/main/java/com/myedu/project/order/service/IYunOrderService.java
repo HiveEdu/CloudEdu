@@ -71,6 +71,8 @@ public interface IYunOrderService
      */
     public String toPayAsPc(YunOrderVo yunOrder) throws Exception;
 
+    public String toPayAsWeb(YunOrderVo yunOrder) throws Exception;
+
     String synchronous(HttpServletRequest request);
     /**
      * 付款异步通知调用地址

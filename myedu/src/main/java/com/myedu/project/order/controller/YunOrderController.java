@@ -145,6 +145,16 @@ public class YunOrderController extends BaseController
         return ajax;
     }
 
+    @PreAuthorize("@ss.hasPermi('order:order:toPayAsWeb')")
+    @Log(title = "支付宝PC网页支付")
+    @PostMapping(value = "/toPayAsWeb")
+    public AjaxResult toPayAsWeb(@RequestBody YunOrderVo yunOrder) throws Exception{
+        AjaxResult ajax = AjaxResult.success();
+        String payUrl = yunOrderService.toPayAsWeb(yunOrder);
+        ajax.put("url",payUrl);
+        return ajax;
+    }
+
     /*
      * @Description :同步通知
      * @Author : 梁少鹏

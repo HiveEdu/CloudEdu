@@ -184,6 +184,40 @@ public class YunOrderServiceImpl implements IYunOrderService
 
 
     @Override
+    public String toPayAsWeb(YunOrderVo yunOrder) throws Exception{
+        YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
+        yunAlipayConfig.setPayMentType(PaymentType.PAYMENTOFANORDER.getCode());
+        List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);
+        if(yunAlipayConfigs!=null){
+            yunAlipayConfig=yunAlipayConfigs.get(0);
+        }
+        AlipayClient alipayClient = new DefaultAlipayClient(yunAlipayConfig.getGatewayUrl(), yunAlipayConfig.getAppId(), yunAlipayConfig.getPrivateKey(), yunAlipayConfig.getFormat(), yunAlipayConfig.getCharset(), yunAlipayConfig.getPublicKey(), yunAlipayConfig.getSignType());
+
+        double money = Double.parseDouble(String.valueOf(yunOrder.getTotalMoney()));
+
+        // 创建API对应的request(手机网页版)
+        AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
+        request.setReturnUrl(yunAlipayConfig.getReturnUrl());
+        request.setNotifyUrl(yunAlipayConfig.getNotifyUrl());
+        String order=yunOrder.getNum();//订单号
+        String subject=yunOrder.getCourseName();//商品名称
+        String body=yunOrder.getRemark();//商品描述
+        request.setBizContent("{" +
+                "    \"order_id\":\""+yunOrder.getId()+"\"," +
+                "    \"out_trade_no\":\""+order+"\"," +
+                "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," +
+                "    \"total_amount\":"+money+"," +
+                "    \"subject\":\""+subject+"\"," +
+                "    \"body\":\""+body+"\"," +
+                "    \"extend_params\":{" +
+                "    \"sys_service_provider_id\":\""+yunAlipayConfig.getSysServiceProviderId()+"\"" +
+                "    }"+
+                "  }");
+
+        return alipayClient.pageExecute(request, "GET").getBody();
+    }
+
+    @Override
     public String synchronous(HttpServletRequest request) {
 
         Map<String, String> parameters = new HashMap<>();
