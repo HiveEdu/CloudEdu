@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myedu.project.store.mapper.YunStoreClassMapper">
     
-    <resultMap type="YunStoreClass" id="YunStoreClassResult">
+    <resultMap type="YunStoreClassVo" id="YunStoreClassResult">
         <result property="id"    column="id"    />
         <result property="name"    column="name"    />
         <result property="classLogo"    column="class_logo"    />
@@ -22,24 +22,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStoreClassVo">
-        select id, name, class_logo, bishop_teacher, assistant_teacher, remark, create_by, create_time, update_by, update_time, del_flag, store_id, create_by_id, update_by_id from yun_store_class
+         select ysl.*,yst.name as storeName from yun_store_class ysl
+         LEFT  JOIN yun_store yst ON ysl.store_id=yst.id
     </sql>
 
-    <select id="selectYunStoreClassList" parameterType="YunStoreClass" resultMap="YunStoreClassResult">
+    <select id="selectYunStoreClassList" parameterType="YunStoreClassVo" resultMap="YunStoreClassResult">
         <include refid="selectYunStoreClassVo"/>
         <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="bishopTeacher != null  and bishopTeacher != ''"> and bishop_teacher like concat('%', #{bishopTeacher}, '%')</if>
-            <if test="assistantTeacher != null  and assistantTeacher != ''"> and assistant_teacher like concat('%', #{assistantTeacher}, '%')</if>
-            <if test="storeId != null "> and store_id = #{storeId}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
-            <if test="updateById != null "> and update_by_id = #{updateById}</if>
+            <if test="name != null  and name != ''"> and ysl.name like concat('%', #{name}, '%')</if>
+            <if test="bishopTeacher != null  and bishopTeacher != ''"> and ysl.bishop_teacher like concat('%', #{bishopTeacher}, '%')</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''"> and ysl.assistant_teacher like concat('%', #{assistantTeacher}, '%')</if>
         </where>
     </select>
     
     <select id="selectYunStoreClassById" parameterType="Long" resultMap="YunStoreClassResult">
         <include refid="selectYunStoreClassVo"/>
-        where id = #{id}
+        where ysl.id = #{id}
     </select>
         
     <insert id="insertYunStoreClass" parameterType="YunStoreClass" useGeneratedKeys="true" keyProperty="id">

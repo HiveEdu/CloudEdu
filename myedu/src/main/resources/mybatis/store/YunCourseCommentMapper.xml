@@ -21,23 +21,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunCourseCommentVo">
-        select id, course_id, content, create_by_id, create_by, create_time, update_by, update_time, del_flag, type,store_id,
-        score_content, score from yun_course_comment
+        select  ycc.*,yc.name as courseName from yun_course_comment ycc
+        left join yun_course yc on ycc.course_id =yc.id
     </sql>
 
     <select id="selectYunCourseCommentList" parameterType="YunCourseComment" resultMap="YunCourseCommentResult">
         <include refid="selectYunCourseCommentVo"/>
         <where>  
-            <if test="courseId != null "> and course_id = #{courseId}</if>
-            <if test="content != null  and content != ''"> and content = #{content}</if>
-            <if test="createById != null "> and create_by_id = #{createById}</if>
-            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="courseId != null "> and ycc.course_id = #{courseId}</if>
+            <if test="type != null  and type != ''"> and ycc.type = #{type}</if>
+            <if test="courseName != null  and courseName != ''"> and yc.name like concat('%', #{courseName}, '%')</if>
         </where>
     </select>
     
     <select id="selectYunCourseCommentById" parameterType="Long" resultMap="YunCourseCommentResult">
         <include refid="selectYunCourseCommentVo"/>
-        where id = #{id}
+        where ycc.id = #{id}
     </select>
         
     <insert id="insertYunCourseComment" parameterType="YunCourseComment" useGeneratedKeys="true" keyProperty="id">

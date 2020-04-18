@@ -8,6 +8,7 @@ import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.store.domain.YunStoreClass;
+import com.myedu.project.store.domain.vo.YunStoreClassVo;
 import com.myedu.project.store.service.IYunStoreClassService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +41,7 @@ public class YunStoreClassController extends BaseController
     public TableDataInfo list(YunStoreClass yunStoreClass)
     {
         startPage();
-        List<YunStoreClass> list = yunStoreClassService.selectYunStoreClassList(yunStoreClass);
+        List<YunStoreClassVo> list = yunStoreClassService.selectYunStoreClassList(yunStoreClass);
         return getDataTable(list);
     }
 
@@ -54,8 +55,8 @@ public class YunStoreClassController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(YunStoreClass yunStoreClass)
     {
-        List<YunStoreClass> list = yunStoreClassService.selectYunStoreClassList(yunStoreClass);
-        ExcelUtil<YunStoreClass> util = new ExcelUtil<YunStoreClass>(YunStoreClass.class);
+        List<YunStoreClassVo> list = yunStoreClassService.selectYunStoreClassList(yunStoreClass);
+        ExcelUtil<YunStoreClassVo> util = new ExcelUtil<YunStoreClassVo>(YunStoreClassVo.class);
         return util.exportExcel(list, "class");
     }
 
