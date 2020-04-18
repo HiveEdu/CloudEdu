@@ -50,7 +50,7 @@
             this.dialogVisible=e;
           },
           currentData:function (e) {
-           this.form.courseId = e.id;
+           this.form.courseId = e.courseId;
            this.form.storeId = e.storeId;
           },
         },

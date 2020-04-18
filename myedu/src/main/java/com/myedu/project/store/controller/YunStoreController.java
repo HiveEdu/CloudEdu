@@ -21,6 +21,7 @@ import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.StoreStatus;
 import com.myedu.project.store.enums.StoryType;
 import com.myedu.project.store.enums.labelType;
+import com.myedu.project.store.service.IYunStoreHitsService;
 import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,6 +50,9 @@ public class YunStoreController extends BaseController
 
     @Autowired
     private ISysLabelService syslabelService;
+
+    @Autowired
+    private IYunStoreHitsService yunStoreHitsService;
 
     /**
      * 查询门店列表
@@ -92,10 +96,13 @@ public class YunStoreController extends BaseController
         ajax.put("storeLabels", syslabelService.selectSysLabelList(sysLabel));
         if (StringUtils.isNotNull(id))
         {
+            //增加点击记录到redis中
+            yunStoreHitsService.savehitsRedis(id, SecurityUtils.getUserId());
             ajax.put(AjaxResult.DATA_TAG, yunStoreService.selectYunStoreById(id));
             ajax.put("storeTypeIds", sysStoreTypeService.selectStoreTypeListByStoreId(id));
             ajax.put("storeLabelIds", syslabelService.selectLabelListById(id));
         }
+
         return ajax;
     }
 

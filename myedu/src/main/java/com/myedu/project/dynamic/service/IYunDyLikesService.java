@@ -122,7 +122,7 @@ public interface IYunDyLikesService
     /**
      * 将Redis里的点赞数据存入数据库中
      */
-    void transLikedFromRedis2DB();
+    void    transLikedFromRedis2DB();
 
     /**
      * 将Redis中的点赞数量数据存入数据库

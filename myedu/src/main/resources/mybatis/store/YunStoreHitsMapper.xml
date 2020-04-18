@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreHitsMapper">
+    
+    <resultMap type="YunStoreHits" id="YunStoreHitsResult">
+        <result property="id"    column="id"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="hits"    column="hits"    />
+        <result property="hitTime"    column="hit_time"    />
+
+    </resultMap>
+
+    <sql id="selectYunStoreHitsVo">
+        select id, store_id, hits, hit_time from yun_store_hits
+    </sql>
+
+    <select id="selectYunStoreHitsList" parameterType="YunStoreHits" resultMap="YunStoreHitsResult">
+        <include refid="selectYunStoreHitsVo"/>
+        <where>  
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+            <if test="hitTime != null "> and hit_time = #{hitTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStoreHitsById" parameterType="Long" resultMap="YunStoreHitsResult">
+        <include refid="selectYunStoreHitsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStoreHits" parameterType="YunStoreHits" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_store_hits
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">store_id,</if>
+            <if test="hits != null ">hits,</if>
+            <if test="hitTime != null ">hit_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="hits != null ">#{hits},</if>
+            <if test="hitTime != null ">#{hitTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreHits" parameterType="YunStoreHits">
+        update yun_store_hits
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeId != null ">store_id = #{storeId},</if>
+            <if test="hits != null ">hits = #{hits},</if>
+            <if test="hitTime != null ">hit_time = #{hitTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStoreHitsById" parameterType="Long">
+        delete from yun_store_hits where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStoreHitsByIds" parameterType="String">
+        delete from yun_store_hits where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
