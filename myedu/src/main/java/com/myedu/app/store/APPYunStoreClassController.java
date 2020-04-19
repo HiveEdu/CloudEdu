@@ -14,8 +14,9 @@ import com.myedu.project.store.domain.YunStoreClass;
 import com.myedu.project.store.domain.vo.YunStoreClassVo;
 import com.myedu.project.store.service.IYunStoreClassService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,9 @@ public class APPYunStoreClassController extends BaseController
     /**
      * 查询分班管理列表
      */
-    @PreAuthorize("@ss.hasPermi('store:class:list')")
+    @ApiOperation("查询分班管理列表")
+    @ApiImplicitParam(name = "yunStoreClass", value = "查询分班管理列表",
+            dataType = "YunStoreClass")
     @GetMapping("/list")
     public TableDataInfo list(YunStoreClass yunStoreClass)
     {
@@ -57,7 +60,9 @@ public class APPYunStoreClassController extends BaseController
     /**
      * 导出分班管理列表
      */
-    @PreAuthorize("@ss.hasPermi('store:class:export')")
+    @ApiOperation("导出分班管理列表")
+    @ApiImplicitParam(name = "yunStoreClass", value = "导出分班管理列表",
+            dataType = "YunStoreClass")
     @Log(title = "分班管理", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(YunStoreClass yunStoreClass)
@@ -70,7 +75,9 @@ public class APPYunStoreClassController extends BaseController
     /**
      * 获取分班管理详细信息
      */
-    @PreAuthorize("@ss.hasPermi('store:class:query')")
+    @ApiOperation("获取分班管理详细信息")
+    @ApiImplicitParam(name = "id", value = "获取分班管理详细信息",
+            dataType = "Long")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -86,7 +93,9 @@ public class APPYunStoreClassController extends BaseController
     /**
      * 新增分班管理
      */
-    @PreAuthorize("@ss.hasPermi('store:class:add')")
+    @ApiOperation("新增分班管理")
+    @ApiImplicitParam(name = "yunStoreClass", value = "新增分班管理",
+            dataType = "YunStoreClass")
     @Log(title = "分班管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunStoreClass yunStoreClass)
@@ -105,7 +114,9 @@ public class APPYunStoreClassController extends BaseController
     /**
      * 修改分班管理
      */
-    @PreAuthorize("@ss.hasPermi('store:class:edit')")
+    @ApiOperation("修改分班管理")
+    @ApiImplicitParam(name = "yunStoreClass", value = "修改分班管理",
+            dataType = "YunStoreClass")
     @Log(title = "分班管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody YunStoreClass yunStoreClass)
@@ -124,7 +135,9 @@ public class APPYunStoreClassController extends BaseController
     /**
      * 删除分班管理
      */
-    @PreAuthorize("@ss.hasPermi('store:class:remove')")
+    @ApiOperation("删除分班管理")
+    @ApiImplicitParam(name = "ids", value = "删除分班管理",
+            dataType = "Long[]")
     @Log(title = "分班管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

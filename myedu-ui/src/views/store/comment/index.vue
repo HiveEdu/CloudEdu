@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="关联课程" prop="courseId">
+      <el-form-item label="关联课程" prop="courseName">
         <el-input
-          v-model="queryParams.courseId"
+          v-model="queryParams.courseName"
           placeholder="请输入关联课程"
           clearable
           size="small"
@@ -60,7 +60,7 @@
 
     <el-table v-loading="loading" :data="commentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="课程关联Id" align="center" prop="courseId" />
+      <el-table-column label="课程关联" align="center" prop="courseName" />
       <el-table-column label="评论内容" align="center" prop="content" />
       <el-table-column label="创建人Id" align="center" prop="createById" />
       <el-table-column label="评价类型" align="center" prop="type" :formatter="typeFormat" />
@@ -148,7 +148,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        courseId: undefined,
+        courseName: undefined,
         content: undefined,
         createById: undefined,
         type: undefined
@@ -189,7 +189,7 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        courseId: undefined,
+        courseName: undefined,
         content: undefined,
         createById: undefined,
         createBy: undefined,
