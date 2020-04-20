@@ -96,6 +96,7 @@ public class YunStoreController extends BaseController
         ajax.put("storeLabels", syslabelService.selectSysLabelList(sysLabel));
         if (StringUtils.isNotNull(id))
         {
+            YunStoreVo yunStoreVo=yunStoreService.selectYunStoreById(id);
             //增加点击记录到redis中
             yunStoreHitsService.savehitsRedis(id, SecurityUtils.getUserId());
             ajax.put(AjaxResult.DATA_TAG, yunStoreService.selectYunStoreById(id));

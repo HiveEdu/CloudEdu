@@ -1,7 +1,10 @@
 package com.myedu.project.store.domain.vo;
 
+import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStore;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,4 +20,8 @@ public class YunStoreVo  extends YunStore {
      * @Description :门店Vip等级
      */
     private Integer level;
+
+
+    private List<YunCourseVo> courseVoList;
+
 }

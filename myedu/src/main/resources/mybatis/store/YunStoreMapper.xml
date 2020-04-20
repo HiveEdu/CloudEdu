@@ -31,14 +31,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="beginExperienceTime"    column="begin_experience_time"    />
         <result property="endExperienceTime"    column="end_experience_time"    />
         <result property="vipLevelId"    column="vip_level_id"    />
+        <collection property="courseVoList" ofType="com.myedu.project.store.domain.vo.YunCourseVo">
+            <result property="id"    column="id"    />
+            <result property="courseName"    column="name"    />
+            <result property="classify"    column="classify"    />
+            <result property="reclassifyColl"    column="reclassify_coll"    />
+            <result property="isOneToOne"    column="is_one_to_one"    />
+            <result property="stuCount"    column="stu_count"    />
+            <result property="gradeId"    column="grade_id"    />
+            <result property="cStarttime"    column="c_starttime"    />
+            <result property="cEndtime"    column="c_endtime"    />
+            <result property="courseCost"    column="course_cost"    />
+            <result property="meals"    column="meals"    />
+            <result property="introduce"    column="introduce"    />
+            <result property="picture"    column="picture"    />
+            <result property="storeId"    column="store_id"    />
+            <result property="classTime"    column="class_time"    />
+            <result property="classHour"    column="class_hour"    />
+            <result property="classAll"    column="class_all"    />
+            <result property="totalCost"    column="total_cost"    />
+            <result property="week"    column="week"    />
+            <result property="content"    column="content"    />
+            <result property="status"    column="status"    />
+            <result property="createBy"    column="create_by"    />
+            <result property="createTime"    column="create_time"    />
+            <result property="updateBy"    column="update_by"    />
+            <result property="updateTime"    column="update_time"    />
+            <result property="delFlag"    column="del_flag"    />
+            <result property="createById"    column="create_by_id"    />
+        </collection>
+
     </resultMap>
 
     <sql id="selectYunStoreVo">
-select ys.id, ys.name, ys.reject_resion,ys.logo, ys.status,ys.manager, ys.manager_phone, ys.photos, ys.healths,ys.video, ys.license, ys.province, ys.city, ys.area, ys.address, ys.map_x, ys.map_y, ys.create_by, ys.create_time, ys.update_by, ys.update_time, ys.del_flag, ys.create_by_id,
- ys.begin_experience_time,ys.end_experience_time,ys.vip_level_id,
- sml.grade as level
- from yun_store ys
- left  join  sys_member_level sml on sml.id=ys.vip_level_id
+         select ys.id, ys.name, ys.reject_resion,ys.logo, ys.status,ys.manager, ys.manager_phone, ys.photos, ys.healths,ys.video, ys.license, ys.province, ys.city, ys.area, ys.address, ys.map_x, ys.map_y, ys.create_by, ys.create_time, ys.update_by, ys.update_time, ys.del_flag, ys.create_by_id,
+         ys.begin_experience_time,ys.end_experience_time,ys.vip_level_id,sml.grade as level,
+         yc.name as courseName,yc.classify,yc.reclassify_coll,yc.is_one_to_one,yc.stu_count,
+         yc.grade_id,yc.c_starttime,yc.c_endtime,yc.course_cost,yc.meals,yc.introduce,yc.picture,
+         yc.class_time,yc.class_hour,yc.class_all,yc.total_cost,yc.week,yc.content,yc.status
+         from yun_store ys
+         left  join  sys_member_level sml on sml.id=ys.vip_level_id
+         left  join  yun_course  yc on ys.id=yc.store_id
     </sql>
 
     <select id="selectYunStoreList" parameterType="YunStore" resultMap="YunStoreResult">

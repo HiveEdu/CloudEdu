@@ -18,6 +18,11 @@ public class YunCourseVo extends YunCourse {
      */
     private String storeName;
 
+    /*
+     * @Description :课程名称
+     */
+    private String courseName;
+
     public String getStoreName() {
         return storeName;
     }
