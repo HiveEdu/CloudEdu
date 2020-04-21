@@ -156,6 +156,15 @@
                   style="margin-top: 10px"
                 >删除</el-button>
               </el-dropdown-item>
+              <el-dropdown-item >
+                <el-button
+                  size="mini"
+                  type="success"
+                  icon="el-icon-edit"
+                  @click="changeClass(scope.row)"
+                  style="margin-top: 10px"
+                >班级</el-button>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -169,6 +178,9 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <!--分班页面-->
+    <classStuModal ref="classStuModal" :classStu="classStu" :currentData="currentData" @closeClassStuModal="closeClassStuModal"></classStuModal>
 
     <!-- 添加或修改门店学生管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
@@ -213,10 +225,13 @@
 <script>
 import { listStoreStudent, getStoreStudent, delStoreStudent, addStoreStudent, updateStoreStudent, exportStoreStudent,
   changeStatusOff,changeStatusOn,sigint,sigout} from "@/api/store/storeStudent";
-
+import classStuModal from './modal/classStuModal'
 export default {
+  components: { classStuModal},
   data() {
     return {
+      classStu:false,
+      currentData:null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -265,6 +280,14 @@ export default {
     });
   },
   methods: {
+    /** 分班 */
+    changeClass(row){
+      this.currentData=row;
+      this.classStu=true;
+    },
+    closeClassStuModal(){
+      this.classStu=false;
+    },
     /** 更改门店学生状态 */
     changeStatus(row,status) {
       const ids = row.id || this.ids;
