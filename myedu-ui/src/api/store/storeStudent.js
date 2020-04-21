@@ -16,7 +16,14 @@ export function getStoreStudent(id) {
     method: 'get'
   })
 }
-
+// 查询门店下的班级
+export function getStoreClassByStoreId(id) {
+  alert(id)
+  return request({
+    url: '/store/class/getStoreClassByStoreId/' + id,
+    method: 'get'
+  })
+}
 // 新增门店学生管理
 export function addStoreStudent(data) {
   return request({

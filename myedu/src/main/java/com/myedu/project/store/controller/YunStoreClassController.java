@@ -113,4 +113,20 @@ public class YunStoreClassController extends BaseController
     {
         return toAjax(yunStoreClassService.deleteYunStoreClassByIds(ids));
     }
+
+
+    /**
+     * 查询门店下的班级
+     */
+    @ApiOperation("查询门店下的班级")
+    @ApiImplicitParam(name = "yunStoreClass", value = "查询门店下的班级",
+            dataType = "YunStoreClass")
+    @GetMapping(value = {"/getStoreClassByStoreId/{id}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public AjaxResult getStoreClassByStoreId(@PathVariable("id") Long id)
+    {
+        YunStoreClassVo yunStoreClass=new YunStoreClassVo();
+        yunStoreClass.setStoreId(id);
+        List<YunStoreClassVo> list = yunStoreClassService.selectYunStoreClassList(yunStoreClass);
+        return AjaxResult.success(list);
+    }
 }
