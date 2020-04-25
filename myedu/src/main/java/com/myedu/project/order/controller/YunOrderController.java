@@ -18,6 +18,7 @@ import com.myedu.project.order.service.IYunOrderService;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStudentService;
 import com.myedu.project.store.domain.YunStoreStu;
+import com.myedu.project.store.domain.vo.YunStoreStuVo;
 import com.myedu.project.store.service.IYunStoreStuService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,13 +102,18 @@ public class YunOrderController extends BaseController
     {
         if(yunOrder.getStoreId()!=null){
             //报名给这个门店添加学生
-            YunStoreStu yunStoreStu=new YunStoreStu();
-            yunStoreStu.setStoreId(yunOrder.getStoreId());
-            yunStoreStu.setStuId(yunOrder.getStudentId());
-            yunStoreStu.setCreateById(SecurityUtils.getUserId());
-            yunStoreStu.setCreateBy(SecurityUtils.getUsername());
-            yunStoreStu.setStatus(StoreStuStatus.SIGNUP.getCode());
-            yunStoreStuService.insertYunStoreStu(yunStoreStu);
+            YunStoreStuVo yunStoreStu1=new YunStoreStuVo();
+            yunStoreStu1.setStoreId(yunOrder.getStoreId());
+            yunStoreStu1.setStuId(yunOrder.getStudentId());
+            if(yunStoreStuService.selectYunStoreStuList(yunStoreStu1).size()<1){
+                YunStoreStu yunStoreStu=new YunStoreStu();
+                yunStoreStu.setStoreId(yunOrder.getStoreId());
+                yunStoreStu.setStuId(yunOrder.getStudentId());
+                yunStoreStu.setCreateById(SecurityUtils.getUserId());
+                yunStoreStu.setCreateBy(SecurityUtils.getUsername());
+                yunStoreStu.setStatus(StoreStuStatus.SIGNUP.getCode());
+                yunStoreStuService.insertYunStoreStu(yunStoreStu);
+            }
         }
         return toAjax(yunOrderService.insertYunOrder(yunOrder));
     }
