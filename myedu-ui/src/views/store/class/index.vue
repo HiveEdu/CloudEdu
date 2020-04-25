@@ -118,6 +118,16 @@
     <!-- 添加或修改分班管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+            <el-form-item label="所属门店" prop="storeId">
+              <el-select v-model="form.storeId"  placeholder="请选择所属门店"  style="width: 100%;">
+                <el-option
+                  v-for="item in stores"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
         <el-form-item label="班级名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入班级名称" />
         </el-form-item>
@@ -166,6 +176,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+       //门店列表
+      stores:[],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -195,6 +207,9 @@ export default {
       rules: {
         name: [
           { required: true, message: "班级名称不能为空", trigger: "blur" }
+        ],
+         storeId:[
+          { required: true, message: "所属门店不能为空", trigger: "blur" }
         ]
       },
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
@@ -272,6 +287,7 @@ export default {
       const id = row.id || this.ids
       getClass(id).then(response => {
         this.form = response.data;
+        this.stores=response.stores;
         this.open = true;
         this.title = "修改分班管理";
       });

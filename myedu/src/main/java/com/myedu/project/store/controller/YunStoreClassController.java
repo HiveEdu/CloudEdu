@@ -1,6 +1,7 @@
 package com.myedu.project.store.controller;
 
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
@@ -9,7 +10,9 @@ import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.store.domain.YunStoreClass;
 import com.myedu.project.store.domain.vo.YunStoreClassVo;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.service.IYunStoreClassService;
+import com.myedu.project.store.service.IYunStoreService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public class YunStoreClassController extends BaseController
 {
     @Autowired
     private IYunStoreClassService yunStoreClassService;
+    @Autowired
+    private IYunStoreService yunStoreService;
 
     /**
      * 查询分班管理列表
@@ -69,7 +74,17 @@ public class YunStoreClassController extends BaseController
     @GetMapping(value = { "/", "/{id}" }, produces = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(yunStoreClassService.selectYunStoreClassById(id));
+        AjaxResult ajax = AjaxResult.success();
+        YunStoreVo yunStore=new YunStoreVo();
+        yunStore.setCreateById(SecurityUtils.getUserId());
+        List<YunStoreVo> stores=yunStoreService.selectYunStoreList(yunStore);
+        ajax.put("stores", stores);
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG,yunStoreClassService.selectYunStoreClassById(id));
+        }
+        return ajax;
+
     }
 
     /**

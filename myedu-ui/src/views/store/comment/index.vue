@@ -95,8 +95,8 @@
     <!-- 添加或修改课程评论对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="关联课程" prop="courseId">
-          <el-input v-model="form.courseId" placeholder="请输入课程关联Id" />
+        <el-form-item label="关联课程" prop="courseName">
+          <el-input v-model="form.courseName" placeholder="请输入课程关联Id" />
         </el-form-item>
         <el-form-item label="评论内容" prop="content">
           <el-input v-model="form.content" placeholder="请输入评论内容" />
