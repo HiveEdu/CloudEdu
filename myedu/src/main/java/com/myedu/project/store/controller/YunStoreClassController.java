@@ -72,7 +72,7 @@ public class YunStoreClassController extends BaseController
     @ApiImplicitParam(name = "id", value = "获取分班管理详细信息",
             dataType = "Long", required = true, paramType = "path")
     @GetMapping(value = { "/", "/{id}" }, produces = MediaType.APPLICATION_JSON_VALUE)
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
         AjaxResult ajax = AjaxResult.success();
         YunStoreVo yunStore=new YunStoreVo();

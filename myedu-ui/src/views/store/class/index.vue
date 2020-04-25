@@ -278,8 +278,11 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加分班管理";
+      getClass().then(response => {
+        this.stores=response.stores;
+        this.open = true;
+        this.title = "添加分班管理";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

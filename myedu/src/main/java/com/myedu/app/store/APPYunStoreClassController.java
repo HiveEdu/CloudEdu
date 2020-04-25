@@ -83,8 +83,8 @@ public class APPYunStoreClassController extends BaseController
     @ApiOperation("获取分班管理详细信息")
     @ApiImplicitParam(name = "id", value = "获取分班管理详细信息",
             dataType = "Long")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = { "/", "/{id}" })
+    public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
