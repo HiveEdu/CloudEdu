@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询公告列表
 export function listNotice(query) {
   return request({
@@ -12,7 +12,7 @@ export function listNotice(query) {
 // 查询公告详细
 export function getNotice(noticeId) {
   return request({
-    url: '/system/notice/' + noticeId,
+    url: '/system/notice/' + praseStrEmpty(noticeId),
     method: 'get'
   })
 }

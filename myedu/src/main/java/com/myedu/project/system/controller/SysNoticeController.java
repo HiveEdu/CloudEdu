@@ -1,6 +1,10 @@
 package com.myedu.project.system.controller;
 
 import java.util.List;
+
+import com.myedu.common.utils.StringUtils;
+import com.myedu.project.store.domain.vo.YunStoreVo;
+import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +36,8 @@ public class SysNoticeController extends BaseController
 {
     @Autowired
     private ISysNoticeService noticeService;
-
+    @Autowired
+    private IYunStoreService yunStoreService;
     /**
      * 获取通知公告列表
      */
@@ -49,10 +54,19 @@ public class SysNoticeController extends BaseController
      * 根据通知公告编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:notice:query')")
-    @GetMapping(value = "/{noticeId}")
-    public AjaxResult getInfo(@PathVariable Long noticeId)
+    @GetMapping(value = { "/", "/{noticeId}" })
+    public AjaxResult getInfo(@PathVariable(value = "noticeId", required = false) Long noticeId)
     {
-        return AjaxResult.success(noticeService.selectNoticeById(noticeId));
+        AjaxResult ajax = AjaxResult.success();
+        YunStoreVo yunStore=new YunStoreVo();
+        yunStore.setCreateById(SecurityUtils.getUserId());
+        List<YunStoreVo> stores=yunStoreService.selectYunStoreList(yunStore);
+        ajax.put("stores", stores);
+        if (StringUtils.isNotNull(noticeId))
+        {
+            ajax.put(AjaxResult.DATA_TAG,noticeService.selectNoticeById(noticeId));
+        }
+        return ajax;
     }
 
     /**

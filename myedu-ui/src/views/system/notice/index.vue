@@ -70,6 +70,7 @@
     <el-table v-loading="loading" :data="noticeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="序号" align="center" prop="noticeId" width="100" />
+      <el-table-column label="门店" align="center" prop="storeName" />
       <el-table-column
         label="公告标题"
         align="center"
@@ -129,6 +130,21 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
+              <el-form-item label="所属门店" prop="storeId">
+                <el-select v-model="form.storeId"  placeholder="请选择所属门店"  style="width: 100%;">
+                  <el-option
+                    v-for="item in stores"
+                    v-if="item.status==3"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="公告标题" prop="noticeTitle">
               <el-input v-model="form.noticeTitle" placeholder="请输入公告标题" />
             </el-form-item>
@@ -182,6 +198,8 @@ export default {
   },
   data() {
     return {
+      //门店列表
+      stores:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -214,6 +232,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        storeId: [
+          { required: true, message: "请选择门店", trigger: "blur" }
+        ],
         noticeTitle: [
           { required: true, message: "公告标题不能为空", trigger: "blur" }
         ],
@@ -285,8 +306,11 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加公告";
+      getNotice().then(response => {
+        this.stores = response.stores;
+        this.open = true;
+        this.title = "添加公告";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -294,6 +318,7 @@ export default {
       const noticeId = row.noticeId || this.ids
       getNotice(noticeId).then(response => {
         this.form = response.data;
+        this.stores=response.stores;
         this.open = true;
         this.title = "修改公告";
       });

@@ -30,6 +30,12 @@ public class SysNotice extends BaseEntity
     /** 公告状态（0正常 1关闭） */
     private String status;
 
+    /** 门店Id */
+    private Long storeId;
+
+    /** 门店Id */
+    private String storeName;
+
     public Long getNoticeId()
     {
         return noticeId;
@@ -82,6 +88,22 @@ public class SysNotice extends BaseEntity
         return status;
     }
 
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -95,6 +117,7 @@ public class SysNotice extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("storeId", getStoreId())
             .toString();
     }
 }
