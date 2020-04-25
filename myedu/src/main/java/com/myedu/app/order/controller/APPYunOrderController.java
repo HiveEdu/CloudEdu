@@ -207,7 +207,7 @@ public class APPYunOrderController extends BaseController
     }
 
     @PreAuthorize("@ss.hasPermi('order:order:toPayAsWeb')")
-    @Log(title = "支付宝PC网页支付")
+    @Log(title = "支付宝手机支付")
     @PostMapping(value = "/toPayAsWeb")
     public AjaxResult toPayAsWeb(@RequestBody YunOrderVo yunOrder) throws Exception{
         AjaxResult ajax = AjaxResult.success();
