@@ -83,6 +83,7 @@
           <img  :src="viewImage+'/'+scope.row.classLogo" :onerror="defaultImg" alt="点击打开" class="el-avatar" style="border-radius:10px">
         </template>
       </el-table-column>
+      <el-table-column label="所属门店" align="center" prop="storeName" />
       <el-table-column label="班级名称" align="center" prop="name" />
       <el-table-column label="主教老师" align="center" prop="bishopTeacher" />
       <el-table-column label="助教老师" align="center" prop="assistantTeacher" />
