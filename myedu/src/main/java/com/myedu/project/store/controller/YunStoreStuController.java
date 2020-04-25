@@ -5,10 +5,12 @@ import java.util.List;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.store.domain.YunStore;
+import com.myedu.project.store.domain.YunStoreClassStu;
 import com.myedu.project.store.domain.YunStoreSignin;
 import com.myedu.project.store.domain.vo.YunStoreStuVo;
 import com.myedu.project.store.enums.StoreStatus;
 import com.myedu.project.store.enums.StudengStatus;
+import com.myedu.project.store.service.IYunStoreClassStuService;
 import com.myedu.project.store.service.IYunStoreSigninService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,8 @@ public class YunStoreStuController extends BaseController
     private IYunStoreStuService yunStoreStuService;
     @Autowired
     private IYunStoreSigninService yunStoreSigninService;
+    @Autowired
+    private IYunStoreClassStuService yunStoreClassStuService;
     /**
      * 查询门店学生管理列表
      */
@@ -215,4 +219,29 @@ public class YunStoreStuController extends BaseController
         }
         return toAjax(rows);
     }
+
+    /**
+     * 设置学生所属班级
+     */
+    @PreAuthorize("@ss.hasPermi('store:storeStudent:setClass')")
+    @Log(title = "设置学生所属班级", businessType = BusinessType.UPDATE)
+    @PutMapping("/setClass")
+    public AjaxResult setClass(@RequestBody YunStoreClassStu yunStoreClassStu)
+    {
+        YunStoreClassStu yunStoreClassStu1=new YunStoreClassStu();
+        yunStoreClassStu1.setStuId(yunStoreClassStu.getStuId());
+        yunStoreClassStu1.setStoreId(yunStoreClassStu.getStoreId());
+        if(yunStoreClassStuService.selectYunStoreClassStuList(yunStoreClassStu1).size()>0){
+            //如果门店下的班级下存在学生则修改
+            yunStoreClassStuService.deleteYunStoreClassStu(yunStoreClassStu.getStoreId(),
+                    yunStoreClassStu.getStuId());
+            return toAjax(yunStoreClassStuService.insertYunStoreClassStu(yunStoreClassStu));
+        }else{
+            //如果门店下的班级下不存在学生则添加
+            return toAjax(yunStoreClassStuService.insertYunStoreClassStu(yunStoreClassStu));
+        }
+
+    }
+
+
 }

@@ -78,7 +78,7 @@ import {checkStore } from "@/api/store/store";
                   }
                 });
               } 
-      });
+             });
     
           },
         }

@@ -13,7 +13,7 @@ public class StoreHitsTask {
     @Autowired
     IYunStoreHitsService yunStoreHitsService;
     //0 0 12 * * ?
-    @Scheduled(cron="*/5 * * * * ?") //每天12点执行
+    @Scheduled(cron="0 0 12 * * ?") //每天12点执行
     protected void executedyInternal(){
         System.out.println("将动态数据存入到数据库中"+new Date());
         //将 Redis 里的门店点击数据同步到数据库里

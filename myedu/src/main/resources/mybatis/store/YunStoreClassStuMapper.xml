@@ -5,17 +5,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.myedu.project.store.mapper.YunStoreClassStuMapper">
     
     <resultMap type="YunStoreClassStu" id="YunStoreClassStuResult">
+        <result property="storeId"    column="store_id"    />
+        <result property="stuId"    column="stu_id"    />
         <result property="classId"    column="class_id"    />
         <result property="stuId"    column="stu_id"    />
     </resultMap>
 
     <sql id="selectYunStoreClassStuVo">
-        select class_id, stu_id from yun_store_class_stu
+        select store_id,class_id, stu_id from yun_store_class_stu
     </sql>
 
     <select id="selectYunStoreClassStuList" parameterType="YunStoreClassStu" resultMap="YunStoreClassStuResult">
         <include refid="selectYunStoreClassStuVo"/>
-        <where>  
+        <where>
+            <if test="storeId != null "> and store_id = #{storeId}</if>
             <if test="classId != null "> and class_id = #{classId}</if>
             <if test="stuId != null "> and stu_id = #{stuId}</if>
         </where>
@@ -29,32 +32,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertYunStoreClassStu" parameterType="YunStoreClassStu">
         insert into yun_store_class_stu
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">store_id,</if>
             <if test="classId != null ">class_id,</if>
             <if test="stuId != null ">stu_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeId != null ">#{storeId},</if>
             <if test="classId != null ">#{classId},</if>
             <if test="stuId != null ">#{stuId},</if>
          </trim>
     </insert>
 
-    <update id="updateYunStoreClassStu" parameterType="YunStoreClassStu">
-        update yun_store_class_stu
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="stuId != null ">stu_id = #{stuId},</if>
-        </trim>
-        where class_id = #{classId}
-    </update>
-
-    <delete id="deleteYunStoreClassStuById" parameterType="Long">
-        delete from yun_store_class_stu where class_id = #{classId}
+    <delete id="deleteYunStoreClassStu" parameterType="Long">
+        delete from yun_store_class_stu where  store_id = #{storeId}  and stu_id = #{stuId}
     </delete>
 
-    <delete id="deleteYunStoreClassStuByIds" parameterType="String">
-        delete from yun_store_class_stu where class_id in 
-        <foreach item="classId" collection="array" open="(" separator="," close=")">
-            #{classId}
-        </foreach>
-    </delete>
-    
 </mapper>

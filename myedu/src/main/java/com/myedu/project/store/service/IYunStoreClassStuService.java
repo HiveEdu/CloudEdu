@@ -35,27 +35,12 @@ public interface IYunStoreClassStuService
      */
     public int insertYunStoreClassStu(YunStoreClassStu yunStoreClassStu);
 
-    /**
-     * 修改班级学生管理
-     * 
-     * @param yunStoreClassStu 班级学生管理
-     * @return 结果
-     */
-    public int updateYunStoreClassStu(YunStoreClassStu yunStoreClassStu);
 
-    /**
-     * 批量删除班级学生管理
-     * 
-     * @param classIds 需要删除的班级学生管理ID
-     * @return 结果
-     */
-    public int deleteYunStoreClassStuByIds(Long[] classIds);
 
     /**
      * 删除班级学生管理信息
-     * 
-     * @param classId 班级学生管理ID
+     *
      * @return 结果
      */
-    public int deleteYunStoreClassStuById(Long classId);
+    public int deleteYunStoreClassStu(Long storeId,Long stuId);
 }

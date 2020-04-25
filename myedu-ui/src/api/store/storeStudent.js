@@ -18,7 +18,6 @@ export function getStoreStudent(id) {
 }
 // 查询门店下的班级
 export function getStoreClassByStoreId(id) {
-  alert(id)
   return request({
     url: '/store/class/getStoreClassByStoreId/' + id,
     method: 'get'
@@ -89,4 +88,11 @@ export function sigout(id) {
     method: 'get',
   })
 }
-
+//设置学生所属班级
+export function setClassStu(data){
+  return request({
+    url: '/store/storeStudent/setClass',
+    method: 'put',
+    data: data
+  })
+}

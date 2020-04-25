@@ -22,10 +22,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStoreStuVo">
-        select yss.*,ys.name as studentName, ys2.name as storeName
+         select yss.*,ys.name as studentName, ys2.name as storeName,
+         yscs.class_id as classId,ysc.name as className
          from yun_store_stu yss
          left join  yun_student ys on  ys.id=yss.stu_id
          left join  yun_store ys2 on ys2.id=yss.store_id
+         left join  yun_store_class_stu yscs on yscs.stu_id=ys.id
+         left join  yun_store_class ysc on ysc.id=yscs.class_id
     </sql>
 
     <select id="selectYunStoreStuList" parameterType="YunStoreStuVo" resultMap="YunStoreStuResult">

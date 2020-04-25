@@ -88,6 +88,7 @@
     <el-table v-loading="loading" :data="storeStudentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="门店" align="center" prop="storeName" />
+      <el-table-column label="班级" align="center" prop="className" />
       <el-table-column label="学生" align="center" prop="studentName" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="签到次数" align="center" prop="sigin" />
@@ -287,6 +288,7 @@ export default {
     },
     closeClassStuModal(){
       this.classStu=false;
+      this.getList();
     },
     /** 更改门店学生状态 */
     changeStatus(row,status) {

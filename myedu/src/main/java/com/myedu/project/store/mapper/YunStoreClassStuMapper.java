@@ -1,6 +1,8 @@
 package com.myedu.project.store.mapper;
 
 import com.myedu.project.store.domain.YunStoreClassStu;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -35,21 +37,14 @@ public interface YunStoreClassStuMapper
      */
     public int insertYunStoreClassStu(YunStoreClassStu yunStoreClassStu);
 
-    /**
-     * 修改班级学生管理
-     * 
-     * @param yunStoreClassStu 班级学生管理
-     * @return 结果
-     */
-    public int updateYunStoreClassStu(YunStoreClassStu yunStoreClassStu);
 
     /**
      * 删除班级学生管理
-     * 
-     * @param classId 班级学生管理ID
+     *
      * @return 结果
      */
-    public int deleteYunStoreClassStuById(Long classId);
+    public int deleteYunStoreClassStu(@Param("storeId") Long storeId,
+                                      @Param("stuId") Long stuId);
 
     /**
      * 批量删除班级学生管理

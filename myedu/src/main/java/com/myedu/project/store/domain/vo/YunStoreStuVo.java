@@ -22,6 +22,16 @@ public class YunStoreStuVo extends YunStoreStu {
      */
     private String studentName;
 
+    /*
+     * @Description :班级id
+     */
+    private String classId;
+
+    /*
+     * @Description :班级名称
+     */
+    private String className;
+
     public String getStoreName() {
         return storeName;
     }
@@ -36,5 +46,21 @@ public class YunStoreStuVo extends YunStoreStu {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }

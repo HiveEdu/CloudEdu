@@ -14,6 +14,10 @@ public class YunStoreClassStu extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    /** 门店Id */
+    @Excel(name = "门店Id")
+    private Long storeId;
+
     /** 班级id */
     @Excel(name = "班级id")
     private Long classId;
@@ -41,11 +45,20 @@ public class YunStoreClassStu extends BaseEntity
         return stuId;
     }
 
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("classId", getClassId())
             .append("stuId", getStuId())
+            .append("storeId", getStoreId())
             .toString();
     }
 }

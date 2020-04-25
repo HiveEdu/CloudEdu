@@ -55,39 +55,15 @@ public class YunStoreClassStuServiceImpl implements IYunStoreClassStuService
         return yunStoreClassStuMapper.insertYunStoreClassStu(yunStoreClassStu);
     }
 
-    /**
-     * 修改班级学生管理
-     * 
-     * @param yunStoreClassStu 班级学生管理
-     * @return 结果
-     */
-    @Override
-    public int updateYunStoreClassStu(YunStoreClassStu yunStoreClassStu)
-    {
-        return yunStoreClassStuMapper.updateYunStoreClassStu(yunStoreClassStu);
-    }
-
-    /**
-     * 批量删除班级学生管理
-     * 
-     * @param classIds 需要删除的班级学生管理ID
-     * @return 结果
-     */
-    @Override
-    public int deleteYunStoreClassStuByIds(Long[] classIds)
-    {
-        return yunStoreClassStuMapper.deleteYunStoreClassStuByIds(classIds);
-    }
 
     /**
      * 删除班级学生管理信息
-     * 
-     * @param classId 班级学生管理ID
+     *
      * @return 结果
      */
     @Override
-    public int deleteYunStoreClassStuById(Long classId)
+    public int deleteYunStoreClassStu(Long storeId,Long stuId)
     {
-        return yunStoreClassStuMapper.deleteYunStoreClassStuById(classId);
+        return yunStoreClassStuMapper.deleteYunStoreClassStu(storeId,stuId);
     }
 }
