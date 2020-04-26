@@ -1,102 +1,126 @@
 package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
+import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import com.myedu.framework.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 课程对象 yun_course
  * 
  * @author 梁少鹏
  * @date 2020-01-21
  */
+@ApiModel("门店课程对象实体")
 public class YunCourse extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("课程ID")
     private Long id;
 
     /** 课程名称 */
+    @ApiModelProperty("课程名称")
     @Excel(name = "课程名称")
     private String name;
 
     /** 课程类型（0托管班1辅导班2兴趣班） */
+    @ApiModelProperty("课程类型（0托管班1辅导班2兴趣班）")
     @Excel(name = "课程类型", readConverterExp = "0=托管班1辅导班2兴趣班")
     private String classify;
 
     /** 托管类型（0午托1晚托2全托3早教4临托） */
+    @ApiModelProperty("托管类型（0午托1晚托2全托3早教4临托）")
     @Excel(name = "托管类型", readConverterExp = "0=午托1晚托2全托3早教4临托")
     private String reclassifyColl;
 
     /** 是否一对一（0是1否） */
+    @ApiModelProperty(" 是否一对一（0是1否）")
     @Excel(name = "是否一对一", readConverterExp = "0=是1否")
     private String isOneToOne;
 
     /** 招生人数 */
+    @ApiModelProperty("招生人数")
     @Excel(name = "招生人数")
     private Long stuCount;
 
     /** 招生对象 */
+    @ApiModelProperty("招生对象")
     @Excel(name = "招生对象")
     private String gradeId;
 
     /** 开始时间 */
+    @ApiModelProperty("开始时间")
     @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date cStarttime;
 
     /** 结束时间 */
+    @ApiModelProperty("结束时间")
     @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date cEndtime;
 
     /** 课程费用 */
+    @ApiModelProperty("课程费用")
     @Excel(name = "课程费用")
     private Double courseCost;
 
     /** 餐费 */
+    @ApiModelProperty("餐费")
     @Excel(name = "餐费")
     private BigDecimal meals;
 
     /** 课程介绍 */
+    @ApiModelProperty("课程介绍")
     @Excel(name = "课程介绍")
     private String introduce;
 
     /** 课程封面 */
+    @ApiModelProperty("课程封面")
     @Excel(name = "课程封面")
     private String picture;
 
     /** 门店Id */
+    @ApiModelProperty("门店Id")
     @Excel(name = "门店Id")
     private Long storeId;
 
     /** 上课时间 */
+    @ApiModelProperty("上课时间")
     @Excel(name = "上课时间", width = 30)
     private String classTime;
 
     /** 上课时长 */
+    @ApiModelProperty("上课时长")
     @Excel(name = "上课时长")
     private Double classHour;
 
     /** 总课时 */
+    @ApiModelProperty("总课时")
     @Excel(name = "总课时")
     private Long classAll;
 
     /** 总费用 */
+    @ApiModelProperty("总费用")
     @Excel(name = "总费用")
     private BigDecimal totalCost;
 
     /** 上课周期 */
+    @ApiModelProperty("上课周期")
     @Excel(name = "上课周期")
     private String week;
 
     /** 课程内容 */
+    @ApiModelProperty("课程内容")
     @Excel(name = "课程内容")
     private String content;
 
     /** 课程状态 */
+    @ApiModelProperty("课程状态")
     @Excel(name = "课程状态")
     private String status;
 
@@ -104,6 +128,7 @@ public class YunCourse extends BaseEntity
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     @Excel(name = "创建人Id")
     private Long createById;
 

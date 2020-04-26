@@ -2,8 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -14,89 +14,113 @@ import java.util.Date;
  * @author 梁少鹏
  * @date 2020-01-04
  */
+@ApiModel("门店对象实体")
 public class YunStore extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("门店ID")
     private Long id;
 
     /** 门店名称 */
+    @ApiModelProperty("门店名称")
     @Excel(name = "门店名称")
     private String name;
 
     /** 门店logo */
+    @ApiModelProperty("门店logo")
     private String logo;
 
     /** 门店负责人 */
+    @ApiModelProperty("门店负责人")
     @Excel(name = "门店负责人")
     private String manager;
 
     /** 负责人电话 */
+    @ApiModelProperty("负责人电话")
     @Excel(name = "负责人电话")
     private String managerPhone;
 
     /** 门店照片墙 */
+    @ApiModelProperty("门店照片墙")
     private String photos;
 
     /** 健康证 */
+    @ApiModelProperty("健康证")
     private String healths;
 
     /** 门店宣传视频地址 */
+    @ApiModelProperty("门店宣传视频地址")
     private String video;
 
     /** 门店营业执照 */
+    @ApiModelProperty("门店营业执照")
     private String license;
 
     /** 省 */
     @Excel(name = "省")
+    @ApiModelProperty("省")
     private String province;
 
     /** 市 */
+    @ApiModelProperty("市")
     @Excel(name = "市")
     private String city;
 
     /** 区 */
+    @ApiModelProperty("区")
     @Excel(name = "区")
     private String area;
 
     /** 门店详细地址 */
+    @ApiModelProperty("门店详细地址")
     @Excel(name = "门店详细地址")
     private String address;
 
     /** 门店地图坐标经纬度详情x */
+    @ApiModelProperty("门店地图坐标经纬度详情x")
     private Double mapX;
 
     /** 门店地图坐标经纬度详情y */
+    @ApiModelProperty("门店地图坐标经纬度详情y")
     private Double mapY;
 
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     private Long createById;
 
     /** 门店类型组 */
+    @ApiModelProperty("门店类型组")
     private Long[] storeTypeIds;
 
     /** 标签类型组 */
+    @ApiModelProperty("门店标签类型组")
     private Long[] storeLabelIds;
 
     /** 状态（0待审核1审核通过2审核驳回） */
+    @ApiModelProperty("门店状态（0待审核1审核通过2审核驳回）")
     @Excel(name = "审核状态", readConverterExp = "0=可用1不可用")
     private String status;
 
     /** 驳回原因 */
+    @ApiModelProperty("驳回原因")
     @Excel(name = "驳回原因")
     private String rejectResion;
 
     /** 体验开始时间 */
+    @ApiModelProperty("vip体验开始时间")
     private Date beginExperienceTime;
 
     /** 体验结束时间 */
+    @ApiModelProperty("vip体验结束时间")
     private Date endExperienceTime;
 
     /** 门店等级关联id */
+    @ApiModelProperty("门店等级关联id")
     private Long vipLevelId;
 
 

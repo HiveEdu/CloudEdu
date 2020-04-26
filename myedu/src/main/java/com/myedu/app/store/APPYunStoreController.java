@@ -20,13 +20,13 @@ import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.enums.StoreStatus;
 import com.myedu.project.store.enums.StoryType;
 import com.myedu.project.store.enums.labelType;
+import com.myedu.project.store.service.IYunStoreHitsService;
 import com.myedu.project.store.service.IYunStoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,6 +53,8 @@ public class APPYunStoreController extends BaseController
 
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private IYunStoreHitsService yunStoreHitsService;
     /**
      * 查询门店列表
      */
@@ -98,21 +100,25 @@ public class APPYunStoreController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if(loginUser!=null) {
-        AjaxResult ajax = AjaxResult.success();
-        SysStoreType sysStoreType=new SysStoreType();
-        sysStoreType.setType(StoryType.STORE.getCode());
-        ajax.put("storeTypes", sysStoreTypeService.selectSysStoreTypeList(sysStoreType));
+            AjaxResult ajax = AjaxResult.success();
+            SysStoreType sysStoreType=new SysStoreType();
+            sysStoreType.setType(StoryType.STORE.getCode());
+            ajax.put("storeTypes", sysStoreTypeService.selectSysStoreTypeList(sysStoreType));
 
-        SysLabel sysLabel =new SysLabel();
-        sysLabel.setType(labelType.STORE.getCode());
-        ajax.put("storeLabels", syslabelService.selectSysLabelList(sysLabel));
-        if (StringUtils.isNotNull(id))
-        {
-            ajax.put(AjaxResult.DATA_TAG, yunStoreService.selectYunStoreById(id));
-            ajax.put("storeTypeIds", sysStoreTypeService.selectStoreTypeListByStoreId(id));
-            ajax.put("storeLabelIds", syslabelService.selectLabelListById(id));
-        }
-        return ajax;
+            SysLabel sysLabel =new SysLabel();
+            sysLabel.setType(labelType.STORE.getCode());
+            ajax.put("storeLabels", syslabelService.selectSysLabelList(sysLabel));
+            if (StringUtils.isNotNull(id))
+            {
+                YunStoreVo yunStoreVo=yunStoreService.selectYunStoreById(id);
+                //增加点击记录到redis中
+                yunStoreHitsService.savehitsRedis(id, SecurityUtils.getUserId());
+                ajax.put(AjaxResult.DATA_TAG, yunStoreService.selectYunStoreById(id));
+                ajax.put("storeTypeIds", sysStoreTypeService.selectStoreTypeListByStoreId(id));
+                ajax.put("storeLabelIds", syslabelService.selectLabelListById(id));
+            }
+
+            return ajax;
         }else{
             return AjaxResult.error("token无效");
         }
