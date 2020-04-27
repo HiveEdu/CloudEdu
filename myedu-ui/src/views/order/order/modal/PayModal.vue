@@ -75,7 +75,8 @@
           }
           orderPay(url, this.form).then(res => {
             this.loading = false
-            this.url = res.url
+            this.url = res.url;
+            this.$emit('closePayModal', false);
           }).catch(err => {
             this.loading = false
           })

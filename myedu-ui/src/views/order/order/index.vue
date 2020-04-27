@@ -366,6 +366,7 @@ export default {
     //关闭支付页面
     closePayModal(){
       this.pay=false;
+      this.getList();
     },
       //打开订单详情页面
     openDatail(row){
