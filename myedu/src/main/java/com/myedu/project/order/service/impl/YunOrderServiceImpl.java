@@ -160,7 +160,12 @@ public class YunOrderServiceImpl implements IYunOrderService
                 yunAlipayConfig.getSignType());
         // 填充订单参数
         String order=yunOrder.getNum();//订单号
-        PayUtils.checkAlipay(alipayClient,order);
+        YunOrder yunOrderStatus= yunOrderMapper.selectYunOrderByNum(order);
+        Integer status=PayUtils.checkAlipay(alipayClient,order);
+        if(status!=null){
+            yunOrderStatus.setStatus(String.valueOf(status));
+            yunOrderMapper.updateYunOrder(yunOrderStatus);
+        }
         // 创建API对应的request(电脑网页版)
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         //订单完成后返回的页面和异步通知地址
@@ -194,14 +199,18 @@ public class YunOrderServiceImpl implements IYunOrderService
             yunAlipayConfig=yunAlipayConfigs.get(0);
         }
         AlipayClient alipayClient = new DefaultAlipayClient(yunAlipayConfig.getGatewayUrl(), yunAlipayConfig.getAppId(), yunAlipayConfig.getPrivateKey(), yunAlipayConfig.getFormat(), yunAlipayConfig.getCharset(), yunAlipayConfig.getPublicKey(), yunAlipayConfig.getSignType());
-
+        String order=yunOrder.getNum();//订单号
         double money = Double.parseDouble(String.valueOf(yunOrder.getTotalMoney()));
-
+        YunOrder yunOrderStatus= yunOrderMapper.selectYunOrderByNum(order);
+        Integer status=PayUtils.checkAlipay(alipayClient,order);
+        if(status!=null){
+            yunOrderStatus.setStatus(String.valueOf(status));
+            yunOrderMapper.updateYunOrder(yunOrderStatus);
+        }
         // 创建API对应的request(手机网页版)
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         request.setReturnUrl(yunAlipayConfig.getReturnUrl());
         request.setNotifyUrl(yunAlipayConfig.getNotifyUrl());
-        String order=yunOrder.getNum();//订单号
         String subject=yunOrder.getCourseName();//商品名称
         String body=yunOrder.getRemark();//商品描述
         request.setBizContent("{" +
@@ -258,7 +267,7 @@ public class YunOrderServiceImpl implements IYunOrderService
             String total_amount = new String(request.getParameter("total_amount"));
             // 修改订单状态为支付成功，已付款; 同时新增支付流水
             yunOrder.setPayWay("1");//支付方式支付宝支付
-            yunOrder.setStatus("2");//已支付状态
+            yunOrder.setStatus(OrderStatus.HAVETOPAY.getCode());//已支付状态
             yunOrder.setTotalMoney(new BigDecimal(total_amount));
             yunOrderMapper.updateYunOrder(yunOrder);
             System.out.println("支付, 验签成功...");

@@ -2,9 +2,11 @@ package com.myedu.project.order.enums;
 
 public enum OrderStatus {
 
-    TOBEPAID("1", "待支付"), HAVETOPAY("2", "已支付"),
-    HAVEAREFUND("3", "已退款");
-
+    TOBEPAID("1", "交易创建待支付"),
+    HAVEAREFUND("2", "退款成功"),
+    TIMEEND("3", "交易超时"),
+    HAVETOPAY("4", "交易成功"),
+    END("5", "交易结束并不可退款");
     private final String code;
     private final String info;
 
