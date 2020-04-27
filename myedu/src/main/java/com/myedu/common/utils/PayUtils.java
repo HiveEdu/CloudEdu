@@ -1,0 +1,65 @@
+package com.myedu.common.utils;
+
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.response.AlipayTradeQueryResponse;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: ${梁少鹏}
+ * Date: 2020/4/27
+ * Time: 21:05
+ * Description:
+ */
+public class PayUtils {
+
+    /*
+     * @Description :查询支付状态公用接口
+     * @Author : 梁少鹏
+     * @Date : 2020/4/27 21:11
+     */
+    public static Byte checkAlipay(AlipayClient alipayClient, String outTradeNo) {
+        try {
+            //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型）
+            AlipayTradeQueryRequest alipayTradeQueryRequest = new AlipayTradeQueryRequest();
+            alipayTradeQueryRequest.setBizContent("{" +
+                    "\"out_trade_no\":\""+outTradeNo+"\"" +
+                    "}");
+            AlipayTradeQueryResponse alipayTradeQueryResponse = alipayClient.execute(alipayTradeQueryRequest);
+            if(alipayTradeQueryResponse.isSuccess()){
+
+                Byte status=0;
+                switch (alipayTradeQueryResponse.getTradeStatus()) // 判断交易结果
+                {
+                    case "TRADE_FINISHED": // 交易结束并不可退款
+                        System.out.println("3");
+                        status=3;
+                        break;
+                    case "TRADE_SUCCESS": // 交易支付成功
+                        System.out.println("2");
+                        status=2;
+                        break;
+                    case "TRADE_CLOSED": // 未付款交易超时关闭或支付完成后全额退款
+                        System.out.println("1");
+                        status=1;
+                        break;
+                    case "WAIT_BUYER_PAY": // 交易创建并等待买家付款
+                        System.out.println("0");
+                        status=0;
+                        break;
+                    default:
+                        break;
+                }
+
+                return status;
+            } else {
+                System.out.println("调用失败");
+            }
+        } catch (AlipayApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 0;
+    }
+}

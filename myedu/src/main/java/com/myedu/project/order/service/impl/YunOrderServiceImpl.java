@@ -17,8 +17,10 @@ import com.alipay.api.request.*;
 import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.alipay.api.response.AlipayOfflineMarketShopCreateResponse;
 import com.alipay.api.response.AlipayTradeOrderSettleResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.OrderCodeFactory;
+import com.myedu.common.utils.PayUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.project.account.domain.YunAlipayConfig;
 import com.myedu.project.account.mapper.YunAlipayConfigMapper;
@@ -156,13 +158,15 @@ public class YunOrderServiceImpl implements IYunOrderService
                 yunAlipayConfig.getCharset(),
                 yunAlipayConfig.getPublicKey(),
                 yunAlipayConfig.getSignType());
+        // 填充订单参数
+        String order=yunOrder.getNum();//订单号
+        PayUtils.checkAlipay(alipayClient,order);
         // 创建API对应的request(电脑网页版)
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         //订单完成后返回的页面和异步通知地址
         request.setReturnUrl(yunAlipayConfig.getReturnUrl());
         request.setNotifyUrl(yunAlipayConfig.getNotifyUrl());
-        // 填充订单参数
-        String order=yunOrder.getNum();//订单号
+
         String totalAmount=String.valueOf(yunOrder.getTotalMoney());//支付金额
         String subject=yunOrder.getCourseName();//商品名称
         String body=yunOrder.getRemark();//商品描述
@@ -177,8 +181,6 @@ public class YunOrderServiceImpl implements IYunOrderService
                 "    \"sys_service_provider_id\":\""+yunAlipayConfig.getSysServiceProviderId()+"\"" +
                 "    }"+
                 "  }");//填充业务参数
-        // 调用SDK生成表单, 通过GET方式，口可以获取url
-        System.out.println(alipayClient.pageExecute(request, "GET").getBody());
         return alipayClient.pageExecute(request, "GET").getBody();
     }
 
