@@ -57,29 +57,37 @@
         >导出</el-button>
       </el-col>
     </el-row>
-
     <el-table v-loading="loading" :data="commentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="课程关联" align="center" prop="courseName" />
       <el-table-column label="评论内容" align="center" prop="content" />
-      <el-table-column label="创建人Id" align="center" prop="createById" />
+      <el-table-column label="评价人" align="center" prop="createBy" />
       <el-table-column label="评价类型" align="center" prop="type" :formatter="typeFormat" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['store:comment:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['store:comment:remove']"
-          >删除</el-button>
+          <el-button  size="mini" type="primary" @click="openDatail(scope.row)">详情</el-button>
+          <el-dropdown size="mini" split-button type="primary" trigger="click">
+            操作
+            <el-dropdown-menu slot="dropdown">
+               <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['store:comment:edit']"
+                 style="margin-top: 10px"
+              >修改</el-button>
+              <br>
+            <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['store:comment:remove']"
+                 style="margin-top: 10px"
+              >删除</el-button>
+            </el-dropdown-menu>
+          </el-dropdown>  
         </template>
       </el-table-column>
     </el-table>
@@ -91,7 +99,9 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
+    
+    <!--课程评价详情-->
+    <DetailModal ref="DetailModal" :commentDetail="commentDetail" :currentData="currentData" @closeDetail="closeDetail"></DetailModal>
     <!-- 添加或修改课程评论对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -122,10 +132,14 @@
 
 <script>
 import { listComment, getComment, delComment, addComment, updateComment, exportComment } from "@/api/store/comment";
-
+import DetailModal from './modal/DetailModal'
+import { getToken } from '@/utils/auth'
 export default {
+   components: { DetailModal},
   data() {
     return {
+      commentDetail:false,
+      currentData:null,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -167,6 +181,15 @@ export default {
     });
   },
   methods: {
+     //打开课程评价详情页面
+    openDatail(row){
+      this.currentData=row;
+      this.commentDetail=true;
+    },
+    //关闭课程评价详情页面
+    closeDetail(){
+      this.commentDetail=false;
+    },
     /** 查询课程评论列表 */
     getList() {
       this.loading = true;
@@ -291,3 +314,12 @@ export default {
   }
 };
 </script>
+<style>
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+</style>
