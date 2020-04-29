@@ -1,7 +1,8 @@
 package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
-import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,22 +11,27 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author LSP
  * @date 2020-04-18
  */
+@ApiModel("门店日访问量统计对象实体")
 public class YunStoreHits
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("主键id")
     private Long id;
 
     /** 门店关联ID */
+    @ApiModelProperty("门店关联ID")
     @Excel(name = "门店关联ID")
     private Long storeId;
 
     /** 访问量 */
+    @ApiModelProperty("访问量")
     @Excel(name = "访问量")
     private Long hits;
 
     /** 点击时间*/
+    @ApiModelProperty("点击时间")
     @Excel(name = "点击时间")
     private String  hitTime;
 

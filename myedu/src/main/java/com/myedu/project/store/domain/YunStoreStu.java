@@ -2,6 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,47 +12,58 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁少鹏
  * @date 2020-03-03
  */
+@ApiModel("门店学生管理对象实体")
 public class YunStoreStu extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("主键id")
     private Long id;
 
     /** 门店id */
+    @ApiModelProperty("门店id")
     @Excel(name = "门店id")
     private Long storeId;
 
     /** 学生id */
+    @ApiModelProperty("学生id")
     @Excel(name = "学生id")
     private Long stuId;
 
     /** 学生状态 */
+    @ApiModelProperty("学生状态")
     @Excel(name = "学生状态")
     private String status;
 
     /** 签到类型 */
+    @ApiModelProperty("签到类型")
     @Excel(name = "签到类型")
     private String signinType;
 
     /** 分配班级 */
+    @ApiModelProperty("分配班级")
     @Excel(name = "分配班级")
     private Long  clbum;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     @Excel(name = "删除标志", readConverterExp = "0=代表存在,1=代表删除")
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     @Excel(name = "创建人Id")
     private Long createById;
 
 
     /** 签到次数  */
+    @ApiModelProperty("签到次数")
     @Excel(name = "签到次数")
     private Long sigin;
 
     /** 签退次数  */
+    @ApiModelProperty("签退次数")
     @Excel(name = "签退次数")
     private Long sigout;
 
@@ -158,8 +171,8 @@ public class YunStoreStu extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
             .append("createById", getCreateById())
-                .append("sigin", getSigin())
-                .append("sigout", getSigout())
+            .append("sigin", getSigin())
+            .append("sigout", getSigout())
             .toString();
     }
 }

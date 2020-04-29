@@ -2,6 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,41 +12,51 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁龙飞
  * @date 2020-04-18
  */
+@ApiModel("分班管理对象实体")
 public class YunStoreClass extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 班级 */
+    @ApiModelProperty("班级ID")
     private Long id;
 
     /** 班级名称 */
-    @Excel(name = "班级名称")
+    @ApiModelProperty("班级名称")
+    @Excel(name = "班级图标")
     private String name;
 
     /** 班级图标 */
+    @ApiModelProperty("班级图标")
     @Excel(name = "班级图标")
     private String classLogo;
 
     /** 主教老师 */
+    @ApiModelProperty("主教老师")
     @Excel(name = "主教老师")
     private String bishopTeacher;
 
     /** 助教老师 */
+    @ApiModelProperty("助教老师")
     @Excel(name = "助教老师")
     private String assistantTeacher;
 
     /** 删除标志 */
+    @ApiModelProperty("删除标志")
     private String delFlag;
 
     /** 门店id */
+    @ApiModelProperty("门店id")
     @Excel(name = "门店id")
     private Long storeId;
 
     /** 创建人id */
+    @ApiModelProperty("创建人id")
     @Excel(name = "创建人id")
     private Long createById;
 
     /** 修改人id */
+    @ApiModelProperty("修改人id")
     @Excel(name = "修改人id")
     private Long updateById;
 
