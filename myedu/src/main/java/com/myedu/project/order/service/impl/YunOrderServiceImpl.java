@@ -263,19 +263,24 @@ public class YunOrderServiceImpl implements IYunOrderService
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+        String payState = request.getParameter("trade_status");//交易状态
         ModelAndView mv = new ModelAndView("alipaySuccess");
         //——请在这里编写您的程序（以下代码仅作参考）——
         if(signVerified) {
-            //付款金额
-            String total_amount = new String(request.getParameter("total_amount"));
-            // 修改订单状态为支付成功，已付款; 同时新增支付流水
-            yunOrder.setPayWay("1");//支付方式支付宝支付
-            yunOrder.setStatus(OrderStatus.HAVETOPAY.getCode());//已支付状态
-            yunOrder.setTotalMoney(new BigDecimal(total_amount));
-            yunOrder.setTradeNo(tradeNo);
-            yunOrderMapper.updateYunOrder(yunOrder);
-            System.out.println("支付, 验签成功...");
-            return "success";
+            if (payState.equals(TRADE_SUCCESS)) {
+                //付款金额
+                String total_amount = new String(request.getParameter("total_amount"));
+                // 修改订单状态为支付成功，已付款; 同时新增支付流水
+                yunOrder.setPayWay("1");//支付方式支付宝支付
+                yunOrder.setStatus(OrderStatus.HAVETOPAY.getCode());//已支付状态
+                yunOrder.setTotalMoney(new BigDecimal(total_amount));
+                yunOrder.setTradeNo(tradeNo);
+                yunOrderMapper.updateYunOrder(yunOrder);
+                System.out.println("支付, 验签成功...");
+                return "success";
+            }else{
+                return "fail";
+            }
         }else {
             System.out.println("支付, 验签失败...");
             return "fail";
@@ -324,23 +329,19 @@ public class YunOrderServiceImpl implements IYunOrderService
             signVerified = AlipaySignature.rsaCheckV1(parameters, yunAlipayConfig.getPublicKey(), yunAlipayConfig.getCharset(), yunAlipayConfig.getSignType());//验证签名
             System.out.println("signVerified is [signVerified={}]"+signVerified);
             if (signVerified) { //通过验证
+                //支付宝的交易号
+                String tradeNo = request.getParameter("trade_no");
                 System.out.println("payState: {}"+ payState);
                 if (payState.equals(TRADE_SUCCESS)) {
                     //判断订单号与插入的订单号是否一样
                     if (merchantOrderNo.equals(encodeOrderNum) == false || yunAlipayConfig.getAppId().equals(appId) == false) {
                         System.out.println("vali failure");
-//                        cashMapper.update(merchantOrderNo, 4);
-//                        response.getOutputStream().print("failure");
                         return;
                     }
-//                    cashMapper.update(merchantOrderNo, 3);
-//                    orderMapper.afterPay(orderId);
-//                    response.getOutputStream().print("success");
                     return;
                 } else if (payState.equals(TRADE_CLOSED)) { //交易关闭
-//                    cashMapper.update(merchantOrderNo, 7);
+
                 } else {
-//                    cashMapper.update(merchantOrderNo, 4);
 //                    response.getOutputStream().print("failure");
                     return;
                 }
