@@ -2,6 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,38 +15,47 @@ import java.math.BigDecimal;
  * @author 梁龙飞
  * @date 2020-04-13
  */
+@ApiModel("课程评论对象实体")
 public class YunCourseComment extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("主键id")
     private Long id;
 
     /** 课程关联Id */
+    @ApiModelProperty("课程关联Id")
     @Excel(name = "课程关联Id")
     private Long courseId;
 
     /** 评论内容 */
+    @ApiModelProperty("评论内容")
     @Excel(name = "评论内容")
     private String content;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     @Excel(name = "创建人Id")
     private Long createById;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     private String delFlag;
 
     /** 评价类型 */
+    @ApiModelProperty("评价类型")
     @Excel(name = "评价类型")
     private String type;
 
     /** 课程门店Id */
+    @ApiModelProperty("课程门店Id")
     @Excel(name = "课程门店Id")
     private Long storeId;
 
     /** 评分内容 */
     @Excel(name = "评分内容")
+    @ApiModelProperty("评分内容")
     private String scoreContent;
 
     public String getCourseName() {
@@ -57,6 +68,7 @@ public class YunCourseComment extends BaseEntity
 
     /** 平均评分 */
     @Excel(name = "平均评分")
+    @ApiModelProperty("平均评分")
     private BigDecimal score;
 
     private String courseName;

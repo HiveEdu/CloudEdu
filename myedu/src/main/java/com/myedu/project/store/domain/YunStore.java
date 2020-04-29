@@ -14,7 +14,7 @@ import java.util.Date;
  * @author 梁少鹏
  * @date 2020-01-04
  */
-@ApiModel("门店对象实体")
+@ApiModel("门店对象对象实体")
 public class YunStore extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

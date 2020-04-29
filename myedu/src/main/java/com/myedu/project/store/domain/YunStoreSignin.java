@@ -2,6 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,32 +12,41 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁龙飞
  * @date 2020-02-29
  */
+@ApiModel("点名签到对象实体")
 public class YunStoreSignin extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键id */
+    @ApiModelProperty("主键id")
     private Long id;
 
     /** 门店id */
+    @ApiModelProperty("门店id")
     @Excel(name = "门店id")
     private Long storeId;
+
     /** 学生id */
+    @ApiModelProperty("学生id")
     @Excel(name = "学生id")
     private Long stuId;
 
     /** 名单标题 */
+    @ApiModelProperty("名单标题")
     @Excel(name = "名单标题")
     private String nameTitle;
 
     /** 签到类型 */
+    @ApiModelProperty("签到类型")
     @Excel(name = "签到类型")
     private String signinType;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     private String delFlag;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     @Excel(name = "创建人Id")
     private Long createById;
 

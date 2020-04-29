@@ -2,6 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,19 +12,23 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author LSP
  * @date 2020-04-21
  */
+@ApiModel("班级学生管理对象实体")
 public class YunStoreClassStu extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 门店Id */
+    @ApiModelProperty("门店Id")
     @Excel(name = "门店Id")
     private Long storeId;
 
     /** 班级id */
+    @ApiModelProperty("班级id")
     @Excel(name = "班级id")
     private Long classId;
 
     /** 学生id */
+    @ApiModelProperty("学生id")
     @Excel(name = "学生id")
     private Long stuId;
 
