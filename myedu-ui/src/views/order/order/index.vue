@@ -117,22 +117,42 @@
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['order:order:remove']"
                 >删除</el-button>
-                <br >
+                <br  v-if="scope.row.status==1||scope.row.status==0">
                 <el-button
+                  v-if="scope.row.status==1||scope.row.status==0"
                   style="margin-top: 10px;background-color: rgb(63, 18, 241);border-color:rgb(63, 18, 241);"
                   size="mini"
                   type="success"
                   icon="el-icon-success"
                   @click="openPay(scope.row)"
                 >付款</el-button>
-                  <br >
+                  <br v-if="scope.row.status==4">
                   <el-button
+                    v-if="scope.row.status==4"
                     style="margin-top: 10px;background-color: rgba(249, 20, 179, 0.98);border-color:rgb(63, 18, 241);"
                     size="mini"
                     type="success"
                     icon="el-icon-notebook-2"
                     @click="openComment(scope.row)"
                   >评论</el-button>
+                  <br  v-if="scope.row.status==4">
+                  <el-button
+                    v-if="scope.row.status==4"
+                    style="margin-top: 10px;background-color: rgba(249, 20, 179, 0.98);border-color:rgb(63, 18, 241);"
+                    size="mini"
+                    type="success"
+                    icon="el-icon-notebook-2"
+                    @click="openRefund(scope.row)"
+                  >退款申请</el-button>
+                  <br  v-if="scope.row.status==6">
+                  <el-button
+                    v-if="scope.row.status==6"
+                    style="margin-top: 10px;background-color: rgba(249, 20, 179, 0.98);border-color:rgb(63, 18, 241);"
+                    size="mini"
+                    type="success"
+                    icon="el-icon-notebook-2"
+                    @click="refund(scope.row)"
+                  >退款</el-button>
               </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -146,6 +166,8 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <!-- 退款申请页面-->
+    <RebundModal ref="RebundModal" :rebund="rebund" :currentData="currentData" @closeRebundModal="closeRebundModal"></RebundModal>
     <!-- 评论页面-->
     <CommentModal ref="CommentModal" :comment="comment" :currentData="currentData" @closeCommentModal="closeCommentModal"></CommentModal>
     <!-- 详情页面-->
@@ -252,18 +274,20 @@
 </template>
 
 <script>
-import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } from "@/api/order/order";
+import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder ,rebund} from "@/api/order/order";
 import DetailModal from './modal/DetailModal'
 import PayModal from './modal/PayModal'
 import { formatTime } from '@/utils/index'
 import CommentModal from './modal/CommentModal'
+import RebundModal from './modal/RebundModal'
 export default {
-  components: {DetailModal,PayModal,CommentModal},
+  components: {DetailModal,PayModal,CommentModal,RebundModal},
   data() {
     return {
       pay:false,
       orderDetail:false,
       comment:false,
+      rebund:false,
       currentData:null,
       // 年级列表
       sysGrades: [],
@@ -349,6 +373,37 @@ export default {
 
   },
   methods: {
+    //退款
+    refund(row){
+      const ids = row.id || this.ids;
+      this.$confirm('是否确认退款订单编号为"' + row.num+ '"的订单?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        rebund(ids).then(response => {
+          if (response.code === 200) {
+            this.msgSuccess("退款成功");
+            this.open = false;
+            this.getList();
+          } else {
+            this.msgError(response.msg);
+          }
+        });
+      }).then(() => {
+        this.getList();
+      }).catch(function() {});
+    },
+    //打开退款申请页面
+    openRefund(row){
+      this.currentData=row;
+      this.rebund=true;
+    },
+    //关闭退款申请页面
+    closeRebundModal(){
+      this.rebund=false;
+      this.getList();
+    },
     //打开评价页面
     openComment(row){
       this.currentData=row;

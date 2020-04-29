@@ -84,6 +84,11 @@ public class YunOrder extends BaseEntity
     @Excel(name = "创建人Id")
     private Long createById;
 
+    /** 退款原因 */
+    private String  refundReason;
+    /**交易号 */
+    private String   tradeNo;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -237,6 +242,22 @@ public class YunOrder extends BaseEntity
         this.payWay = payWay;
     }
 
+    public String getRefundReason() {
+        return refundReason;
+    }
+
+    public void setRefundReason(String refundReason) {
+        this.refundReason = refundReason;
+    }
+
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -261,6 +282,8 @@ public class YunOrder extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
             .append("createById", getCreateById())
+            .append("refundReason",getRefundReason())
+            .append("tradeNo",getTradeNo())
             .toString();
     }
 }

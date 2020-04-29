@@ -80,4 +80,6 @@ public interface IYunOrderService
      * @return 新增返回值
      */
     void notify(HttpServletRequest request, HttpServletResponse response);
+
+    String rebund(Long id);
 }

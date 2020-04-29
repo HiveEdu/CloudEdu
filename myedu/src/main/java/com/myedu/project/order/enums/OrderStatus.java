@@ -6,7 +6,8 @@ public enum OrderStatus {
     HAVEAREFUND("2", "退款成功"),
     TIMEEND("3", "交易超时"),
     HAVETOPAY("4", "交易成功"),
-    END("5", "交易结束并不可退款");
+    END("5", "交易结束并不可退款"),
+    REFUNDAPP("6", "退款申请中");
     private final String code;
     private final String info;
 

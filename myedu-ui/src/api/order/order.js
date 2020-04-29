@@ -42,7 +42,13 @@ export function delOrder(id) {
     method: 'delete'
   })
 }
-
+//订单退款
+export function rebund(id) {
+  return request({
+    url: '/order/order/rebund/' + id,
+    method: 'get'
+  })
+}
 // 导出订单
 export function exportOrder(query) {
   return request({

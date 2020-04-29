@@ -3,7 +3,9 @@ package com.myedu.common.utils;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,4 +60,32 @@ public class PayUtils {
         }
         return 0;
     }
-}
+
+    public synchronized static String alipayRefundRequest(AlipayClient alipayClient,String out_trade_no,String trade_no,double refund_amount) {
+          String returnStr = null;
+          String out_request_no=out_trade_no;//随机数  不是全额退款，部分退款使用该参数
+          try {
+            AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+            request.setBizContent("{" +
+                                "\"out_trade_no\":\"" + out_trade_no + "\"," +
+                                "\"trade_no\":\"" + trade_no + "\"," +
+                               "\"refund_amount\":\"" + refund_amount + "\"," +
+
+                                "\"out_request_no\":\"" + out_request_no+ "\"," +
+                               "\"refund_reason\":\"正常退款\"" +
+                                " }");
+            AlipayTradeRefundResponse response;
+            response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                returnStr="success";
+               System.out.println("支付宝退款成功");
+            } else {
+                returnStr = response.getSubMsg();//失败会返回错误信息
+            }
+          } catch (Exception e) {
+            e.printStackTrace();
+         }
+            return returnStr;
+         }
+
+  }

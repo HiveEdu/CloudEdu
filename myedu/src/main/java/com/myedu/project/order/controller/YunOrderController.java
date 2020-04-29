@@ -129,6 +129,20 @@ public class YunOrderController extends BaseController
         return toAjax(yunOrderService.updateYunOrder(yunOrder));
     }
 
+    @PreAuthorize("@ss.hasPermi('order:order:rebund')")
+    @GetMapping(value = { "rebund/", "rebund/{id}" })
+    public AjaxResult rebund(@PathVariable(value = "id", required = false) Long id) {
+        String result=null;
+        if(id!=null){
+            result=yunOrderService.rebund(id);
+        }
+        if(result.equals("success")){
+           return AjaxResult.success("退款成功");
+        }else{
+            return  AjaxResult.error(result);
+        }
+    }
+
     /**
      * 删除订单
      */

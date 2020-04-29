@@ -26,6 +26,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createById"    column="create_by_id"    />
+        <result property="refundReason"    column="refund_reason"    />
+        <result property="tradeNo"    column="trade_no"    />
     </resultMap>
 
     <sql id="selectYunOrderVo">
@@ -63,7 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null "> and yo.create_time = #{createTime}</if>
             <if test="delFlag != null  and delFlag != ''"> and yo.del_flag = #{delFlag}</if>
             <if test="createById != null "> and yo.create_by_id = #{createById}</if>
-        </where>
+            <if test="tradeNo != null "> and yo.trade_no = #{tradeNo}</if>
+             </where>
         order by yo.create_time desc
     </select>
     
@@ -101,6 +104,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createById != null ">create_by_id,</if>
+            <if test="refundReason != null ">refund_reason,</if>
+            <if test="tradeNo != null ">trade_no,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -124,6 +129,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createById != null ">#{createById},</if>
+            <if test="refundReason != null ">#{refundReason},</if>
+            <if test="tradeNo != null ">#{tradeNo},</if>
          </trim>
     </insert>
 
@@ -150,6 +157,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="refundReason != null ">refund_reason = #{refundReason},</if>
+            <if test="tradeNo != null ">trade_no = #{tradeNo},</if>
         </trim>
         where id = #{id}
     </update>

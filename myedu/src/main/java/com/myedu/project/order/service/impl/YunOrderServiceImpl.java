@@ -246,6 +246,9 @@ public class YunOrderServiceImpl implements IYunOrderService
 
         //调用SDK验证签名
         String out_trade_no = request.getParameter("out_trade_no");//订单号
+        //支付宝的交易号
+        String tradeNo = request.getParameter("trade_no");
+        System.out.println(tradeNo);
         YunOrder yunOrder= yunOrderMapper.selectYunOrderByNum(out_trade_no);
         YunStore yunStore= yunStoreMapper.selectYunStoreById(yunOrder.getStoreId());
         YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
@@ -269,6 +272,7 @@ public class YunOrderServiceImpl implements IYunOrderService
             yunOrder.setPayWay("1");//支付方式支付宝支付
             yunOrder.setStatus(OrderStatus.HAVETOPAY.getCode());//已支付状态
             yunOrder.setTotalMoney(new BigDecimal(total_amount));
+            yunOrder.setTradeNo(tradeNo);
             yunOrderMapper.updateYunOrder(yunOrder);
             System.out.println("支付, 验签成功...");
             return "success";
@@ -355,6 +359,24 @@ public class YunOrderServiceImpl implements IYunOrderService
             throw new RuntimeException("调用支付宝接口发生异常");
         }
 
+    }
+
+    @Override
+    public String rebund(Long id) {
+        YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
+        yunAlipayConfig.setPayMentType(PaymentType.PAYMENTOFANORDER.getCode());
+        List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);
+        if(yunAlipayConfigs!=null){
+            yunAlipayConfig=yunAlipayConfigs.get(0);
+        }
+        AlipayClient alipayClient = new DefaultAlipayClient(yunAlipayConfig.getGatewayUrl(), yunAlipayConfig.getAppId(), yunAlipayConfig.getPrivateKey(), yunAlipayConfig.getFormat(), yunAlipayConfig.getCharset(), yunAlipayConfig.getPublicKey(), yunAlipayConfig.getSignType());
+        YunOrder yunOrder=yunOrderMapper.selectYunOrderById(id);
+        String result=PayUtils.alipayRefundRequest(alipayClient,yunOrder.getNum(),yunOrder.getTradeNo(),yunOrder.getTotalMoney().doubleValue());
+        if(result.equals("success")){
+            yunOrder.setStatus(OrderStatus.HAVEAREFUND.getCode());
+            yunOrderMapper.updateYunOrder(yunOrder);
+        }
+        return result;
     }
 
     public static void main(String[] args) {
