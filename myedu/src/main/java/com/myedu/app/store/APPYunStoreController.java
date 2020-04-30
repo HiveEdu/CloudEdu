@@ -27,8 +27,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -38,6 +40,7 @@ import java.util.List;
  * @date 2020-01-04
  */
 @Api("门店管理")
+@Validated
 @RestController
 @RequestMapping("/app/store/store")
 public class APPYunStoreController extends BaseController
@@ -132,7 +135,7 @@ public class APPYunStoreController extends BaseController
             dataType = "YunStore")
     @Log(title = "门店", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(YunStore yunStore)
+    public AjaxResult add(@Valid @RequestBody YunStore yunStore)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
@@ -152,7 +155,7 @@ public class APPYunStoreController extends BaseController
             dataType = "YunStore")
     @Log(title = "门店", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(YunStore yunStore)
+    public AjaxResult edit(@Valid @RequestBody YunStore yunStore)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {
