@@ -66,28 +66,14 @@
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
           <el-button  size="mini" type="primary" @click="openDatail(scope.row)">详情</el-button>
-          <el-dropdown size="mini" split-button type="primary" trigger="click">
-            操作
-            <el-dropdown-menu slot="dropdown">
-               <el-button
+           <el-button
                 size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['store:comment:edit']"
-                 style="margin-top: 10px"
-              >修改</el-button>
-              <br>
-            <el-button
-                size="mini"
-                type="text"
+                type="danger"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['store:comment:remove']"
                  style="margin-top: 10px"
               >删除</el-button>
-            </el-dropdown-menu>
-          </el-dropdown>  
         </template>
       </el-table-column>
     </el-table>

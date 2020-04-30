@@ -5,6 +5,9 @@ import com.myedu.framework.web.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -24,6 +27,7 @@ public class YunStore extends BaseEntity
     private Long id;
 
     /** 门店名称 */
+    @NotBlank(message = "门店名称不能为空")
     @ApiModelProperty("门店名称")
     @Excel(name = "门店名称")
     private String name;
@@ -33,6 +37,7 @@ public class YunStore extends BaseEntity
     private String logo;
 
     /** 门店负责人 */
+    @NotBlank(message = "门店负责人不能为空")
     @ApiModelProperty("门店负责人")
     @Excel(name = "门店负责人")
     private String manager;
@@ -40,6 +45,8 @@ public class YunStore extends BaseEntity
     /** 负责人电话 */
     @ApiModelProperty("负责人电话")
     @Excel(name = "负责人电话")
+    @NotBlank(message = "手机号码不能为空")
+    @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$",message = "手机号码格式有误")
     private String managerPhone;
 
     /** 门店照片墙 */
@@ -112,10 +119,12 @@ public class YunStore extends BaseEntity
     private String rejectResion;
 
     /** 体验开始时间 */
+    @Future(message = "时间必须为将来时间")
     @ApiModelProperty("vip体验开始时间")
     private Date beginExperienceTime;
 
     /** 体验结束时间 */
+    @Future(message = "时间必须为将来时间")
     @ApiModelProperty("vip体验结束时间")
     private Date endExperienceTime;
 

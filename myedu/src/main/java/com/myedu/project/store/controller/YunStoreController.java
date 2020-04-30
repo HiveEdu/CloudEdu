@@ -25,10 +25,12 @@ import com.myedu.project.store.service.IYunStoreHitsService;
 import com.myedu.project.store.service.IYunStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +40,8 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2020-01-04
  */
+
+@Validated
 @RestController
 @RequestMapping("/store/store")
 public class YunStoreController extends BaseController
@@ -113,7 +117,7 @@ public class YunStoreController extends BaseController
     @PreAuthorize("@ss.hasPermi('store:store:add')")
     @Log(title = "门店", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStore yunStore)
+    public AjaxResult add(@Valid @RequestBody YunStore yunStore)
     {
         yunStore.setCreateById(SecurityUtils.getUserId());
         yunStore.setCreateBy(SecurityUtils.getUsername());
@@ -127,7 +131,7 @@ public class YunStoreController extends BaseController
     @PreAuthorize("@ss.hasPermi('store:store:edit')")
     @Log(title = "门店", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody YunStore yunStore)
+    public AjaxResult edit(@Valid @RequestBody YunStore yunStore)
     {
         yunStore.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(yunStoreService.updateYunStore(yunStore));
