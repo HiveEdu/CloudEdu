@@ -2,6 +2,8 @@ package com.myedu.project.dynamic.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,30 +12,38 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁少鹏
  * @date 2020-01-01
  */
+@ApiModel("云托管动态管理对象实体")
 public class YunDynamic extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("主键ID")
     private Long id;
 
     /** 动态内容 */
+    @ApiModelProperty("动态内容")
     private String content;
 
     /** 动态图片 */
+    @ApiModelProperty("动态图片")
     private String picture;
 
     /** 动态类型（0：家长发表1：老师发表） */
+    @ApiModelProperty("（0：家长发表1：老师发表）")
     @Excel(name = "动态类型", readConverterExp = "0=：家长发表1：老师发表")
     private String type;
 
     /** 点赞数量 */
+    @ApiModelProperty("点赞数量")
     private Long likes;
 
     /** 评论数量 */
+    @ApiModelProperty("评论数量")
     private Long comments;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id")
     @Excel(name = "创建人Id")
     private Long createById;
 

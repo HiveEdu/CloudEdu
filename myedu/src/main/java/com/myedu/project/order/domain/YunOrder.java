@@ -1,78 +1,96 @@
 package com.myedu.project.order.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
+import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import com.myedu.framework.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 订单对象 yun_order
  * 
  * @author 梁少鹏
  * @date 2020-01-22
  */
+@ApiModel("订单对象实体")
 public class YunOrder extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 订单表 */
+    @ApiModelProperty("订单表主键ID")
     private Long id;
 
     /** 订单编号 */
+    @ApiModelProperty("订单编号")
     @Excel(name = "订单编号")
     private String num;
 
     /** 关联学生id */
+    @ApiModelProperty("关联学生id")
     @Excel(name = "关联学生id")
     private Long studentId;
 
     /** 关联门店id */
+    @ApiModelProperty("关联门店id")
     @Excel(name = "关联门店id")
     private Long storeId;
 
     /** 关联课程id */
+    @ApiModelProperty("关联课程id")
     @Excel(name = "关联课程id")
     private Long courseId;
 
     /** 关联年级id */
+    @ApiModelProperty("关联年级id")
     @Excel(name = "关联年级id")
     private Long greadId;
 
     /** 托管时间 */
+    @ApiModelProperty("托管时间")
     @Excel(name = "托管时长", width = 30)
     private String managTime;
 
     /** 是否含餐 */
+    @ApiModelProperty("是否含餐")
     @Excel(name = "是否含餐")
     private String isMeal;
 
     /** 入学时间 */
+    @ApiModelProperty("入学时间")
     @Excel(name = "入学时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date enrolTime;
 
     /** 证件类型 */
+    @ApiModelProperty("证件类型")
     @Excel(name = "证件类型")
     private String certificateType;
 
     /** 支付方式 */
+    @ApiModelProperty("支付方式")
     @Excel(name = "支付方式")
     private String payWay;
 
     /** 学生姓名 */
+    @ApiModelProperty("学生姓名")
     @Excel(name = "学生姓名")
     private String studentName;
 
     /** 证件号 */
+    @ApiModelProperty("证件号")
     @Excel(name = "证件号")
     private String certificateNum;
 
     /** 实付总金额 */
+    @ApiModelProperty("实付总金额")
     @Excel(name = "实付总金额")
     private BigDecimal totalMoney;
 
     /** 支付状态 */
+    @ApiModelProperty("支付状态")
     @Excel(name = "支付状态")
     private String status;
 
@@ -85,8 +103,10 @@ public class YunOrder extends BaseEntity
     private Long createById;
 
     /** 退款原因 */
+    @ApiModelProperty("退款原因")
     private String  refundReason;
     /**交易号 */
+    @ApiModelProperty("交易号")
     private String   tradeNo;
 
     public void setId(Long id) 

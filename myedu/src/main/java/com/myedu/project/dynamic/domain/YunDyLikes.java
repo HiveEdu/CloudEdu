@@ -2,6 +2,8 @@ package com.myedu.project.dynamic.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,23 +12,30 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁少鹏
  * @date 2020-01-01
  */
+@ApiModel("动态点赞对象实体")
 public class YunDyLikes extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("主键ID")
     private Long id;
 
     /** 动态关联ID */
+    @ApiModelProperty("动态关联ID ")
     private Long dyId;
 
     /** 创建人Id */
+    @ApiModelProperty("创建人Id ")
     @Excel(name = "创建人Id")
     private Long createById;
 
     /** 删除标志（0代表存在 1代表删除） */
+    @ApiModelProperty("删除标志（0代表存在 1代表删除）")
     private String delFlag;
-    /** 删除标志（0取消点赞 1点赞） */
+
+    /** 点赞状态（0取消点赞 1点赞） */
+    @ApiModelProperty("点赞状态（0取消点赞 1点赞）")
     private String status;
 
     public void setId(Long id) 

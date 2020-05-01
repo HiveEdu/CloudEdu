@@ -2,6 +2,8 @@ package com.myedu.project.dynamic.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,18 +13,22 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁少鹏
  * @date 2020-01-01
  */
+@ApiModel("动态评论对象实体")
 public class YunDyComment extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @ApiModelProperty("主键ID")
     private Long id;
 
     /** 动态关联Id */
+    @ApiModelProperty("动态关联Id")
     @Excel(name = "动态关联Id")
     private Long dyId;
 
     /** 评论内容 */
+    @ApiModelProperty("评论内容")
     @Excel(name = "评论内容")
     private String content;
 
