@@ -25,7 +25,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -206,7 +205,9 @@ public class APPYunOrderController extends BaseController
 
     }
 
-    @PreAuthorize("@ss.hasPermi('order:order:toPayAsWeb')")
+    @ApiOperation("支付宝手机支付")
+    @ApiImplicitParam(name = "yunOrder", value = "支付宝手机支付",
+            dataType = "YunOrderVo")
     @Log(title = "支付宝手机支付")
     @PostMapping(value = "/toPayAsWeb")
     public AjaxResult toPayAsWeb(@RequestBody YunOrderVo yunOrder) throws Exception{
@@ -216,11 +217,12 @@ public class APPYunOrderController extends BaseController
         return ajax;
     }
 
-    /*
+    /**
      * @Description :同步通知
      * @Author : 梁少鹏
      * @Date : 2020/2/12 11:35
      */
+    @ApiOperation("同步通知")
     @GetMapping(value = "/getReturnUrlInfo")
     public String alipayReturnUrlInfo(HttpServletRequest request) {
         String result=yunOrderService.synchronous(request);
@@ -237,11 +239,12 @@ public class APPYunOrderController extends BaseController
         }
         return result;
     }
-    /*
+    /**
      * @Description :异步通知
      * @Author : 梁少鹏
      * @Date : 2020/2/12 11:35
      */
+    @ApiOperation("异步通知")
     @PostMapping(value = "/getNotifyUrlInfo")
     public void alipayNotifyUrlInfo(HttpServletRequest request, HttpServletResponse response){
         yunOrderService.notify(request,response);

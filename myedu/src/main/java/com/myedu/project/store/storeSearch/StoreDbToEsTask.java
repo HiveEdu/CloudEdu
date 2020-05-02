@@ -1,7 +1,6 @@
 package com.myedu.project.store.storeSearch;
 
 import com.myedu.project.dynamic.service.IYunDyLikesService;
-import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.YunStoreType;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.service.IYunStoreService;
@@ -14,7 +13,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -28,7 +26,7 @@ public class StoreDbToEsTask {
     @Autowired
     private StoreSearchVoRepository storeSearchVoRepository;
     //0 0 12 * * ?
-    @Scheduled(cron="*/5 * * * * ?") //每天12点执行
+    @Scheduled(cron="0 0 13 * * ?") //每天12点执行
     protected void executedyInternal(){
         YunStoreVo yunStore=new YunStoreVo();
         List<YunStoreVo> yunStores=yunStoreService.selectYunStoreList(yunStore);

@@ -1,26 +1,20 @@
 package com.myedu.project.dataBasic.controller;
 
-import java.util.List;
-
 import com.myedu.common.utils.SecurityUtils;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
-import com.myedu.project.dataBasic.domain.SysGrade;
-import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.dataBasic.domain.SysGrade;
+import com.myedu.project.dataBasic.service.ISysGradeService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 年级基础Controller
@@ -38,7 +32,7 @@ public class SysGradeController extends BaseController
     /**
      * 查询年级基础列表
      */
-    @PreAuthorize("@ss.hasPermi('dataBasic:grade:list')")
+    @ApiOperation("查询年级基础列表")
     @GetMapping("/list")
     public TableDataInfo list(SysGrade sysGrade)
     {
@@ -63,6 +57,7 @@ public class SysGradeController extends BaseController
     /**
      * 获取年级基础详细信息
      */
+    @ApiOperation("获取年级基础详细信息")
     @PreAuthorize("@ss.hasPermi('dataBasic:grade:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
