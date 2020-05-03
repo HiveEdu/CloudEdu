@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="birthday"    column="birthday"    />
         <result property="aidPerson"    column="aid_person"    />
-        <result property="aidPhone"    column="aid_Phone"    />
+        <result property="aidPhone"    column="aid_phone"    />
         <result property="schoolArea"    column="school_area"    />
     </resultMap>
 
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="school != null  and school != ''">school,</if>
             <if test="birthday != null  and birthday != ''">birthday,</if>
             <if test="aidPerson != null  and aidPerson != ''">aid_person,</if>
-            <if test="aidPhone != null  and aidPhone != ''">aid_Phone,</if>
+            <if test="aidPhone != null  and aidPhone != ''">aid_phone,</if>
             <if test="schoolArea != null  and schoolArea != ''">school_area,</if>
             <if test="gradeId != null ">grade_id,</if>
             <if test="parentId != null ">parent_id,</if>
@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="aidPerson != null ">aid_person = #{aidPerson},</if>
-            <if test="aidPhone != null ">aid_Phone = #{aidPhone},</if>
+            <if test="aidPhone != null ">aid_phone = #{aidPhone},</if>
             <if test="schoolArea != null ">school_area = #{schoolArea},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
         </trim>

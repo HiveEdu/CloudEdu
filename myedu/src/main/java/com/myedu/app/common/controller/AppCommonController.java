@@ -34,7 +34,7 @@ public class AppCommonController
 
     /**
      * 通用下载请求
-     * 
+     *
      * @param fileName 文件名称
      * @param delete 是否删除
      */
@@ -119,5 +119,8 @@ public class AppCommonController
             return AjaxResult.error(e.getMessage());
         }
     }
+
+
+
 
 }

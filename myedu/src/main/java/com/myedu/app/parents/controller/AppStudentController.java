@@ -1,9 +1,6 @@
 package com.myedu.app.parents.controller;
 
-import com.myedu.common.constant.Constants;
-import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
-import com.myedu.common.utils.StringUtils;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.redis.RedisCache;
@@ -15,13 +12,11 @@ import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.parents.domain.YunStudent;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStudentService;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -94,7 +89,7 @@ public class AppStudentController extends BaseController {
     @ApiImplicitParam(name = "yunStudent", value = "增加学生", dataType = "YunStudent")
     @Log(title = "学生数据", businessType = BusinessType.INSERT)
     @PostMapping("/addStudent")
-    public AjaxResult addStudent(YunStudent yunStudent) throws IOException {
+    public AjaxResult addStudent(@RequestBody YunStudent yunStudent) throws IOException {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null)
         {
@@ -116,7 +111,7 @@ public class AppStudentController extends BaseController {
     @ApiImplicitParam(name = "yunStudent", value = "修改学生", dataType = "YunStudent")
     @Log(title = "学生数据", businessType = BusinessType.UPDATE)
     @PostMapping("/editStudent")
-    public AjaxResult editStudent(YunStudent yunStudent)
+    public AjaxResult editStudent(@RequestBody YunStudent yunStudent)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null) {

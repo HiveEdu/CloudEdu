@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 /**
  * 学生数据对象 yun_student
  * 
@@ -49,12 +52,15 @@ public class YunStudent extends BaseEntity
 
     /** 紧急联系人 */
     @Excel(name = "紧急联系人")
+    @NotBlank(message = "紧急联系人不能为空")
     @ApiModelProperty("紧急联系人")
     private String aidPerson;
 
     /** 紧急联系人联系方式 */
     @Excel(name = "紧急联系人联系方式")
     @ApiModelProperty("紧急联系人联系方式")
+    @NotBlank(message = "手机号码不能为空")
+    @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$",message = "手机号码格式有误")
     private String aidPhone;
 
     /** 学生就读学校区域 */

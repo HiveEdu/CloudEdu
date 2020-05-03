@@ -175,6 +175,15 @@
         <el-form-item label="学校" prop="school">
           <el-input v-model="form.school" placeholder="请输入学生就读所在学校" />
         </el-form-item>
+         <el-form-item label="学校所在区域" prop="schoolArea">
+          <el-input v-model="form.schoolArea" placeholder="学校所在区域" />
+        </el-form-item>
+         <el-form-item label="紧急联系人" prop="aidPerson">
+          <el-input v-model="form.aidPerson" placeholder="紧急联系人" />
+        </el-form-item>
+         <el-form-item label="紧急联系人联系方式" prop="aidPhone">
+          <el-input v-model="form.aidPhone" placeholder="紧急联系人联系方式" />
+        </el-form-item>
         <el-form-item label="年级" prop="gradeId">
           <el-select v-model="form.gradeId"  placeholder="请选择">
             <el-option
