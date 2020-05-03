@@ -55,13 +55,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gendel != null  and gendel != ''">gendel,</if>
             <if test="avatar != null  and avatar != ''">avatar,</if>
             <if test="school != null  and school != ''">school,</if>
-            <if test="birthday != null  and birthday != ''">birthday,</if>
+            <if test="birthday != null ">birthday,</if>
             <if test="aidPerson != null  and aidPerson != ''">aid_person,</if>
             <if test="aidPhone != null  and aidPhone != ''">aid_phone,</if>
             <if test="schoolArea != null  and schoolArea != ''">school_area,</if>
-            <if test="gradeId != null ">grade_id,</if>
-            <if test="parentId != null ">parent_id,</if>
-            <if test="createById != null ">create_by_id,</if>
+            <if test="gradeId != null and gradeId != ''">grade_id,</if>
+            <if test="parentId != null and parentId != ''">parent_id,</if>
+            <if test="createById != null and createById != ''">create_by_id,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
@@ -73,17 +73,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gendel != null  and gendel != ''">#{gendel},</if>
             <if test="avatar != null  and avatar != ''">#{avatar},</if>
             <if test="school != null  and school != ''">#{school},</if>
-            <if test="gradeId != null ">#{gradeId},</if>
-            <if test="parentId != null ">#{parentId},</if>
-            <if test="createById != null ">#{createById},</if>
+            <if test="birthday != null ">#{birthday},</if>
+            <if test="aidPerson != null and aidPerson != ''">#{aidPerson},</if>
+            <if test="aidPhone != null and aidPhone != ''">#{aidPhone},</if>
+            <if test="schoolArea != null  and schoolArea != ''">#{schoolArea},</if>
+            <if test="gradeId != null and gradeId != ''">#{gradeId},</if>
+            <if test="parentId != null and parentId != ''">#{parentId},</if>
+            <if test="createById != null and createById != ''">#{createById},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
-            <if test="birthday != null ">#{birthday},</if>
-            <if test="aidPerson != null ">#{aidPerson},</if>
-            <if test="aidPhone != null ">#{aidPhone},</if>
-            <if test="schoolArea != null ">#{schoolArea},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
          </trim>
     </insert>

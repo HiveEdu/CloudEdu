@@ -141,59 +141,92 @@
     />
 
     <!-- 添加或修改学生数据对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px">
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入学生名称" />
-        </el-form-item>
-        <el-form-item label="性别" prop="gendel">
-          <el-select v-model="form.gendel" placeholder="请选择学生性别">
-            <el-option
-              v-for="dict in gendelOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="人脸注册">
-          <el-upload
-            class="avatar-uploader"
-            ref="upload"
-            :headers="headers"
-            :action="uploadImgUrl"
-            :data="{'type':'stuAvatar'}"
-            :show-file-list="false"
-            :on-success="onSuccess"
-            :on-remove="handleRemove"
-            :on-preview="handlePictureCardPreview"
-            :before-upload="beforeUpload">
-            <img v-if="form.avatar" :src="viewImage+'/'+form.avatar" :onerror="defaultImg" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="学校" prop="school">
-          <el-input v-model="form.school" placeholder="请输入学生就读所在学校" />
-        </el-form-item>
-         <el-form-item label="学校所在区域" prop="schoolArea">
-          <el-input v-model="form.schoolArea" placeholder="学校所在区域" />
-        </el-form-item>
-         <el-form-item label="紧急联系人" prop="aidPerson">
-          <el-input v-model="form.aidPerson" placeholder="紧急联系人" />
-        </el-form-item>
-         <el-form-item label="紧急联系人联系方式" prop="aidPhone">
-          <el-input v-model="form.aidPhone" placeholder="紧急联系人联系方式" />
-        </el-form-item>
-        <el-form-item label="年级" prop="gradeId">
-          <el-select v-model="form.gradeId"  placeholder="请选择">
-            <el-option
-              v-for="item in gradeLists"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="50%">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="头像">
+              <el-upload
+                class="avatar-uploader"
+                ref="upload"
+                :headers="headers"
+                :action="uploadImgUrl"
+                :data="{'type':'stuAvatar'}"
+                :show-file-list="false"
+                :on-success="onSuccess"
+                :on-remove="handleRemove"
+                :on-preview="handlePictureCardPreview"
+                :before-upload="beforeUpload">
+                <img v-if="form.avatar" :src="viewImage+'/'+form.avatar" :onerror="defaultImg" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="姓名" prop="name">
+              <el-input v-model="form.name" placeholder="请输入学生名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="性别" prop="gendel">
+              <el-select v-model="form.gendel" placeholder="请选择学生性别" style="width: 100%;">
+                <el-option
+                  v-for="dict in gendelOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="生日" prop="birthday">
+              <el-date-picker clearable size="small"
+                              v-model="form.birthday"
+                              type="date"
+                              style="width: 100%;"
+                              value-format="yyyy-MM-dd"
+                              placeholder="请选择生日">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="年级" prop="gradeId">
+              <el-select v-model="form.gradeId"  placeholder="请选择"  style="width: 100%;">
+                <el-option
+                  v-for="item in gradeLists"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="学校" prop="school">
+              <el-input v-model="form.school" placeholder="请输入学生就读所在学校" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="学校所在区域" prop="schoolArea">
+              <el-input v-model="form.schoolArea" placeholder="学校所在区域" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+             <el-form-item label="紧急联系人" prop="aidPerson">
+              <el-input v-model="form.aidPerson" placeholder="紧急联系人" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="手机号" prop="aidPhone">
+              <el-input v-model="form.aidPhone" placeholder="手机号" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>

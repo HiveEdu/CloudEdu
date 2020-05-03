@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 /**
  * 学生数据对象 yun_student
@@ -48,7 +49,7 @@ public class YunStudent extends BaseEntity
     /** 学生出生日期 */
     @Excel(name = "学生出生日期")
     @ApiModelProperty("学生出生日期")
-    private String birthday;
+    private Date birthday;
 
     /** 紧急联系人 */
     @Excel(name = "紧急联系人")
@@ -116,11 +117,11 @@ public class YunStudent extends BaseEntity
         this.id = id;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
