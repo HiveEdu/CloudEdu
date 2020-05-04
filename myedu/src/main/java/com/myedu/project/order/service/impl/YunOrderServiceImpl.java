@@ -22,7 +22,11 @@ import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.OrderCodeFactory;
 import com.myedu.common.utils.PayUtils;
 import com.myedu.common.utils.SecurityUtils;
+import com.myedu.framework.web.domain.AjaxResult;
+import com.myedu.project.account.domain.YunAccountChange;
 import com.myedu.project.account.domain.YunAlipayConfig;
+import com.myedu.project.account.enums.AccountChangeType;
+import com.myedu.project.account.mapper.YunAccountChangeMapper;
 import com.myedu.project.account.mapper.YunAlipayConfigMapper;
 import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.order.enums.OrderStatus;
@@ -51,6 +55,8 @@ public class YunOrderServiceImpl implements IYunOrderService
 {
     @Autowired
     private YunOrderMapper yunOrderMapper;
+    @Autowired
+    private YunAccountChangeMapper yunAccountChangeMapper;
     @Autowired
     private YunStoreMapper yunStoreMapper;
     @Autowired
@@ -267,7 +273,6 @@ public class YunOrderServiceImpl implements IYunOrderService
         ModelAndView mv = new ModelAndView("alipaySuccess");
         //——请在这里编写您的程序（以下代码仅作参考）——
         if(signVerified) {
-            if (payState.equals(TRADE_SUCCESS)) {
                 //付款金额
                 String total_amount = new String(request.getParameter("total_amount"));
                 // 修改订单状态为支付成功，已付款; 同时新增支付流水
@@ -276,11 +281,18 @@ public class YunOrderServiceImpl implements IYunOrderService
                 yunOrder.setTotalMoney(new BigDecimal(total_amount));
                 yunOrder.setTradeNo(tradeNo);
                 yunOrderMapper.updateYunOrder(yunOrder);
+                //增加支付账单流水
+                YunAccountChange yunAccountChange=new YunAccountChange();
+                yunAccountChange.setUserId(yunOrder.getCreateById());
+                yunAccountChange.setUncashAmount(yunOrder.getTotalMoney());
+                yunAccountChange.setChangeType(AccountChangeType.PAYMENT.getCode());
+                yunAccountChange.setRefId(tradeNo);
+                yunAccountChange.setCreateById(yunOrder.getCreateById());
+                yunAccountChange.setCreateBy(yunOrder.getCreateBy());
+                yunAccountChange.setCreateTime(DateUtils.getNowDate());
+                yunAccountChangeMapper.insertYunAccountChange(yunAccountChange);
                 System.out.println("支付, 验签成功...");
                 return "success";
-            }else{
-                return "fail";
-            }
         }else {
             System.out.println("支付, 验签失败...");
             return "fail";
@@ -363,7 +375,7 @@ public class YunOrderServiceImpl implements IYunOrderService
     }
 
     @Override
-    public String rebund(Long id) {
+    public AjaxResult rebund(Long id) {
         YunAlipayConfig yunAlipayConfig=new YunAlipayConfig();
         yunAlipayConfig.setPayMentType(PaymentType.PAYMENTOFANORDER.getCode());
         List<YunAlipayConfig> yunAlipayConfigs= yunAlipayConfigMapper.selectYunAlipayConfigList(yunAlipayConfig);
@@ -372,10 +384,22 @@ public class YunOrderServiceImpl implements IYunOrderService
         }
         AlipayClient alipayClient = new DefaultAlipayClient(yunAlipayConfig.getGatewayUrl(), yunAlipayConfig.getAppId(), yunAlipayConfig.getPrivateKey(), yunAlipayConfig.getFormat(), yunAlipayConfig.getCharset(), yunAlipayConfig.getPublicKey(), yunAlipayConfig.getSignType());
         YunOrder yunOrder=yunOrderMapper.selectYunOrderById(id);
-        String result=PayUtils.alipayRefundRequest(alipayClient,yunOrder.getNum(),yunOrder.getTradeNo(),yunOrder.getTotalMoney().doubleValue());
-        if(result.equals("success")){
+        AjaxResult result=PayUtils.alipayRefundRequest(alipayClient,yunOrder.getNum(),yunOrder.getTradeNo(),yunOrder.getTotalMoney().doubleValue());
+        if(String.valueOf(result.get("code")).equals("200")){
             yunOrder.setStatus(OrderStatus.HAVEAREFUND.getCode());
             yunOrderMapper.updateYunOrder(yunOrder);
+            //增加退款账单流水
+            YunAccountChange yunAccountChange=new YunAccountChange();
+            yunAccountChange.setUserId(yunOrder.getCreateById());
+            yunAccountChange.setPreAmount(null);
+            yunAccountChange.setCashAmount(null);
+            yunAccountChange.setUncashAmount(yunOrder.getTotalMoney());
+            yunAccountChange.setChangeType(AccountChangeType.REFUND.getCode());
+            yunAccountChange.setRefId(String.valueOf(result.get("msg")));
+            yunAccountChange.setCreateById(SecurityUtils.getUserId());
+            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
+            yunAccountChange.setCreateTime(DateUtils.getNowDate());
+            yunAccountChangeMapper.insertYunAccountChange(yunAccountChange);
         }
         return result;
     }

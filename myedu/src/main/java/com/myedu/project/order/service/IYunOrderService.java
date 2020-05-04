@@ -1,5 +1,6 @@
 package com.myedu.project.order.service;
 
+import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.project.order.domain.YunOrder;
 import com.myedu.project.order.domain.vo.YunOrderVo;
 
@@ -81,5 +82,5 @@ public interface IYunOrderService
      */
     void notify(HttpServletRequest request, HttpServletResponse response);
 
-    String rebund(Long id);
+    AjaxResult rebund(Long id);
 }

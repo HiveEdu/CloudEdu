@@ -384,7 +384,6 @@ export default {
         rebund(ids).then(response => {
           if (response.code === 200) {
             this.msgSuccess("退款成功");
-            this.open = false;
             this.getList();
           } else {
             this.msgError(response.msg);

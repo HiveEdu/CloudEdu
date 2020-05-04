@@ -42,7 +42,7 @@ public class YunAccountChange extends BaseEntity
 
     /** 关联流水ID(change_type不同，对应不同流水表，如充值、支付、提现流水) */
     @Excel(name = "关联流水ID(change_type不同，对应不同流水表，如充值、支付、提现流水)")
-    private Long refId;
+    private String  refId;
 
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
@@ -105,12 +105,12 @@ public class YunAccountChange extends BaseEntity
     {
         return uncashAmount;
     }
-    public void setRefId(Long refId) 
+    public void setRefId(String refId)
     {
         this.refId = refId;
     }
 
-    public Long getRefId() 
+    public String getRefId()
     {
         return refId;
     }

@@ -60,7 +60,6 @@
 
           /** 提交按钮 */
           submitForm: function() {
-            alert(this.form.refundReason);
             this.form.status=6;//退款申请中
             this.$refs["form"].validate(valid => {
               if (valid) {

@@ -1,11 +1,22 @@
 package com.myedu.common.utils;
 
+import com.alibaba.druid.support.spring.stat.annotation.Stat;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.myedu.framework.web.domain.AjaxResult;
+import com.myedu.project.account.domain.YunAccountChange;
+import com.myedu.project.account.enums.AccountChangeType;
+import com.myedu.project.account.mapper.YunAccountChangeMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +26,6 @@ import com.alipay.api.response.AlipayTradeRefundResponse;
  * Description:
  */
 public class PayUtils {
-
     /*
      * @Description :查询支付状态公用接口
      * @Author : 梁少鹏
@@ -61,31 +71,53 @@ public class PayUtils {
         return 0;
     }
 
-    public synchronized static String alipayRefundRequest(AlipayClient alipayClient,String out_trade_no,String trade_no,double refund_amount) {
+    public synchronized static AjaxResult alipayRefundRequest(AlipayClient alipayClient, String out_trade_no, String trade_no, double refund_amount) {
           String returnStr = null;
           String out_request_no=out_trade_no;//随机数  不是全额退款，部分退款使用该参数
           try {
             AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+            String batch_no=getRandomBatchNum();
             request.setBizContent("{" +
                                 "\"out_trade_no\":\"" + out_trade_no + "\"," +
                                 "\"trade_no\":\"" + trade_no + "\"," +
                                "\"refund_amount\":\"" + refund_amount + "\"," +
-
                                 "\"out_request_no\":\"" + out_request_no+ "\"," +
                                "\"refund_reason\":\"正常退款\"" +
                                 " }");
             AlipayTradeRefundResponse response;
             response = alipayClient.execute(request);
             if (response.isSuccess()) {
-                returnStr="success";
-               System.out.println("支付宝退款成功");
+                System.out.println("支付宝退款成功");
+                return AjaxResult.success(batch_no);
             } else {
                 returnStr = response.getSubMsg();//失败会返回错误信息
+                return AjaxResult.error(returnStr);
             }
           } catch (Exception e) {
             e.printStackTrace();
          }
-            return returnStr;
+            return AjaxResult.error();
          }
+
+
+    /**
+     * 生成支付宝退款批次号
+     *
+     * @return
+     */
+    public static String getRandomBatchNum() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String format = dateFormat.format(new Date());
+        int max = 24;
+        int min = 3;
+        Random random = new Random();
+        int s = random.nextInt(max) % (max - min + 1) + min;
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < s; i++) {
+            Integer val = (int) (Math.random() * 9 + 1);
+            buffer.append(val.toString());
+        }
+        return format + buffer.toString();
+    }
 
   }

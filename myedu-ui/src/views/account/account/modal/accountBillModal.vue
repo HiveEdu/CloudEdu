@@ -2,21 +2,23 @@
   <el-dialog
     :title="title"
     :visible.sync="dialogVisible"
-    width="40%"
+    width="50%"
     @close="handleClose">
 
     <el-table :data="accountBillData">
+      <el-table-column property="refId" label="流水"  style="width: 20%"></el-table-column>
       <el-table-column property="changeType" label="种类" :formatter="changeTypeFormat" ></el-table-column>
       <el-table-column property="preAmount" label="变动前" ></el-table-column>
       <el-table-column property="cashAmount" label="变动后" ></el-table-column>
-      <el-table-column property="uncashAmount" label="变动值" >
-        <template slot-scope="scope">
-          <span v-if="scope.row.changeType==1">+{{ scope.row.uncashAmount }}</span>
-          <span v-else-if="scope.row.changeType==4">-{{ scope.row.uncashAmount }}</span>
-          <span v-else>{{scope.row.uncashAmount }}</span>
-        </template>
+      <el-table-column property="uncashAmount" label="交易额" ></el-table-column>
+<!--      <el-table-column property="uncashAmount" label="变动值" >-->
+<!--        <template slot-scope="scope">-->
+<!--          <span v-if="scope.row.changeType==1">+{{ scope.row.uncashAmount }}</span>-->
+<!--          <span v-else-if="scope.row.changeType==4">-{{ scope.row.uncashAmount }}</span>-->
+<!--          <span v-else>{{scope.row.uncashAmount }}</span>-->
+<!--        </template>-->
 
-      </el-table-column>
+<!--      </el-table-column>-->
       <el-table-column label="日期" align="center" prop="createTime">
         <template slot-scope="scope" v-if="scope.row.createTime!=null">
           <span>{{ parseTimeBefore(scope.row.createTime) }}</span>

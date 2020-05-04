@@ -79,7 +79,7 @@ public class YunAccountController extends BaseController
     {
         AjaxResult ajax = AjaxResult.success();
         if(id!=null){
-            List<YunAccountChange> yunAccountChanges=yunAccountChangeService.selectYunAccountChangeByUserId(id);
+            List<YunAccountChange> yunAccountChanges=yunAccountChangeService.selectYunAccountChangeByUserId(yunAccountService.selectYunAccountById(id).getCreateById());
             ajax.put(AjaxResult.DATA_TAG,yunAccountService.selectYunAccountById(id));
             ajax.put("WITHDRAWLIST",yunAccountChanges);
             return ajax;
