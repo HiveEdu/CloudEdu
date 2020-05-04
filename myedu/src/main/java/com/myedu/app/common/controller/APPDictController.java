@@ -2,6 +2,8 @@ package com.myedu.app.common.controller;
 
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
+import com.myedu.project.system.domain.SysDictData;
+import com.myedu.project.system.domain.SysDictType;
 import com.myedu.project.system.service.ISysDictDataService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,5 +37,16 @@ public class APPDictController extends BaseController {
     public AjaxResult dictType(@PathVariable String dictType)
     {
         return AjaxResult.success(dictDataService.selectDictDataByType(dictType));
+    }
+
+    /**
+     * 根据字典类型查询字典数据信息
+     */
+    @ApiOperation("获取所有字典项")
+    @GetMapping(value = "/dictType/all")
+    public AjaxResult dictType()
+    {
+        SysDictData sysDictData=new SysDictData();
+        return AjaxResult.success(dictDataService.selectDictDataList(sysDictData));
     }
 }
