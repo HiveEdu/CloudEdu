@@ -1,6 +1,7 @@
 package com.myedu.app.hometeacher;
 
 import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.web.controller.BaseController;
@@ -41,6 +42,7 @@ public class APPYunUserInfoController extends BaseController
     /**
      * 查询家教老师表列表
      */
+    @AutoIdempotent
     @ApiOperation("查询家教老师表列表")
     @ApiImplicitParam(name = "yunUserInfo", value = "查询家教老师表列表",
             dataType = "YunUserInfo")
@@ -54,24 +56,9 @@ public class APPYunUserInfoController extends BaseController
     }
 
     /**
-     * 导出家教老师表列表
-     */
-    @ApiOperation("导出家教老师表列表")
-    @ApiImplicitParam(name = "yunUserInfo", value = "导出家教老师表列表",
-            dataType = "YunUserInfo")
-    @PreAuthorize("@ss.hasPermi('hometeacher:info:export')")
-    @Log(title = "家教老师表", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunUserInfo yunUserInfo)
-    {
-        List<YunUserInfoVo> list = yunUserInfoService.selectYunUserInfoList(yunUserInfo);
-        ExcelUtil<YunUserInfoVo> util = new ExcelUtil<YunUserInfoVo>(YunUserInfoVo.class);
-        return util.exportExcel(list, "info");
-    }
-
-    /**
      * 获取家教老师表详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取家教老师表详细信息")
     @ApiImplicitParam(name = "id", value = "获取家教老师表详细信息",
             dataType = "Long")
@@ -105,6 +92,7 @@ public class APPYunUserInfoController extends BaseController
     /**
      * 新增家教老师表
      */
+    @AutoIdempotent
     @ApiOperation("新增家教老师表")
     @ApiImplicitParam(name = "yunUserInfo", value = "新增家教老师表",
             dataType = "YunUserInfo")
@@ -120,6 +108,7 @@ public class APPYunUserInfoController extends BaseController
     /**
      * 修改家教老师表
      */
+    @AutoIdempotent
     @ApiOperation("修改家教老师表")
     @ApiImplicitParam(name = "yunUserInfo", value = "修改家教老师表",
             dataType = "YunUserInfo")
@@ -134,6 +123,7 @@ public class APPYunUserInfoController extends BaseController
     /**
      * 删除家教老师表
      */
+    @AutoIdempotent
     @ApiOperation("删除家教老师表")
     @ApiImplicitParam(name = "ids", value = "删除家教老师表",
             dataType = "Long[]")
@@ -151,6 +141,7 @@ public class APPYunUserInfoController extends BaseController
      * @Author : 梁少鹏
      * @Date : 2020/1/21 16:30
      */
+    @AutoIdempotent
     @ApiOperation("更改课程状态下线")
     @ApiImplicitParam(name = "ids", value = "更改课程状态下线",
             dataType = "Long[]")
@@ -175,6 +166,7 @@ public class APPYunUserInfoController extends BaseController
      * @Author : 梁少鹏
      * @Date : 2020/1/21 16:30
      */
+    @AutoIdempotent
     @ApiOperation("更改课程状态在售")
     @ApiImplicitParam(name = "ids", value = "更改课程状态在售",
             dataType = "Long[]")

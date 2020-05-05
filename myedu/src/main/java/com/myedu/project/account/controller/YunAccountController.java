@@ -104,6 +104,9 @@ public class YunAccountController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunAccount yunAccount)
     {
+        yunAccount.setCreateById(SecurityUtils.getUserId());
+        yunAccount.setCreateBy(SecurityUtils.getUseNickName());
+        yunAccount.setCreateTime(DateUtils.getNowDate());
         return toAjax(yunAccountService.insertYunAccount(yunAccount));
     }
 
@@ -115,6 +118,7 @@ public class YunAccountController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunAccount yunAccount)
     {
+        yunAccount.setUpdateTime(DateUtils.getNowDate());
         return toAjax(yunAccountService.updateYunAccount(yunAccount));
     }
 

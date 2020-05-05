@@ -1,9 +1,10 @@
 package com.myedu.app.order.controller;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
-import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -56,6 +57,7 @@ public class APPYunOrderController extends BaseController
     /**
      * 查询订单列表
      */
+    @AutoIdempotent
     @ApiOperation("查询订单列表")
     @ApiImplicitParam(name = "yunOrder", value = "查询订单列表",
             dataType = "YunOrderVo")
@@ -63,68 +65,40 @@ public class APPYunOrderController extends BaseController
     public TableDataInfo list(YunOrderVo yunOrder)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            startPage();
-            List<YunOrderVo> list = yunOrderService.selectYunOrderList(yunOrder);
-            return getDataTable(list);
-        }else {
-            return getDataTableLose(null);
-        }
-
+        startPage();
+        yunOrder.setCreateById(loginUser.getUser().getUserId());
+        List<YunOrderVo> list = yunOrderService.selectYunOrderList(yunOrder);
+        return getDataTable(list);
     }
 
-    /**
-     * 导出订单列表
-     */
-    @ApiOperation("导出订单列表")
-    @ApiImplicitParam(name = "yunOrder", value = "导出订单列表",
-            dataType = "YunOrderVo")
-    @Log(title = "订单", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunOrderVo yunOrder)
-    {
-
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            List<YunOrderVo> list = yunOrderService.selectYunOrderList(yunOrder);
-            ExcelUtil<YunOrderVo> util = new ExcelUtil<YunOrderVo>(YunOrderVo.class);
-            return util.exportExcel(list, "order");
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
-    }
 
     /**
      * 获取订单详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取订单详细信息")
     @ApiImplicitParam(name = "id", value = "获取订单详细信息",
             dataType = "Long")
     @GetMapping(value = { "/", "/{id}" })
     public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            AjaxResult ajax = AjaxResult.success();
-            YunStudentVo yunStudent=new YunStudentVo();
-            yunStudent.setCreateById(SecurityUtils.getUserId());
-            SysGrade sysGrade=new SysGrade();
-            ajax.put("students", yunStudentService.selectYunStudentList(yunStudent));
-            ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
-            if (StringUtils.isNotNull(id))
-            {
-                ajax.put(AjaxResult.DATA_TAG,yunOrderService.selectYunOrderById(id));
-            }
-            return ajax;
-        }else {
-            return AjaxResult.error("token无效");
+        AjaxResult ajax = AjaxResult.success();
+        YunStudentVo yunStudent=new YunStudentVo();
+        yunStudent.setCreateById(SecurityUtils.getUserId());
+        SysGrade sysGrade=new SysGrade();
+        ajax.put("students", yunStudentService.selectYunStudentList(yunStudent));
+        ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG,yunOrderService.selectYunOrderById(id));
         }
+        return ajax;
     }
 
     /**
      * 新增订单
      */
+    @AutoIdempotent
     @ApiOperation("新增订单")
     @ApiImplicitParam(name = "yunOrder", value = "新增订单",
             dataType = "YunOrderVo")
@@ -133,27 +107,26 @@ public class APPYunOrderController extends BaseController
     public AjaxResult add(@RequestBody YunOrder yunOrder)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            if(yunOrder.getStoreId()!=null){
-                //报名给这个门店添加学生
-                YunStoreStu yunStoreStu=new YunStoreStu();
-                yunStoreStu.setStoreId(yunOrder.getStoreId());
-                yunStoreStu.setStuId(yunOrder.getStudentId());
-                yunStoreStu.setCreateById(SecurityUtils.getUserId());
-                yunStoreStu.setCreateBy(SecurityUtils.getUsername());
-                yunStoreStu.setStatus(StoreStuStatus.SIGNUP.getCode());
-                yunStoreStuService.insertYunStoreStu(yunStoreStu);
-            }
-            return toAjax(yunOrderService.insertYunOrder(yunOrder));
-        }else {
-            return AjaxResult.error("token无效");
+        yunOrder.setCreateById(loginUser.getUser().getUserId());
+        yunOrder.setCreateBy(loginUser.getUser().getNickName());
+        yunOrder.setCreateTime(DateUtils.getNowDate());
+        if(yunOrder.getStoreId()!=null){
+            //报名给这个门店添加学生
+            YunStoreStu yunStoreStu=new YunStoreStu();
+            yunStoreStu.setStoreId(yunOrder.getStoreId());
+            yunStoreStu.setStuId(yunOrder.getStudentId());
+            yunStoreStu.setCreateById(SecurityUtils.getUserId());
+            yunStoreStu.setCreateBy(SecurityUtils.getUsername());
+            yunStoreStu.setStatus(StoreStuStatus.SIGNUP.getCode());
+            yunStoreStuService.insertYunStoreStu(yunStoreStu);
         }
-
+        return toAjax(yunOrderService.insertYunOrder(yunOrder));
     }
 
     /**
      * 修改订单
      */
+    @AutoIdempotent
     @ApiOperation("修改订单")
     @ApiImplicitParam(name = "yunOrder", value = "修改订单",
             dataType = "YunOrderVo")
@@ -161,20 +134,16 @@ public class APPYunOrderController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunOrder yunOrder)
     {
-
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunOrderService.updateYunOrder(yunOrder));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
-
+        yunOrder.setUpdateTime(DateUtils.getNowDate());
+        yunOrder.setUpdateBy(loginUser.getUser().getNickName());
+        return toAjax(yunOrderService.updateYunOrder(yunOrder));
     }
 
     /**
      * 删除订单
      */
+    @AutoIdempotent
     @ApiOperation("删除订单")
     @ApiImplicitParam(name = "ids", value = "删除订单",
             dataType = "Long[]")
@@ -185,26 +154,20 @@ public class APPYunOrderController extends BaseController
         return toAjax(yunOrderService.deleteYunOrderByIds(ids));
     }
 
-
+    @AutoIdempotent
     @ApiOperation("支付宝PC网页支付")
     @ApiImplicitParam(name = "yunOrder", value = "支付宝PC网页支付",
             dataType = "YunOrderVo")
     @Log(title = "支付宝PC网页支付")
     @PostMapping(value = "/toPayAsPC")
     public AjaxResult toPayAsPc(@RequestBody YunOrderVo yunOrder) throws Exception{
-
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            AjaxResult ajax = AjaxResult.success();
-            String payUrl = yunOrderService.toPayAsPc(yunOrder);
-            ajax.put("url",payUrl);
-            return ajax;
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        AjaxResult ajax = AjaxResult.success();
+        String payUrl = yunOrderService.toPayAsPc(yunOrder);
+        ajax.put("url",payUrl);
+        return ajax;
     }
 
+    @AutoIdempotent
     @ApiOperation("支付宝手机支付")
     @ApiImplicitParam(name = "yunOrder", value = "支付宝手机支付",
             dataType = "YunOrderVo")
@@ -222,6 +185,7 @@ public class APPYunOrderController extends BaseController
      * @Author : 梁少鹏
      * @Date : 2020/2/12 11:35
      */
+    @AutoIdempotent
     @ApiOperation("同步通知")
     @GetMapping(value = "/getReturnUrlInfo")
     public String alipayReturnUrlInfo(HttpServletRequest request) {
@@ -244,6 +208,7 @@ public class APPYunOrderController extends BaseController
      * @Author : 梁少鹏
      * @Date : 2020/2/12 11:35
      */
+    @AutoIdempotent
     @ApiOperation("异步通知")
     @PostMapping(value = "/getNotifyUrlInfo")
     public void alipayNotifyUrlInfo(HttpServletRequest request, HttpServletResponse response){

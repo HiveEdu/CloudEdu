@@ -1,8 +1,7 @@
 package com.myedu.app.common.controller;
 
-import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
-import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
@@ -38,28 +37,22 @@ public class APPSysGradeController extends BaseController
     /**
      * 查询年级基础列表
      */
-
+    @AutoIdempotent
     @GetMapping("/list")
     @ApiOperation("查询年级基础列表")
     @ApiImplicitParam(name = "sysGrade", value = "查询订单列表",
             dataType = "SysGrade")
     public TableDataInfo list(SysGrade sysGrade)
     {
-
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            startPage();
-            List<SysGrade> list = sysGradeService.selectSysGradeList(sysGrade);
-            return getDataTable(list);
-        }else {
-            return getDataTableLose(null);
-        }
-
+        startPage();
+        List<SysGrade> list = sysGradeService.selectSysGradeList(sysGrade);
+        return getDataTable(list);
     }
 
     /**
      * 获取年级基础详细信息
      */
+    @AutoIdempotent
     @ApiOperation("查询年级基础列表")
     @ApiImplicitParam(name = "id", value = "查询订单列表",
             dataType = "Long")
@@ -70,9 +63,7 @@ public class APPSysGradeController extends BaseController
         SysGrade sysGrade = new SysGrade();
         ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
         if (StringUtils.isNotNull(id)){
-
             ajax.put(AjaxResult.DATA_TAG,sysGradeService.selectSysGradeById(id));
-
         }
         return ajax;
     }

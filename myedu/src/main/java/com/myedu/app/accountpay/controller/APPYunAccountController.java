@@ -4,6 +4,7 @@ import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -46,6 +47,7 @@ public class APPYunAccountController extends BaseController
     /**
      * 查询账户管理列表
      */
+    @AutoIdempotent
     @ApiOperation("查询账户管理列表")
     @ApiImplicitParam(name = "yunAccount", value = "查询账户管理列表",
             dataType = "YunAccount")
@@ -53,30 +55,18 @@ public class APPYunAccountController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(YunAccount yunAccount)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         startPage();
+        yunAccount.setCreateById(loginUser.getUser().getUserId());
         List<YunAccount> list = yunAccountService.selectYunAccountList(yunAccount);
         return getDataTable(list);
     }
 
-    /**
-     * 导出账户管理列表
-     */
-    @ApiOperation("导出账户管理列表")
-    @ApiImplicitParam(name = "yunAccount", value = "导出账户管理列表",
-            dataType = "YunAccount")
-    @PreAuthorize("@ss.hasPermi('account:account:export')")
-    @Log(title = "账户管理", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunAccount yunAccount)
-    {
-        List<YunAccount> list = yunAccountService.selectYunAccountList(yunAccount);
-        ExcelUtil<YunAccount> util = new ExcelUtil<YunAccount>(YunAccount.class);
-        return util.exportExcel(list, "account");
-    }
 
     /**
      * 获取账户管理详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取账户管理详细信息")
     @ApiImplicitParam(name = "id", value = "获取账户管理详细信息",
             dataType = "Long")
@@ -106,6 +96,7 @@ public class APPYunAccountController extends BaseController
     /**
      * 新增账户管理
      */
+    @AutoIdempotent
     @ApiOperation("新增账户管理")
     @ApiImplicitParam(name = "yunAccount", value = "新增账户管理",
             dataType = "YunAccount")
@@ -114,12 +105,16 @@ public class APPYunAccountController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunAccount yunAccount)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        yunAccount.setCreateById(loginUser.getUser().getUserId());
+        yunAccount.setCreateBy(loginUser.getUser().getNickName());
         return toAjax(yunAccountService.insertYunAccount(yunAccount));
     }
 
     /**
      * 修改账户管理
      */
+    @AutoIdempotent
     @ApiOperation("修改账户管理")
     @ApiImplicitParam(name = "yunAccount", value = "修改账户管理",
             dataType = "YunAccount")
@@ -128,12 +123,15 @@ public class APPYunAccountController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunAccount yunAccount)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        yunAccount.setUpdateBy(loginUser.getUser().getNickName());
         return toAjax(yunAccountService.updateYunAccount(yunAccount));
     }
 
     /**
      * 删除账户管理
      */
+    @AutoIdempotent
     @ApiOperation("删除账户管理")
     @ApiImplicitParam(name = "ids", value = "删除账户管理",
             dataType = "Long[]")
@@ -152,6 +150,7 @@ public class APPYunAccountController extends BaseController
      * @Author : 梁少鹏
      * @Date : 2020/1/26 11:14
      */
+    @AutoIdempotent
     @ApiOperation("账户充值")
     @ApiImplicitParam(name = "yunAccount", value = "账户充值",
             dataType = "YunAccountVo")
@@ -172,8 +171,8 @@ public class APPYunAccountController extends BaseController
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
             yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());
             yunAccountChange.setChangeType(AccountChangeType.RECHARGE.getCode());
-            yunAccountChange.setCreateById(SecurityUtils.getUserId());
-            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
+            yunAccountChange.setCreateById(loginUser.getUser().getUserId());
+            yunAccountChange.setCreateBy(loginUser.getUser().getNickName());
             yunAccountChange.setCreateTime(DateUtils.getNowDate());
             yunAccountChangeService.insertYunAccountChange(yunAccountChange);
         }
@@ -185,7 +184,8 @@ public class APPYunAccountController extends BaseController
      * @Author : 梁少鹏
      * @Date : 2020/1/26 11:14
      */
-    @ApiOperation("账户充值")
+    @AutoIdempotent
+    @ApiOperation("账户提现")
     @ApiImplicitParam(name = "yunAccount", value = "账户提现",
             dataType = "YunAccountVo")
     @PreAuthorize("@ss.hasPermi('account:account:withdraw')")
@@ -205,8 +205,8 @@ public class APPYunAccountController extends BaseController
             yunAccountChange.setCashAmount(yunAccount.getTotalAmount());
             yunAccountChange.setUncashAmount(yunAccount.getRachargeAmount());
             yunAccountChange.setChangeType(AccountChangeType.WITHDRAW.getCode());
-            yunAccountChange.setCreateById(SecurityUtils.getUserId());
-            yunAccountChange.setCreateBy(SecurityUtils.getUsername());
+            yunAccountChange.setCreateById(loginUser.getUser().getUserId());
+            yunAccountChange.setCreateBy(loginUser.getUser().getNickName());
             yunAccountChange.setCreateTime(DateUtils.getNowDate());
             yunAccountChangeService.insertYunAccountChange(yunAccountChange);
         }

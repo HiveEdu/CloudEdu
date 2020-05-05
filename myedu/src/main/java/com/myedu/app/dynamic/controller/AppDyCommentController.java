@@ -2,6 +2,7 @@ package com.myedu.app.dynamic.controller;
 
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -40,64 +41,36 @@ public class AppDyCommentController extends BaseController
     /**
      * 查询动态评论列表
      */
+    @AutoIdempotent
     @ApiOperation("查询动态评论列表")
     @ApiImplicitParam(name = "yunDyComment", value = "查询动态评论列表",
             dataType = "YunDyComment")
     @GetMapping("/list")
     public TableDataInfo list(YunDyComment yunDyComment)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            startPage();
-            List<YunDyComment> list = yunDyCommentService.selectYunDyCommentList(yunDyComment);
-            return getDataTable(list);
-        }else {
-            return getDataTableLose(null);
-        }
-
+        startPage();
+        List<YunDyComment> list = yunDyCommentService.selectYunDyCommentList(yunDyComment);
+        return getDataTable(list);
     }
 
-    /**
-     * 导出动态评论列表
-     */
-    @ApiOperation("导出动态评论列表")
-    @ApiImplicitParam(name = "yunDyComment", value = "导出动态评论列表",
-            dataType = "YunDyComment")
-    @Log(title = "动态评论", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunDyComment yunDyComment)
-    {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            List<YunDyComment> list = yunDyCommentService.selectYunDyCommentList(yunDyComment);
-            ExcelUtil<YunDyComment> util = new ExcelUtil<YunDyComment>(YunDyComment.class);
-            return util.exportExcel(list, "comment");
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
-    }
 
     /**
      * 获取动态评论详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取动态评论详细信息")
     @ApiImplicitParam(name = "id", value = "获取动态评论详细信息",
             dataType = "Long")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return AjaxResult.success(yunDyCommentService.selectYunDyCommentById(id));
-        }else {
-            return AjaxResult.error("token无效");
-        }
+      return AjaxResult.success(yunDyCommentService.selectYunDyCommentById(id));
     }
 
     /**
      * 新增动态评论
      */
+    @AutoIdempotent
     @ApiOperation("新增动态评论")
     @ApiImplicitParam(name = "yunDyComment", value = "新增动态评论",
             dataType = "YunDyComment")
@@ -106,17 +79,15 @@ public class AppDyCommentController extends BaseController
     public AjaxResult add(@RequestBody YunDyComment yunDyComment)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunDyCommentService.insertYunDyComment(yunDyComment));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        yunDyComment.setCreateById(loginUser.getUser().getUserId());
+        yunDyComment.setCreateBy(loginUser.getUser().getNickName());
+        return toAjax(yunDyCommentService.insertYunDyComment(yunDyComment));
     }
 
     /**
      * 修改动态评论
      */
+    @AutoIdempotent
     @ApiOperation("修改动态评论")
     @ApiImplicitParam(name = "yunDyComment", value = "修改动态评论",
             dataType = "YunDyComment")
@@ -124,18 +95,13 @@ public class AppDyCommentController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunDyComment yunDyComment)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunDyCommentService.updateYunDyComment(yunDyComment));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+       return toAjax(yunDyCommentService.updateYunDyComment(yunDyComment));
     }
 
     /**
      * 删除动态评论
      */
+    @AutoIdempotent
     @ApiOperation("删除动态评论")
     @ApiImplicitParam(name = "ids", value = "删除动态评论",
             dataType = "Long[]")
@@ -143,12 +109,6 @@ public class AppDyCommentController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunDyCommentService.deleteYunDyCommentByIds(ids));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        return toAjax(yunDyCommentService.deleteYunDyCommentByIds(ids));
     }
 }

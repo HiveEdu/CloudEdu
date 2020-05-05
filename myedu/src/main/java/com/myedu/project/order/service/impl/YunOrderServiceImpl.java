@@ -96,9 +96,6 @@ public class YunOrderServiceImpl implements IYunOrderService
     @Override
     public int insertYunOrder(YunOrder yunOrder)
     {
-        yunOrder.setCreateById(SecurityUtils.getUserId());
-        yunOrder.setCreateBy(SecurityUtils.getUsername());
-        yunOrder.setCreateTime(DateUtils.getNowDate());
         yunOrder.setNum(OrderCodeFactory.getOrderCode(SecurityUtils.getUserId()));
         yunOrder.setStatus(OrderStatus.TOBEPAID.getCode());
         return yunOrderMapper.insertYunOrder(yunOrder);
@@ -113,7 +110,6 @@ public class YunOrderServiceImpl implements IYunOrderService
     @Override
     public int updateYunOrder(YunOrder yunOrder)
     {
-        yunOrder.setUpdateTime(DateUtils.getNowDate());
         return yunOrderMapper.updateYunOrder(yunOrder);
     }
 

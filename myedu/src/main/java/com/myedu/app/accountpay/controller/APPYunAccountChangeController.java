@@ -1,8 +1,11 @@
 package com.myedu.app.accountpay.controller;
 
-import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.common.utils.ServletUtils;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
@@ -30,10 +33,12 @@ public class APPYunAccountChangeController extends BaseController
 {
     @Autowired
     private IYunAccountChangeService yunAccountChangeService;
-
+    @Autowired
+    private TokenService tokenService;
     /**
      * 查询账户资金变动流水列表
      */
+    @AutoIdempotent
     @ApiOperation("查询账户资金变动流水列表")
     @ApiImplicitParam(name = "yunAccountChange", value = "查询账户资金变动流水列表",
             dataType = "YunAccountChange")
@@ -41,30 +46,18 @@ public class APPYunAccountChangeController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(YunAccountChange yunAccountChange)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         startPage();
+        yunAccountChange.setCreateById(loginUser.getUser().getUserId());
         List<YunAccountChange> list = yunAccountChangeService.selectYunAccountChangeList(yunAccountChange);
         return getDataTable(list);
     }
 
-    /**
-     * 导出账户资金变动流水列表
-     */
-    @ApiOperation("导出账户资金变动流水列表")
-    @ApiImplicitParam(name = "yunAccountChange", value = "导出账户资金变动流水列表",
-            dataType = "YunAccountChange")
-    @PreAuthorize("@ss.hasPermi('account:account_change:export')")
-    @Log(title = "账户资金变动流水", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunAccountChange yunAccountChange)
-    {
-        List<YunAccountChange> list = yunAccountChangeService.selectYunAccountChangeList(yunAccountChange);
-        ExcelUtil<YunAccountChange> util = new ExcelUtil<YunAccountChange>(YunAccountChange.class);
-        return util.exportExcel(list, "account_change");
-    }
 
     /**
      * 获取账户资金变动流水详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取账户资金变动流水详细信息")
     @ApiImplicitParam(name = "id", value = "获取账户资金变动流水详细信息",
             dataType = "Long")
@@ -78,20 +71,24 @@ public class APPYunAccountChangeController extends BaseController
     /**
      * 新增账户资金变动流水
      */
-    @ApiOperation("获取账户资金变动流水详细信息")
-    @ApiImplicitParam(name = "id", value = "获取账户资金变动流水详细信息",
+    @AutoIdempotent
+    @ApiOperation("新增账户资金变动流水")
+    @ApiImplicitParam(name = "id", value = "新增账户资金变动流水",
             dataType = "Long")
     @PreAuthorize("@ss.hasPermi('account:account_change:add')")
-    @Log(title = "账户资金变动流水", businessType = BusinessType.INSERT)
+    @Log(title = "新增账户资金变动流水", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody YunAccountChange yunAccountChange)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        yunAccountChange.setCreateById(loginUser.getUser().getUserId());
         return toAjax(yunAccountChangeService.insertYunAccountChange(yunAccountChange));
     }
 
     /**
      * 修改账户资金变动流水
      */
+    @AutoIdempotent
     @ApiOperation("修改账户资金变动流水")
     @ApiImplicitParam(name = "yunAccountChange", value = "修改账户资金变动流水",
             dataType = "YunAccountChange")
@@ -106,6 +103,7 @@ public class APPYunAccountChangeController extends BaseController
     /**
      * 删除账户资金变动流水
      */
+    @AutoIdempotent
     @ApiOperation("删除账户资金变动流水")
     @ApiImplicitParam(name = "ids", value = "删除账户资金变动流水",
             dataType = "Long[]")

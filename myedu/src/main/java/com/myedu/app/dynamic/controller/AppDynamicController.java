@@ -1,9 +1,8 @@
 package com.myedu.app.dynamic.controller;
 
 import com.myedu.common.utils.DyRedisKeyUtils;
-import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
-import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -19,7 +18,6 @@ import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
 import com.myedu.project.dynamic.service.IYunDyCommentService;
 import com.myedu.project.dynamic.service.IYunDyLikesService;
 import com.myedu.project.dynamic.service.IYunDynamicService;
-import com.myedu.project.parents.domain.YunComplaint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -59,6 +56,7 @@ public class AppDynamicController extends BaseController
     /**
      * 查询云托管动态管理列表
      */
+    @AutoIdempotent
     @ApiOperation("查询云托管动态管理列表")
     @ApiImplicitParam(name = "yunDynamic", value = "查询云托管动态管理列表",
             dataType = "YunDynamicVo")
@@ -100,31 +98,9 @@ public class AppDynamicController extends BaseController
     }
 
     /**
-     * 导出云托管动态管理列表
-     */
-    @ApiOperation("导出云托管动态管理列表")
-    @ApiImplicitParam(name = "yunDynamic", value = "导出云托管动态管理列表",
-            dataType = "YunDynamicVo")
-    @Log(title = "云托管动态管理", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunDynamicVo yunDynamic)
-    {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            List<YunDynamicVo> list = yunDynamicService.selectYunDynamicList(yunDynamic);
-            ExcelUtil<YunDynamicVo> util = new ExcelUtil<YunDynamicVo>(YunDynamicVo.class);
-            return util.exportExcel(list, "dynamic");
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
-    }
-
-
-
-    /**
      * 获取云托管动态管理详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取云托管动态管理详细信息")
     @ApiImplicitParam(name = "id", value = "获取云托管动态管理详细信息",
             dataType = "Long")
@@ -133,21 +109,18 @@ public class AppDynamicController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         AjaxResult ajax = AjaxResult.success();
-        if (loginUser!=null) {
-            YunDyComment yunDyComment=new YunDyComment();
-            yunDyComment.setDyId(id);
-            List<YunDyComment> yunDyComments=yunDyCommentService.selectYunDyCommentList(yunDyComment);
-            ajax.put("yunDyComments", yunDyComments);
-            ajax.put(AjaxResult.DATA_TAG, yunDynamicService.selectYunDynamicById(id));
-            return ajax;
-        }else {
-            return AjaxResult.error("token无效");
-        }
+        YunDyComment yunDyComment=new YunDyComment();
+        yunDyComment.setDyId(id);
+        List<YunDyComment> yunDyComments=yunDyCommentService.selectYunDyCommentList(yunDyComment);
+        ajax.put("yunDyComments", yunDyComments);
+        ajax.put(AjaxResult.DATA_TAG, yunDynamicService.selectYunDynamicById(id));
+        return ajax;
     }
 
     /**
      * 新增云托管动态管理
      */
+    @AutoIdempotent
     @ApiOperation("新增云托管动态管理")
     @ApiImplicitParam(name = "yunDynamic", value = "新增云托管动态管理",
             dataType = "YunDynamic")
@@ -156,19 +129,15 @@ public class AppDynamicController extends BaseController
     public AjaxResult add(@RequestBody YunDynamic yunDynamic)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            yunDynamic.setCreateById(loginUser.getUser().getUserId());
-            yunDynamic.setCreateBy(loginUser.getUser().getNickName());
-            return toAjax(yunDynamicService.insertYunDynamic(yunDynamic));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        yunDynamic.setCreateById(loginUser.getUser().getUserId());
+        yunDynamic.setCreateBy(loginUser.getUser().getNickName());
+        return toAjax(yunDynamicService.insertYunDynamic(yunDynamic));
     }
 
     /**
      * 修改云托管动态管理
      */
+    @AutoIdempotent
     @ApiOperation("修改云托管动态管理")
     @ApiImplicitParam(name = "yunDynamic", value = "修改云托管动态管理",
             dataType = "YunDynamic")
@@ -177,17 +146,14 @@ public class AppDynamicController extends BaseController
     public AjaxResult edit(@RequestBody YunDynamic yunDynamic)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            yunDynamic.setUpdateBy(loginUser.getUser().getNickName());
-            return toAjax(yunDynamicService.updateYunDynamic(yunDynamic));
-        }else {
-            return AjaxResult.error("token无效");
-        }
+        yunDynamic.setUpdateBy(loginUser.getUser().getNickName());
+        return toAjax(yunDynamicService.updateYunDynamic(yunDynamic));
     }
 
     /**
      * 删除云托管动态管理
      */
+    @AutoIdempotent
     @ApiOperation("删除云托管动态管理")
     @ApiImplicitParam(name = "ids", value = "删除云托管动态管理",
             dataType = "Long[]")
@@ -195,41 +161,35 @@ public class AppDynamicController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            for (int i = 0; i < ids.length; i++) {
-                yunDyLikesService.deleteYunDyLikesByDyId(ids[i]);
-                yunDyCommentService.deleteYunDyCommentByDyId(ids[i]);
-                //删除redis中缓存的点赞数据
-                Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, ScanOptions.NONE);
-                while (cursor.hasNext()){
-                    Map.Entry<Object, Object> entry = cursor.next();
-                    String key = String.valueOf(entry.getKey());
-                    String[] split = key.split("::");
-                    System.out.println("split.length"+split.length);
-                    Long likedDynamicId = Long.valueOf(split[0]);
-                    //存到 list 后从 Redis 中删除
-                    if(ids[i]==likedDynamicId){
-                        redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, key);
-                    }
-                }
-                Cursor<Map.Entry<Object, Object>> cursor2 = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, ScanOptions.NONE);
-                while (cursor2.hasNext()){
-                    Map.Entry<Object, Object> map = cursor2.next();
-                    //将点赞数量存储在 DyLikedCountDTO
-                    System.out.println("map.getKey()____"+map.getKey());
-                    String key = String.valueOf(map.getKey());
-                    if(ids[i]==Long.valueOf(key)){
-                        //从Redis中删除这条记录
-                        redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, map.getKey());
-                    }
+        for (int i = 0; i < ids.length; i++) {
+            yunDyLikesService.deleteYunDyLikesByDyId(ids[i]);
+            yunDyCommentService.deleteYunDyCommentByDyId(ids[i]);
+            //删除redis中缓存的点赞数据
+            Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, ScanOptions.NONE);
+            while (cursor.hasNext()){
+                Map.Entry<Object, Object> entry = cursor.next();
+                String key = String.valueOf(entry.getKey());
+                String[] split = key.split("::");
+                System.out.println("split.length"+split.length);
+                Long likedDynamicId = Long.valueOf(split[0]);
+                //存到 list 后从 Redis 中删除
+                if(ids[i]==likedDynamicId){
+                    redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED, key);
                 }
             }
-            return toAjax(yunDynamicService.deleteYunDynamicByIds(ids));
-        }else {
-            return AjaxResult.error("token无效");
+            Cursor<Map.Entry<Object, Object>> cursor2 = redisTemplate.opsForHash().scan(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, ScanOptions.NONE);
+            while (cursor2.hasNext()){
+                Map.Entry<Object, Object> map = cursor2.next();
+                //将点赞数量存储在 DyLikedCountDTO
+                System.out.println("map.getKey()____"+map.getKey());
+                String key = String.valueOf(map.getKey());
+                if(ids[i]==Long.valueOf(key)){
+                    //从Redis中删除这条记录
+                    redisTemplate.opsForHash().delete(DyRedisKeyUtils.MAP_KEY_DYNAMIC_LIKED_COUNT, map.getKey());
+                }
+            }
         }
-
+        return toAjax(yunDynamicService.deleteYunDynamicByIds(ids));
     }
 
 
@@ -237,28 +197,23 @@ public class AppDynamicController extends BaseController
     /**
      * 动态点赞
      */
+    @AutoIdempotent
     @ApiOperation("动态点赞")
     @ApiImplicitParam(name = "ids", value = "动态点赞",
             dataType = "Long")
     @GetMapping(value = "/like/{id}")
-    public AjaxResult like(@PathVariable("id") Long id)
-    {
+    public AjaxResult like(@PathVariable("id") Long id) {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            AjaxResult ajax = AjaxResult.success();
-            //先把数据存到Redis里,再定时存回数据库
-            yunDyLikesService.saveLiked2Redis(id, loginUser.getUser().getUserId());
-            yunDyLikesService.incrementLikedCount(id);
-            return ajax;
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        AjaxResult ajax = AjaxResult.success();
+        //先把数据存到Redis里,再定时存回数据库
+        yunDyLikesService.saveLiked2Redis(id, loginUser.getUser().getUserId());
+        yunDyLikesService.incrementLikedCount(id);
+        return ajax;
     }
-
-    /**
+    /*
      * 动态取消点赞
      */
+    @AutoIdempotent
     @ApiOperation("动态取消点赞")
     @ApiImplicitParam(name = "id", value = "动态取消点赞",
             dataType = "Long")
@@ -266,22 +221,18 @@ public class AppDynamicController extends BaseController
     public AjaxResult unlike(@PathVariable("id") Long id)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            AjaxResult ajax = AjaxResult.success();
-            //先把数据存到Redis里,再定时存回数据库
-            yunDyLikesService.unlikeFromRedis(id, loginUser.getUser().getUserId());
-            yunDyLikesService.decrementLikedCount(id);
-            return ajax;
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        AjaxResult ajax = AjaxResult.success();
+        //先把数据存到Redis里,再定时存回数据库
+        yunDyLikesService.unlikeFromRedis(id, loginUser.getUser().getUserId());
+        yunDyLikesService.decrementLikedCount(id);
+        return ajax;
     }
 
 
     /**
      * 新增云托管动态管理
      */
+    @AutoIdempotent
     @ApiOperation("新增云托管动态管理")
     @ApiImplicitParam(name = "yunDyComment", value = "新增云托管动态管理",
             dataType = "YunDyComment")
@@ -290,18 +241,13 @@ public class AppDynamicController extends BaseController
     public AjaxResult comment(@RequestBody YunDyComment yunDyComment)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            AjaxResult ajax = AjaxResult.success();
-            yunDyComment.setCreateById(loginUser.getUser().getUserId());
-            yunDyComment.setCreateBy(loginUser.getUser().getNickName());
-            yunDyCommentService.insertYunDyComment(yunDyComment);
-            YunDynamic  yunDynamic=yunDynamicService.selectYunDynamicById(yunDyComment.getDyId());
-            yunDynamic.setComments(yunDynamic.getComments()+1);
-            return toAjax(yunDynamicService.updateYunDynamic(yunDynamic));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        AjaxResult ajax = AjaxResult.success();
+        yunDyComment.setCreateById(loginUser.getUser().getUserId());
+        yunDyComment.setCreateBy(loginUser.getUser().getNickName());
+        yunDyCommentService.insertYunDyComment(yunDyComment);
+        YunDynamic  yunDynamic=yunDynamicService.selectYunDynamicById(yunDyComment.getDyId());
+        yunDynamic.setComments(yunDynamic.getComments()+1);
+        return toAjax(yunDynamicService.updateYunDynamic(yunDynamic));
     }
 
 

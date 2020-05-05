@@ -3,6 +3,7 @@ package com.myedu.app.common.controller;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.file.FileUploadUtils;
 import com.myedu.common.utils.file.FileUtils;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.config.MyEduConfig;
 import com.myedu.framework.config.ServerConfig;
 import com.myedu.framework.web.domain.AjaxResult;
@@ -38,6 +39,7 @@ public class AppCommonController
      * @param fileName 文件名称
      * @param delete 是否删除
      */
+    @AutoIdempotent
     @ApiOperation("文件下载")
     @GetMapping("/common/download")
     public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request)
@@ -70,6 +72,7 @@ public class AppCommonController
     /**
      * 通用上传请求
      */
+    @AutoIdempotent
     @ApiOperation("单文件文件上传")
     @PostMapping("/common/upload")
     public AjaxResult uploadFile(@RequestParam(value = "file", required=false) MultipartFile file) throws Exception
@@ -95,6 +98,7 @@ public class AppCommonController
     /**
      * 通用上传请求
      */
+    @AutoIdempotent
     @ApiOperation("多文件文件上传")
     @PostMapping("/common/uploads")
     public AjaxResult uploadFiles(@RequestParam(value = "files", required=false) MultipartFile[] files) throws Exception

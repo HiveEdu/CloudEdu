@@ -61,8 +61,6 @@ public class YunAccountServiceImpl implements IYunAccountService
     @Override
     public int insertYunAccount(YunAccount yunAccount)
     {
-        yunAccount.setCreateById(SecurityUtils.getUserId());
-        yunAccount.setCreateBy(SecurityUtils.getUsername());
         yunAccount.setCreateTime(DateUtils.getNowDate());
         //初始添加总金额与可提金额一致
         yunAccount.setCaseAmount(yunAccount.getTotalAmount());

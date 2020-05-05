@@ -4,6 +4,7 @@ import com.myedu.common.constant.Constants;
 import com.myedu.common.constant.UserConstants;
 import com.myedu.common.utils.*;
 import com.myedu.common.utils.sign.Base64;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.redis.RedisCache;
 import com.myedu.framework.security.LoginUser;
 import com.myedu.framework.security.service.SysLoginService;
@@ -11,24 +12,19 @@ import com.myedu.framework.security.service.SysPermissionService;
 import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.system.domain.SysRole;
 import com.myedu.project.system.domain.SysUser;
 import com.myedu.project.system.service.ISysRoleService;
 import com.myedu.project.system.service.ISysUserService;
 import io.jsonwebtoken.Claims;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,8 +32,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Created with IntelliJ IDEA.
  * User: 梁少鹏
@@ -90,12 +84,12 @@ public class AppUserController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2019/12/21 7:48
      */
+    @AutoIdempotent
     @ApiOperation("修改用户")
     @ApiImplicitParam(name = "SysUser", value = "修改用户信息", dataType = "SysUser")
     @PostMapping("/editUser")
     public AjaxResult editUser(SysUser user)
     {
-        //userService.checkUserAllowed(user);
         if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
@@ -143,6 +137,7 @@ public class AppUserController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2020/2/1 20:07
      */
+    @AutoIdempotent
     @ApiOperation("获取用户详情")
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo()
@@ -179,17 +174,12 @@ public class AppUserController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2020/2/1 20:15
      */
+    @AutoIdempotent
     @ApiOperation("获取角色列表")
     @ApiImplicitParam(name = "HttpServletResponse", value = "获取角色列表")
     @GetMapping("/getRoleList")
     public AjaxResult getRoleList() throws IOException {
         AjaxResult ajax = AjaxResult.success();
-//        if(this.CheckTokenBen()){
-//            List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
-//            ajax.put("roleList", list);
-//        }else{
-//            ajax.error("token无效");
-//        }
         List<SysRole> list = roleService.selectRoleAll().stream().filter(r->!r.getRoleName().equals("管理员")).collect(Collectors.toList());
         ajax.put("roleList", list);
         return ajax;

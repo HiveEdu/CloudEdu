@@ -1,5 +1,6 @@
 package com.myedu.project.order.controller;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
@@ -100,6 +101,9 @@ public class YunOrderController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunOrder yunOrder)
     {
+        yunOrder.setCreateById(SecurityUtils.getUserId());
+        yunOrder.setCreateBy(SecurityUtils.getUseNickName());
+        yunOrder.setCreateTime(DateUtils.getNowDate());
         if(yunOrder.getStoreId()!=null){
             //报名给这个门店添加学生
             YunStoreStuVo yunStoreStu1=new YunStoreStuVo();
@@ -126,6 +130,7 @@ public class YunOrderController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunOrder yunOrder)
     {
+        yunOrder.setUpdateTime(DateUtils.getNowDate());
         return toAjax(yunOrderService.updateYunOrder(yunOrder));
     }
     /*
