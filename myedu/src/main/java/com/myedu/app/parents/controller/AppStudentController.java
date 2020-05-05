@@ -73,15 +73,9 @@ public class AppStudentController extends BaseController {
     @ApiOperation("获取学生详情")
     @ApiImplicitParam(name = "id", value = "获取学生详情", required = true, dataType = "Long", paramType = "path")
     @GetMapping(value = "/getStudnetById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-        public AjaxResult getStudnetById(@PathVariable Long id)
+    public AjaxResult getStudnetById(@PathVariable Long id)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if(loginUser!=null){
-            return AjaxResult.success(yunStudentService.selectYunStudentById(id));
-        }else{
-            return AjaxResult.error("token无效");
-        }
-
+        return AjaxResult.success(yunStudentService.selectYunStudentById(id));
     }
     /**
      * @Description :家长端增加学生
@@ -103,8 +97,6 @@ public class AppStudentController extends BaseController {
         }else{
             return AjaxResult.error("token无效");
         }
-
-
     }
     /**
      * @Description :修改学生数据
@@ -138,13 +130,7 @@ public class AppStudentController extends BaseController {
     @DeleteMapping("/deletStudentByIds/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunStudentService.deleteYunStudentByIds(ids));
-        }else{
-            return AjaxResult.error("token无效");
-        }
-
+       return toAjax(yunStudentService.deleteYunStudentByIds(ids));
     }
 
 }
