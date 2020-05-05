@@ -1,6 +1,7 @@
 package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.ServletUtils;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.redis.RedisCache;
@@ -49,6 +50,7 @@ public class AppStudentController extends BaseController {
     @ApiOperation("查询当前用户下的学生")
     @ApiImplicitParam(name = "yunStudentVo", value = "查询当前用户下的学生",
             dataType = "YunStudentVo")
+    @AutoIdempotent
     @GetMapping("/getMyStudent")
     public TableDataInfo  getMyStudent(YunStudentVo yunStudentVo)
     {
@@ -67,10 +69,11 @@ public class AppStudentController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:32
      */
+    @AutoIdempotent
     @ApiOperation("获取学生详情")
     @ApiImplicitParam(name = "id", value = "获取学生详情", required = true, dataType = "Long", paramType = "path")
     @GetMapping(value = "/getStudnetById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public AjaxResult getStudnetById(@PathVariable Long id)
+        public AjaxResult getStudnetById(@PathVariable Long id)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if(loginUser!=null){
@@ -85,6 +88,7 @@ public class AppStudentController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2019/12/28 18:49
      */
+    @AutoIdempotent
     @ApiOperation("增加学生")
     @ApiImplicitParam(name = "yunStudent", value = "增加学生", dataType = "YunStudent")
     @Log(title = "学生数据", businessType = BusinessType.INSERT)
@@ -107,6 +111,7 @@ public class AppStudentController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:35
      */
+    @AutoIdempotent
     @ApiOperation("修改学生")
     @ApiImplicitParam(name = "yunStudent", value = "修改学生", dataType = "YunStudent")
     @Log(title = "学生数据", businessType = BusinessType.UPDATE)
@@ -126,6 +131,7 @@ public class AppStudentController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:39
      */
+    @AutoIdempotent
     @ApiOperation("删除学生")
     @ApiImplicitParam(name = "ids", value = "删除学生", dataType = "Long[]")
     @Log(title = "学生数据", businessType = BusinessType.DELETE)

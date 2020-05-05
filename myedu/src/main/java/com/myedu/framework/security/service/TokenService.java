@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
+
+import com.myedu.framework.web.domain.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -114,8 +116,7 @@ public class TokenService
 
     /**
      * 验证令牌有效期，相差不足20分钟，自动刷新缓存
-     * 
-     * @param token 令牌
+     *
      * @return 令牌
      */
     public void verifyToken(LoginUser loginUser)
@@ -218,5 +219,30 @@ public class TokenService
     public String getTokenKey(String uuid)
     {
         return Constants.LOGIN_TOKEN_KEY + uuid;
+    }
+
+    /**
+     * 检验token
+     * @return
+     */
+    public boolean checkToken(HttpServletRequest request) throws Exception {
+        Boolean result=true;
+        // 获取请求携带的令牌
+        String token = getToken(request);
+        LoginUser loginUser =null;
+        if (StringUtils.isNotEmpty(token))
+        {
+            Claims claims = parseToken(token);
+            // 解析对应的权限以及用户信息
+            String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+            String userKey = getTokenKey(uuid);
+            loginUser = redisCache.getCacheObject(userKey);
+        }
+        if(loginUser==null){
+            result=false;
+        }else{
+            result=true;
+        }
+        return result;
     }
 }
