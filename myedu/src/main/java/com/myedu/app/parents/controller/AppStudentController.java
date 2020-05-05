@@ -47,10 +47,10 @@ public class AppStudentController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2019/12/28 20:28
      */
+    @AutoIdempotent
     @ApiOperation("查询当前用户下的学生")
     @ApiImplicitParam(name = "yunStudentVo", value = "查询当前用户下的学生",
             dataType = "YunStudentVo")
-    @AutoIdempotent
     @GetMapping("/getMyStudent")
     public TableDataInfo  getMyStudent(YunStudentVo yunStudentVo)
     {
@@ -89,14 +89,9 @@ public class AppStudentController extends BaseController {
     @PostMapping("/addStudent")
     public AjaxResult addStudent(@RequestBody YunStudent yunStudent) throws IOException {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null)
-        {
-            yunStudent.setCreateById(loginUser.getUser().getUserId());
-            yunStudent.setCreateBy(loginUser.getUser().getNickName());
-            return toAjax(yunStudentService.insertYunStudent(yunStudent));
-        }else{
-            return AjaxResult.error("token无效");
-        }
+        yunStudent.setCreateById(loginUser.getUser().getUserId());
+        yunStudent.setCreateBy(loginUser.getUser().getNickName());
+        return toAjax(yunStudentService.insertYunStudent(yunStudent));
     }
     /**
      * @Description :修改学生数据
@@ -111,12 +106,8 @@ public class AppStudentController extends BaseController {
     public AjaxResult editStudent(@RequestBody YunStudent yunStudent)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            yunStudent.setUpdateBy(loginUser.getUser().getNickName());
-            return toAjax(yunStudentService.updateYunStudent(yunStudent));
-        }else{
-            return AjaxResult.error("token无效");
-        }
+        yunStudent.setUpdateBy(loginUser.getUser().getNickName());
+        return toAjax(yunStudentService.updateYunStudent(yunStudent));
     }
     /**
      * @Description :删除学生

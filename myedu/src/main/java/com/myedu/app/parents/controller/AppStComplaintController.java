@@ -3,6 +3,7 @@ package com.myedu.app.parents.controller;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -40,6 +41,7 @@ public class AppStComplaintController extends BaseController
     /**
      * 查询投诉列表
      */
+    @AutoIdempotent
     @ApiOperation("查询投诉列表")
     @ApiImplicitParam(name = "yunComplaint", value = "查询投诉列表",
             dataType = "YunComplaint")
@@ -47,58 +49,31 @@ public class AppStComplaintController extends BaseController
     public TableDataInfo list(YunComplaint yunComplaint)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            startPage();
-            List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
-            return getDataTable(list);
-        }else {
-            return getDataTableLose(null);
-        }
-
+        startPage();
+        yunComplaint.setCreateById(loginUser.getUser().getUserId());
+        List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
+        return getDataTable(list);
     }
 
-    /**
-     * 导出投诉列表
-     */
-    @ApiOperation("导出投诉列表")
-    @ApiImplicitParam(name = "yunComplaint", value = "导出投诉列表",
-            dataType = "YunComplaint")
-    @Log(title = "投诉", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunComplaint yunComplaint)
-    {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
-            ExcelUtil<YunComplaint> util = new ExcelUtil<YunComplaint>(YunComplaint.class);
-            return util.exportExcel(list, "complaint");
-        }else {
-            return AjaxResult.error("token无效");
-        }
 
-    }
 
     /**
      * 获取投诉详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取投诉详细信息")
     @ApiImplicitParam(name = "id", value = "获取投诉详细信息",
             dataType = "Long")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return AjaxResult.success(yunComplaintService.selectYunComplaintById(id));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+      return AjaxResult.success(yunComplaintService.selectYunComplaintById(id));
     }
 
     /**
      * 新增投诉
      */
+    @AutoIdempotent
     @ApiOperation("新增投诉")
     @ApiImplicitParam(name = "yunComplaint", value = "新增投诉",
             dataType = "YunComplaint")
@@ -107,19 +82,15 @@ public class AppStComplaintController extends BaseController
     public AjaxResult add(@RequestBody YunComplaint yunComplaint)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            yunComplaint.setCreateById(loginUser.getUser().getUserId());
-            yunComplaint.setCreateBy(loginUser.getUser().getNickName());
-            return toAjax(yunComplaintService.insertYunComplaint(yunComplaint));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        yunComplaint.setCreateById(loginUser.getUser().getUserId());
+        yunComplaint.setCreateBy(loginUser.getUser().getNickName());
+        return toAjax(yunComplaintService.insertYunComplaint(yunComplaint));
     }
 
     /**
      * 修改投诉
      */
+    @AutoIdempotent
     @ApiOperation("修改投诉")
     @ApiImplicitParam(name = "yunComplaint", value = "修改投诉",
             dataType = "YunComplaint")
@@ -127,18 +98,13 @@ public class AppStComplaintController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunComplaint yunComplaint)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunComplaintService.updateYunComplaint(yunComplaint));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+      return toAjax(yunComplaintService.updateYunComplaint(yunComplaint));
     }
 
     /**
      * 删除投诉
      */
+    @AutoIdempotent
     @ApiOperation("删除投诉")
     @ApiImplicitParam(name = "ids", value = "删除投诉",
             dataType = "Long[]")
@@ -146,12 +112,6 @@ public class AppStComplaintController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunComplaintService.deleteYunComplaintByIds(ids));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        return toAjax(yunComplaintService.deleteYunComplaintByIds(ids));
     }
 }

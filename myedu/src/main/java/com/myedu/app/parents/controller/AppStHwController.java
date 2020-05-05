@@ -1,9 +1,8 @@
 package com.myedu.app.parents.controller;
 
-import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
-import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -20,7 +19,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +43,7 @@ public class AppStHwController extends BaseController
     /**
      * 查询学生身高体重记录列表
      */
+    @AutoIdempotent
     @ApiOperation("查询学生身高体重记录列表")
     @ApiImplicitParam(name = "yunStuHw", value = "查询学生身高体重记录列表",
             dataType = "YunStuHwVo")
@@ -52,39 +51,16 @@ public class AppStHwController extends BaseController
     public TableDataInfo list(YunStuHwVo yunStuHw)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            startPage();
-            List<YunStuHwVo> list = yunStuHwService.selectYunStuHwList(yunStuHw);
-            return getDataTable(list);
-        }else {
-            return getDataTableLose(null);
-        }
-
-    }
-
-    /**
-     * 导出学生身高体重记录列表
-     */
-    @ApiOperation("导出学生身高体重记录列表")
-    @ApiImplicitParam(name = "yunStuHw", value = "导出学生身高体重记录列表",
-            dataType = "YunStuHwVo")
-    @Log(title = "学生身高体重记录", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunStuHwVo yunStuHw)
-    {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            List<YunStuHwVo> list = yunStuHwService.selectYunStuHwList(yunStuHw);
-            ExcelUtil<YunStuHwVo> util = new ExcelUtil<YunStuHwVo>(YunStuHwVo.class);
-            return util.exportExcel(list, "hw");
-        }else {
-            return AjaxResult.error("token无效");
-        }
+        startPage();
+        yunStuHw.setCreateById(loginUser.getUser().getUserId());
+        List<YunStuHwVo> list = yunStuHwService.selectYunStuHwList(yunStuHw);
+        return getDataTable(list);
     }
 
     /**
      * 获取学生身高体重记录详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取学生身高体重记录详细信息")
     @ApiImplicitParam(name = "id", value = "获取学生身高体重记录详细信息",
             dataType = "Long")
@@ -93,16 +69,12 @@ public class AppStHwController extends BaseController
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         AjaxResult ajax = AjaxResult.success();
-        if (loginUser!=null) {
-            YunStudentVo yunStudentVo = new YunStudentVo();
-            yunStudentVo.setCreateById(loginUser.getUser().getUserId());
-            List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
-            ajax.put("studentLists", list);
-            if (StringUtils.isNotNull(id)) {
-                ajax.put(AjaxResult.DATA_TAG, yunStuHwService.selectYunStuHwById(id));
-            }
-        }else{
-            return AjaxResult.error("token无效");
+        YunStudentVo yunStudentVo = new YunStudentVo();
+        yunStudentVo.setCreateById(loginUser.getUser().getUserId());
+        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+        ajax.put("studentLists", list);
+        if (StringUtils.isNotNull(id)) {
+            ajax.put(AjaxResult.DATA_TAG, yunStuHwService.selectYunStuHwById(id));
         }
         return ajax;
     }
@@ -110,6 +82,7 @@ public class AppStHwController extends BaseController
     /**
      * 新增学生身高体重记录
      */
+    @AutoIdempotent
     @ApiOperation("新增学生身高体重记录")
     @ApiImplicitParam(name = "yunStuHw", value = "新增学生身高体重记录",
             dataType = "YunStuHw")
@@ -118,20 +91,15 @@ public class AppStHwController extends BaseController
     public AjaxResult add(@RequestBody YunStuHw yunStuHw)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            yunStuHw.setCreateById(loginUser.getUser().getUserId());
-            yunStuHw.setCreateBy(loginUser.getUser().getNickName());
-            return toAjax(yunStuHwService.insertYunStuHw(yunStuHw));
-        }else {
-
-            return AjaxResult.error("token无效");
-        }
-
+        yunStuHw.setCreateById(loginUser.getUser().getUserId());
+        yunStuHw.setCreateBy(loginUser.getUser().getNickName());
+        return toAjax(yunStuHwService.insertYunStuHw(yunStuHw));
     }
 
     /**
      * 修改学生身高体重记录
      */
+    @AutoIdempotent
     @ApiOperation("修改学生身高体重记录")
     @ApiImplicitParam(name = "yunStuHw", value = "修改学生身高体重记录",
             dataType = "YunStuHw")
@@ -139,30 +107,20 @@ public class AppStHwController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuHw yunStuHw)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunStuHwService.updateYunStuHw(yunStuHw));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        return toAjax(yunStuHwService.updateYunStuHw(yunStuHw));
     }
 
     /**
      * 删除学生身高体重记录
      */
+    @AutoIdempotent
     @ApiOperation("删除学生身高体重记录")
     @ApiImplicitParam(name = "ids", value = "删除学生身高体重记录",
             dataType = "Long[]")
     @Log(title = "学生身高体重记录", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
-    {   LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunStuHwService.deleteYunStuHwByIds(ids));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+    {
+        return toAjax(yunStuHwService.deleteYunStuHwByIds(ids));
     }
 }

@@ -1,6 +1,7 @@
 package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.ServletUtils;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.security.LoginUser;
 import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
@@ -40,14 +41,12 @@ import java.util.List;
 @RequestMapping("/app/storeSearch")
 public class APPStoreSearchController extends BaseController {
     @Autowired
-    private StoreSearchVoRepository storeSearchVoRepository;
-
-    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
-
     @Autowired
     private TokenService tokenService;
 
+
+    @AutoIdempotent
     @ApiOperation("附近的门店列表")
     @GetMapping(value = "/findAll")
     public TableDataInfo listProducts(double lon, double lat, String distance,StoreSearchVo storeSearchVo)
@@ -106,9 +105,5 @@ public class APPStoreSearchController extends BaseController {
         }else {
             return getDataTableLose(null);
         }
-
-
-
     }
-
 }

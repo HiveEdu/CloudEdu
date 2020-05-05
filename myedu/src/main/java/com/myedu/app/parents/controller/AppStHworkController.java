@@ -1,9 +1,9 @@
 package com.myedu.app.parents.controller;
 
-import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -12,7 +12,6 @@ import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.parents.domain.YunStuHwork;
-import com.myedu.project.parents.domain.vo.YunStuHwVo;
 import com.myedu.project.parents.domain.vo.YunStuHworkVo;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStuHworkService;
@@ -21,7 +20,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +44,7 @@ public class AppStHworkController extends BaseController
     /**
      * 查询学生作业列表
      */
+    @AutoIdempotent
     @ApiOperation("查询学生作业列表")
     @ApiImplicitParam(name = "yunStuHwork", value = "查询学生作业列表",
             dataType = "YunStuHworkVo")
@@ -53,39 +52,16 @@ public class AppStHworkController extends BaseController
     public TableDataInfo list(YunStuHworkVo yunStuHwork)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            startPage();
-            List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
-            return getDataTable(list);
-        }else {
-            return getDataTableLose(null);
-        }
-
-    }
-
-    /**
-     * 导出学生作业列表
-     */
-    @ApiOperation("导出学生作业列表")
-    @ApiImplicitParam(name = "yunStuHwork", value = "查询学生作业列表",
-            dataType = "YunStuHworkVo")
-    @Log(title = "学生作业", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunStuHworkVo yunStuHwork)
-    {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
-            ExcelUtil<YunStuHworkVo> util = new ExcelUtil<YunStuHworkVo>(YunStuHworkVo.class);
-            return util.exportExcel(list, "hwork");
-        }else {
-            return AjaxResult.error("token无效");
-        }
+        startPage();
+        yunStuHwork.setCreateById(loginUser.getUser().getUserId());
+        List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
+        return getDataTable(list);
     }
 
     /**
      * 获取学生作业详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取学生作业详细信息")
     @ApiImplicitParam(name = "id", value = "获取学生作业详细信息",
             dataType = "Long")
@@ -94,25 +70,21 @@ public class AppStHworkController extends BaseController
     {
         AjaxResult ajax = AjaxResult.success();
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            YunStudentVo yunStudentVo=new YunStudentVo();
-            yunStudentVo.setCreateById(loginUser.getUser().getUserId());
-            List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
-            ajax.put("studentLists", list);
-            if (StringUtils.isNotNull(id))
-            {
-                ajax.put(AjaxResult.DATA_TAG, yunStuHworkService.selectYunStuHworkById(id));
-            }
-            return ajax;
-        }else{
-            return AjaxResult.error("token无效");
+        YunStudentVo yunStudentVo=new YunStudentVo();
+        yunStudentVo.setCreateById(loginUser.getUser().getUserId());
+        List<YunStudentVo> list = yunStudentService.selectYunStudentList(yunStudentVo);
+        ajax.put("studentLists", list);
+        if (StringUtils.isNotNull(id))
+        {
+            ajax.put(AjaxResult.DATA_TAG, yunStuHworkService.selectYunStuHworkById(id));
         }
-
+        return ajax;
     }
 
     /**
      * 新增学生作业
      */
+    @AutoIdempotent
     @ApiOperation("新增学生作业")
     @ApiImplicitParam(name = "yunStuHwork", value = "新增学生作业",
             dataType = "YunStuHwork")
@@ -121,19 +93,15 @@ public class AppStHworkController extends BaseController
     public AjaxResult add(@RequestBody YunStuHwork yunStuHwork)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            yunStuHwork.setCreateById(loginUser.getUser().getUserId());
-            yunStuHwork.setCreateBy(loginUser.getUser().getNickName());
-            return toAjax(yunStuHworkService.insertYunStuHwork(yunStuHwork));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        yunStuHwork.setCreateById(loginUser.getUser().getUserId());
+        yunStuHwork.setCreateBy(loginUser.getUser().getNickName());
+        return toAjax(yunStuHworkService.insertYunStuHwork(yunStuHwork));
     }
 
     /**
      * 修改学生作业
      */
+    @AutoIdempotent
     @ApiOperation("修改学生作业")
     @ApiImplicitParam(name = "yunStuHwork", value = "修改学生作业",
             dataType = "YunStuHwork")
@@ -141,17 +109,13 @@ public class AppStHworkController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunStuHwork yunStuHwork)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunStuHworkService.updateYunStuHwork(yunStuHwork));
-        }else {
-            return AjaxResult.error("token无效");
-        }
+        return toAjax(yunStuHworkService.updateYunStuHwork(yunStuHwork));
     }
 
     /**
      * 删除学生作业
      */
+    @AutoIdempotent
     @ApiOperation("删除学生作业")
     @ApiImplicitParam(name = "ids", value = "删除学生作业",
             dataType = "Long[]")
@@ -159,11 +123,6 @@ public class AppStHworkController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunStuHworkService.deleteYunStuHworkByIds(ids));
-        }else {
-            return AjaxResult.error("token无效");
-        }
+       return toAjax(yunStuHworkService.deleteYunStuHworkByIds(ids));
     }
 }
