@@ -174,7 +174,6 @@ public class AppUserController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2020/2/1 20:15
      */
-    @AutoIdempotent
     @ApiOperation("获取角色列表")
     @ApiImplicitParam(name = "HttpServletResponse", value = "获取角色列表")
     @GetMapping("/getRoleList")
