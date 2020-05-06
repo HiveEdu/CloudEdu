@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.system.mapper.YunBannerMapper">
+    
+    <resultMap type="YunBanner" id="YunBannerResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="url"    column="url"    />
+        <result property="myvue"    column="myvue"    />
+        <result property="uniapp"    column="uniapp"    />
+        <result property="photo"    column="photo"    />
+        <result property="sort"    column="sort"    />
+        <result property="isshow"    column="isshow"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunBannerVo">
+        select id, title, url, myvue, uniapp, photo, sort, isshow, create_by, create_time, update_by, update_time, del_flag, create_by_id from yun_banner
+    </sql>
+
+    <select id="selectYunBannerList" parameterType="YunBanner" resultMap="YunBannerResult">
+        <include refid="selectYunBannerVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="isshow != null  and isshow != ''"> and isshow = #{isshow}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createById != null "> and create_by_id = #{createById}</if>
+        </where>
+        order  by  create_time desc
+    </select>
+    
+    <select id="selectYunBannerById" parameterType="Long" resultMap="YunBannerResult">
+        <include refid="selectYunBannerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunBanner" parameterType="YunBanner">
+        insert into yun_banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="myvue != null  and myvue != ''">myvue,</if>
+            <if test="uniapp != null  and uniapp != ''">uniapp,</if>
+            <if test="photo != null  and photo != ''">photo,</if>
+            <if test="sort != null ">sort,</if>
+            <if test="isshow != null  and isshow != ''">isshow,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="myvue != null  and myvue != ''">#{myvue},</if>
+            <if test="uniapp != null  and uniapp != ''">#{uniapp},</if>
+            <if test="photo != null  and photo != ''">#{photo},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="isshow != null  and isshow != ''">#{isshow},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunBanner" parameterType="YunBanner">
+        update yun_banner
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="myvue != null  and myvue != ''">myvue = #{myvue},</if>
+            <if test="uniapp != null  and uniapp != ''">uniapp = #{uniapp},</if>
+            <if test="photo != null  and photo != ''">photo = #{photo},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="isshow != null  and isshow != ''">isshow = #{isshow},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunBannerById" parameterType="Long">
+        delete from yun_banner where id = #{id}
+    </delete>
+
+    <delete id="deleteYunBannerByIds" parameterType="String">
+        delete from yun_banner where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
