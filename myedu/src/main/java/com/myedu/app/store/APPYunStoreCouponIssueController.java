@@ -1,8 +1,7 @@
 package com.myedu.app.store;
 
-import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.ServletUtils;
-import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -22,7 +21,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -50,96 +48,73 @@ public class APPYunStoreCouponIssueController extends BaseController
      * 查询店铺优惠券发布列表
      */
     @ApiOperation("查询店铺优惠券发布列表")
+    @AutoIdempotent
     @ApiImplicitParam(name = "yunStoreCouponIssue", value = "查询店铺优惠券发布列表",
             dataType = "YunStoreCouponIssueVo")
     @GetMapping("/list")
     public TableDataInfo list(YunStoreCouponIssueVo yunStoreCouponIssue)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
+        yunStoreCouponIssue.setCreateById(loginUser.getUser().getUserId());
         startPage();
         List<YunStoreCouponIssueVo> list = yunStoreCouponIssueService.selectYunStoreCouponIssueList(yunStoreCouponIssue);
         return getDataTable(list);
-        }else{
-            return getDataTableLose(null);
-        }
     }
 
-    /**
-     * 导出店铺优惠券发布列表
-     */
-    @ApiOperation("导出店铺优惠券发布列表")
-    @ApiImplicitParam(name = "yunStoreCouponIssue", value = "导出店铺优惠券发布列表",
-            dataType = "YunStoreCouponIssueVo")
-    @Log(title = "店铺优惠券发布", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunStoreCouponIssueVo yunStoreCouponIssue)
-    {
-        List<YunStoreCouponIssueVo> list = yunStoreCouponIssueService.selectYunStoreCouponIssueList(yunStoreCouponIssue);
-        ExcelUtil<YunStoreCouponIssueVo> util = new ExcelUtil<YunStoreCouponIssueVo>(YunStoreCouponIssueVo.class);
-        return util.exportExcel(list, "issue");
-    }
 
     /**
      * 获取店铺优惠券发布详细信息
      */
     @ApiOperation("获取店铺优惠券发布详细信息")
+    @AutoIdempotent
     @ApiImplicitParam(name = "id", value = "获取店铺优惠券发布详细信息",
             dataType = "Long", required = true, paramType = "path")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public AjaxResult getInfo(@PathVariable Long id)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if(loginUser!=null) {
         return AjaxResult.success(yunStoreCouponIssueService.selectYunStoreCouponIssueById(id));
-        }else{
-            return AjaxResult.error("token无效");
-        }
     }
 
     /**
      * 领用店铺优惠券
      */
     @ApiOperation("领用店铺优惠券")
+    @AutoIdempotent
     @ApiImplicitParam(name = "id", value = "领用店铺优惠券",
             dataType = "Long")
     @GetMapping(value = "/receive/{id}")
     public AjaxResult receive(@PathVariable("id") Long id)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if(loginUser!=null) {
-                YunStoreCouponIssue yunStoreCouponIssue=yunStoreCouponIssueService.selectYunStoreCouponIssueById(id);
-                if(yunStoreCouponIssue.getStatus().equals(CouponIssueStatus.CLOSE.getCode())){
-                    return AjaxResult.error(500,"此优惠卷未开启");
-                }else if(yunStoreCouponIssue.getStatus().equals(CouponIssueStatus.INVA.getCode())){
-                    return AjaxResult.error(500,"此优惠卷已失效");
-                }else if(yunStoreCouponIssue.getLeadStartTime().getTime()>new Date().getTime()){
-                    return AjaxResult.error(500,"此优惠卷开始时间还未到");
-                }else if(yunStoreCouponIssue.getLeadEndTime().getTime()<new Date().getTime()){
-                    return AjaxResult.error(500,"此优惠卷已经过期");
-                }else if(yunStoreCouponIssue.getIsPermanent().equals("0")&&yunStoreCouponIssue.getTotalCount()==0){
-                    return AjaxResult.error(500,"此优惠卷已经领取完毕");//0是限量1不限量
-                }else{
-                    YunStoreCouponReceive yunStoreCouponReceive=new YunStoreCouponReceive();
-                    yunStoreCouponReceive.setSciId(id);
-                    yunStoreCouponReceive.setCreateById(SecurityUtils.getUserId());
-                    yunStoreCouponReceive.setCreateBy(SecurityUtils.getUsername());
-                    yunStoreCouponReceive.setCreateTime(new Date());
-                    yunStoreCouponReceive.setStatus(receiveStatus.STORE.getCode());//未使用
-                    int row= yunStoreCouponReceiveService.insertYunStoreCouponReceive(yunStoreCouponReceive);
-                    if(row>=1){
-                        yunStoreCouponIssue.setLeadCount(yunStoreCouponIssue.getLeadCount()+1);
-                        if(yunStoreCouponIssue.getIsPermanent().equals(0)){
-                            yunStoreCouponIssue.setRemainCount(yunStoreCouponIssue.getTotalCount()-1);
-                        }
-                        yunStoreCouponIssueService.updateYunStoreCouponIssue(yunStoreCouponIssue);
-                        return AjaxResult.success("领取成功");
-                    }else{
-                        return  AjaxResult.error(500,"系统错误");
-                    }
-                }
+        YunStoreCouponIssue yunStoreCouponIssue=yunStoreCouponIssueService.selectYunStoreCouponIssueById(id);
+        if(yunStoreCouponIssue.getStatus().equals(CouponIssueStatus.CLOSE.getCode())){
+            return AjaxResult.error(500,"此优惠卷未开启");
+        }else if(yunStoreCouponIssue.getStatus().equals(CouponIssueStatus.INVA.getCode())){
+            return AjaxResult.error(500,"此优惠卷已失效");
+        }else if(yunStoreCouponIssue.getLeadStartTime().getTime()>new Date().getTime()){
+            return AjaxResult.error(500,"此优惠卷开始时间还未到");
+        }else if(yunStoreCouponIssue.getLeadEndTime().getTime()<new Date().getTime()){
+            return AjaxResult.error(500,"此优惠卷已经过期");
+        }else if(yunStoreCouponIssue.getIsPermanent().equals("0")&&yunStoreCouponIssue.getTotalCount()==0){
+            return AjaxResult.error(500,"此优惠卷已经领取完毕");//0是限量1不限量
         }else{
-            return AjaxResult.error("token无效");
+            YunStoreCouponReceive yunStoreCouponReceive=new YunStoreCouponReceive();
+            yunStoreCouponReceive.setSciId(id);
+            yunStoreCouponReceive.setCreateById(loginUser.getUser().getUserId());
+            yunStoreCouponReceive.setCreateBy(loginUser.getUser().getNickName());
+            yunStoreCouponReceive.setCreateTime(new Date());
+            yunStoreCouponReceive.setStatus(receiveStatus.STORE.getCode());//未使用
+            int row= yunStoreCouponReceiveService.insertYunStoreCouponReceive(yunStoreCouponReceive);
+            if(row>=1){
+                yunStoreCouponIssue.setLeadCount(yunStoreCouponIssue.getLeadCount()+1);
+                if(yunStoreCouponIssue.getIsPermanent().equals(0)){
+                    yunStoreCouponIssue.setRemainCount(yunStoreCouponIssue.getTotalCount()-1);
+                }
+                yunStoreCouponIssueService.updateYunStoreCouponIssue(yunStoreCouponIssue);
+                return AjaxResult.success("领取成功");
+            }else{
+                return  AjaxResult.error(500,"系统错误");
+            }
         }
     }
 
@@ -174,17 +149,13 @@ public class APPYunStoreCouponIssueController extends BaseController
      * 删除店铺优惠券发布
      */
     @ApiOperation("删除店铺优惠券发布")
+    @AutoIdempotent
     @ApiImplicitParam(name = "ids", value = "删除店铺优惠券发布",
             dataType = "Integer[]")
     @Log(title = "店铺优惠券发布", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Integer[] ids)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if(loginUser!=null) {
         return toAjax(yunStoreCouponIssueService.deleteYunStoreCouponIssueByIds(ids));
-        }else{
-            return AjaxResult.error("token无效");
-        }
     }
 }

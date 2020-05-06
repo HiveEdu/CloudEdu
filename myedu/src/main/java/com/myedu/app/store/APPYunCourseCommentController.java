@@ -1,7 +1,8 @@
 package com.myedu.app.store;
 
+import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.ServletUtils;
-import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.security.LoginUser;
@@ -38,6 +39,7 @@ public class APPYunCourseCommentController extends BaseController
     /**
      * 查询课程评论列表
      */
+    @AutoIdempotent
     @ApiOperation("查询课程评论列表")
     @ApiImplicitParam(name = "yunCourseComment", value = "查询课程评论列表",
             dataType = "YunCourseComment")
@@ -45,58 +47,30 @@ public class APPYunCourseCommentController extends BaseController
     public TableDataInfo list(YunCourseComment yunCourseComment)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            startPage();
-            List<YunCourseComment> list = yunCourseCommentService.selectYunCourseCommentList(yunCourseComment);
-            return getDataTable(list);
-        }else {
-            return getDataTableLose(null);
-        }
-
+        startPage();
+        yunCourseComment.setCreateById(loginUser.getUser().getUserId());
+        List<YunCourseComment> list = yunCourseCommentService.selectYunCourseCommentList(yunCourseComment);
+        return getDataTable(list);
     }
 
-    /**
-     * 导出课程评论列表
-     */
-    @ApiOperation("导出课程评论列表")
-    @ApiImplicitParam(name = "yunCourseComment", value = "导出课程评论列表",
-            dataType = "YunCourseComment")
-    @Log(title = "课程评论", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunCourseComment yunCourseComment)
-    {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            List<YunCourseComment> list = yunCourseCommentService.selectYunCourseCommentList(yunCourseComment);
-            ExcelUtil<YunCourseComment> util = new ExcelUtil<YunCourseComment>(YunCourseComment.class);
-            return util.exportExcel(list, "comment");
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
-    }
 
     /**
      * 获取课程评论详细信息
      */
+    @AutoIdempotent
     @ApiOperation("获取课程评论详细信息")
     @ApiImplicitParam(name = "id", value = "获取课程评论详细信息",
             dataType = "Long")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return AjaxResult.success(yunCourseCommentService.selectYunCourseCommentById(id));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        return AjaxResult.success(yunCourseCommentService.selectYunCourseCommentById(id));
     }
 
     /**
      * 新增课程评论
      */
+    @AutoIdempotent
     @ApiOperation("新增课程评论")
     @ApiImplicitParam(name = "yunCourseComment", value = "新增课程评论",
             dataType = "YunCourseComment")
@@ -105,17 +79,17 @@ public class APPYunCourseCommentController extends BaseController
     public AjaxResult add(@RequestBody YunCourseComment yunCourseComment)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunCourseCommentService.insertYunCourseComment(yunCourseComment));
-        }else {
-            return AjaxResult.error("token无效");
-        }
+        yunCourseComment.setCreateById(loginUser.getUser().getUserId());
+        yunCourseComment.setCreateBy(loginUser.getUser().getNickName());
+        yunCourseComment.setCreateTime(DateUtils.getNowDate());
+        return toAjax(yunCourseCommentService.insertYunCourseComment(yunCourseComment));
 
     }
 
     /**
      * 修改课程评论
      */
+    @AutoIdempotent
     @ApiOperation("修改课程评论")
     @ApiImplicitParam(name = "yunCourseComment", value = "修改课程评论",
             dataType = "YunCourseComment")
@@ -124,17 +98,16 @@ public class APPYunCourseCommentController extends BaseController
     public AjaxResult edit(@RequestBody YunCourseComment yunCourseComment)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunCourseCommentService.updateYunCourseComment(yunCourseComment));
-        }else {
-            return AjaxResult.error("token无效");
-        }
+        yunCourseComment.setUpdateBy(loginUser.getUser().getNickName());
+        yunCourseComment.setUpdateTime(DateUtils.getNowDate());
+        return toAjax(yunCourseCommentService.updateYunCourseComment(yunCourseComment));
 
     }
 
     /**
      * 删除课程评论
      */
+    @AutoIdempotent
     @ApiOperation("删除课程评论")
     @ApiImplicitParam(name = "ids", value = "删除课程评论",
             dataType = "Long[]")
@@ -142,12 +115,6 @@ public class APPYunCourseCommentController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser!=null) {
-            return toAjax(yunCourseCommentService.deleteYunCourseCommentByIds(ids));
-        }else {
-            return AjaxResult.error("token无效");
-        }
-
+        return toAjax(yunCourseCommentService.deleteYunCourseCommentByIds(ids));
     }
 }
