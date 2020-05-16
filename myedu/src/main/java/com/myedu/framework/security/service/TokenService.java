@@ -60,8 +60,9 @@ public class TokenService
     {
         // 获取请求携带的令牌
         String token = getToken(request);
-        if (StringUtils.isNotEmpty(token))
-        {
+        //token.equals判断不是natAPP的token
+        if (StringUtils.isNotEmpty(token)&&!token.equals("Basic bWVuZ3lpOjEyMzQ1Ng=="))
+            {
             Claims claims = parseToken(token);
             // 解析对应的权限以及用户信息
             String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
@@ -171,6 +172,7 @@ public class TokenService
         String token = Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
+//                .signWith(SignatureAlgorithm.HS256, secret).compact();
         return token;
     }
 
