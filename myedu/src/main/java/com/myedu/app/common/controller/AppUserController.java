@@ -14,13 +14,13 @@ import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.project.system.domain.SysRole;
 import com.myedu.project.system.domain.SysUser;
+import com.myedu.project.system.domain.vo.UserLoginVO;
 import com.myedu.project.system.service.ISysRoleService;
 import com.myedu.project.system.service.ISysUserService;
+import com.myedu.project.system.service.impl.SysUserServiceImpl;
 import io.jsonwebtoken.Claims;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -60,22 +60,25 @@ public class AppUserController extends BaseController {
 
     @Autowired
     private ISysRoleService roleService;
+    @Autowired
+    private SysUserServiceImpl sysUserService;
     /**
    * @Description :
    * @Author : 梁少鹏
    * @Date : 2019/12/21 7:48
    */
     @ApiOperation("用户注册")
-    @ApiImplicitParam(name = "SysUser", value = "用户注册", dataType = "SysUser")
     @PostMapping("/userRegister")
-    public AjaxResult saveUser(SysUser user)
-    {if(UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
+    public AjaxResult saveUser(@RequestBody  @ApiParam(name="userLogin",value="用户登录信息",required=true) UserLoginVO userLogin)
+    {if(UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(userLogin.getUserName())))
         {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
+            return AjaxResult.error("新增用户'" + userLogin.getUserName() + "'失败，手机号码已存在");
         }
-        user.setUserName(user.getUserName());
-        user.setPhonenumber(user.getUserName());
-        user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
+        SysUser user=new SysUser();
+        user.setUserName(userLogin.getUserName());
+        user.setPhonenumber(userLogin.getUserName());
+        user.setPassword(SecurityUtils.encryptPassword(userLogin.getPassword()));
+        user.setRoleIds(userLogin.getRoleIds());
         return toAjax(userService.insertUser(user));
     }
 
@@ -105,24 +108,14 @@ public class AppUserController extends BaseController {
     * @Date : 2019/12/28 18:42
     */
     @ApiOperation("APP用户登录")
-    //@ApiImplicitParam(name = "SysUser", value = "APP用户登录", dataType = "String")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType="form",name="userName",dataType="String",required=true,value="用户的姓名"),
-            @ApiImplicitParam(paramType="form",name="password",dataType="String",required=true,value="用户的密码"),
-            @ApiImplicitParam(paramType="form",name="code",dataType="String",required=true,value="验证码"),
-            @ApiImplicitParam(paramType="form",name="uuid",dataType="String",required=true,value="uuid"),
-    })
-    @PostMapping(value = "/appLogin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public AjaxResult appLogin(@RequestParam("userName") String userName,
-                               @RequestParam("password") String password,
-                               @RequestParam("code") String code,
-                               @RequestParam("uuid") String uuid)
+    @PostMapping(value = "/appLogin")
+    public AjaxResult appLogin(@RequestBody  @ApiParam(name="userLogin",value="用户登录信息",required=true) UserLoginVO userLogin)
     {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
-        String token = loginService.login(userName, password, code, uuid);
+        String token = loginService.login(userLogin.getUserName(), userLogin.getPassword(), userLogin.getCode(), userLogin.getUuid());
         ajax.put(Constants.TOKEN, token);
-        SysUser user=userService.selectUserByUserName(userName);
+        SysUser user=userService.selectUserByUserName(userLogin.getUserName());
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
