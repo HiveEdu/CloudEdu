@@ -1,8 +1,12 @@
 package com.myedu.app.store;
 
-import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.common.utils.DateUtils;
+import com.myedu.common.utils.ServletUtils;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.security.LoginUser;
+import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
@@ -30,42 +34,33 @@ public class APPYunStoreCouponReceiveController extends BaseController
 {
     @Autowired
     private IYunStoreCouponReceiveService yunStoreCouponReceiveService;
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * 查询优惠券领用列表
      */
     @ApiOperation("查询优惠券领用列表")
+    @AutoIdempotent
     @ApiImplicitParam(name = "yunStoreCouponReceive", value = "查询优惠券领用列表",
             dataType = "YunStoreCouponReceive")
     @PreAuthorize("@ss.hasPermi('store:receive:list')")
     @GetMapping("/list")
     public TableDataInfo list(YunStoreCouponReceive yunStoreCouponReceive)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         startPage();
+        yunStoreCouponReceive.setCreateById(loginUser.getUser().getUserId());
         List<YunStoreCouponReceive> list = yunStoreCouponReceiveService.selectYunStoreCouponReceiveList(yunStoreCouponReceive);
         return getDataTable(list);
     }
 
-    /**
-     * 导出优惠券领用列表
-     */
-    @ApiOperation("导出优惠券领用列表")
-    @ApiImplicitParam(name = "yunStoreCouponReceive", value = "导出优惠券领用列表",
-            dataType = "YunStoreCouponReceive")
-    @PreAuthorize("@ss.hasPermi('store:receive:export')")
-    @Log(title = "优惠券领用", businessType = BusinessType.EXPORT)
-    @GetMapping("/export")
-    public AjaxResult export(YunStoreCouponReceive yunStoreCouponReceive)
-    {
-        List<YunStoreCouponReceive> list = yunStoreCouponReceiveService.selectYunStoreCouponReceiveList(yunStoreCouponReceive);
-        ExcelUtil<YunStoreCouponReceive> util = new ExcelUtil<YunStoreCouponReceive>(YunStoreCouponReceive.class);
-        return util.exportExcel(list, "receive");
-    }
 
     /**
      * 获取优惠券领用详细信息
      */
     @ApiOperation("获取优惠券领用详细信息")
+    @AutoIdempotent
     @ApiImplicitParam(name = "id", value = "获取优惠券领用详细信息",
             dataType = "Long")
     @PreAuthorize("@ss.hasPermi('store:receive:query')")
@@ -79,6 +74,7 @@ public class APPYunStoreCouponReceiveController extends BaseController
      * 新增优惠券领用
      */
     @ApiOperation("新增优惠券领用")
+    @AutoIdempotent
     @ApiImplicitParam(name = "yunStoreCouponReceive", value = "新增优惠券领用",
             dataType = "YunStoreCouponReceive")
     @PreAuthorize("@ss.hasPermi('store:receive:add')")
@@ -86,6 +82,10 @@ public class APPYunStoreCouponReceiveController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody YunStoreCouponReceive yunStoreCouponReceive)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        yunStoreCouponReceive.setCreateById(loginUser.getUser().getUserId());
+        yunStoreCouponReceive.setCreateBy(loginUser.getUser().getNickName());
+        yunStoreCouponReceive.setCreateTime(DateUtils.getNowDate());
         return toAjax(yunStoreCouponReceiveService.insertYunStoreCouponReceive(yunStoreCouponReceive));
     }
 
@@ -93,6 +93,7 @@ public class APPYunStoreCouponReceiveController extends BaseController
      * 修改优惠券领用
      */
     @ApiOperation("修改优惠券领用")
+    @AutoIdempotent
     @ApiImplicitParam(name = "yunStoreCouponReceive", value = "修改优惠券领用",
             dataType = "YunStoreCouponReceive")
     @PreAuthorize("@ss.hasPermi('store:receive:edit')")
@@ -100,6 +101,9 @@ public class APPYunStoreCouponReceiveController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody YunStoreCouponReceive yunStoreCouponReceive)
     {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        yunStoreCouponReceive.setUpdateBy(loginUser.getUser().getNickName());
+        yunStoreCouponReceive.setUpdateTime(DateUtils.getNowDate());
         return toAjax(yunStoreCouponReceiveService.updateYunStoreCouponReceive(yunStoreCouponReceive));
     }
 
@@ -107,6 +111,7 @@ public class APPYunStoreCouponReceiveController extends BaseController
      * 删除优惠券领用
      */
     @ApiOperation("删除优惠券领用")
+    @AutoIdempotent
     @ApiImplicitParam(name = "ids", value = "删除优惠券领用",
             dataType = "Long[]")
     @PreAuthorize("@ss.hasPermi('store:receive:remove')")
