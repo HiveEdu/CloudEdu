@@ -130,9 +130,8 @@ public class AppUserController extends BaseController {
      * @Author : 梁少鹏
      * @Date : 2020/2/1 20:07
      */
-    @AutoIdempotent
     @ApiOperation("获取用户详情")
-    @GetMapping("/getUserInfo")
+    @PostMapping("/getUserInfo")
     public AjaxResult getUserInfo()
     {
         // 获取请求携带的令牌
