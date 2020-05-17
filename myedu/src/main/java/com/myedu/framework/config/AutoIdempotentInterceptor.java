@@ -1,6 +1,8 @@
 package com.myedu.framework.config;
 
 import cn.hutool.json.JSONUtil;
+import com.myedu.common.constant.HttpStatus;
+import com.myedu.common.exception.CustomException;
 import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.domain.AjaxResult;
@@ -48,7 +50,12 @@ public class AutoIdempotentInterceptor implements HandlerInterceptor {
         AutoIdempotent methodAnnotation = method.getAnnotation(AutoIdempotent.class);
         if (methodAnnotation != null) {
             try {
-               return tokenService.checkToken(request);// 幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
+               if (tokenService.checkToken(request)){
+                   return true;
+               }else{
+                   throw new CustomException("获取用户账户异常,检查token", HttpStatus.TOKENFAIL);
+               }
+                // 幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
             }catch (Exception ex){
                 AjaxResult failedResult = AjaxResult.error(101, ex.getMessage());
                 writeReturnJson(response,JSONUtil.toJsonStr(failedResult));

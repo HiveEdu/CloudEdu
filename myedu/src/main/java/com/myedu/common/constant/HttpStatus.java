@@ -7,6 +7,11 @@ package com.myedu.common.constant;
  */
 public interface HttpStatus
 {
+
+    /**
+     * TOKEN失效
+     */
+    public static final int TOKENFAIL = 101;
     /**
      * 操作成功
      */

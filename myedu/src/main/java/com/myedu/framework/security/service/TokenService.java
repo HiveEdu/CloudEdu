@@ -61,7 +61,7 @@ public class TokenService
         // 获取请求携带的令牌
         String token = getToken(request);
         //token.equals判断不是natAPP的token
-        if (StringUtils.isNotEmpty(token)&&!token.equals("Basic bWVuZ3lpOjEyMzQ1Ng=="))
+        if (StringUtils.isNotEmpty(token)&&!token.equals("[object Null]")&&!token.equals("Basic bWVuZ3lpOjEyMzQ1Ng=="))
             {
             Claims claims = parseToken(token);
             // 解析对应的权限以及用户信息
@@ -69,6 +69,7 @@ public class TokenService
             String userKey = getTokenKey(uuid);
             LoginUser user = redisCache.getCacheObject(userKey);
             return user;
+        }else{
         }
         return null;
     }
