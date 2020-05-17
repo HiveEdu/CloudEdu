@@ -50,12 +50,15 @@ public class AutoIdempotentInterceptor implements HandlerInterceptor {
         AutoIdempotent methodAnnotation = method.getAnnotation(AutoIdempotent.class);
         if (methodAnnotation != null) {
             try {
-               if (tokenService.checkToken(request)){
-                   return true;
-               }else{
-                   throw new CustomException("获取用户账户异常,检查token", HttpStatus.TOKENFAIL);
-               }
-                // 幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
+               Boolean re= tokenService.checkToken(request);
+                return  re;
+//               if(re){
+//                   return  true;
+//                   // 幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
+//               }else{
+//                   throw new CustomException("获取用户账户异常", HttpStatus.TOKENFAIL);
+//               }
+
             }catch (Exception ex){
                 AjaxResult failedResult = AjaxResult.error(101, ex.getMessage());
                 writeReturnJson(response,JSONUtil.toJsonStr(failedResult));

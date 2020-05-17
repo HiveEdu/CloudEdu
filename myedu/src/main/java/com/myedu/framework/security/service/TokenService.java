@@ -228,7 +228,7 @@ public class TokenService
      * 检验token
      * @return
      */
-    public boolean checkToken(HttpServletRequest request) throws Exception {
+    public boolean checkToken(HttpServletRequest request){
         Boolean result=true;
         // 获取请求携带的令牌
         String token = getToken(request);
