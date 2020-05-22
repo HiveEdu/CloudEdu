@@ -1,26 +1,19 @@
 package com.myedu.project.system.controller;
 
-import java.util.List;
-
 import com.myedu.common.utils.SecurityUtils;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
-import com.myedu.project.system.domain.YunBanner;
-import com.myedu.project.system.service.IYunBannerService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.system.domain.YunBanner;
+import com.myedu.project.system.service.IYunBannerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 轮廓图设置Controller

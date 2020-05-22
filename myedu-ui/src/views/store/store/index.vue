@@ -221,6 +221,7 @@
                 </el-form-item>
             </el-col>
           </el-row>
+        
 
            <el-row>
             <el-col :span="24">
@@ -233,6 +234,13 @@
                     </el-checkbox-button>
                   </el-checkbox-group>
                 </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+               <el-form-item label="门店介绍" prop="introduction">
+                <el-input v-model="form.introduction" placeholder="请输入门店介绍" />
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>
@@ -615,6 +623,7 @@ export default {
         name: undefined,
         logo: undefined,
         manager: undefined,
+        introduction:undefined,
         managerPhone: undefined,
         photos: undefined,
         healths: undefined,

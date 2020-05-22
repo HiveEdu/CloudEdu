@@ -132,6 +132,9 @@ public class YunStore extends BaseEntity
     @ApiModelProperty("门店等级关联id")
     private Long vipLevelId;
 
+    /** 门店介绍 */
+    @ApiModelProperty("门店介绍")
+    private String introduction;
 
     public String getRejectResion() {
         return rejectResion;
@@ -299,6 +302,14 @@ public class YunStore extends BaseEntity
         this.vipLevelId = vipLevelId;
     }
 
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
     @Override
     public String toString() {
         return "YunStore{" +
@@ -308,6 +319,7 @@ public class YunStore extends BaseEntity
                 ", manager='" + manager + '\'' +
                 ", managerPhone='" + managerPhone + '\'' +
                 ", photos='" + photos + '\'' +
+
                 ", healths='" + healths + '\'' +
                 ", video='" + video + '\'' +
                 ", license='" + license + '\'' +
@@ -323,6 +335,7 @@ public class YunStore extends BaseEntity
                 ", storeLabelIds=" + Arrays.toString(storeLabelIds) +
                 ", status='" + status + '\'' +
                 ", rejectResion='" + rejectResion + '\'' +
+                ", introduction='" + introduction + '\'' +
                 ", beginExperienceTime='" + beginExperienceTime + '\'' +
                 ", endExperienceTime='" + endExperienceTime + '\'' +
                 ", vipLevelId='" + vipLevelId + '\'' +
