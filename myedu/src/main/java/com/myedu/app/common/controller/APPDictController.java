@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api("获取字典数据")
 @RestController
-@RequestMapping("/dict")
+@RequestMapping("/app/dict")
 public class APPDictController extends BaseController {
     @Autowired
     private ISysDictDataService dictDataService;
@@ -33,7 +33,7 @@ public class APPDictController extends BaseController {
     @AutoIdempotent
     @ApiOperation("根据字典类型查询字典数据信息")
     @ApiImplicitParam(name = "dictType", value = "根据字典类型查询字典数据信息",
-            dataType = "Long")
+            dataType = "String")
     @GetMapping(value = "/dictType/{dictType}")
     public AjaxResult dictType(@PathVariable String dictType)
     {

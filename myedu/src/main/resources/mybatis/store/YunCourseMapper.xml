@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="content != null  and content != ''"> and yc.content = #{content}</if>
             <if test="status != null  and status != ''"> and yc.status = #{status}</if>
             <if test="createById != null "> and yc.create_by_id = #{createById}</if>
-            and yc.store_id is not null
+            <if test="storeId != null and storeId != '' "> and yc.store_id = #{storeId}</if>
         </where>
     </select>
     

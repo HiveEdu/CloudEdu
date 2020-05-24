@@ -57,8 +57,6 @@ public class APPYunCourseController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(YunCourse yunCourse)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        yunCourse.setCreateById(loginUser.getUser().getUserId());
         startPage();
         List<YunCourseVo> list = yunCourseService.selectYunCourseList(yunCourse);
         return getDataTable(list);
