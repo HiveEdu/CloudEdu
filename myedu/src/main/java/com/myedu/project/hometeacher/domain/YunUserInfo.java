@@ -4,8 +4,6 @@ import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 家教老师表对象 yun_user_info
  * 
@@ -263,7 +261,35 @@ public class YunUserInfo extends BaseEntity
         this.video = video;
     }
 
-    public String getVideo() 
+    @Override
+    public String toString() {
+        return "YunUserInfo{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", courseId='" + courseId + '\'' +
+                ", awards='" + awards + '\'' +
+                ", experience='" + experience + '\'' +
+                ", trait='" + trait + '\'' +
+                ", photos='" + photos + '\'' +
+                ", video='" + video + '\'' +
+                ", school='" + school + '\'' +
+                ", isGraduate='" + isGraduate + '\'' +
+                ", education='" + education + '\'' +
+                ", credentials='" + credentials + '\'' +
+                ", mapX=" + mapX +
+                ", mapY=" + mapY +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", address='" + address + '\'' +
+                ", status='" + status + '\'' +
+                ", rejectResion='" + rejectResion + '\'' +
+                ", identityCard='" + identityCard + '\'' +
+                ", delFlag='" + delFlag + '\'' +
+                '}';
+    }
+
+    public String getVideo()
     {
         return video;
     }
@@ -313,33 +339,5 @@ public class YunUserInfo extends BaseEntity
         return delFlag;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("userId", getUserId())
-            .append("courseId", getCourseId())
-            .append("awards", getAwards())
-            .append("experience", getExperience())
-            .append("trait", getTrait())
-            .append("photos", getPhotos())
-            .append("video", getVideo())
-            .append("school", getSchool())
-            .append("isGraduate", getIsGraduate())
-            .append("credentials", getCredentials())
-            .append("identityCard", getIdentityCard())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-                .append("mapX", getMapX())
-                .append("mapY", getMapY())
-                .append("province", getProvince())
-                .append("city", getCity())
-                .append("area", getArea())
-                .append("address", getAddress())
-                .append("status", getStatus())
-                .append("rejectResion", getRejectResion())
-            .toString();
-    }
+
 }

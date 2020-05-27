@@ -153,6 +153,8 @@ public class TeacherSearchVo {
         return province;
     }
 
+
+
     public void setProvince(String province) {
         this.province = province;
     }
@@ -189,25 +191,25 @@ public class TeacherSearchVo {
         this.status = status;
     }
 
-    public TeacherSearchVo(Long id, Long userId, String courseId, String experience, String trait, String photos, Double mapX, Double mapY, String province, String city, String area, String address, String status, String distanceMeters, GeoPoint location, Double lon, Double lat) {
-        this.id = id;
-        this.userId = userId;
-        this.courseId = courseId;
-        this.experience = experience;
-        this.trait = trait;
-        this.photos = photos;
-        this.mapX = mapX;
-        this.mapY = mapY;
-        this.province = province;
-        this.city = city;
-        this.area = area;
-        this.address = address;
-        this.status = status;
-        this.distanceMeters = distanceMeters;
-        this.location = location;
-        this.lon = lon;
-        this.lat = lat;
-    }
+//    public TeacherSearchVo(Long id, Long userId, String courseId, String experience, String trait, String photos, Double mapX, Double mapY, String province, String city, String area, String address, String status, String distanceMeters, GeoPoint location, Double lon, Double lat) {
+//        this.id = id;
+//        this.userId = userId;
+//        this.courseId = courseId;
+//        this.experience = experience;
+//        this.trait = trait;
+//        this.photos = photos;
+//        this.mapX = mapX;
+//        this.mapY = mapY;
+//        this.province = province;
+//        this.city = city;
+//        this.area = area;
+//        this.address = address;
+//        this.status = status;
+//        this.distanceMeters = distanceMeters;
+//        this.location = location;
+//        this.lon = lon;
+//        this.lat = lat;
+//    }
 
     public String getDistanceMeters() {
 
