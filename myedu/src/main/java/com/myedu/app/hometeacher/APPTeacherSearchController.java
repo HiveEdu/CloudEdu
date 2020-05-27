@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/teacherSearch")
 public class APPTeacherSearchController extends BaseController {
-    
+
     @Autowired
     private TeacherSearchVoRepository teacherSearchVoRepository;
 
@@ -72,7 +72,9 @@ public class APPTeacherSearchController extends BaseController {
             double calculate = GeoDistance.ARC.calculate(teacherSearchVo1.getLocation().getLat(), teacherSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.METERS);
             teacherSearchVo1.setDistanceMeters(String.valueOf(calculate));
             System.out.println("距离" + (int)calculate + "m");
+            teacherSearchVosNew.add(teacherSearchVo1);
         });
+
         return getDataTable(teacherSearchVosNew);
 
 
