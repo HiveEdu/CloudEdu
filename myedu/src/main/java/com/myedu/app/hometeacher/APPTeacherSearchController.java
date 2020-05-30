@@ -46,7 +46,7 @@ public class APPTeacherSearchController extends BaseController {
         //设定搜索半径
         GeoDistanceQueryBuilder queryBuilder = QueryBuilders.geoDistanceQuery("location")
                 .point(lat, lon)
-                .distance(distance, DistanceUnit.METERS.KILOMETERS)
+                .distance(distance, DistanceUnit.KILOMETERS)
                 .geoDistance(GeoDistance.PLANE);
         //按距离排序
         GeoDistanceSortBuilder sortBuilder = SortBuilders.geoDistanceSort("location", lat, lon);

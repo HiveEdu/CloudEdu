@@ -7,7 +7,6 @@ import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
 import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,7 +45,7 @@ public class StoreSearchController extends BaseController {
         //设定搜索半径
         GeoDistanceQueryBuilder queryBuilder = QueryBuilders.geoDistanceQuery("location")
                 .point(lat, lon)
-                .distance(distance, DistanceUnit.METERS.KILOMETERS)
+                .distance(distance, DistanceUnit.KILOMETERS)
                 .geoDistance(GeoDistance.PLANE);
         //按距离排序
         GeoDistanceSortBuilder sortBuilder = SortBuilders.geoDistanceSort("location", lat, lon);
@@ -70,7 +68,7 @@ public class StoreSearchController extends BaseController {
         List<StoreSearchVo> storeSearchVosNew=new ArrayList<StoreSearchVo>();
         List<StoreSearchVo> storeSearchVos= page.getContent();
         storeSearchVos.forEach(storeSearchVo1 -> {
-            double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.METERS);
+            double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
             storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
             List<Long> typeIds=storeSearchVo1.getTypeIds();
             if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0){
@@ -89,7 +87,7 @@ public class StoreSearchController extends BaseController {
             }else{
                   storeSearchVosNew.add(storeSearchVo1);
             }
-            System.out.println("距离" + (int)calculate + "m");
+            System.out.println("距离" + (int)calculate + "km");
         });
         return getDataTable(storeSearchVosNew);
 

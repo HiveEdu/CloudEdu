@@ -19,7 +19,7 @@ public class TeacherDbToEsTask {
     @Autowired
     private TeacherSearchVoRepository teacherSearchVoRepository;
     //0 0 12 * * ?
-    @Scheduled(cron="0 09 20 * * ?") //每天12点执行
+    @Scheduled(cron="0 0 18 * * ?") //每天18点执行
     protected void executedyInternal(){
         YunUserInfoVo yunuser=new YunUserInfoVo();
         List<YunUserInfoVo> yunUsers=yunUserInfoService.selectYunUserInfoList(yunuser);

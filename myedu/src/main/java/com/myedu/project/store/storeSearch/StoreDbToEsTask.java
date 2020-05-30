@@ -26,7 +26,7 @@ public class StoreDbToEsTask {
     @Autowired
     private StoreSearchVoRepository storeSearchVoRepository;
     //0 0 12 * * ?
-    @Scheduled(cron="0 0 13 * * ?") //每天12点执行
+    @Scheduled(cron="0 0 18 * * ?") //每天18点执行
     protected void executedyInternal(){
         YunStoreVo yunStore=new YunStoreVo();
         List<YunStoreVo> yunStores=yunStoreService.selectYunStoreList(yunStore);

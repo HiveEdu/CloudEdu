@@ -7,7 +7,6 @@ import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
-import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.elasticsearch.common.geo.GeoDistance;
@@ -57,7 +56,7 @@ public class APPStoreSearchController extends BaseController {
             //设定搜索半径
             GeoDistanceQueryBuilder queryBuilder = QueryBuilders.geoDistanceQuery("location")
                     .point(lat, lon)
-                    .distance(distance, DistanceUnit.METERS.KILOMETERS)
+                    .distance(distance, DistanceUnit.KILOMETERS)
                     .geoDistance(GeoDistance.PLANE);
             //按距离排序
             GeoDistanceSortBuilder sortBuilder = SortBuilders.geoDistanceSort("location", lat, lon);
@@ -80,7 +79,7 @@ public class APPStoreSearchController extends BaseController {
             List<StoreSearchVo> storeSearchVosNew=new ArrayList<StoreSearchVo>();
             List<StoreSearchVo> storeSearchVos= page.getContent();
             storeSearchVos.forEach(storeSearchVo1 -> {
-                double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.METERS);
+                double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
                 storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
                 List<Long> typeIds=storeSearchVo1.getTypeIds();
                 if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0){
@@ -99,7 +98,7 @@ public class APPStoreSearchController extends BaseController {
                 }else{
                     storeSearchVosNew.add(storeSearchVo1);
                 }
-                System.out.println("距离" + (int)calculate + "m");
+                System.out.println("距离" + (int)calculate + "km");
             });
             return getDataTable(storeSearchVosNew);
         }else {
