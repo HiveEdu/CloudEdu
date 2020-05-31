@@ -24,7 +24,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +72,7 @@ public class APPStoreSearchController extends BaseController {
                     new NativeSearchQueryBuilder()
                             .withFilter(queryBuilder)
                             .withSort(sortBuilder);
+            nativeSearchQueryBuilder.withQuery(QueryBuilders.matchQuery("status", 3));
             Page<StoreSearchVo> page =
                     elasticsearchTemplate.queryForPage(
                             nativeSearchQueryBuilder.build(), StoreSearchVo.class);
