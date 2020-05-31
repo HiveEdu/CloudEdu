@@ -108,7 +108,7 @@ public class StoreSearchVo {
     private Long vipLevelId;
 
     /** 门店总点击量 */
-    private BigInteger hitsAll;
+    private int hitsAll;
 
     public Long getId() {
         return id;
@@ -304,11 +304,11 @@ public class StoreSearchVo {
         this.delFlag = delFlag;
     }
 
-    public BigInteger getHitsAll() {
+    public int getHitsAll() {
         return hitsAll;
     }
 
-    public void setHitsAll(BigInteger hitsAll) {
+    public void setHitsAll(int hitsAll) {
         this.hitsAll = hitsAll;
     }
 
@@ -323,7 +323,8 @@ public class StoreSearchVo {
     public StoreSearchVo(){
 
     }
-    public StoreSearchVo(Long id,List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters, GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license, String province, String city, String area, String address, String delFlag, Long createById, String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime, Long vipLevelId) {
+    public StoreSearchVo(Long id,List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters, GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license, String province, String city, String area, String address, String delFlag, Long createById, String status, String rejectResion,
+                         Date beginExperienceTime, Date endExperienceTime, Long vipLevelId,int hitsAll) {
         this.id = id;
         this.typeIds = typeIds;
         this.name = name;
@@ -349,6 +350,7 @@ public class StoreSearchVo {
         this.beginExperienceTime = beginExperienceTime;
         this.endExperienceTime = endExperienceTime;
         this.vipLevelId = vipLevelId;
+        this.hitsAll=hitsAll;
     }
 
     @Override

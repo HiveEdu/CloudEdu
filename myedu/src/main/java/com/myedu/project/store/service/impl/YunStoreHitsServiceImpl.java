@@ -163,7 +163,7 @@ public class YunStoreHitsServiceImpl implements IYunStoreHitsService
         return list;
     }
 
-    public BigInteger selectYunStoreHitsCountAll(Long id){
-        return yunStoreHitsMapper.selectYunStoreHitsCountAll(id);
+    public int selectYunStoreHitsCountAll(Long storeId){
+        return yunStoreHitsMapper.selectYunStoreHitsCountAll(storeId);
     };
 }

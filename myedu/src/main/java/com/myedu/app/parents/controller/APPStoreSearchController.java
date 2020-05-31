@@ -83,7 +83,7 @@ public class APPStoreSearchController extends BaseController {
                             nativeSearchQueryBuilder.build(), StoreSearchVo.class);
             List<StoreSearchVo> storeSearchVosNew=new ArrayList<StoreSearchVo>();
             List<StoreSearchVo> storeSearchVos= page.getContent();
-            storeSearchVos.forEach(storeSearchVo1 -> {
+            for (StoreSearchVo storeSearchVo1:storeSearchVos){
                 double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
                 storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
                 List<Long> typeIds=storeSearchVo1.getTypeIds();
@@ -98,15 +98,15 @@ public class APPStoreSearchController extends BaseController {
                         }
                     }
                     if(iscontent){
-                     storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
-                     storeSearchVosNew.add(storeSearchVo1);
+                        storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
+                        storeSearchVosNew.add(storeSearchVo1);
                     }
                 }else{
                     storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                     storeSearchVosNew.add(storeSearchVo1);
                 }
                 System.out.println("距离" + (int)calculate + "km");
-            });
+            }
             return getDataTable(storeSearchVosNew);
         }else {
             return getDataTableLose(null);
@@ -114,7 +114,8 @@ public class APPStoreSearchController extends BaseController {
     }
 
     //获取门店总点击量
-    public BigInteger getHitsAll(Long id){
+    public int getHitsAll(Long id){
+        System.out.println(yunStoreHitsService.selectYunStoreHitsCountAll(id));
        return yunStoreHitsService.selectYunStoreHitsCountAll(id);
     }
 }

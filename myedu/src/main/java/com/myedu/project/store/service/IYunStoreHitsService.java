@@ -66,5 +66,5 @@ public interface IYunStoreHitsService
     public void transHitsCountFromRedis2DB();
 
 
-    public BigInteger selectYunStoreHitsCountAll(Long id);
+    public int selectYunStoreHitsCountAll(Long storeId);
 }

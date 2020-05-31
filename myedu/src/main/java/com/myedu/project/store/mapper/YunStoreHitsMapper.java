@@ -1,6 +1,7 @@
 package com.myedu.project.store.mapper;
 
 import com.myedu.project.store.domain.YunStoreHits;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -66,8 +67,8 @@ public interface YunStoreHitsMapper
     /**
      * 获取门店总点击量
      *
-     * @param id
+     * @param storeId
      * @return 结果
      */
-    public BigInteger selectYunStoreHitsCountAll(Long id);
+    public int selectYunStoreHitsCountAll(@Param(value="storeId") Long storeId);
 }

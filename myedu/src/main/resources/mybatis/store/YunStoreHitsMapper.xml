@@ -24,10 +24,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectYunStoreHitsCountAll" resultType="Integer">
-        SELECT SUM(hits) FROM yun_store_hits
+    <select id="selectYunStoreHitsCountAll" parameterType="Long" resultType="Integer">
+        SELECT SUM(ys.hits) FROM yun_store_hits ys
         <where>
-            <if test="storeId != null "> and store_id = #{storeId}</if>
+            <if test="storeId != null ">  ys.store_id = #{storeId}</if>
         </where>
     </select>
 
