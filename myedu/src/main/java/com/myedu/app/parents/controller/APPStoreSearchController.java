@@ -6,6 +6,8 @@ import com.myedu.framework.security.LoginUser;
 import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.store.mapper.YunStoreHitsMapper;
+import com.myedu.project.store.service.IYunStoreHitsService;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +26,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +46,8 @@ public class APPStoreSearchController extends BaseController {
     private ElasticsearchTemplate elasticsearchTemplate;
     @Autowired
     private TokenService tokenService;
-
+    @Autowired
+    private IYunStoreHitsService yunStoreHitsService;
 
     @AutoIdempotent
     @ApiOperation("附近的门店列表")
@@ -82,20 +87,22 @@ public class APPStoreSearchController extends BaseController {
                 double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
                 storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
                 List<Long> typeIds=storeSearchVo1.getTypeIds();
+                //如果有门店类型根据门点类型搜索
                 if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0){
                     Long typeId= storeSearchVo.getTypeIds().get(0);
                     Boolean iscontent=false;
-                    for (Long typeIdsNew:
-                            typeIds) {
+                    for (Long typeIdsNew:typeIds) {
                         if(typeIdsNew==typeId){
                             iscontent=true;
                             break;
                         }
                     }
                     if(iscontent){
-                        storeSearchVosNew.add(storeSearchVo1);
+                     storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
+                     storeSearchVosNew.add(storeSearchVo1);
                     }
                 }else{
+                    storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                     storeSearchVosNew.add(storeSearchVo1);
                 }
                 System.out.println("距离" + (int)calculate + "km");
@@ -104,5 +111,10 @@ public class APPStoreSearchController extends BaseController {
         }else {
             return getDataTableLose(null);
         }
+    }
+
+    //获取门店总点击量
+    public BigInteger getHitsAll(Long id){
+       return yunStoreHitsService.selectYunStoreHitsCountAll(id);
     }
 }

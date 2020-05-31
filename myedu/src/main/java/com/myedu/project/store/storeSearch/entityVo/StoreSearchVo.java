@@ -4,6 +4,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -105,6 +106,9 @@ public class StoreSearchVo {
 
     /** 门店等级关联id */
     private Long vipLevelId;
+
+    /** 门店总点击量 */
+    private BigInteger hitsAll;
 
     public Long getId() {
         return id;
@@ -300,6 +304,13 @@ public class StoreSearchVo {
         this.delFlag = delFlag;
     }
 
+    public BigInteger getHitsAll() {
+        return hitsAll;
+    }
+
+    public void setHitsAll(BigInteger hitsAll) {
+        this.hitsAll = hitsAll;
+    }
 
     public List<Long> getTypeIds() {
         return typeIds;
@@ -348,6 +359,7 @@ public class StoreSearchVo {
                 ", name='" + name + '\'' +
                 ", lon=" + lon +
                 ", lat=" + lat +
+                ", hitsAll=" + hitsAll +
                 ", distanceMeters='" + distanceMeters + '\'' +
                 ", location=" + location +
                 ", logo='" + logo + '\'' +
@@ -368,6 +380,7 @@ public class StoreSearchVo {
                 ", beginExperienceTime=" + beginExperienceTime +
                 ", endExperienceTime=" + endExperienceTime +
                 ", vipLevelId=" + vipLevelId +
+
                 '}';
     }
 }

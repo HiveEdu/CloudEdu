@@ -1,5 +1,6 @@
 package com.myedu.project.store.service.impl;
 
+import java.math.BigInteger;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -161,4 +162,8 @@ public class YunStoreHitsServiceImpl implements IYunStoreHitsService
         }
         return list;
     }
+
+    public BigInteger selectYunStoreHitsCountAll(Long id){
+        return yunStoreHitsMapper.selectYunStoreHitsCountAll(id);
+    };
 }

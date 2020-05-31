@@ -1,6 +1,8 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreHits;
+
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -62,4 +64,7 @@ public interface IYunStoreHitsService
     public void  savehitsRedis(Long storeId,Long userId);
 
     public void transHitsCountFromRedis2DB();
+
+
+    public BigInteger selectYunStoreHitsCountAll(Long id);
 }

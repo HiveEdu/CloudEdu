@@ -1,6 +1,8 @@
 package com.myedu.project.store.mapper;
 
 import com.myedu.project.store.domain.YunStoreHits;
+
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -35,6 +37,7 @@ public interface YunStoreHitsMapper
      */
     public int insertYunStoreHits(YunStoreHits yunStoreHits);
 
+
     /**
      * 修改门店日访问量统计
      * 
@@ -58,4 +61,13 @@ public interface YunStoreHitsMapper
      * @return 结果
      */
     public int deleteYunStoreHitsByIds(Long[] ids);
+
+
+    /**
+     * 获取门店总点击量
+     *
+     * @param id
+     * @return 结果
+     */
+    public BigInteger selectYunStoreHitsCountAll(Long id);
 }

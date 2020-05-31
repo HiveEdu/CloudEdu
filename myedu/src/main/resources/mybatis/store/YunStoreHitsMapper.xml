@@ -23,7 +23,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hitTime != null "> and hit_time = #{hitTime}</if>
         </where>
     </select>
-    
+
+    <select id="selectYunStoreHitsCountAll" resultType="Integer">
+        SELECT SUM(hits) FROM yun_store_hits
+        <where>
+            <if test="storeId != null "> and store_id = #{storeId}</if>
+        </where>
+    </select>
+
     <select id="selectYunStoreHitsById" parameterType="Long" resultMap="YunStoreHitsResult">
         <include refid="selectYunStoreHitsVo"/>
         where id = #{id}
