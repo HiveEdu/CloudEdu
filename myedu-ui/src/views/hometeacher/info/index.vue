@@ -79,6 +79,7 @@
       <el-table-column label="性别" align="center" prop="sex" :formatter="gendelFormat"/>
       <el-table-column label="省/市/区" align="center" prop="province" />
       <el-table-column label="学校" align="center" prop="school" />
+      <el-table-column label="最低费用" align="center" prop="minfee" />
       <el-table-column label="学历" align="center" prop="education" :formatter="EducationFormat"/>
       <el-table-column label="是否毕业" align="center" prop="isGraduate" :formatter="isOneToOneFormat"/>
        <el-table-column label="审核状态" align="center" prop="status" :formatter="checkFormat" />
@@ -225,6 +226,9 @@
         </el-form-item>
         <el-form-item label="奖励荣誉" prop="awards">
         <el-input v-model="form.awards" placeholder="请输入奖励荣誉" />
+        </el-form-item>
+         <el-form-item label="最低课时费" prop="minfee">
+        <el-input v-model="form.minfee" placeholder="请输入最低课时费" />
         </el-form-item>
          </div>
         <div v-if="active==2" style="margin-top: 30px">
@@ -524,6 +528,7 @@ export default {
         awards: undefined,
         experience: undefined,
         trait: undefined,
+        minfee: undefined,
         photos: undefined,
         video: undefined,
         school: undefined,

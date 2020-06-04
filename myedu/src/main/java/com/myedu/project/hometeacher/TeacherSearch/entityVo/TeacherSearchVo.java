@@ -40,6 +40,11 @@ public class TeacherSearchVo {
     @Excel(name = "教学特点")
     private String trait;
 
+    /** 最低费用*/
+    @ApiModelProperty("最低费用")
+    @Excel(name = "最低费用")
+    private Double minfee;
+
     /** 照片展示 */
     @ApiModelProperty("照片展示")
     @Excel(name = "照片展示")
@@ -191,25 +196,6 @@ public class TeacherSearchVo {
         this.status = status;
     }
 
-//    public TeacherSearchVo(Long id, Long userId, String courseId, String experience, String trait, String photos, Double mapX, Double mapY, String province, String city, String area, String address, String status, String distanceMeters, GeoPoint location, Double lon, Double lat) {
-//        this.id = id;
-//        this.userId = userId;
-//        this.courseId = courseId;
-//        this.experience = experience;
-//        this.trait = trait;
-//        this.photos = photos;
-//        this.mapX = mapX;
-//        this.mapY = mapY;
-//        this.province = province;
-//        this.city = city;
-//        this.area = area;
-//        this.address = address;
-//        this.status = status;
-//        this.distanceMeters = distanceMeters;
-//        this.location = location;
-//        this.lon = lon;
-//        this.lat = lat;
-//    }
 
     public String getDistanceMeters() {
 
@@ -232,12 +218,8 @@ public class TeacherSearchVo {
         return lon;
     }
 
-    public void setLon(Double lon) {
-        this.lon = lon;
-    }
-
-    public Double getLat() {
-        return lat;
+    public Double getMinfee() {
+        return minfee;
     }
 
     @Override
@@ -248,6 +230,7 @@ public class TeacherSearchVo {
                 ", courseId='" + courseId + '\'' +
                 ", experience='" + experience + '\'' +
                 ", trait='" + trait + '\'' +
+                ", minfee=" + minfee +
                 ", photos='" + photos + '\'' +
                 ", mapX=" + mapX +
                 ", mapY=" + mapY +
@@ -262,6 +245,19 @@ public class TeacherSearchVo {
                 ", lat=" + lat +
                 '}';
     }
+
+    public void setMinfee(Double minfee) {
+        this.minfee = minfee;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
 
     public void setLat(Double lat) {
         this.lat = lat;

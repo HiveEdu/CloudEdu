@@ -68,6 +68,11 @@ public class YunUserInfo extends BaseEntity
     @Excel(name = "学历", readConverterExp = "0=博士1硕士")
     private String education;
 
+    /** 最低费用*/
+    @ApiModelProperty("最低费用")
+    @Excel(name = "最低费用")
+    private Double minfee;
+
     /** 证书 */
     @ApiModelProperty("证书")
     @Excel(name = "证书")
@@ -110,6 +115,14 @@ public class YunUserInfo extends BaseEntity
     @ApiModelProperty("驳回原因")
     @Excel(name = "驳回原因")
     private String rejectResion;
+
+    public Double getMinfee() {
+        return minfee;
+    }
+
+    public void setMinfee(Double minfee) {
+        this.minfee = minfee;
+    }
 
     public Double getMapX() {
         return mapX;
@@ -261,33 +274,6 @@ public class YunUserInfo extends BaseEntity
         this.video = video;
     }
 
-    @Override
-    public String toString() {
-        return "YunUserInfo{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", courseId='" + courseId + '\'' +
-                ", awards='" + awards + '\'' +
-                ", experience='" + experience + '\'' +
-                ", trait='" + trait + '\'' +
-                ", photos='" + photos + '\'' +
-                ", video='" + video + '\'' +
-                ", school='" + school + '\'' +
-                ", isGraduate='" + isGraduate + '\'' +
-                ", education='" + education + '\'' +
-                ", credentials='" + credentials + '\'' +
-                ", mapX=" + mapX +
-                ", mapY=" + mapY +
-                ", province='" + province + '\'' +
-                ", city='" + city + '\'' +
-                ", area='" + area + '\'' +
-                ", address='" + address + '\'' +
-                ", status='" + status + '\'' +
-                ", rejectResion='" + rejectResion + '\'' +
-                ", identityCard='" + identityCard + '\'' +
-                ", delFlag='" + delFlag + '\'' +
-                '}';
-    }
 
     public String getVideo()
     {
@@ -339,5 +325,32 @@ public class YunUserInfo extends BaseEntity
         return delFlag;
     }
 
-
+    @Override
+    public String toString() {
+        return "YunUserInfo{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", courseId='" + courseId + '\'' +
+                ", awards='" + awards + '\'' +
+                ", experience='" + experience + '\'' +
+                ", trait='" + trait + '\'' +
+                ", photos='" + photos + '\'' +
+                ", video='" + video + '\'' +
+                ", school='" + school + '\'' +
+                ", isGraduate='" + isGraduate + '\'' +
+                ", education='" + education + '\'' +
+                ", minfee=" + minfee +
+                ", credentials='" + credentials + '\'' +
+                ", mapX=" + mapX +
+                ", mapY=" + mapY +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", address='" + address + '\'' +
+                ", status='" + status + '\'' +
+                ", rejectResion='" + rejectResion + '\'' +
+                ", identityCard='" + identityCard + '\'' +
+                ", delFlag='" + delFlag + '\'' +
+                '}';
+    }
 }

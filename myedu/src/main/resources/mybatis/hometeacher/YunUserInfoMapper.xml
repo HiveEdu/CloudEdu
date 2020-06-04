@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="province"    column="province"    />
         <result property="city"    column="city"    />
         <result property="area"    column="area"    />
+        <result property="minfee"    column="minfee"    />
         <result property="address"    column="address"    />
         <result property="mapX"    column="map_x"    />
         <result property="mapY"    column="map_y"    />
@@ -62,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="experience != null  and experience != ''">experience,</if>
             <if test="trait != null  and trait != ''">trait,</if>
             <if test="photos != null  and photos != ''">photos,</if>
+            <if test="minfee != null  and minfee != ''">minfee,</if>
             <if test="province != null  and province != ''">province,</if>
             <if test="city != null  and city != ''">city,</if>
             <if test="area != null  and area != ''">area,</if>
@@ -87,6 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="experience != null  and experience != ''">#{experience},</if>
             <if test="trait != null  and trait != ''">#{trait},</if>
             <if test="photos != null  and photos != ''">#{photos},</if>
+            <if test="minfee != null  and minfee != ''">#{minfee},</if>
             <if test="province != null  and province != ''">#{province},</if>
             <if test="city != null  and city != ''">#{city},</if>
             <if test="area != null  and area != ''">#{area},</if>
@@ -116,6 +119,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="experience != null  and experience != ''">experience = #{experience},</if>
             <if test="trait != null  and trait != ''">trait = #{trait},</if>
             <if test="photos != null  and photos != ''">photos = #{photos},</if>
+            <if test="minfee != null  and minfee != ''">minfee = #{minfee},</if>
             <if test="video != null  and video != ''">video = #{video},</if>
             <if test="school != null  and school != ''">school = #{school},</if>
             <if test="isGraduate != null  and isGraduate != ''">is_graduate = #{isGraduate},</if>
