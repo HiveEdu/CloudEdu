@@ -165,10 +165,24 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
+            <el-form-item label="所属老师" prop="teacherId">
+              <el-select v-model="form.teacherId"  placeholder="请选择所属注册老师"  style="width: 100%;">
+                <el-option
+                  v-for="item in teachers"
+                  v-if="item.status==3"
+                  :key="item.id"
+                  :label="item.nickName"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
             <el-form-item label="课程名称" prop="name">
               <el-input v-model="form.name" placeholder="请输入课程名称" />
             </el-form-item>
-             </el-col>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
@@ -310,6 +324,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      //注册老师列表
+      teachers:[],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -322,7 +338,7 @@ export default {
         status: undefined,
       },
       // 表单参数
-      form: {},
+      form: {teacherId:null},
       // 表单校验
       rules: {
         name: [
@@ -441,7 +457,7 @@ export default {
       this.reset();
       getCourse().then(response => {
         this.sysGrades = response.sysGrades;
-        this.stores=response.stores;
+        this.teachers=response.teachers;
         this.form.courseCost=0;
         this.form.totalCost=0;
         this.form.classAll=0;
@@ -527,6 +543,7 @@ export default {
             });
           } else {
             this.form.status=0;//默认在售状态
+            this.form.courseType='2',//家教客户才能
             addCourse(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");

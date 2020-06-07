@@ -20,6 +20,12 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="类型" prop="orderType">
+        <el-select v-model="queryParams.orderType" placeholder="请选择类型" clearable size="small">
+          <el-option value="1" label="门店订单">门店订单</el-option>
+          <el-option value="2" label="家教订单">家教订单</el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="用户" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
@@ -78,8 +84,11 @@
 
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="编号" align="center" prop="num" /> -->
-      <el-table-column label="门店" align="center" prop="storeName" />
+      <el-table-column label="编号" align="center" prop="num" :formatter="orderTypeFormat"/>
+<!--      <el-table-column label="类型" align="center" prop="orderType" :formatter="orderTypeFormat">-->
+<!--      </el-table-column>-->
+      <el-table-column v-if="storeShow" label="门店" align="center" prop="storeName" />
+      <el-table-column v-else label="老师" align="center" prop="teacherName" />
       <el-table-column label="课程" align="center" prop="courseName" />
       <el-table-column label="学生" align="center" prop="studentAssName" />
       <el-table-column label="年级" align="center" prop="gradeName" />
@@ -289,6 +298,7 @@ export default {
       comment:false,
       rebund:false,
       currentData:null,
+      storeShow:true,
       // 年级列表
       sysGrades: [],
       // 学生列表
@@ -334,6 +344,7 @@ export default {
         certificateNum: undefined,
         totalMoney: undefined,
         status: undefined,
+        orderType:undefined,
         createBy: undefined,
         createTime: undefined,
         studentAssName: undefined,
@@ -373,6 +384,15 @@ export default {
 
   },
   methods: {
+    orderTypeFormat(row, column) {
+      this.storeShow=false;
+      if (row.orderType === '1') {
+        this.storeShow=true;
+      } else  {
+        this.storeShow=false;
+      }
+      return row.num;
+    },
     //退款
     refund(row){
       const ids = row.id || this.ids;

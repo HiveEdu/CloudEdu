@@ -159,6 +159,7 @@
           submitForm: function() {
             this.$refs["signUpForm"].validate(valid => {
               if (valid) {
+                this.signUpForm.orderType='2';//门店订单
                   addOrder(this.signUpForm).then(response => {
                     if (response.code === 200) {
                       this.msgSuccess("报名成功");

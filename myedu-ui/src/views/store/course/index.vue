@@ -485,6 +485,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        courseType:'1',
         name: undefined,
         classify: undefined,
         reclassifyColl: undefined,
@@ -697,6 +698,7 @@ export default {
             });
           } else {
             this.form.status=0;//默认在售状态
+            this.form.courseType='1';//门店课程
             addCourse(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
