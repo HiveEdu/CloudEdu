@@ -4,7 +4,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -109,6 +108,17 @@ public class StoreSearchVo {
 
     /** 门店总点击量 */
     private int hitsAll;
+
+    /** 门店介绍 */
+    private String introduction;
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
 
     public Long getId() {
         return id;
@@ -323,8 +333,9 @@ public class StoreSearchVo {
     public StoreSearchVo(){
 
     }
-    public StoreSearchVo(Long id,List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters, GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license, String province, String city, String area, String address, String delFlag, Long createById, String status, String rejectResion,
-                         Date beginExperienceTime, Date endExperienceTime, Long vipLevelId,int hitsAll) {
+
+
+    public StoreSearchVo(Long id, List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters, GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license, String province, String city, String area, String address, String delFlag, Long createById, String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime, Long vipLevelId, int hitsAll, String introduction) {
         this.id = id;
         this.typeIds = typeIds;
         this.name = name;
@@ -350,18 +361,18 @@ public class StoreSearchVo {
         this.beginExperienceTime = beginExperienceTime;
         this.endExperienceTime = endExperienceTime;
         this.vipLevelId = vipLevelId;
-        this.hitsAll=hitsAll;
+        this.hitsAll = hitsAll;
+        this.introduction = introduction;
     }
 
     @Override
     public String toString() {
         return "StoreSearchVo{" +
                 "id=" + id +
-                "typeIds=" + typeIds +
+                ", typeIds=" + typeIds +
                 ", name='" + name + '\'' +
                 ", lon=" + lon +
                 ", lat=" + lat +
-                ", hitsAll=" + hitsAll +
                 ", distanceMeters='" + distanceMeters + '\'' +
                 ", location=" + location +
                 ", logo='" + logo + '\'' +
@@ -382,7 +393,8 @@ public class StoreSearchVo {
                 ", beginExperienceTime=" + beginExperienceTime +
                 ", endExperienceTime=" + endExperienceTime +
                 ", vipLevelId=" + vipLevelId +
-
+                ", hitsAll=" + hitsAll +
+                ", introduction='" + introduction + '\'' +
                 '}';
     }
 }

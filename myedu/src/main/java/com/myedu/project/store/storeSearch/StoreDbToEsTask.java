@@ -26,7 +26,7 @@ public class StoreDbToEsTask {
     @Autowired
     private StoreSearchVoRepository storeSearchVoRepository;
     //0 0 12 * * ?
-    @Scheduled(cron="0 0 18 * * ?") //每天18点执行
+    @Scheduled(cron="0 37 18 * * ?") //每天18点执行
     protected void executedyInternal(){
         YunStoreVo yunStore=new YunStoreVo();
         List<YunStoreVo> yunStores=yunStoreService.selectYunStoreList(yunStore);
@@ -34,7 +34,7 @@ public class StoreDbToEsTask {
                 yunStores) {
 //            storeSearchVoRepository.deleteById(yun.getId());
             Boolean exists= storeSearchVoRepository.existsById(yun.getId());
-            if(!exists){
+            if(exists){
                 //增加门店到es查询数据库中
                 StoreSearchVo storeSearchVo=new StoreSearchVo();
                 storeSearchVo.setId(yun.getId());
@@ -59,6 +59,7 @@ public class StoreDbToEsTask {
                 storeSearchVo.setVideo(yun.getVideo());
                 storeSearchVo.setRejectResion(yun.getRejectResion());
                 storeSearchVo.setVipLevelId(yun.getVipLevelId());
+                storeSearchVo.setIntroduction(yun.getIntroduction());
                 List<YunStoreType>  yunStoreTypes=yunStoreTypeService.selectYunStoreTypeByStoreId(yun.getId());
                 List<Long> typeIds=new ArrayList<>();
                 for (YunStoreType storeType:

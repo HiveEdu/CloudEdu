@@ -319,7 +319,6 @@ public class YunStore extends BaseEntity
                 ", manager='" + manager + '\'' +
                 ", managerPhone='" + managerPhone + '\'' +
                 ", photos='" + photos + '\'' +
-
                 ", healths='" + healths + '\'' +
                 ", video='" + video + '\'' +
                 ", license='" + license + '\'' +
