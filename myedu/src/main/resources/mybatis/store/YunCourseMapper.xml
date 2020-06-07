@@ -32,6 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createById"    column="create_by_id"    />
+        <result property="courseType"    column="course_type"    />
+        <result property="teacherId"    column="teacher_id"    />
     </resultMap>
 
     <sql id="selectYunCourseVo">
@@ -64,7 +66,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and yc.status = #{status}</if>
             <if test="createById != null "> and yc.create_by_id = #{createById}</if>
             <if test="storeId != null and storeId != '' "> and yc.store_id = #{storeId}</if>
-        </where>
+            <if test="courseType != null and courseType != '' "> and yc.course_type = #{courseType}</if>
+            <if test="teacherId != null and teacherId != '' "> and yc.teacher_id = #{teacherId}</if>
+       </where>
     </select>
     
     <select id="selectYunCourseById" parameterType="Long" resultMap="YunCourseResult">
@@ -101,6 +105,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
             <if test="createById != null ">create_by_id,</if>
+            <if test="courseType != null ">course_type,</if>
+            <if test="teacherId != null ">teacher_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
@@ -129,6 +135,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="createById != null ">#{createById},</if>
+            <if test="courseType != null ">#{courseType},</if>
+            <if test="teacherId != null ">#{teacherId},</if>
          </trim>
     </insert>
 
@@ -161,6 +169,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="courseType != null ">course_type = #{courseType},</if>
+            <if test="teacherId != null ">teacher_id = #{teacherId},</if>
         </trim>
         where id = #{id}
     </update>

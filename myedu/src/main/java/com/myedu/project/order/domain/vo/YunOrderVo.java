@@ -23,6 +23,8 @@ public class YunOrderVo extends YunOrder {
      * @Date : 2020/1/23 10:41
      */
     private String storeName;
+
+    private String teacherName;
     /*
      * @Description :课程名称
      * @Date : 2020/1/23 10:41

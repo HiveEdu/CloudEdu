@@ -45,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="courseId != null  and courseId != ''"> and course_id = #{courseId}</if>
             <if test="school != null  and school != ''"> and school = #{school}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
         </where>
     </select>
     

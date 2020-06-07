@@ -109,6 +109,15 @@ public class YunOrder extends BaseEntity
     @ApiModelProperty("交易号")
     private String   tradeNo;
 
+    /**订单类型 */
+    @ApiModelProperty("订单类型")
+    private String   orderType;
+
+    /** 关联家教老师id */
+    @ApiModelProperty("关联家教老师id")
+    @Excel(name = "关联家教老师id")
+    private Long teacherId;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -278,6 +287,22 @@ public class YunOrder extends BaseEntity
         this.tradeNo = tradeNo;
     }
 
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -304,6 +329,8 @@ public class YunOrder extends BaseEntity
             .append("createById", getCreateById())
             .append("refundReason",getRefundReason())
             .append("tradeNo",getTradeNo())
+            .append("orderType",getOrderType())
+            .append("teacherId",getTeacherId())
             .toString();
     }
 }

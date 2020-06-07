@@ -132,6 +132,17 @@ public class YunCourse extends BaseEntity
     @Excel(name = "创建人Id")
     private Long createById;
 
+
+    /** 课程类型 */
+    @ApiModelProperty("课程类型")
+    @Excel(name = "课程类型")
+    private String courseType;
+
+    /** 家教老师id */
+    @ApiModelProperty("家教老师id")
+    @Excel(name = "家教老师id")
+    private Long teacherId;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -340,6 +351,22 @@ public class YunCourse extends BaseEntity
         return createById;
     }
 
+    public String getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(String courseType) {
+        this.courseType = courseType;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -370,6 +397,9 @@ public class YunCourse extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
             .append("createById", getCreateById())
+                .append("courseType", getCourseType())
+                .append("teacherId", getTeacherId())
+
             .toString();
     }
 }

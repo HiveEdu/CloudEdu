@@ -2,9 +2,13 @@ package com.myedu.project.hometeacher.controller;
 
 import java.util.List;
 
+import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
+import com.myedu.project.hometeacher.domain.vo.YunUserInfoVo;
+import com.myedu.project.hometeacher.service.IYunUserInfoService;
+import com.myedu.project.store.domain.vo.YunStoreVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +42,8 @@ public class HomeCourseController extends BaseController
     private IHomeCourseService homeCourseService;
     @Autowired
     private ISysGradeService sysGradeService;
+    @Autowired
+    private IYunUserInfoService yunUserInfoService;
     /**
      * 查询课程列表
      */
@@ -72,10 +78,11 @@ public class HomeCourseController extends BaseController
         AjaxResult ajax = AjaxResult.success();
         SysGrade sysGrade = new SysGrade();
         ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
+        YunUserInfoVo yunUserInfoVo=new YunUserInfoVo();
+        List<YunUserInfoVo> teachers=yunUserInfoService.selectYunUserInfoList(yunUserInfoVo);
+        ajax.put("teachers", teachers);
         if (StringUtils.isNotNull(id)){
-
             ajax.put(AjaxResult.DATA_TAG, homeCourseService.selectHomeCourseById(id));
-
         }
         return ajax;
     }
