@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+
 /**
  * 学生身高体重记录对象 yun_stu_hw
  * 
@@ -23,11 +26,15 @@ public class YunStuHw extends BaseEntity
     private Long id;
 
     /** 身高（cm） */
+    @NotBlank(message = "身高不能为空")
+    @Digits(integer=20,fraction=2)
     @ApiModelProperty("身高（cm）")
     @Excel(name = "身高", readConverterExp = "c=m")
     private Double height;
 
     /** 体重（kg） */
+    @NotBlank(message = "体重不能为空")
+    @Digits(integer=20,fraction=2)
     @ApiModelProperty("体重（kg）")
     @Excel(name = "体重", readConverterExp = "k=g")
     private Double weight;

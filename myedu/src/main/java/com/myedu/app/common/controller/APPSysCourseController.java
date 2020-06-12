@@ -1,7 +1,8 @@
-package com.myedu.project.dataBasic.controller;
+package com.myedu.app.common.controller;
 
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.web.controller.BaseController;
@@ -9,6 +10,8 @@ import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.dataBasic.domain.SysCourse;
 import com.myedu.project.dataBasic.service.ISysCourseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,10 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2019-12-28
  */
+@Api("课程接口")
 @RestController
-@RequestMapping("/dataBasic/course")
-public class SysCourseController extends BaseController
+@RequestMapping("/app/dataBasic/course")
+public class APPSysCourseController extends BaseController
 {
     @Autowired
     private ISysCourseService sysCourseService;
@@ -31,7 +35,8 @@ public class SysCourseController extends BaseController
     /**
      * 查询课程基本数据列表
      */
-    @PreAuthorize("@ss.hasPermi('dataBasic:course:list')")
+    @AutoIdempotent
+    @ApiOperation("查询课程基本数据列表")
     @GetMapping("/list")
     public TableDataInfo list(SysCourse sysCourse)
     {

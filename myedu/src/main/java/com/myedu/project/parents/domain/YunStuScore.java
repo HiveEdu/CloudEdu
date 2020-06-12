@@ -1,10 +1,14 @@
 package com.myedu.project.parents.domain;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.myedu.framework.aspectj.lang.annotation.Excel;
-import java.util.Date;
 import com.myedu.framework.web.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 
 /**
@@ -23,6 +27,8 @@ public class YunStuScore extends BaseEntity
     private Long scoreId;
 
     /** 考试分数 */
+    @NotBlank(message = "考试分数不能为空")
+    @Digits(integer=20,fraction=2)
     @ApiModelProperty("考试分数")
     @Excel(name = "考试分数")
     private Double mark;
@@ -53,6 +59,7 @@ public class YunStuScore extends BaseEntity
     }
 
     /** 考试科目 */
+    @NotBlank(message = "考试科目不能为空")
     @ApiModelProperty("考试科目")
     @Excel(name = "考试科目")
     private String examtname;
