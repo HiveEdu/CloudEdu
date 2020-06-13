@@ -1,30 +1,24 @@
 package com.myedu.project.parents.controller;
 
-import java.util.List;
-
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
-import com.myedu.project.parents.domain.vo.YunStuHworkVo;
-import com.myedu.project.parents.domain.vo.YunStudentVo;
-import com.myedu.project.parents.service.IYunStudentService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
-import com.myedu.project.parents.domain.YunStuHwork;
-import com.myedu.project.parents.service.IYunStuHworkService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.parents.domain.YunStuHwork;
+import com.myedu.project.parents.domain.vo.YunStuHworkVo;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+import com.myedu.project.parents.service.IYunStuHworkService;
+import com.myedu.project.parents.service.IYunStudentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 学生作业Controller
@@ -90,7 +84,7 @@ public class YunStuHworkController extends BaseController
     @PreAuthorize("@ss.hasPermi('parents:hwork:add')")
     @Log(title = "学生作业", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStuHwork yunStuHwork)
+    public AjaxResult add(@Valid @RequestBody YunStuHwork yunStuHwork)
     {   yunStuHwork.setCreateById(SecurityUtils.getUserId());
         yunStuHwork.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStuHworkService.insertYunStuHwork(yunStuHwork));

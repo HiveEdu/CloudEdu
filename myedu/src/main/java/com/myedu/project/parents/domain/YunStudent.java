@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -47,6 +48,7 @@ public class YunStudent extends BaseEntity
     private String school;
 
     /** 学生出生日期 */
+    @NotNull
     @Excel(name = "学生出生日期")
     @ApiModelProperty("学生出生日期")
     private Date birthday;

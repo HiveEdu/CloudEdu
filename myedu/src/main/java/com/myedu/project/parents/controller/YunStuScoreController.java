@@ -1,32 +1,26 @@
 package com.myedu.project.parents.controller;
 
-import java.util.List;
-
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
-import com.myedu.project.dataBasic.domain.SysCourse;
-import com.myedu.project.dataBasic.service.ISysCourseService;
-import com.myedu.project.parents.domain.vo.YunStuScoreVo;
-import com.myedu.project.parents.domain.vo.YunStudentVo;
-import com.myedu.project.parents.service.IYunStudentService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
-import com.myedu.project.parents.domain.YunStuScore;
-import com.myedu.project.parents.service.IYunStuScoreService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.dataBasic.domain.SysCourse;
+import com.myedu.project.dataBasic.service.ISysCourseService;
+import com.myedu.project.parents.domain.YunStuScore;
+import com.myedu.project.parents.domain.vo.YunStuScoreVo;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+import com.myedu.project.parents.service.IYunStuScoreService;
+import com.myedu.project.parents.service.IYunStudentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 学生成绩Controller
@@ -98,7 +92,7 @@ public class YunStuScoreController extends BaseController
     @PreAuthorize("@ss.hasPermi('parents:score:add')")
     @Log(title = "学生成绩", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStuScore yunStuScore)
+    public AjaxResult add(@Valid @RequestBody YunStuScore yunStuScore)
     {   yunStuScore.setCreateById(SecurityUtils.getUserId());
         yunStuScore.setCreateBy(SecurityUtils.getUsername());
         return toAjax(yunStuScoreService.insertYunStuScore(yunStuScore));

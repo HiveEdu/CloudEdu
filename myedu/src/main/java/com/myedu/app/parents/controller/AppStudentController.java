@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class AppStudentController extends BaseController {
     @ApiImplicitParam(name = "yunStudent", value = "增加学生", dataType = "YunStudent")
     @Log(title = "学生数据", businessType = BusinessType.INSERT)
     @PostMapping("/addStudent")
-    public AjaxResult addStudent(@RequestBody YunStudent yunStudent) throws IOException {
+    public AjaxResult addStudent(@Valid @RequestBody YunStudent yunStudent) throws IOException {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunStudent.setCreateById(loginUser.getUser().getUserId());
         yunStudent.setCreateBy(loginUser.getUser().getNickName());

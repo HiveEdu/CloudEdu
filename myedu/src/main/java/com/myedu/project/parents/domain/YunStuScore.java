@@ -6,8 +6,8 @@ import com.myedu.framework.web.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 
@@ -27,8 +27,8 @@ public class YunStuScore extends BaseEntity
     private Long scoreId;
 
     /** 考试分数 */
-    @NotBlank(message = "考试分数不能为空")
-    @Digits(integer=20,fraction=2)
+    @NotNull
+   // @Digits(integer=20,fraction=2)
     @ApiModelProperty("考试分数")
     @Excel(name = "考试分数")
     private Double mark;
@@ -58,10 +58,10 @@ public class YunStuScore extends BaseEntity
         return courseId;
     }
 
-    /** 考试科目 */
-    @NotBlank(message = "考试科目不能为空")
-    @ApiModelProperty("考试科目")
-    @Excel(name = "考试科目")
+    /** 考试名称 */
+    @NotBlank(message = "考试名称不能为空")
+    @ApiModelProperty("考试名称")
+    @Excel(name = "考试名称")
     private String examtname;
 
     /** 照片地址 */

@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -75,7 +76,7 @@ public class AppStComplaintController extends BaseController
             dataType = "YunComplaint")
     @Log(title = "投诉", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunComplaint yunComplaint)
+    public AjaxResult add(@Valid @RequestBody YunComplaint yunComplaint)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunComplaint.setCreateById(loginUser.getUser().getUserId());

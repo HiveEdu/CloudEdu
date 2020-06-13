@@ -1,4 +1,5 @@
 package com.myedu.app.parents.controller;
+
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
 import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
@@ -21,6 +22,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -94,7 +97,7 @@ public class AppStScoreController extends BaseController
             dataType = "YunStuScore")
     @Log(title = "学生成绩", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStuScore yunStuScore)
+    public AjaxResult add(@Valid @RequestBody YunStuScore yunStuScore)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunStuScore.setCreateById(loginUser.getUser().getUserId());

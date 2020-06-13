@@ -2,7 +2,6 @@ package com.myedu.app.parents.controller;
 
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.common.utils.StringUtils;
-import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
@@ -22,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -90,7 +90,7 @@ public class AppStHworkController extends BaseController
             dataType = "YunStuHwork")
     @Log(title = "学生作业", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStuHwork yunStuHwork)
+    public AjaxResult add(@Valid @RequestBody YunStuHwork yunStuHwork)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunStuHwork.setCreateById(loginUser.getUser().getUserId());

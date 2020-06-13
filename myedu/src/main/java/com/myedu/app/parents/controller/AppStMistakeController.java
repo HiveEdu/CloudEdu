@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -73,7 +74,7 @@ public class AppStMistakeController extends BaseController {
     @ApiImplicitParam(name = "yunStuMistake", value = "添加学生错题记录",
             dataType = "YunStuMistake")
     @PostMapping("/addStudentMistake")
-    public AjaxResult addStudentMistake(@RequestBody YunStuMistake yunStuMistake)
+    public AjaxResult addStudentMistake(@Valid @RequestBody YunStuMistake yunStuMistake)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunStuMistake.setCreateById(loginUser.getUser().getUserId());

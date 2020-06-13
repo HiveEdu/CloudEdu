@@ -77,6 +77,7 @@
     <el-table v-loading="loading" :data="scoreList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="学生姓名" align="center" prop="studentName" />
+       <el-table-column label="考试名称" align="center" prop="examtname" />
       <el-table-column label="考试科目" align="center" prop="courseName" />
       <el-table-column label="考试时间" align="center" prop="examtime" width="180">
         <template slot-scope="scope"  v-if="scope.row.examtime!=null">
@@ -126,6 +127,9 @@
             ></el-option>
           </el-select>
       </el-form-item>
+       <el-form-item label="哪次考试" prop="examtname">
+          <el-input v-model="form.examtname" placeholder="例如:第一次单元测试" />
+        </el-form-item>
      <el-form-item label="考试科目" prop="courseId">
           <el-select v-model="form.courseId"  placeholder="请选择考试科目">
             <el-option

@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -88,7 +89,7 @@ public class AppStHwController extends BaseController
             dataType = "YunStuHw")
     @Log(title = "学生身高体重记录", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStuHw yunStuHw)
+    public AjaxResult add(@Valid @RequestBody YunStuHw yunStuHw)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         yunStuHw.setCreateById(loginUser.getUser().getUserId());
