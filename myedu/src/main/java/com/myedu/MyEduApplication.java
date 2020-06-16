@@ -1,10 +1,8 @@
 package com.myedu;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -22,7 +20,7 @@ public class MyEduApplication
     {    System.setProperty("es.set.netty.runtime.available.processors", "false");
         // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(MyEduApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  微托管   ლ(´ڡ`ლ)ﾞ  \n" +
+        System.out.println("(♥◠‿◠)ﾉﾞ  云托管   ლ(´ڡ`ლ)ﾞ  \n" +
                 " .-------.       ____     __        \n" +
                 " |  _ _   \\      \\   \\   /  /    \n" +
                 " | ( ' )  |       \\  _. /  '       \n" +
