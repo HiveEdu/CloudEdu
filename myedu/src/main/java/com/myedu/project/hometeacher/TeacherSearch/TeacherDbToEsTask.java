@@ -6,12 +6,11 @@ import com.myedu.project.hometeacher.domain.vo.YunUserInfoVo;
 import com.myedu.project.hometeacher.service.IYunUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Component("teacherDbToEsTask")
 public class TeacherDbToEsTask {
     @Autowired
     private IYunUserInfoService yunUserInfoService;
@@ -19,8 +18,8 @@ public class TeacherDbToEsTask {
     @Autowired
     private TeacherSearchVoRepository teacherSearchVoRepository;
     //0 0 12 * * ?
-    @Scheduled(cron="0 0 18 * * ?") //每天18点执行
-    protected void executedyInternal(){
+    //@Scheduled(cron="0 0 18 * * ?") //每天18点执行
+    public void executedyInternal(){
         YunUserInfoVo yunuser=new YunUserInfoVo();
         List<YunUserInfoVo> yunUsers=yunUserInfoService.selectYunUserInfoList(yunuser);
         for (YunUserInfoVo yun:
