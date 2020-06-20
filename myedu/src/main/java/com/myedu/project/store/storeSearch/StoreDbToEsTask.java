@@ -9,13 +9,12 @@ import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
 import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Component("StoreDbToEsTask")
 public class StoreDbToEsTask {
     @Autowired
     IYunDyLikesService yunDyLikesService;
@@ -26,8 +25,8 @@ public class StoreDbToEsTask {
     @Autowired
     private StoreSearchVoRepository storeSearchVoRepository;
     //0 0 12 * * ?
-    @Scheduled(cron="0 24 19 * * ?") //每天18点执行
-    protected void executedyInternal(){
+   // @Scheduled(cron="0 24 19 * * ?") //每天18点执行
+    public void executedyInternal(){
         YunStoreVo yunStore=new YunStoreVo();
         List<YunStoreVo> yunStores=yunStoreService.selectYunStoreList(yunStore);
         for (YunStoreVo yun:
