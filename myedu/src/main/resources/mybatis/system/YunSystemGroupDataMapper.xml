@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.system.mapper.YunSystemGroupDataMapper">
+    
+    <resultMap type="YunSystemGroupData" id="YunSystemGroupDataResult">
+        <result property="id"    column="id"    />
+        <result property="groupName"    column="group_name"    />
+        <result property="value"    column="value"    />
+        <result property="addTime"    column="add_time"    />
+        <result property="sort"    column="sort"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectYunSystemGroupDataVo">
+        select id, group_name, value, add_time, sort, status from yun_system_group_data
+    </sql>
+
+    <select id="selectYunSystemGroupDataList" parameterType="YunSystemGroupData" resultMap="YunSystemGroupDataResult">
+        <include refid="selectYunSystemGroupDataVo"/>
+        <where>  
+            <if test="groupName != null  and groupName != ''"> and group_name like concat('%', #{groupName}, '%')</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="addTime != null "> and add_time = #{addTime}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunSystemGroupDataById" parameterType="Long" resultMap="YunSystemGroupDataResult">
+        <include refid="selectYunSystemGroupDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunSystemGroupData" parameterType="YunSystemGroupData" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_system_group_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupName != null  and groupName != ''">group_name,</if>
+            <if test="value != null  and value != ''">value,</if>
+            <if test="addTime != null ">add_time,</if>
+            <if test="sort != null ">sort,</if>
+            <if test="status != null ">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupName != null  and groupName != ''">#{groupName},</if>
+            <if test="value != null  and value != ''">#{value},</if>
+            <if test="addTime != null ">#{addTime},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="status != null ">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunSystemGroupData" parameterType="YunSystemGroupData">
+        update yun_system_group_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groupName != null  and groupName != ''">group_name = #{groupName},</if>
+            <if test="value != null  and value != ''">value = #{value},</if>
+            <if test="addTime != null ">add_time = #{addTime},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="status != null ">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunSystemGroupDataById" parameterType="Long">
+        delete from yun_system_group_data where id = #{id}
+    </delete>
+
+    <delete id="deleteYunSystemGroupDataByIds" parameterType="String">
+        delete from yun_system_group_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
