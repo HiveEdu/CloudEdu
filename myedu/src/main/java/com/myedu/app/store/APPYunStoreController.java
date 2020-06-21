@@ -75,6 +75,24 @@ public class APPYunStoreController extends BaseController
         return getDataTable(list);
     }
 
+    @AutoIdempotent
+    @ApiOperation("查询当前用户下的门店列表")
+    @ApiImplicitParam(name = "yunStoreVo", value = "查询当前用户下的门店列表",
+            dataType = "YunStoreVo")
+    @GetMapping("/getMyStores")
+    public TableDataInfo  getMyStudent(YunStoreVo yunStoreVo)
+    {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null){
+            startPage();
+            yunStoreVo.setCreateById(loginUser.getUser().getUserId());
+            List<YunStoreVo> list = yunStoreService.selectYunStoreList(yunStoreVo);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
+    }
+
 
     /**
      * 获取门店详细信息
