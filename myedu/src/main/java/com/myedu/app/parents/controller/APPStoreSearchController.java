@@ -1,14 +1,16 @@
 package com.myedu.app.parents.controller;
 
+import com.myedu.common.api.CommonPage;
+import com.myedu.common.api.CommonResult;
 import com.myedu.common.utils.ServletUtils;
 import com.myedu.framework.aspectj.lang.annotation.AutoIdempotent;
 import com.myedu.framework.security.LoginUser;
 import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.page.TableDataInfo;
-import com.myedu.project.store.mapper.YunStoreHitsMapper;
 import com.myedu.project.store.service.IYunStoreHitsService;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
+import com.myedu.project.store.storeSearch.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.elasticsearch.common.geo.GeoDistance;
@@ -23,11 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +47,8 @@ public class APPStoreSearchController extends BaseController {
     private TokenService tokenService;
     @Autowired
     private IYunStoreHitsService yunStoreHitsService;
+    @Autowired
+    private StoreService storeService;
 
     @AutoIdempotent
     @ApiOperation("附近的门店列表")
@@ -118,4 +119,17 @@ public class APPStoreSearchController extends BaseController {
         System.out.println(yunStoreHitsService.selectYunStoreHitsCountAll(id));
        return yunStoreHitsService.selectYunStoreHitsCountAll(id);
     }
+
+
+    @ApiOperation(value = "门店搜索")
+    @RequestMapping(value = "/search/simple", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<CommonPage<StoreSearchVo>> search(@RequestParam(required = false) String keyword,
+                                                          @RequestParam(required = false, defaultValue = "0") Integer pageNum,
+                                                          @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
+        Page<StoreSearchVo> esProductPage = storeService.search(keyword, pageNum, pageSize);
+        return CommonResult.success(CommonPage.restPage(esProductPage));
+    }
+
+
 }

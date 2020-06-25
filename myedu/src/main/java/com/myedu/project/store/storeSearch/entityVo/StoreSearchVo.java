@@ -1,12 +1,13 @@
 package com.myedu.project.store.storeSearch.entityVo;
 
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import java.util.Date;
 import java.util.List;
-
 /**
  * Created with IntelliJ IDEA.
  * User: ${梁少鹏}
@@ -24,10 +25,12 @@ public class StoreSearchVo {
     /*
      * 门店类型id
      */
+
     private List<Long> typeIds;
     /**
      * 名称
      */
+    @Field(type = FieldType.Keyword)
     private String name;
     /**
      * 经度
@@ -111,6 +114,9 @@ public class StoreSearchVo {
 
     /** 门店介绍 */
     private String introduction;
+    /** 关键字 */
+    @Field(analyzer = "ik_max_word",type = FieldType.Text)
+    private String keywords;
 
     public String getIntroduction() {
         return introduction;
@@ -310,6 +316,14 @@ public class StoreSearchVo {
         return delFlag;
     }
 
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
     }
@@ -335,7 +349,11 @@ public class StoreSearchVo {
     }
 
 
-    public StoreSearchVo(Long id, List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters, GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license, String province, String city, String area, String address, String delFlag, Long createById, String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime, Long vipLevelId, int hitsAll, String introduction) {
+    public StoreSearchVo(Long id, List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters,
+                         GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license,
+                         String province, String city, String area, String address, String delFlag, Long createById,
+                         String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime,
+                         Long vipLevelId, int hitsAll, String introduction,String keywords) {
         this.id = id;
         this.typeIds = typeIds;
         this.name = name;
@@ -363,7 +381,9 @@ public class StoreSearchVo {
         this.vipLevelId = vipLevelId;
         this.hitsAll = hitsAll;
         this.introduction = introduction;
+        this.keywords = keywords;
     }
+
 
     @Override
     public String toString() {
@@ -395,6 +415,7 @@ public class StoreSearchVo {
                 ", vipLevelId=" + vipLevelId +
                 ", hitsAll=" + hitsAll +
                 ", introduction='" + introduction + '\'' +
+                ", keywords='" + keywords + '\'' +
                 '}';
     }
 }

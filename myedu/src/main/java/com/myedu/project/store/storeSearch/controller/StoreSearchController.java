@@ -1,9 +1,13 @@
 package com.myedu.project.store.storeSearch.controller;
 
+import com.myedu.common.api.CommonPage;
+import com.myedu.common.api.CommonResult;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
 import com.myedu.project.store.storeSearch.reponsitory.StoreSearchVoRepository;
+import com.myedu.project.store.storeSearch.service.StoreService;
+import io.swagger.annotations.ApiOperation;
 import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
@@ -16,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,9 @@ import java.util.List;
 public class StoreSearchController extends BaseController {
     @Autowired
     private StoreSearchVoRepository storeSearchVoRepository;
+
+    @Autowired
+    private StoreService storeService;
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
@@ -93,5 +98,18 @@ public class StoreSearchController extends BaseController {
 
 
     }
+
+
+    @ApiOperation(value = "简单搜索")
+    @RequestMapping(value = "/search/simple", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<CommonPage<StoreSearchVo>> search(@RequestParam(required = false) String keyword,
+                                                          @RequestParam(required = false, defaultValue = "0") Integer pageNum,
+                                                          @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
+        Page<StoreSearchVo> esProductPage = storeService.search(keyword, pageNum, pageSize);
+        return CommonResult.success(CommonPage.restPage(esProductPage));
+    }
+
+
 
 }
