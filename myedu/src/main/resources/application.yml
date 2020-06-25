@@ -32,6 +32,7 @@ server:
 # 日志配置
 logging:
   level:
+    org.springframework.data.mongodb.core: debug
     com.myedu: debug
     org.springframework: warn
 
@@ -62,7 +63,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: myedu
+      database: test
 
   # 服务模块
   devtools:

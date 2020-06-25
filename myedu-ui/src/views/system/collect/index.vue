@@ -68,8 +68,13 @@
 
     <el-table v-loading="loading" :data="collectList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="头像" width="55" >
+        　　<template slot-scope="scope">
+        　　　　<img :src="viewImage+'/'+scope.row.userImage" width="50" height="50" class="head_pic"/>
+        　　</template>
+      </el-table-column>
       <el-table-column label="用户昵称" align="center" prop="userNickname" />
-      <el-table-column label="用户头像" align="center" prop="userImage" />
+      <!-- <el-table-column label="用户头像" align="center" prop="userImage" /> -->
       <el-table-column label="门店名称" align="center" prop="storeName" />
       <el-table-column label="教师姓名" align="center" prop="teacherName" />
       <el-table-column label="门店logo" align="center" prop="storeLogo" />
@@ -108,9 +113,9 @@
         <el-form-item label="用户昵称" prop="userNickname">
           <el-input v-model="form.userNickname" placeholder="请输入用户昵称" />
         </el-form-item>
-        <el-form-item label="用户头像" prop="userImage">
+        <!-- <el-form-item label="用户头像" prop="userImage">
           <el-input v-model="form.userImage" placeholder="请输入用户头像" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="门店名称" prop="storeName">
           <el-input v-model="form.storeName" placeholder="请输入门店名称" />
         </el-form-item>
@@ -163,6 +168,7 @@ export default {
         storeLogo: undefined,
         teachePic: undefined
       },
+      viewImage: process.env.VUE_APP_BASE_API,
       // 表单参数
       form: {},
       // 表单校验
@@ -299,3 +305,39 @@ export default {
   }
 };
 </script>
+<style scoped>
+ .map {
+    width: 200%;
+    height: 400px;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+</style>
