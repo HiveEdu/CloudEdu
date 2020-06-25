@@ -37,6 +37,7 @@ public class YunSystemGroupDataController extends BaseController
     @GetMapping("/list")
     public ResponseEntity list(YunSystemGroupData yunSystemGroupData, Pageable pageable)
     {
+
         Sort sort = new Sort(Sort.Direction.DESC, "sort");
         Pageable pageableT = PageRequest.of(pageable.getPageNumber(),
                 pageable.getPageSize(),

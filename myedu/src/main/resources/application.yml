@@ -59,11 +59,17 @@ spring:
       # 节点名称，默认为elasticsearch，如果docker安装的，这里是docker-cluster
       # http://localhost:9200/_cluster/state 查看节点名称
       cluster-name: docker-cluster
+    mongodb:
+      host: localhost
+      port: 27017
+      database: myedu
+
   # 服务模块
   devtools:
     restart:
       # 热部署开关
       enabled: true
+
   # redis 配置
   redis:
     # 地址

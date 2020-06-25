@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
-import com.github.pagehelper.PageInfo;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,7 +27,7 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YunSystemGroupDataServiceImpl implements IYunSystemGroupDataService 
+public class YunSystemGroupDataServiceImpl implements IYunSystemGroupDataService
 {
     @Autowired
     private YunSystemGroupDataMapper yunSystemGroupDataMapper;
@@ -59,7 +57,8 @@ public class YunSystemGroupDataServiceImpl implements IYunSystemGroupDataService
     @Override
     public Map<String, Object> selectYunSystemGroupDataList(YunSystemGroupData yunSystemGroupData,Pageable pageable)
     {
-       // getPage(pageable);
+
+        //getPage(pageable);
         PageInfo<YunSystemGroupData> page = new PageInfo<>(yunSystemGroupDataMapper.selectYunSystemGroupDataList(yunSystemGroupData));
         Map<String, Object> map = new LinkedHashMap<>(2);
         List<YxSystemGroupDataDto> systemGroupDataDTOS = new ArrayList<>();
