@@ -132,4 +132,71 @@ public class APPStoreSearchController extends BaseController {
     }
 
 
+    @AutoIdempotent
+    @ApiOperation("首页搜索门店列表")
+    @GetMapping(value = "/searchlist")
+    public TableDataInfo searchlist(double lon, double lat, String distance,String keywords,StoreSearchVo storeSearchVo)
+    {
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if (loginUser!=null) {
+            startPage();
+            //设定搜索半径
+            GeoDistanceQueryBuilder queryBuilder = QueryBuilders.geoDistanceQuery("location")
+                    .point(lat, lon)
+                    .distance(distance, DistanceUnit.KILOMETERS)
+                    .geoDistance(GeoDistance.PLANE);
+            //按距离排序
+            GeoDistanceSortBuilder sortBuilder = SortBuilders.geoDistanceSort("location", lat, lon);
+            sortBuilder.order(SortOrder.ASC);
+            sortBuilder.point(lat, lon);
+            //构建检索
+            SearchSourceBuilder searchSourceBuilder = SearchSourceBuilder.searchSource()
+                    .from(0)
+                    .size(20)
+                    .query(queryBuilder)
+                    .sort(sortBuilder);
+            //构造查询条件
+            NativeSearchQueryBuilder nativeSearchQueryBuilder =
+                    new NativeSearchQueryBuilder()
+                            .withFilter(queryBuilder)
+                            .withSort(sortBuilder);
+            nativeSearchQueryBuilder.withQuery(QueryBuilders.matchQuery("status", 3));
+            nativeSearchQueryBuilder.withQuery(QueryBuilders.matchQuery("keywords", keywords));
+            Page<StoreSearchVo> page =
+                    elasticsearchTemplate.queryForPage(
+                            nativeSearchQueryBuilder.build(), StoreSearchVo.class);
+            List<StoreSearchVo> storeSearchVosNew=new ArrayList<StoreSearchVo>();
+            List<StoreSearchVo> storeSearchVos= page.getContent();
+            for (StoreSearchVo storeSearchVo1:storeSearchVos){
+                double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
+                storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
+                List<Long> typeIds=storeSearchVo1.getTypeIds();
+                //如果有门店类型根据门点类型搜索
+                if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0){
+                    Long typeId= storeSearchVo.getTypeIds().get(0);
+                    Boolean iscontent=false;
+                    for (Long typeIdsNew:typeIds) {
+                        if(typeIdsNew==typeId){
+                            iscontent=true;
+                            break;
+                        }
+                    }
+                    if(iscontent){
+                        storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
+                        storeSearchVosNew.add(storeSearchVo1);
+                    }
+                }else{
+                    storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
+                    storeSearchVosNew.add(storeSearchVo1);
+                }
+                System.out.println("距离" + (int)calculate + "km");
+            }
+            return getDataTable(storeSearchVosNew);
+        }else {
+            return getDataTableLose(null);
+        }
+    }
+
+
+
 }
