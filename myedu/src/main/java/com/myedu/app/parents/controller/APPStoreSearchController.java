@@ -161,7 +161,7 @@ public class APPStoreSearchController extends BaseController {
                             .withFilter(queryBuilder)
                             .withSort(sortBuilder);
             nativeSearchQueryBuilder.withQuery(QueryBuilders.matchQuery("status", 3));
-            nativeSearchQueryBuilder.withQuery(QueryBuilders.matchQuery("keywords", keywords));
+            nativeSearchQueryBuilder.withQuery(QueryBuilders.matchQuery("name", keywords));
             Page<StoreSearchVo> page =
                     elasticsearchTemplate.queryForPage(
                             nativeSearchQueryBuilder.build(), StoreSearchVo.class);
@@ -182,11 +182,11 @@ public class APPStoreSearchController extends BaseController {
                         }
                     }
                     if(iscontent){
-                        storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
+                        //storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                         storeSearchVosNew.add(storeSearchVo1);
                     }
                 }else{
-                    storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
+                    //storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                     storeSearchVosNew.add(storeSearchVo1);
                 }
                 System.out.println("距离" + (int)calculate + "km");
