@@ -421,6 +421,30 @@
               </el-upload>
             </el-form-item>
         </el-row>
+        <el-row>
+           <el-form-item label="照片墙" style="margin-top: 80px">
+            <el-upload
+              ref="upload"
+              :action="uploadImgUrl"
+              list-type="picture-card"
+              content-type="false"
+              :headers="headers"
+              :file-list="photosList"
+              :show-file-list="true"
+              :before-upload="beforeUpload1"
+              :on-change="onChange1"
+              :on-success="onSuccess1"
+              :on-preview="handlePictureCardPreview1"
+              :on-remove="handleRemove1"
+              accept='.jpg,.jpeg,.png,.gif'
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible1">
+              <img width="100%" :src="dialogImageUrl1" alt="" :onerror="defaultImg">
+            </el-dialog>
+          </el-form-item>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -473,6 +497,9 @@ export default {
       open: false,
       //门店列表
       stores:[],
+      //照片墙列表
+      photosList:[],
+      photosListNew:[],
       // 课程类型字典
       classifyOptions: [],
       // 托管类型字典
@@ -659,6 +686,8 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.photosList=[];
+      this.photosListNew=[];
       getCourse().then(response => {
         this.sysGrades = response.sysGrades;
         this.stores=response.stores;
@@ -674,6 +703,15 @@ export default {
         this.sysGrades = response.sysGrades;
         this.stores=response.stores;
         this.form = response.data;
+        if(this.form.photos!=null){
+          this.photosList=JSON.parse(this.form.photos);
+          this.photosListNew=JSON.parse(this.form.photos);
+          for(let i=0;i<this.photosList.length;i++) {
+            if(this.photosList[i].url!=null){
+              this.photosList[i].url=this.imageView+"/"+this.photosList[i].url;
+            }
+          }
+        }
         this.form.gradeId=JSON.parse(this.form.gradeId);
         this.checkedWeeks=JSON.parse(this.form.week);
         this.open = true;
@@ -684,6 +722,7 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.photos=JSON.stringify(this.photosListNew);
           this.form.gradeId=JSON.stringify(this.form.gradeId);
           this.form.week=JSON.stringify(this.checkedWeeks);
           if (this.form.id != undefined) {
@@ -699,6 +738,7 @@ export default {
           } else {
             this.form.status=0;//默认在售状态
             this.form.courseType='1';//门店课程
+            this.form.photos=JSON.stringify(this.photosListNew);
             addCourse(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
@@ -785,6 +825,34 @@ export default {
         this.msgError("上传失败");
       }
     },
+     //照片墙上传开始
+    beforeUpload1(file){
+    },
+    onChange1(file, fileList){
+    },
+    onSuccess1(res,file, fileList){
+      if(res.code=="200"){
+        this.photosList=fileList
+        this.photosListNew.push({uid:file.uid,name:file.name,status:file.status,url:res.fileName})
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+     handleRemove1(file, fileList) {
+      console.log(file, fileList);
+      this.photosList=fileList;
+      for(let i=0;i<this.photosListNew.length;i++) {
+        if (this.photosListNew[i].uid === file.uid) {
+          this.photosListNew.splice(i);
+        }
+      }
+    },
+    handlePictureCardPreview1(file) {
+      this.dialogImageUrl1 = file.url;
+      this.dialogVisible1 = true;
+    },
+    //照片墙上传结束
     handleRemove(file, fileList) {
       console.log(file, fileList);
       this.form.picture=null;

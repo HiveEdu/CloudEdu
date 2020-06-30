@@ -671,8 +671,6 @@ export default {
       this.licenseListNew=[];
       this.photosList=[];
       this.photosListNew=[];
-      this.photosList=[];
-      this.photosListNew=[];
       this.active=1;
       getStore().then(response => {
         this.storeTypes = response.storeTypes;

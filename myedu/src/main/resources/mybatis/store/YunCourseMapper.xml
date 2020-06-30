@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="meals"    column="meals"    />
         <result property="introduce"    column="introduce"    />
         <result property="picture"    column="picture"    />
+        <result property="photos"    column="photos"    />
         <result property="storeId"    column="store_id"    />
         <result property="classTime"    column="class_time"    />
         <result property="classHour"    column="class_hour"    />
@@ -62,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="classAll != null "> and yc.class_all = #{classAll}</if>
             <if test="totalCost != null "> and yc.total_cost = #{totalCost}</if>
             <if test="week != null "> and yc.week = #{week}</if>
+            <if test="photos != null "> and yc.photos = #{photos}</if>
             <if test="content != null  and content != ''"> and yc.content = #{content}</if>
             <if test="status != null  and status != ''"> and yc.status = #{status}</if>
             <if test="createById != null "> and yc.create_by_id = #{createById}</if>
@@ -97,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="classAll != null ">class_all,</if>
             <if test="totalCost != null ">total_cost,</if>
             <if test="week != null ">week,</if>
+            <if test="photos != null ">photos,</if>
             <if test="content != null  and content != ''">content,</if>
             <if test="status != null  and status != ''">status,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
@@ -127,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="classAll != null ">#{classAll},</if>
             <if test="totalCost != null ">#{totalCost},</if>
             <if test="week != null ">#{week},</if>
+            <if test="photos != null ">#{photos},</if>
             <if test="content != null  and content != ''">#{content},</if>
             <if test="status != null  and status != ''">#{status},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
@@ -161,6 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="classAll != null ">class_all = #{classAll},</if>
             <if test="totalCost != null ">total_cost = #{totalCost},</if>
             <if test="week != null ">week = #{week},</if>
+            <if test="photos != null ">photos = #{photos},</if>
             <if test="content != null  and content != ''">content = #{content},</if>
             <if test="status != null  and status != ''">status = #{status},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>

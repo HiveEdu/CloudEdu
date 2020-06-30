@@ -165,5 +165,5 @@ public class YunStoreHitsServiceImpl implements IYunStoreHitsService
 
     public int selectYunStoreHitsCountAll(Long storeId){
         return yunStoreHitsMapper.selectYunStoreHitsCountAll(storeId);
-    };
+    }
 }
