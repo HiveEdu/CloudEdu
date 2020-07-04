@@ -44,10 +44,14 @@ public class AppStLeaveController extends BaseController {
     public TableDataInfo getMyStudentLeave(YunStuLeaveVo yunStuLeaveVo)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        startPage();
-        yunStuLeaveVo.setCreateById(loginUser.getUser().getUserId());
-        List<YunStuLeaveVo> list = yunStuLeaveService.selectYunStuLeaveList(yunStuLeaveVo);
-        return getDataTable(list);
+        if (loginUser!=null){
+            startPage();
+            yunStuLeaveVo.setCreateById(loginUser.getUser().getUserId());
+            List<YunStuLeaveVo> list = yunStuLeaveService.selectYunStuLeaveList(yunStuLeaveVo);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
     }
 
     /**

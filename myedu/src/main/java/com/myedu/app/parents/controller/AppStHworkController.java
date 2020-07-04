@@ -52,10 +52,15 @@ public class AppStHworkController extends BaseController
     public TableDataInfo list(YunStuHworkVo yunStuHwork)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        startPage();
-        yunStuHwork.setCreateById(loginUser.getUser().getUserId());
-        List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
-        return getDataTable(list);
+        if (loginUser!=null){
+            startPage();
+            yunStuHwork.setCreateById(loginUser.getUser().getUserId());
+            List<YunStuHworkVo> list = yunStuHworkService.selectYunStuHworkList(yunStuHwork);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
+
     }
 
     /**

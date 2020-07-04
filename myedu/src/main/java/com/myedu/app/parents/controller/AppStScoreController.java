@@ -58,10 +58,14 @@ public class AppStScoreController extends BaseController
     public TableDataInfo list(YunStuScoreVo yunStuScore)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        startPage();
-        yunStuScore.setCreateById(loginUser.getUser().getUserId());
-        List<YunStuScoreVo> list = yunStuScoreService.selectYunStuScoreList(yunStuScore);
-        return getDataTable(list);
+        if (loginUser!=null){
+            startPage();
+            yunStuScore.setCreateById(loginUser.getUser().getUserId());
+            List<YunStuScoreVo> list = yunStuScoreService.selectYunStuScoreList(yunStuScore);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
     }
 
     /**

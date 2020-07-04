@@ -49,10 +49,14 @@ public class AppStMistakeController extends BaseController {
     public TableDataInfo getMyStudentMistake(YunStuMistakeVo yunStuMistakeVo)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        startPage();
-        yunStuMistakeVo.setCreateById(loginUser.getUser().getUserId());
-        List<YunStuMistakeVo> list =  yunStuMistakeService.selectYunStuMistakeList(yunStuMistakeVo);
-        return getDataTable(list);
+        if (loginUser!=null){
+            startPage();
+            yunStuMistakeVo.setCreateById(loginUser.getUser().getUserId());
+            List<YunStuMistakeVo> list =  yunStuMistakeService.selectYunStuMistakeList(yunStuMistakeVo);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
     }
     @AutoIdempotent
     @ApiOperation("获取错题详情记录")

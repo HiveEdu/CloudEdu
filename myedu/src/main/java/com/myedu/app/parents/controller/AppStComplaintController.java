@@ -39,17 +39,22 @@ public class AppStComplaintController extends BaseController
      * 查询投诉列表
      */
     @AutoIdempotent
-    @ApiOperation("查询投诉列表")
+    @ApiOperation("查询当前用户下的投诉列表")
     @ApiImplicitParam(name = "yunComplaint", value = "查询投诉列表",
             dataType = "YunComplaint")
     @GetMapping("/list")
     public TableDataInfo list(YunComplaint yunComplaint)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        startPage();
-        yunComplaint.setCreateById(loginUser.getUser().getUserId());
-        List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
-        return getDataTable(list);
+        if (loginUser!=null){
+            startPage();
+            yunComplaint.setCreateById(loginUser.getUser().getUserId());
+            List<YunComplaint> list = yunComplaintService.selectYunComplaintList(yunComplaint);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
+
     }
 
 

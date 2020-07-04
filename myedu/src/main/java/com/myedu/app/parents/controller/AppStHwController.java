@@ -45,17 +45,23 @@ public class AppStHwController extends BaseController
      * 查询学生身高体重记录列表
      */
     @AutoIdempotent
-    @ApiOperation("查询学生身高体重记录列表")
+    @ApiOperation("查询当前家长下的学生身高体重记录列表")
     @ApiImplicitParam(name = "yunStuHw", value = "查询学生身高体重记录列表",
             dataType = "YunStuHwVo")
     @GetMapping("/list")
     public TableDataInfo list(YunStuHwVo yunStuHw)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        startPage();
-        yunStuHw.setCreateById(loginUser.getUser().getUserId());
-        List<YunStuHwVo> list = yunStuHwService.selectYunStuHwList(yunStuHw);
-        return getDataTable(list);
+        if (loginUser!=null){
+            startPage();
+            yunStuHw.setCreateById(loginUser.getUser().getUserId());
+            List<YunStuHwVo> list = yunStuHwService.selectYunStuHwList(yunStuHw);
+            return getDataTable(list);
+        }else{
+            return getDataTableLose(null);
+        }
+
+
     }
 
     /**
