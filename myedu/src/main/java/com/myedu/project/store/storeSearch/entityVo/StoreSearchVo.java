@@ -27,6 +27,12 @@ public class StoreSearchVo {
      */
 
     private List<Long> typeIds;
+    /*
+     * 课程名称
+     */
+
+    private List<String> coureseNames;
+
     /**
      * 名称
      */
@@ -344,18 +350,27 @@ public class StoreSearchVo {
         this.typeIds = typeIds;
     }
 
+    public List<String> getCoureseNames() {
+        return coureseNames;
+    }
+
+    public void setCoureseNames(List<String> coureseNames) {
+        this.coureseNames = coureseNames;
+    }
+
     public StoreSearchVo(){
 
     }
 
 
-    public StoreSearchVo(Long id, List<Long> typeIds, String name, Double lon, Double lat, String distanceMeters,
+    public StoreSearchVo(Long id, List<Long> typeIds,List<String> coureseNames, String name, Double lon, Double lat, String distanceMeters,
                          GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license,
                          String province, String city, String area, String address, String delFlag, Long createById,
                          String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime,
                          Long vipLevelId, int hitsAll, String introduction,String keywords) {
         this.id = id;
         this.typeIds = typeIds;
+        this.coureseNames = coureseNames;
         this.name = name;
         this.lon = lon;
         this.lat = lat;
@@ -390,6 +405,7 @@ public class StoreSearchVo {
         return "StoreSearchVo{" +
                 "id=" + id +
                 ", typeIds=" + typeIds +
+                ", coureseNames=" + coureseNames +
                 ", name='" + name + '\'' +
                 ", lon=" + lon +
                 ", lat=" + lat +

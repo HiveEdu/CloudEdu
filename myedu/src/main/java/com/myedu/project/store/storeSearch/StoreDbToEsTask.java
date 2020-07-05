@@ -1,8 +1,11 @@
 package com.myedu.project.store.storeSearch;
 
 import com.myedu.project.dynamic.service.IYunDyLikesService;
+import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.YunStoreType;
+import com.myedu.project.store.domain.vo.YunCourseVo;
 import com.myedu.project.store.domain.vo.YunStoreVo;
+import com.myedu.project.store.service.IYunCourseService;
 import com.myedu.project.store.service.IYunStoreService;
 import com.myedu.project.store.service.IYunStoreTypeService;
 import com.myedu.project.store.storeSearch.entityVo.StoreSearchVo;
@@ -22,6 +25,8 @@ public class StoreDbToEsTask {
     private IYunStoreService yunStoreService;
     @Autowired
     private IYunStoreTypeService yunStoreTypeService;
+    @Autowired
+    private IYunCourseService yunCourseService;
     @Autowired
     private StoreSearchVoRepository storeSearchVoRepository;
     //0 0 12 * * ?
@@ -64,6 +69,14 @@ public class StoreDbToEsTask {
                 for (YunStoreType storeType:
                         yunStoreTypes) {
                     typeIds.add(storeType.getTypeId());
+                }
+                YunCourse yunCourse=new  YunCourse();
+                yunCourse.setStoreId(yun.getId());
+                List<YunCourseVo> courseVos=yunCourseService.selectYunCourseList(yunCourse);
+                List<String > courseName=new ArrayList<>();
+                for (YunCourseVo courseVo:
+                        courseVos) {
+                    courseName.add(courseVo.getName());
                 }
                 storeSearchVo.setTypeIds(typeIds);
                 storeSearchVoRepository.save(storeSearchVo);
