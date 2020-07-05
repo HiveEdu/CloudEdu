@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreWorkMapper">
+    
+    <resultMap type="YunStoreWorkVo" id="YunStoreWorkResult">
+        <result property="id"    column="id"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workTitle"    column="work_title"    />
+        <result property="workContent"    column="work_content"    />
+        <result property="workPicture"    column="work_picture"    />
+        <result property="storeId"    column="store_id"    />
+        <result property="workStatus"    column="work_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateById"    column="update_by_id"    />
+    </resultMap>
+
+    <sql id="selectYunStoreWorkVo">
+        select ysw.*,yst.name as storeName from yun_store_work ysw
+        LEFT  JOIN yun_store yst ON ysw.store_id=yst.id
+    </sql>
+
+    <select id="selectYunStoreWorkList" parameterType="YunStoreWorkVo" resultMap="YunStoreWorkResult">
+        <include refid="selectYunStoreWorkVo"/>
+        <where>  
+            <if test="workName != null  and workName != ''"> and work_name like concat('%', #{workName}, '%')</if>
+            <if test="workTitle != null  and workTitle != ''"> and work_title like concat('%', #{workTitle}, '%')</if>
+            <if test="workStatus != null  and workStatus != ''"> and work_status = #{workStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStoreWorkById" parameterType="Long" resultMap="YunStoreWorkResult">
+        <include refid="selectYunStoreWorkVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYunStoreWork" parameterType="YunStoreWork" useGeneratedKeys="true" keyProperty="id">
+        insert into yun_store_work
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workName != null  and workName != ''">work_name,</if>
+            <if test="workTitle != null  and workTitle != ''">work_title,</if>
+            <if test="workContent != null  and workContent != ''">work_content,</if>
+            <if test="workPicture != null  and workPicture != ''">work_picture,</if>
+            <if test="storeId != null ">store_id,</if>
+            <if test="workStatus != null  and workStatus != ''">work_status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateById != null ">update_by_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workName != null  and workName != ''">#{workName},</if>
+            <if test="workTitle != null  and workTitle != ''">#{workTitle},</if>
+            <if test="workContent != null  and workContent != ''">#{workContent},</if>
+            <if test="workPicture != null  and workPicture != ''">#{workPicture},</if>
+            <if test="storeId != null ">#{storeId},</if>
+            <if test="workStatus != null  and workStatus != ''">#{workStatus},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateById != null ">#{updateById},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreWork" parameterType="YunStoreWork">
+        update yun_store_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workName != null  and workName != ''">work_name = #{workName},</if>
+            <if test="workTitle != null  and workTitle != ''">work_title = #{workTitle},</if>
+            <if test="workContent != null  and workContent != ''">work_content = #{workContent},</if>
+            <if test="workPicture != null  and workPicture != ''">work_picture = #{workPicture},</if>
+            <if test="storeId != null ">store_id = #{storeId},</if>
+            <if test="workStatus != null  and workStatus != ''">work_status = #{workStatus},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateById != null ">update_by_id = #{updateById},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStoreWorkById" parameterType="Long">
+        delete from yun_store_work where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStoreWorkByIds" parameterType="String">
+        delete from yun_store_work where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
