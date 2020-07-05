@@ -20,16 +20,6 @@
             />
           </el-select>
         </el-form-item>
-<!--        <el-form-item label="一对一" prop="isOneToOne">-->
-<!--        <el-select v-model="queryParams.isOneToOne" placeholder="请选择是否一对一" clearable size="small">-->
-<!--          <el-option-->
-<!--            v-for="dict in isOneToOneOptions"-->
-<!--            :key="dict.dictValue"-->
-<!--            :label="dict.dictLabel"-->
-<!--            :value="dict.dictValue"-->
-<!--          />-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择课程状态" clearable size="small">
           <el-option
@@ -106,7 +96,7 @@
           <span>{{ parseTime(scope.row.cEndtime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="课程内容" align="center" prop="content" />
+<!--      <el-table-column label="课程内容" align="center" prop="content" />-->
       <el-table-column label="课程状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作" align="center" width="200" >
         <template slot-scope="scope">
@@ -547,6 +537,7 @@ export default {
         status: undefined,
         createById: undefined
       },
+      content:null,
       // 表单参数
       form: {},
       // 表单校验
@@ -571,6 +562,8 @@ export default {
       },
       dialogImageUrl: '',
       dialogVisible: false,
+      dialogImageUrl1: '',
+      dialogVisible1: false,
     };
   },
   created() {
@@ -591,7 +584,7 @@ export default {
   methods: {
     //改变门店类行事件
     changeReclassify(e){
-      this.form.content=null;
+     this.form.content=null;
      this.classContentOptions=[];
      let  parm={
           pageNum: 1,
@@ -600,6 +593,7 @@ export default {
       };
       listCourseBytype(parm).then(response => {
         this.classContentOptions = response.rows;
+        // this.form.content=this.content;
       });
     },
     //打开砍价页面
@@ -733,13 +727,22 @@ export default {
           this.photosListNew=JSON.parse(this.form.photos);
           for(let i=0;i<this.photosList.length;i++) {
             if(this.photosList[i].url!=null){
-              this.photosList[i].url=this.imageView+"/"+this.photosList[i].url;
+              this.photosList[i].url=this.viewImage+"/"+this.photosList[i].url;
             }
           }
         }
+        this.content=JSON.parse(this.form.content);
         this.form.gradeId=JSON.parse(this.form.gradeId);
         this.form.content=JSON.parse(this.form.content);
         this.checkedWeeks=JSON.parse(this.form.week);
+        let  parm={
+          pageNum: 1,
+          pageSize: 50,
+          type:this.form.classify,
+        };
+        listCourseBytype(parm).then(response => {
+          this.classContentOptions = response.rows;
+        });
         this.open = true;
         this.title = "修改课程";
       });
