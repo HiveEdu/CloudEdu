@@ -2,6 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -10,38 +12,47 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author lianglongfei
  * @date 2020-07-05
  */
+@ApiModel("门店作业管理对象实体")
 public class YunStoreWork extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键id */
+    @ApiModelProperty("主键id")
     private Long id;
 
     /** 作业名称 */
+    @ApiModelProperty("作业名称")
     @Excel(name = "作业名称")
     private String workName;
 
     /** 作业标题 */
+    @ApiModelProperty("作业标题")
     @Excel(name = "作业标题")
     private String workTitle;
 
     /** 作业内容 */
+    @ApiModelProperty("作业内容")
     @Excel(name = "作业内容")
     private String workContent;
 
     /** 作业照片 */
+    @ApiModelProperty("作业照片")
     @Excel(name = "作业照片")
     private String workPicture;
 
     /** 门店id */
+    @ApiModelProperty("门店id")
     @Excel(name = "门店id")
     private Long storeId;
 
     /** 作业状态 */
+    @ApiModelProperty("作业状态")
     @Excel(name = "作业状态")
     private String workStatus;
 
     /** 发布人id */
+    @ApiModelProperty("发布人id")
     private Long createById;
 
     /** 修改用户id */
