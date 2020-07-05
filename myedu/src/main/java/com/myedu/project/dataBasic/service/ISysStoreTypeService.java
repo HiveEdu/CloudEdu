@@ -1,5 +1,6 @@
 package com.myedu.project.dataBasic.service;
 
+import com.myedu.app.parents.Vo.StoreClassVo;
 import com.myedu.project.dataBasic.domain.SysStoreType;
 import java.util.List;
 
@@ -67,4 +68,9 @@ public interface ISysStoreTypeService
      * @return 结果
      */
     public List<Integer> selectStoreTypeListByStoreId(Long storeId);
+
+
+
+
+    public List<StoreClassVo> selectStoreClass();
 }

@@ -14,6 +14,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
+    <resultMap id="SysCourseResult" type="com.myedu.project.dataBasic.domain.SysCourse" >
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="remark"    column="remark"    />
+        <result property="type"    column="type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+    <resultMap id="SysStoreTypeClassResult" type="com.myedu.app.parents.Vo.StoreClassVo">
+        <result property="storeTypeName"    column="dict_label"    />
+        <result property="storeTypeId"    column="dict_value"    />
+        <collection  property="sysCourses"   javaType="java.util.List"        resultMap="SysCourseResult" />
+    </resultMap>
 
     <sql id="selectSysStoreTypeVo">
         select id, name, remark, type, create_by, create_time, update_by, update_time from sys_store_type
@@ -91,6 +107,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        left join sys_store_type sst on sst.id = yst.type_id
 	        left join yun_store ys on ys.id = yst.store_id
 	    where yst.store_id = #{storeId}
+	</select>
+
+    <select id="selectStoreClass" resultMap="SysStoreTypeClassResult">
+		select  st.dict_label,st.dict_value,sc.*  from sys_dict_data st
+		left join sys_course sc on st.dict_value=sc.type
+		WHERE st.dict_type='course_type'
 	</select>
 
 </mapper>

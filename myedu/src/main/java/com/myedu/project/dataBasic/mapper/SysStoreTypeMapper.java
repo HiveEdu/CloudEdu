@@ -1,5 +1,6 @@
 package com.myedu.project.dataBasic.mapper;
 
+import com.myedu.app.parents.Vo.StoreClassVo;
 import com.myedu.project.dataBasic.domain.SysStoreType;
 import java.util.List;
 
@@ -77,5 +78,7 @@ public interface SysStoreTypeMapper
      * @return 选中门店类型ID列表
      */
     public List<Integer> selectStoreTypeListByStoreId(Long storeId);
+
+    public List<StoreClassVo> selectStoreClass();
 
 }

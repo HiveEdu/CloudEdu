@@ -1,6 +1,8 @@
 package com.myedu.project.dataBasic.service.impl;
 
 import java.util.List;
+
+import com.myedu.app.parents.Vo.StoreClassVo;
 import com.myedu.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,4 +107,15 @@ public class SysStoreTypeServiceImpl implements ISysStoreTypeService
     public List<Integer> selectStoreTypeListByStoreId(Long storeId) {
         return sysStoreTypeMapper.selectStoreTypeListByStoreId(storeId);
     }
+
+
+    /**
+     * 选择门店类型下面的课程
+     *
+     */
+    @Override
+    public List<StoreClassVo> selectStoreClass() {
+        return sysStoreTypeMapper.selectStoreClass();
+    }
+
 }

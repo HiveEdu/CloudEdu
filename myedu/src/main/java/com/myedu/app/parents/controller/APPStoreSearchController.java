@@ -41,7 +41,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/storeSearch")
 public class APPStoreSearchController extends BaseController {
-    @Autowired
+        @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
     @Autowired
     private TokenService tokenService;
@@ -196,6 +196,9 @@ public class APPStoreSearchController extends BaseController {
             return getDataTableLose(null);
         }
     }
+
+
+
 
 
 
