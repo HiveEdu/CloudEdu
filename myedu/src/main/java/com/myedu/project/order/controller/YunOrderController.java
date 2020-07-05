@@ -14,6 +14,7 @@ import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.order.domain.YunOrder;
 import com.myedu.project.order.domain.vo.YunOrderVo;
+import com.myedu.project.order.enums.OrderStatus;
 import com.myedu.project.order.enums.StoreStuStatus;
 import com.myedu.project.order.service.IYunOrderService;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -161,8 +163,11 @@ public class YunOrderController extends BaseController
     @PostMapping(value = "/toPayAsPC")
     public AjaxResult toPayAsPc(@RequestBody YunOrderVo yunOrder) throws Exception{
         AjaxResult ajax = AjaxResult.success();
-        String payUrl = yunOrderService.toPayAsPc(yunOrder);
-        ajax.put("url",payUrl);
+        yunOrder.setPayWay("1");//支付方式支付宝支付
+        yunOrder.setStatus(OrderStatus.HAVETOPAY.getCode());//已支付状态
+        yunOrderService.updateYunOrder(yunOrder);
+//        String payUrl = yunOrderService.toPayAsPc(yunOrder);
+//        ajax.put("url",payUrl);
         return ajax;
     }
 
@@ -170,9 +175,14 @@ public class YunOrderController extends BaseController
     @Log(title = "支付宝手机支付")
     @PostMapping(value = "/toPayAsWeb")
     public AjaxResult toPayAsWeb(@RequestBody YunOrderVo yunOrder) throws Exception{
+        // 修改订单状态为支付成功，已付款; 同时新增支付流水
         AjaxResult ajax = AjaxResult.success();
-        String payUrl = yunOrderService.toPayAsWeb(yunOrder);
-        ajax.put("url",payUrl);
+        yunOrder.setPayWay("1");//支付方式支付宝支付
+        yunOrder.setStatus(OrderStatus.HAVETOPAY.getCode());//已支付状态
+        yunOrderService.updateYunOrder(yunOrder);
+//        AjaxResult ajax = AjaxResult.success();
+//        String payUrl = yunOrderService.toPayAsWeb(yunOrder);
+//        ajax.put("url",payUrl);
         return ajax;
     }
 
