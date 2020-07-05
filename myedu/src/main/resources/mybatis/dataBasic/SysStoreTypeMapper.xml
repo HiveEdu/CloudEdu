@@ -110,9 +110,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
     <select id="selectStoreClass" resultMap="SysStoreTypeClassResult">
-		select  st.dict_label,st.dict_value,sc.*  from sys_dict_data st
-		left join sys_course sc on st.dict_value=sc.type
-		WHERE st.dict_type='course_type'
+	select  st.dict_label,st.dict_value,sc.id,sc.name  from sys_dict_data st
+	left join sys_course sc on st.dict_value=sc.type
+	WHERE st.dict_type='course_type'   and  st.dict_value!='0'
+	UNION ALL
+	select  st.dict_label,st.dict_value,sc.dict_value,sc.dict_label  from sys_dict_data st
+	left join sys_dict_data sc on  sc.dict_type='managed_type'
+	WHERE st.dict_type='course_type' and  st.dict_value='0'
 	</select>
 
 </mapper>

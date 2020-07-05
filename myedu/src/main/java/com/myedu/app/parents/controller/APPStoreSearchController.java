@@ -91,7 +91,7 @@ public class APPStoreSearchController extends BaseController {
                 storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
                 List<Long> typeIds=storeSearchVo1.getTypeIds();
                 //如果有门店类型根据门点类型搜索
-                if(storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames().size()==0){
+                if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames()==null){
                     Long typeId= storeSearchVo.getTypeIds().get(0);
                     Boolean iscontent=false;
                     for (Long typeIdsNew:typeIds) {
@@ -104,7 +104,7 @@ public class APPStoreSearchController extends BaseController {
                         //storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                         storeSearchVosNew.add(storeSearchVo1);
                     }
-                }else if(storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames().size()>0){
+                }else if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getCoureseNames()!=null&&storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames().size()>0){
                     Long typeId= storeSearchVo.getTypeIds().get(0);
                     Boolean iscontent=false;
                     for (Long typeIdsNew:typeIds) {
