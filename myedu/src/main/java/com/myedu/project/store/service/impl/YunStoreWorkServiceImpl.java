@@ -1,13 +1,18 @@
 package com.myedu.project.store.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSONArray;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.project.store.domain.YunStoreWork;
+import com.myedu.project.store.domain.YunStoreWorkStu;
 import com.myedu.project.store.domain.vo.YunStoreWorkVo;
 import com.myedu.project.store.mapper.YunStoreWorkMapper;
 import com.myedu.project.store.service.IYunStoreWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import net.sf.json.JSONObject;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,6 +27,9 @@ public class YunStoreWorkServiceImpl implements IYunStoreWorkService
     @Autowired
     private YunStoreWorkMapper yunStoreWorkMapper;
 
+    @Autowired
+    private YunStoreWorkStuServiceImpl  yunStoreWorkStuService;
+
     /**
      * 查询门店作业管理
      * 
@@ -29,7 +37,7 @@ public class YunStoreWorkServiceImpl implements IYunStoreWorkService
      * @return 门店作业管理
      */
     @Override
-    public YunStoreWork selectYunStoreWorkById(Long id)
+    public YunStoreWorkVo selectYunStoreWorkById(Long id)
     {
         return yunStoreWorkMapper.selectYunStoreWorkById(id);
     }
@@ -53,10 +61,22 @@ public class YunStoreWorkServiceImpl implements IYunStoreWorkService
      * @return 结果
      */
     @Override
-    public int insertYunStoreWork(YunStoreWork yunStoreWork)
+    public int insertYunStoreWork(YunStoreWorkVo yunStoreWork)
     {
         yunStoreWork.setCreateTime(DateUtils.getNowDate());
-        return yunStoreWorkMapper.insertYunStoreWork(yunStoreWork);
+        yunStoreWorkMapper.insertYunStoreWork(yunStoreWork);
+        System.out.println(yunStoreWork.getId());
+        String stuIds=yunStoreWork.getStuIds().substring(1,yunStoreWork.getStuIds().length()-1);
+        String[] stuId= stuIds.split(",");
+        for (String s:stuId){
+            YunStoreWorkStu yunStoreWorkStu=new YunStoreWorkStu();
+            yunStoreWorkStu.setStuId(Long.valueOf(s));
+            yunStoreWorkStu.setStoreWorkId(yunStoreWork.getId());
+            yunStoreWorkStu.setStatus("0");
+            yunStoreWorkStuService.insertYunStoreWorkStu(yunStoreWorkStu);
+
+        }
+        return 1;
     }
 
     /**
@@ -66,9 +86,20 @@ public class YunStoreWorkServiceImpl implements IYunStoreWorkService
      * @return 结果
      */
     @Override
-    public int updateYunStoreWork(YunStoreWork yunStoreWork)
+    public int updateYunStoreWork(YunStoreWorkVo yunStoreWork)
     {
         yunStoreWork.setUpdateTime(DateUtils.getNowDate());
+        String stuIds=yunStoreWork.getStuIds().substring(1,yunStoreWork.getStuIds().length()-1);
+        String[] stuId= stuIds.split(",");
+        yunStoreWorkStuService.deleteYunStoreWorkStuByWorkId(yunStoreWork.getId());
+        for (String s:stuId){
+            YunStoreWorkStu yunStoreWorkStu=new YunStoreWorkStu();
+            yunStoreWorkStu.setStuId(Long.valueOf(s));
+            yunStoreWorkStu.setStoreWorkId(Long.valueOf(yunStoreWork.getId()));
+            yunStoreWorkStu.setStatus("0");
+            yunStoreWorkStuService.insertYunStoreWorkStu(yunStoreWorkStu);
+
+        }
         return yunStoreWorkMapper.updateYunStoreWork(yunStoreWork);
     }
 

@@ -84,7 +84,11 @@
       <el-table-column label="作业内容" align="center" prop="workContent" />
       <el-table-column label="作业状态" align="center" prop="workStatus" :formatter="workStatusFormat" />
       <el-table-column label="发布人" align="center" prop="createBy" />
-      <el-table-column label="发布时间" align="center" prop="createTime" />
+      <el-table-column label="发布时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope" v-if="scope.row.createTime!=null">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -126,8 +130,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="选择学生" prop="stuId">
-                <el-select v-model="form.stuId" multiple placeholder="选择学生"  style="width: 100%;">
+            <el-form-item label="选择学生" prop="stuIds">
+                <el-select v-model="form.stuIds" multiple placeholder="选择学生"  style="width: 100%;">
                   <el-option
                     v-for="item in yunStuents"
                     :key="item.id"
@@ -288,6 +292,7 @@ export default {
         this.form = response.data;
         this.yunStuents=response.yunStuents;
         this.stores=response.stores;
+        this.form.stuIds=JSON.parse(this.form.stuIds);
         this.open = true;
         this.title = "修改门店作业管理";
       });
@@ -297,6 +302,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
+            this.form.stuIds=JSON.stringify(this.form.stuIds);
             updateStorework(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
@@ -307,6 +313,7 @@ export default {
               }
             });
           } else {
+            this.form.stuIds=JSON.stringify(this.form.stuIds);
             addStorework(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");

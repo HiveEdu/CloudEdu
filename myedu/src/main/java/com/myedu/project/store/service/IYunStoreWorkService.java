@@ -19,7 +19,7 @@ public interface IYunStoreWorkService
      * @param id 门店作业管理ID
      * @return 门店作业管理
      */
-    public YunStoreWork selectYunStoreWorkById(Long id);
+    public YunStoreWorkVo selectYunStoreWorkById(Long id);
 
     /**
      * 查询门店作业管理列表
@@ -35,7 +35,7 @@ public interface IYunStoreWorkService
      * @param yunStoreWork 门店作业管理
      * @return 结果
      */
-    public int insertYunStoreWork(YunStoreWork yunStoreWork);
+    public int insertYunStoreWork(YunStoreWorkVo yunStoreWork);
 
     /**
      * 修改门店作业管理
@@ -43,7 +43,7 @@ public interface IYunStoreWorkService
      * @param yunStoreWork 门店作业管理
      * @return 结果
      */
-    public int updateYunStoreWork(YunStoreWork yunStoreWork);
+    public int updateYunStoreWork(YunStoreWorkVo yunStoreWork);
 
     /**
      * 批量删除门店作业管理
@@ -55,7 +55,7 @@ public interface IYunStoreWorkService
 
     /**
      * 删除门店作业管理信息
-     * 
+     *
      * @param id 门店作业管理ID
      * @return 结果
      */

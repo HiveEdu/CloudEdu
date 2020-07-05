@@ -19,7 +19,7 @@ public interface YunStoreWorkMapper
      * @param id 门店作业管理ID
      * @return 门店作业管理
      */
-    public YunStoreWork selectYunStoreWorkById(Long id);
+    public YunStoreWorkVo selectYunStoreWorkById(Long id);
 
     /**
      * 查询门店作业管理列表

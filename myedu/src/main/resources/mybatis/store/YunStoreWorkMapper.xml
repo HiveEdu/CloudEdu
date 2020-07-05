@@ -36,10 +36,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectYunStoreWorkById" parameterType="Long" resultMap="YunStoreWorkResult">
         <include refid="selectYunStoreWorkVo"/>
-        where id = #{id}
+        where ysw.id = #{id}
     </select>
         
-    <insert id="insertYunStoreWork" parameterType="YunStoreWork" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertYunStoreWork" parameterType="com.myedu.project.store.domain.vo.YunStoreWorkVo"
+            useGeneratedKeys="true"  keyProperty="id">
         insert into yun_store_work
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workName != null  and workName != ''">work_name,</if>
@@ -71,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateYunStoreWork" parameterType="YunStoreWork">
+    <update id="updateYunStoreWork" parameterType="com.myedu.project.store.domain.vo.YunStoreWorkVo">
         update yun_store_work
         <trim prefix="SET" suffixOverrides=",">
             <if test="workName != null  and workName != ''">work_name = #{workName},</if>

@@ -11,10 +11,12 @@ import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
 import com.myedu.project.parents.service.IYunStudentService;
 import com.myedu.project.store.domain.YunStoreWork;
+import com.myedu.project.store.domain.YunStoreWorkStu;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.domain.vo.YunStoreWorkVo;
 import com.myedu.project.store.service.IYunStoreService;
 import com.myedu.project.store.service.IYunStoreWorkService;
+import com.myedu.project.store.service.IYunStoreWorkStuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +40,8 @@ public class YunStoreWorkController extends BaseController
     private IYunStoreService yunStoreService;
     @Autowired
     private IYunStudentService yunStudentService;
-
+    @Autowired
+    private IYunStoreWorkStuService yunStoreWorkStuService;
     /**
      * 查询门店作业管理列表
      */
@@ -80,7 +83,17 @@ public class YunStoreWorkController extends BaseController
         ajax.put("stores", stores);
         if (StringUtils.isNotNull(id))
         {
-            ajax.put(AjaxResult.DATA_TAG,yunStoreWorkService.selectYunStoreWorkById(id));
+            YunStoreWorkVo yunStoreWork=yunStoreWorkService.selectYunStoreWorkById(id);
+            YunStoreWorkStu yunStoreWorkStu=new YunStoreWorkStu();
+            yunStoreWorkStu.setStoreWorkId(id);
+            List<YunStoreWorkStu>  yunStoreWorkStus=yunStoreWorkStuService.selectYunStoreWorkStuList(yunStoreWorkStu);
+            String stuIds="";
+            for (YunStoreWorkStu y:yunStoreWorkStus) {
+                stuIds=stuIds+y.getStuId()+",";
+            }
+            stuIds="["+stuIds.substring(0,stuIds.length()-1)+"]";
+            yunStoreWork.setStuIds(stuIds);
+            ajax.put(AjaxResult.DATA_TAG,yunStoreWork);
         }
         return ajax;
 
@@ -92,7 +105,7 @@ public class YunStoreWorkController extends BaseController
     @PreAuthorize("@ss.hasPermi('store:storework:add')")
     @Log(title = "门店作业管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody YunStoreWork yunStoreWork)
+    public AjaxResult add(@RequestBody YunStoreWorkVo yunStoreWork)
     {
         yunStoreWork.setCreateById(SecurityUtils.getUserId());
         yunStoreWork.setCreateBy(SecurityUtils.getUsername());
@@ -105,7 +118,7 @@ public class YunStoreWorkController extends BaseController
     @PreAuthorize("@ss.hasPermi('store:storework:edit')")
     @Log(title = "门店作业管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody YunStoreWork yunStoreWork)
+    public AjaxResult edit(@RequestBody YunStoreWorkVo yunStoreWork)
     {
         yunStoreWork.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(yunStoreWorkService.updateYunStoreWork(yunStoreWork));
