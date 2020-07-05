@@ -9,6 +9,14 @@ export function listCourse(query) {
   })
 }
 
+
+export function listCourseBytype(query) {
+  return request({
+    url: '/dataBasic/course/list',
+    method: 'get',
+    params: query
+  })
+}
 // 查询课程基本数据详细
 export function getCourse(id) {
   return request({

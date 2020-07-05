@@ -211,7 +211,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="类型"  prop="classify">
-                <el-select v-model="form.classify" placeholder="请选择课程类型">
+                <el-select v-model="form.classify" placeholder="请选择课程类型"  @change="changeReclassify">
                   <el-option
                     v-for="dict in classifyOptions"
                     :key="dict.dictValue"
@@ -244,6 +244,21 @@
                 </el-radio-group>
               </el-form-item>
 
+            </el-col>
+          </el-row>
+          <el-row v-if="form.classify!=0">
+            <el-col :span="24">
+              <el-form-item label="课程内容" prop="content">
+                <el-select v-model="form.content" multiple placeholder="请选择课程内容">
+                <el-option
+                  v-for="dict in classContentOptions"
+                  :key="dict.id"
+                  :label="dict.name"
+                  :value="dict.id"
+                ></el-option>
+              </el-select>
+
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>
@@ -389,13 +404,7 @@
               </el-row>
             </el-col>
           </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="课程内容" prop="content">
-              <el-input v-model="form.content" type="textarea" placeholder="请输入课程内容" />
-            </el-form-item>
-          </el-col>
-        </el-row>
+
           <el-row>
             <el-col :span="24">
               <el-form-item label="课程介绍" prop="introduce">
@@ -456,6 +465,7 @@
 
 <script>
 import { listCourse, getCourse, delCourse, changeStatusOff,changeStatusOn,addCourse, updateCourse, exportCourse } from "@/api/store/course";
+import { listCourseBytype} from "@/api/dataBasic/course";
 import { getToken } from '@/utils/auth'
 import signUpModal from './modal/signUpModal'
 import DetailModal from './modal/DetailModal'
@@ -506,6 +516,8 @@ export default {
       reclassifyCollOptions: [],
       // 是否一对一字典
       isOneToOneOptions: [],
+      //课程内容列表
+      classContentOptions:[],
       // 课程状态字典
       statusOptions: [],
       // 查询参数
@@ -577,6 +589,17 @@ export default {
     });
   },
   methods: {
+    //改变门店类行事件
+    changeReclassify(e){
+     let  parm={
+          pageNum: 1,
+          pageSize: 50,
+          type:e,
+      };
+      listCourseBytype(parm).then(response => {
+        this.classContentOptions = response.rows;
+      });
+    },
     //打开砍价页面
     openBargain(row){
       this.currentData=row;
@@ -713,6 +736,7 @@ export default {
           }
         }
         this.form.gradeId=JSON.parse(this.form.gradeId);
+        this.form.content=JSON.parse(this.form.content);
         this.checkedWeeks=JSON.parse(this.form.week);
         this.open = true;
         this.title = "修改课程";
@@ -724,6 +748,7 @@ export default {
         if (valid) {
           this.form.photos=JSON.stringify(this.photosListNew);
           this.form.gradeId=JSON.stringify(this.form.gradeId);
+          this.form.content=JSON.stringify(this.form.content);
           this.form.week=JSON.stringify(this.checkedWeeks);
           if (this.form.id != undefined) {
             updateCourse(this.form).then(response => {
