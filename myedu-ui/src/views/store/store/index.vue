@@ -512,7 +512,7 @@ export default {
       // 门店表格数据
       storeList: [],
       // 弹出层标题
-      title: "",
+      title:"",
       // 是否显示弹出层
       open: false,
       // 查询参数

@@ -217,6 +217,7 @@
   import { listBargain, getBargain, delBargain, addBargain, updateBargain, exportBargain } from "@/api/store/bargain";
   import { quillEditor } from "vue-quill-editor";
   import imageResize  from 'quill-image-resize-module'
+  import { getToken } from '@/utils/auth'
   // 工具栏配置
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"],       // 加粗 斜体 下划线 删除线
@@ -315,6 +316,31 @@
             },
             // 表单校验
             rules: {
+            },
+            uploadImgUrl: "",
+            editorOption: {
+              placeholder: "",
+              theme: "snow", // or 'bubble'
+              placeholder: "请输入内容",
+              modules: {
+                toolbar: {
+                  container: toolbarOptions,
+                  handlers: {
+                    image: function(value) {
+                      if (value) {
+                        // 触发input框选择图片文件
+                        document.querySelector(".quill-img input").click();
+                      } else {
+                        this.quill.format("image", false);
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+            headers: {
+              Authorization: 'Bearer ' + getToken()
             }
           }
         },
