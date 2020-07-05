@@ -591,6 +591,8 @@ export default {
   methods: {
     //改变门店类行事件
     changeReclassify(e){
+      this.form.content=null;
+     this.classContentOptions=[];
      let  parm={
           pageNum: 1,
           pageSize: 50,
