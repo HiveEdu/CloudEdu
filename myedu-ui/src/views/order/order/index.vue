@@ -212,7 +212,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+          <el-row>
           <el-col :span="12">
             <el-form-item label="托管时长" prop="managTime">
               <el-select style="width: 100%" v-model="form.managTime" placeholder="请选择托管时长">

@@ -28,7 +28,9 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,7 +43,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/storeSearch")
 public class APPStoreSearchController extends BaseController {
-        @Autowired
+    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
     @Autowired
     private TokenService tokenService;
@@ -82,14 +84,14 @@ public class APPStoreSearchController extends BaseController {
             Page<StoreSearchVo> page =
                     elasticsearchTemplate.queryForPage(
                             nativeSearchQueryBuilder.build(), StoreSearchVo.class);
-            List<StoreSearchVo> storeSearchVosNew=new ArrayList<StoreSearchVo>();
+            Set<StoreSearchVo> storeSearchVosNew=new HashSet<>();
             List<StoreSearchVo> storeSearchVos= page.getContent();
             for (StoreSearchVo storeSearchVo1:storeSearchVos){
                 double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
                 storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
                 List<Long> typeIds=storeSearchVo1.getTypeIds();
                 //如果有门店类型根据门点类型搜索
-                if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0){
+                if(storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames().size()==0){
                     Long typeId= storeSearchVo.getTypeIds().get(0);
                     Boolean iscontent=false;
                     for (Long typeIdsNew:typeIds) {
@@ -99,16 +101,35 @@ public class APPStoreSearchController extends BaseController {
                         }
                     }
                     if(iscontent){
-                        storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
+                        //storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                         storeSearchVosNew.add(storeSearchVo1);
                     }
+                }else if(storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames().size()>0){
+                    Long typeId= storeSearchVo.getTypeIds().get(0);
+                    Boolean iscontent=false;
+                    for (Long typeIdsNew:typeIds) {
+                        if(typeIdsNew==typeId){
+                            iscontent=true;
+                            break;
+                        }
+                    }
+                    if(iscontent){
+                        List<String>  courseNames1= storeSearchVo1.getCoureseNames();
+                        List<String>  courseNames2= storeSearchVo.getCoureseNames();
+                        for(String courseName1:courseNames1){
+                            for(String courseName2:courseNames2){
+                                if(courseName1.contains(courseName2)){
+                                    storeSearchVosNew.add(storeSearchVo1);
+                                }
+                            }
+                        }
+                    }
                 }else{
-                    storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                     storeSearchVosNew.add(storeSearchVo1);
                 }
                 System.out.println("距离" + (int)calculate + "km");
             }
-            return getDataTable(storeSearchVosNew);
+            return getDataTable(new ArrayList<>(storeSearchVosNew));
         }else {
             return getDataTableLose(null);
         }
@@ -165,14 +186,14 @@ public class APPStoreSearchController extends BaseController {
             Page<StoreSearchVo> page =
                     elasticsearchTemplate.queryForPage(
                             nativeSearchQueryBuilder.build(), StoreSearchVo.class);
-            List<StoreSearchVo> storeSearchVosNew=new ArrayList<StoreSearchVo>();
+            Set<StoreSearchVo> storeSearchVosNew=new HashSet<>();
             List<StoreSearchVo> storeSearchVos= page.getContent();
             for (StoreSearchVo storeSearchVo1:storeSearchVos){
                 double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
                 storeSearchVo1.setDistanceMeters(String.valueOf(calculate));
                 List<Long> typeIds=storeSearchVo1.getTypeIds();
                 //如果有门店类型根据门点类型搜索
-                if(storeSearchVo.getTypeIds()!=null&&storeSearchVo.getTypeIds().size()>0){
+                if(storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames().size()==0){
                     Long typeId= storeSearchVo.getTypeIds().get(0);
                     Boolean iscontent=false;
                     for (Long typeIdsNew:typeIds) {
@@ -185,20 +206,37 @@ public class APPStoreSearchController extends BaseController {
                         //storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                         storeSearchVosNew.add(storeSearchVo1);
                     }
+                }else if(storeSearchVo.getTypeIds().size()>0&&storeSearchVo.getCoureseNames().size()>0){
+                    Long typeId= storeSearchVo.getTypeIds().get(0);
+                    Boolean iscontent=false;
+                    for (Long typeIdsNew:typeIds) {
+                        if(typeIdsNew==typeId){
+                            iscontent=true;
+                            break;
+                        }
+                    }
+                    if(iscontent){
+                        List<String>  courseNames1= storeSearchVo1.getCoureseNames();
+                        List<String>  courseNames2= storeSearchVo.getCoureseNames();
+                        for(String courseName1:courseNames1){
+                            for(String courseName2:courseNames2){
+                               if(courseName1.contains(courseName2)){
+                                   storeSearchVosNew.add(storeSearchVo1);
+                               }
+                            }
+                        }
+                    }
                 }else{
-                    //storeSearchVo1.setHitsAll(getHitsAll(storeSearchVo1.getId()));
                     storeSearchVosNew.add(storeSearchVo1);
                 }
                 System.out.println("距离" + (int)calculate + "km");
             }
-            return getDataTable(storeSearchVosNew);
+
+            return getDataTable(new ArrayList<>(storeSearchVosNew));
         }else {
             return getDataTableLose(null);
         }
     }
-
-
-
 
 
 
