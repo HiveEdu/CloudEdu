@@ -126,6 +126,16 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="选择学生" prop="stuId">
+                <el-select v-model="form.stuId" multiple placeholder="选择学生"  style="width: 100%;">
+                  <el-option
+                    v-for="item in yunStuents"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
         <el-form-item label="作业名称" prop="workName">
           <el-input v-model="form.workName" placeholder="请输入作业名称" />
         </el-form-item>
@@ -166,6 +176,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 学生选择
+      yunStuents: [],
         //门店列表
       stores:[],
       // 非单个禁用
@@ -261,6 +273,7 @@ export default {
     handleAdd() {
       this.reset();
       getStorework().then(response => {
+        this.yunStuents=response.yunStuents;
         this.stores=response.stores;
         this.open = true;
         this.title = "添加门店作业管理";
@@ -273,6 +286,7 @@ export default {
       const id = row.id || this.ids
       getStorework(id).then(response => {
         this.form = response.data;
+        this.yunStuents=response.yunStuents;
         this.stores=response.stores;
         this.open = true;
         this.title = "修改门店作业管理";

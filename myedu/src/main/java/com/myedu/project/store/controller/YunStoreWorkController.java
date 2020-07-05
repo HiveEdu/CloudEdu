@@ -8,6 +8,8 @@ import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.parents.domain.vo.YunStudentVo;
+import com.myedu.project.parents.service.IYunStudentService;
 import com.myedu.project.store.domain.YunStoreWork;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 import com.myedu.project.store.domain.vo.YunStoreWorkVo;
@@ -34,6 +36,8 @@ public class YunStoreWorkController extends BaseController
     private IYunStoreWorkService yunStoreWorkService;
     @Autowired
     private IYunStoreService yunStoreService;
+    @Autowired
+    private IYunStudentService yunStudentService;
 
     /**
      * 查询门店作业管理列表
@@ -68,6 +72,8 @@ public class YunStoreWorkController extends BaseController
     public AjaxResult getInfo(@PathVariable(value = "id", required = false) Long id)
     {
         AjaxResult ajax = AjaxResult.success();
+        YunStudentVo yunStus= new YunStudentVo();
+        ajax.put("yunStuents", yunStudentService.selectYunStudentList(yunStus));
         YunStoreVo yunStore=new YunStoreVo();
         yunStore.setCreateById(SecurityUtils.getUserId());
         List<YunStoreVo> stores=yunStoreService.selectYunStoreList(yunStore);
