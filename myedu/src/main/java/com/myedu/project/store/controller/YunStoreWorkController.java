@@ -90,6 +90,7 @@ public class YunStoreWorkController extends BaseController
             String stuIds="";
             for (YunStoreWorkStu y:yunStoreWorkStus) {
                 stuIds=stuIds+y.getStuId()+",";
+
             }
             stuIds="["+stuIds.substring(0,stuIds.length()-1)+"]";
             yunStoreWork.setStuIds(stuIds);

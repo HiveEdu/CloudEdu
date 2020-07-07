@@ -23,10 +23,12 @@ public class YunDynamic extends BaseEntity
 
     /** 动态内容 */
     @ApiModelProperty("动态内容")
+    @Excel(name = "动态内容")
     private String content;
 
     /** 动态图片 */
     @ApiModelProperty("动态图片")
+    @Excel(name = "动态图片")
     private String picture;
 
     /** 动态类型（0：家长发表1：老师发表） */
@@ -35,10 +37,12 @@ public class YunDynamic extends BaseEntity
     private String type;
 
     /** 点赞数量 */
+    @Excel(name = "点赞数量")
     @ApiModelProperty("点赞数量")
     private Long likes;
 
     /** 评论数量 */
+    @Excel(name = "评论数量")
     @ApiModelProperty("评论数量")
     private Long comments;
 
@@ -47,8 +51,35 @@ public class YunDynamic extends BaseEntity
     @Excel(name = "创建人Id")
     private Long createById;
 
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
     /** 删除标志（0代表存在 1代表删除） */
+
     private String delFlag;
+
+    /** 创建人头像 */
+    @ApiModelProperty("创建人头像")
+    @Excel(name = "创建人头像")
+    private String userImage;
+
+    /** 创建人地址 */
+    @ApiModelProperty("创建人地址")
+    @Excel(name = "创建人头像")
+    private String userAddress;
 
     public void setId(Long id) 
     {
@@ -138,6 +169,8 @@ public class YunDynamic extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("delFlag", getDelFlag())
-            .toString();
+            .append("userImage", getUserImage())
+            .append("userAddress", getUserAddress())
+                .toString();
     }
 }

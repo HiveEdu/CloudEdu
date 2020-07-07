@@ -129,6 +129,7 @@ public class AppDynamicController extends BaseController
     public AjaxResult add(@RequestBody YunDynamic yunDynamic)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        yunDynamic.setUserImage(loginUser.getUser().getAvatar());
         yunDynamic.setCreateById(loginUser.getUser().getUserId());
         yunDynamic.setCreateBy(loginUser.getUser().getNickName());
         return toAjax(yunDynamicService.insertYunDynamic(yunDynamic));

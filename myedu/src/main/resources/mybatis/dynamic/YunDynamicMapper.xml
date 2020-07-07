@@ -17,6 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="delFlag"    column="del_flag"    />
+        <result property="userImage"    column="user_image"    />
+        <result property="userAddress"    column="user_address"    />
     </resultMap>
 
     <sql id="selectYunDynamicVo">
@@ -71,6 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="userImage != null  and userImage != ''">user_image,</if>
+            <if test="userAddress != null  and userAddress != ''">user_address,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="content != null  and content != ''">#{content},</if>
@@ -84,6 +88,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="userImage != null  and userImage != ''">#{userImage},</if>
+            <if test="userAddress != null  and userAddress != ''">#{userAddress},</if>
          </trim>
     </insert>
 
@@ -101,6 +107,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="userImage != null  and userImage != ''">user_image = #{userImage},</if>
+            <if test="userAddress != null  and userAddress != ''">user_address = #{userAddress},</if>
         </trim>
         where id = #{id}
     </update>
