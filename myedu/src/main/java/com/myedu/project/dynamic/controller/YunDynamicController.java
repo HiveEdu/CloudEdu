@@ -1,47 +1,31 @@
 package com.myedu.project.dynamic.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
-
-import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.DyRedisKeyUtils;
 import com.myedu.common.utils.SecurityUtils;
-import com.myedu.common.utils.ServletUtils;
-import com.myedu.common.utils.file.FileUploadUtils;
-import com.myedu.framework.config.MyEduConfig;
-import com.myedu.framework.security.LoginUser;
+import com.myedu.common.utils.poi.ExcelUtil;
+import com.myedu.framework.aspectj.lang.annotation.Log;
+import com.myedu.framework.aspectj.lang.enums.BusinessType;
+import com.myedu.framework.web.controller.BaseController;
+import com.myedu.framework.web.domain.AjaxResult;
+import com.myedu.framework.web.page.TableDataInfo;
 import com.myedu.project.dynamic.domain.DyLikedCountDTO;
 import com.myedu.project.dynamic.domain.YunDyComment;
 import com.myedu.project.dynamic.domain.YunDyLikes;
+import com.myedu.project.dynamic.domain.YunDynamic;
 import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
 import com.myedu.project.dynamic.service.IYunDyCommentService;
 import com.myedu.project.dynamic.service.IYunDyLikesService;
+import com.myedu.project.dynamic.service.IYunDynamicService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import com.myedu.framework.aspectj.lang.annotation.Log;
-import com.myedu.framework.aspectj.lang.enums.BusinessType;
-import com.myedu.project.dynamic.domain.YunDynamic;
-import com.myedu.project.dynamic.service.IYunDynamicService;
-import com.myedu.framework.web.controller.BaseController;
-import com.myedu.framework.web.domain.AjaxResult;
-import com.myedu.common.utils.poi.ExcelUtil;
-import com.myedu.framework.web.page.TableDataInfo;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 云托管动态管理Controller

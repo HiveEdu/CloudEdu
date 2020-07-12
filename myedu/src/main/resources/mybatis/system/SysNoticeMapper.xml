@@ -16,11 +16,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"     column="update_time"     />
         <result property="remark"         column="remark"          />
         <result property="storeId"        column="store_id"      />
+        <result property="createById"        column="create_by_id"      />
+        <result property="updateById"        column="update_by_id"      />
     </resultMap>
     
     <sql id="selectNoticeVo">
-        select sn.notice_id, sn.notice_title, sn.notice_type, sn.notice_content, sn.status,
-        sn.create_by, sn.create_time, sn.update_by, sn.update_time, sn.remark ,sn.store_id,
+        select sn.*,
         ys.name as  storeName
 		from sys_notice  sn
 		left  join  yun_store ys on sn.store_id=ys.id
@@ -55,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
             <if test="storeId != null and storeId != ''">store_id,</if>
+            <if test="createById != null and createById != ''">create_by_id,</if>
  			create_time
  		)values(
 			<if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle}, </if>
@@ -64,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="storeId != null and storeId != ''">#{storeId},</if>
+            <if test="createById != null and createById != ''">#{createById},</if>
  			sysdate()
 		)
     </insert>
@@ -76,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="noticeContent != null">notice_content = #{noticeContent}, </if>
             <if test="status != null and status != ''">status = #{status}, </if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateById != null and updateById != ''">update_by_id = #{updateById},</if>
             <if test="storeId != null and storeId != ''">store_id = #{storeId},</if>
  			update_time = sysdate()
         </set>

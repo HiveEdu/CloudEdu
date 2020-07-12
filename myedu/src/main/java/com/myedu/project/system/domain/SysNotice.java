@@ -1,10 +1,11 @@
 package com.myedu.project.system.domain;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import com.myedu.framework.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.myedu.framework.web.domain.BaseEntity;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 通知公告表 sys_notice
@@ -27,7 +28,24 @@ public class SysNotice extends BaseEntity
     /** 公告内容 */
     private String noticeContent;
 
+    public Long getCreateById() {
+        return createById;
+    }
+
+    public void setCreateById(Long createById) {
+        this.createById = createById;
+    }
+
+    public Long getUpdateById() {
+        return updateById;
+    }
+
+    public void setUpdateById(Long updateById) {
+        this.updateById = updateById;
+    }
+
     /** 公告状态（0正常 1关闭） */
+
     private String status;
 
     /** 门店Id */
@@ -35,6 +53,10 @@ public class SysNotice extends BaseEntity
 
     /** 门店Id */
     private String storeName;
+    /** 创建人Id */
+    private Long createById;
+    /** 修改人Id */
+    private Long updateById;
 
     public Long getNoticeId()
     {
@@ -118,6 +140,8 @@ public class SysNotice extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
             .append("storeId", getStoreId())
+            .append("createById", getCreateById())
+            .append("updateById", getUpdateById())
             .toString();
     }
 }
