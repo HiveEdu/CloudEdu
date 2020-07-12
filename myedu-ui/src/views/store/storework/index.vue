@@ -149,8 +149,24 @@
         <el-form-item label="作业内容" prop="workContent">
           <el-input v-model="form.workContent" placeholder="请输入作业内容" />
         </el-form-item>
-        <el-form-item label="上传照片" prop="workPicture">
+        <!-- <el-form-item label="上传照片" prop="workPicture">
           <el-input v-model="form.workPicture" placeholder="请输入作业照片" />
+        </el-form-item> -->
+          <el-form-item label="上传照片">
+          <el-upload
+            class="avatar-uploader"
+            ref="upload"
+            :headers="headers"
+            :action="uploadImgUrl"
+            :data="{'type':'stuAvatar'}"
+            :show-file-list="false"
+            :on-success="onSuccess"
+            :on-remove="handleRemove"
+            :on-preview="handlePictureCardPreview"
+            :before-upload="beforeUpload">
+            <img v-if="form.workPicture" :src="viewImage+'/'+form.workPicture" :onerror="defaultImg" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </el-form-item>
         <el-form-item label="作业状态">
           <el-radio-group v-model="form.workStatus">
@@ -172,10 +188,11 @@
 
 <script>
 import { listStorework, getStorework, delStorework, addStorework, updateStorework, exportStorework } from "@/api/store/storework";
-
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
+        defaultImg: 'this.src="' + require("@/assets/image/deaufalt.jpg") + '"',
       // 遮罩层
       loading: true,
       // 选中数组
@@ -210,7 +227,12 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      viewImage: process.env.VUE_APP_BASE_API,
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      },
     };
   },
   created() {
@@ -353,7 +375,51 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
+    },
+     beforeUpload(file){
+    },
+    onSuccess(res,file, fileList){
+      if(res.code=="200"){
+       //this.form.avatar=res.url
+        this.form.workPicture=res.fileName
+        this.msgSuccess("上传成功");
+      }else{
+        this.msgError("上传失败");
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      this.form.workPicture=null;
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     }
   }
 };
 </script>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

@@ -25,12 +25,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 /**
  * 云托管动态管理Controller
  * 
@@ -126,6 +126,7 @@ public class AppDynamicController extends BaseController
             dataType = "YunDynamic")
     @Log(title = "云托管动态管理", businessType = BusinessType.INSERT)
     @PostMapping
+    @Transactional(rollbackFor = Exception.class)
     public AjaxResult add(@RequestBody YunDynamic yunDynamic)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
