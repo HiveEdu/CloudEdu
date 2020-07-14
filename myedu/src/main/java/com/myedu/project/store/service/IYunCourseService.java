@@ -2,6 +2,8 @@ package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.vo.YunCourseVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2020-01-21
  */
+@CacheConfig(cacheNames = "courses")
 public interface IYunCourseService 
 {
     /**
@@ -19,6 +22,7 @@ public interface IYunCourseService
      * @param id 课程ID
      * @return 课程
      */
+    @Cacheable
     public YunCourseVo selectYunCourseById(Long id);
 
     /**
@@ -27,6 +31,7 @@ public interface IYunCourseService
      * @param yunCourse 课程
      * @return 课程集合
      */
+    @Cacheable
     public List<YunCourseVo> selectYunCourseList(YunCourse yunCourse);
 
     /**

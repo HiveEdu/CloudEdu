@@ -1,8 +1,9 @@
 package com.myedu.project.dynamic.service;
 
-import com.myedu.project.dynamic.domain.YunDyLikes;
 import com.myedu.project.dynamic.domain.YunDynamic;
 import com.myedu.project.dynamic.domain.vo.YunDynamicVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2020-01-01
  */
+@CacheConfig(cacheNames = "dynamics")
 public interface IYunDynamicService 
 {
     /**
@@ -20,6 +22,7 @@ public interface IYunDynamicService
      * @param id 云托管动态管理ID
      * @return 云托管动态管理
      */
+    @Cacheable
     public YunDynamicVo selectYunDynamicById(Long id);
 
     /**
@@ -28,6 +31,7 @@ public interface IYunDynamicService
      * @param yunDynamic 云托管动态管理
      * @return 云托管动态管理集合
      */
+    @Cacheable
     public List<YunDynamicVo> selectYunDynamicList(YunDynamicVo yunDynamic);
 
     /**
@@ -36,6 +40,7 @@ public interface IYunDynamicService
      * @param yunDynamic 动态评论列表
      * @return 动态评论列表
      */
+    @Cacheable
     public List<YunDynamicVo> selectYunDyCommentList(YunDynamicVo yunDynamic);
 
 

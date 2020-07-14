@@ -1,8 +1,9 @@
 package com.myedu.project.store.service;
 
-import com.myedu.project.order.domain.vo.YunOrderVo;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2020-01-04
  */
+@CacheConfig(cacheNames = "stores")
 public interface IYunStoreService 
 {
     /**
@@ -23,6 +25,7 @@ public interface IYunStoreService
      * @param id 门店ID
      * @return 门店
      */
+    @Cacheable
     public YunStoreVo selectYunStoreById(Long id);
 
     /**
@@ -31,6 +34,7 @@ public interface IYunStoreService
      * @param yunStore 门店
      * @return 门店集合
      */
+    @Cacheable
     public List<YunStoreVo> selectYunStoreList(YunStoreVo yunStore);
 
     /**
