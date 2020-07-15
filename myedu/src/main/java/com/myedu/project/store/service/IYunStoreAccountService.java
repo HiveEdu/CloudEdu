@@ -1,6 +1,10 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreAccount;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+
 import java.util.List;
 
 /**
@@ -9,6 +13,7 @@ import java.util.List;
  * @author lsp
  * @date 2020-04-25
  */
+@CacheConfig(cacheNames = "accounts")
 public interface IYunStoreAccountService 
 {
     /**
@@ -17,6 +22,7 @@ public interface IYunStoreAccountService
      * @param id 门店账目记录ID
      * @return 门店账目记录
      */
+    @Cacheable
     public YunStoreAccount selectYunStoreAccountById(Long id);
 
     /**
@@ -25,6 +31,7 @@ public interface IYunStoreAccountService
      * @param yunStoreAccount 门店账目记录
      * @return 门店账目记录集合
      */
+    @Cacheable
     public List<YunStoreAccount> selectYunStoreAccountList(YunStoreAccount yunStoreAccount);
 
     /**
@@ -49,6 +56,7 @@ public interface IYunStoreAccountService
      * @param ids 需要删除的门店账目记录ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunStoreAccountByIds(Long[] ids);
 
     /**

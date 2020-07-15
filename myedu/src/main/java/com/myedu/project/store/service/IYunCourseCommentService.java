@@ -1,6 +1,10 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunCourseComment;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+
 import java.util.List;
 
 /**
@@ -9,6 +13,7 @@ import java.util.List;
  * @author 梁龙飞
  * @date 2020-04-13
  */
+@CacheConfig(cacheNames = "commnets")
 public interface IYunCourseCommentService 
 {
     /**
@@ -17,6 +22,7 @@ public interface IYunCourseCommentService
      * @param id 课程评论ID
      * @return 课程评论
      */
+    @Cacheable
     public YunCourseComment selectYunCourseCommentById(Long id);
 
     /**
@@ -25,6 +31,7 @@ public interface IYunCourseCommentService
      * @param yunCourseComment 课程评论
      * @return 课程评论集合
      */
+    @Cacheable
     public List<YunCourseComment> selectYunCourseCommentList(YunCourseComment yunCourseComment);
 
     /**
@@ -49,6 +56,7 @@ public interface IYunCourseCommentService
      * @param ids 需要删除的课程评论ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunCourseCommentByIds(Long[] ids);
 
     /**

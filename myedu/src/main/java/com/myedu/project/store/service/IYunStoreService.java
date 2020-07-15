@@ -3,6 +3,7 @@ package com.myedu.project.store.service;
 import com.myedu.project.store.domain.YunStore;
 import com.myedu.project.store.domain.vo.YunStoreVo;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,7 @@ public interface IYunStoreService
      * @param ids 需要删除的门店ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunStoreByIds(Long[] ids);
 
     /**

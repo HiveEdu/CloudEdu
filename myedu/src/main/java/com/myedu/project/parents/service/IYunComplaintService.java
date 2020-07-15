@@ -1,6 +1,10 @@
 package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunComplaint;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+
 import java.util.List;
 
 /**
@@ -9,6 +13,7 @@ import java.util.List;
  * @author myedu
  * @date 2020-01-18
  */
+@CacheConfig(cacheNames = "yunComplaints")
 public interface IYunComplaintService 
 {
     /**
@@ -17,6 +22,7 @@ public interface IYunComplaintService
      * @param id 投诉ID
      * @return 投诉
      */
+    @Cacheable
     public YunComplaint selectYunComplaintById(Long id);
 
     /**
@@ -25,6 +31,7 @@ public interface IYunComplaintService
      * @param yunComplaint 投诉
      * @return 投诉集合
      */
+    @Cacheable
     public List<YunComplaint> selectYunComplaintList(YunComplaint yunComplaint);
 
     /**
@@ -49,6 +56,7 @@ public interface IYunComplaintService
      * @param ids 需要删除的投诉ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunComplaintByIds(Long[] ids);
 
     /**

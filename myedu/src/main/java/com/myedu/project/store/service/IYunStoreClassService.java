@@ -2,6 +2,9 @@ package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreClass;
 import com.myedu.project.store.domain.vo.YunStoreClassVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -11,6 +14,7 @@ import java.util.List;
  * @author 梁龙飞
  * @date 2020-04-18
  */
+@CacheConfig(cacheNames = "classes")
 public interface IYunStoreClassService 
 {
     /**
@@ -19,6 +23,7 @@ public interface IYunStoreClassService
      * @param id 分班管理ID
      * @return 分班管理
      */
+    @Cacheable
     public YunStoreClassVo selectYunStoreClassById(Long id);
 
     /**
@@ -27,6 +32,7 @@ public interface IYunStoreClassService
      * @param yunStoreClass 分班管理
      * @return 分班管理集合
      */
+    @Cacheable
     public List<YunStoreClassVo> selectYunStoreClassList(YunStoreClass yunStoreClass);
 
     /**
@@ -51,6 +57,7 @@ public interface IYunStoreClassService
      * @param ids 需要删除的分班管理ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunStoreClassByIds(Long[] ids);
 
     /**

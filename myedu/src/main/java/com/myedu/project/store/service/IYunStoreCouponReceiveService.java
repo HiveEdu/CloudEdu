@@ -1,6 +1,10 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreCouponReceive;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+
 import java.util.List;
 
 /**
@@ -9,6 +13,7 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2020-02-24
  */
+@CacheConfig(cacheNames = "couponreceive")
 public interface IYunStoreCouponReceiveService 
 {
     /**
@@ -17,6 +22,7 @@ public interface IYunStoreCouponReceiveService
      * @param id 优惠券领用ID
      * @return 优惠券领用
      */
+    @Cacheable
     public YunStoreCouponReceive selectYunStoreCouponReceiveById(Long id);
 
     /**
@@ -25,6 +31,7 @@ public interface IYunStoreCouponReceiveService
      * @param yunStoreCouponReceive 优惠券领用
      * @return 优惠券领用集合
      */
+    @Cacheable
     public List<YunStoreCouponReceive> selectYunStoreCouponReceiveList(YunStoreCouponReceive yunStoreCouponReceive);
 
     /**
@@ -49,6 +56,7 @@ public interface IYunStoreCouponReceiveService
      * @param ids 需要删除的优惠券领用ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunStoreCouponReceiveByIds(Long[] ids);
 
     /**

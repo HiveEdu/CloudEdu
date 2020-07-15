@@ -3,6 +3,7 @@ package com.myedu.project.store.service;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.vo.YunCourseVo;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public interface IYunCourseService
      * @param ids 需要删除的课程ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunCourseByIds(Long[] ids);
 
     /**

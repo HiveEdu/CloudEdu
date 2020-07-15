@@ -2,6 +2,9 @@ package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStudent;
 import com.myedu.project.parents.domain.vo.YunStudentVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -11,6 +14,7 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2019-12-28
  */
+@CacheConfig(cacheNames = "yunStudents")
 public interface IYunStudentService 
 {
     /**
@@ -19,6 +23,7 @@ public interface IYunStudentService
      * @param id 学生数据ID
      * @return 学生数据
      */
+    @Cacheable
     public YunStudentVo selectYunStudentById(Long id);
 
     /**
@@ -27,6 +32,7 @@ public interface IYunStudentService
      * @param yunStudent 学生数据
      * @return 学生数据集合
      */
+    @Cacheable
     public List<YunStudentVo> selectYunStudentList(YunStudentVo yunStudent);
 
     /**
@@ -51,6 +57,7 @@ public interface IYunStudentService
      * @param ids 需要删除的学生数据ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunStudentByIds(Long[] ids);
 
     /**

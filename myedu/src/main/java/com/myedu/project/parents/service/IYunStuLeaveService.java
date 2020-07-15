@@ -2,6 +2,10 @@ package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStuLeave;
 import com.myedu.project.parents.domain.vo.YunStuLeaveVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+
 import java.util.List;
 
 /**
@@ -10,6 +14,7 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2019-12-28
  */
+@CacheConfig(cacheNames = "yunStuLeaves")
 public interface IYunStuLeaveService 
 {
     /**
@@ -18,6 +23,7 @@ public interface IYunStuLeaveService
      * @param id 学生请假ID
      * @return 学生请假
      */
+    @Cacheable
     public YunStuLeaveVo selectYunStuLeaveById(Long id);
 
     /**
@@ -26,6 +32,7 @@ public interface IYunStuLeaveService
      * @param yunStuLeave 学生请假
      * @return 学生请假集合
      */
+    @Cacheable
     public List<YunStuLeaveVo> selectYunStuLeaveList(YunStuLeaveVo yunStuLeave);
 
     /**
@@ -50,6 +57,7 @@ public interface IYunStuLeaveService
      * @param ids 需要删除的学生请假ID
      * @return 结果
      */
+    @CacheEvict
     public int deleteYunStuLeaveByIds(Long[] ids);
 
     /**
