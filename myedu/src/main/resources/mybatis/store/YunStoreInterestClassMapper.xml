@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myedu.project.store.mapper.YunStoreInterestClassMapper">
+    
+    <resultMap type="YunStoreInterestClassVo" id="YunStoreInterestClassResult">
+        <result property="id"    column="id"    />
+        <result property="logo"    column="logo"    />
+        <result property="content"    column="content"    />
+        <result property="name"    column="name"    />
+        <result property="openDate"    column="open_date"    />
+        <result property="masterTeacher"    column="master_teacher"    />
+        <result property="assistantTeacher"    column="assistant_teacher"    />
+        <result property="classTime"    column="class_time"    />
+        <result property="duration"    column="duration"    />
+        <result property="totalCalssHour"    column="total_calss_hour"    />
+        <result property="courseDesc"    column="course_desc"    />
+        <result property="classType"    column="class_type"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateById"    column="update_by_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="week"    column="week"    />
+        <result property="storeId"    column="store_id"    />
+    </resultMap>
+
+    <sql id="selectYunStoreInterestClassVo">
+         select yic.*,yst.name as storeName from yun_store_interest_class yic
+         LEFT  JOIN yun_store yst ON yic.store_id=yst.id
+    </sql>
+
+    <select id="selectYunStoreInterestClassList" parameterType="YunStoreInterestClassVo" resultMap="YunStoreInterestClassResult">
+        <include refid="selectYunStoreInterestClassVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and yic.name like concat('%', #{name}, '%')</if>
+            <if test="classType != null  and classType != ''"> and yic.class_type = #{classType}</if>
+        </where>
+    </select>
+    
+    <select id="selectYunStoreInterestClassById" parameterType="Long" resultMap="YunStoreInterestClassResult">
+        <include refid="selectYunStoreInterestClassVo"/>
+        where yic.id = #{id}
+    </select>
+        
+    <insert id="insertYunStoreInterestClass" parameterType="YunStoreInterestClass">
+        insert into yun_store_interest_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="logo != null  and logo != ''">logo,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="openDate != null ">open_date,</if>
+            <if test="masterTeacher != null  and masterTeacher != ''">master_teacher,</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''">assistant_teacher,</if>
+            <if test="classTime != null ">class_time,</if>
+            <if test="duration != null ">duration,</if>
+            <if test="totalCalssHour != null ">total_calss_hour,</if>
+            <if test="courseDesc != null  and courseDesc != ''">course_desc,</if>
+            <if test="classType != null  and classType != ''">class_type,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createById != null ">create_by_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateById != null ">update_by_id,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="week != null  and week != ''">week,</if>
+            <if test="storeId != null ">store_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="logo != null  and logo != ''">#{logo},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="openDate != null ">#{openDate},</if>
+            <if test="masterTeacher != null  and masterTeacher != ''">#{masterTeacher},</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''">#{assistantTeacher},</if>
+            <if test="classTime != null ">#{classTime},</if>
+            <if test="duration != null ">#{duration},</if>
+            <if test="totalCalssHour != null ">#{totalCalssHour},</if>
+            <if test="courseDesc != null  and courseDesc != ''">#{courseDesc},</if>
+            <if test="classType != null  and classType != ''">#{classType},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createById != null ">#{createById},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateById != null ">#{updateById},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="week != null  and week != ''">#{week},</if>
+            <if test="storeId != null ">#{storeId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYunStoreInterestClass" parameterType="YunStoreInterestClass">
+        update yun_store_interest_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logo != null  and logo != ''">logo = #{logo},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="openDate != null ">open_date = #{openDate},</if>
+            <if test="masterTeacher != null  and masterTeacher != ''">master_teacher = #{masterTeacher},</if>
+            <if test="assistantTeacher != null  and assistantTeacher != ''">assistant_teacher = #{assistantTeacher},</if>
+            <if test="classTime != null ">class_time = #{classTime},</if>
+            <if test="duration != null ">duration = #{duration},</if>
+            <if test="totalCalssHour != null ">total_calss_hour = #{totalCalssHour},</if>
+            <if test="courseDesc != null  and courseDesc != ''">course_desc = #{courseDesc},</if>
+            <if test="classType != null  and classType != ''">class_type = #{classType},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createById != null ">create_by_id = #{createById},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateById != null ">update_by_id = #{updateById},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="week != null  and week != ''">week = #{week},</if>
+            <if test="storeId != null ">store_id = #{storeId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYunStoreInterestClassById" parameterType="Long">
+        delete from yun_store_interest_class where id = #{id}
+    </delete>
+
+    <delete id="deleteYunStoreInterestClassByIds" parameterType="String">
+        delete from yun_store_interest_class where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
