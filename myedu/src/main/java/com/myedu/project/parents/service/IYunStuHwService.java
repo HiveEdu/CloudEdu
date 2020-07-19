@@ -2,9 +2,6 @@ package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStuHw;
 import com.myedu.project.parents.domain.vo.YunStuHwVo;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -14,7 +11,6 @@ import java.util.List;
  * @author  llf
  * @date 2019-12-29
  */
-@CacheConfig(cacheNames = "yunStuHws")
 public interface IYunStuHwService 
 {
     /**
@@ -23,7 +19,6 @@ public interface IYunStuHwService
      * @param id 学生身高体重记录ID
      * @return 学生身高体重记录
      */
-    @Cacheable
     public YunStuHwVo selectYunStuHwById(Long id);
 
     /**
@@ -32,7 +27,6 @@ public interface IYunStuHwService
      * @param yunStuHw 学生身高体重记录
      * @return 学生身高体重记录集合
      */
-    @Cacheable
     public List<YunStuHwVo> selectYunStuHwList(YunStuHwVo yunStuHw);
 
     /**
@@ -57,7 +51,6 @@ public interface IYunStuHwService
      * @param ids 需要删除的学生身高体重记录ID
      * @return 结果
      */
-    @CacheEvict
     public int deleteYunStuHwByIds(Long[] ids);
 
     /**

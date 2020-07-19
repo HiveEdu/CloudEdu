@@ -1,9 +1,6 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreClassStu;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -13,7 +10,6 @@ import java.util.List;
  * @author LSP
  * @date 2020-04-21
  */
-@CacheConfig(cacheNames = "studentclass")
 public interface IYunStoreClassStuService 
 {
     /**
@@ -23,7 +19,6 @@ public interface IYunStoreClassStuService
      * @return 班级学生管理
      */
 
-    @Cacheable
     public YunStoreClassStu selectYunStoreClassStuById(Long classId);
 
     /**
@@ -32,7 +27,6 @@ public interface IYunStoreClassStuService
      * @param yunStoreClassStu 班级学生管理
      * @return 班级学生管理集合
      */
-    @Cacheable
     public List<YunStoreClassStu> selectYunStoreClassStuList(YunStoreClassStu yunStoreClassStu);
 
     /**
@@ -50,6 +44,5 @@ public interface IYunStoreClassStuService
      *
      * @return 结果
      */
-    @CacheEvict
     public int deleteYunStoreClassStu(Long storeId,Long stuId);
 }

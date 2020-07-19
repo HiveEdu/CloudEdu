@@ -2,9 +2,6 @@ package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStuMistake;
 import com.myedu.project.parents.domain.vo.YunStuMistakeVo;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -14,7 +11,6 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2019-12-29
  */
-@CacheConfig(cacheNames = "yunStuMistakes")
 public interface IYunStuMistakeService 
 {
     /**
@@ -23,7 +19,6 @@ public interface IYunStuMistakeService
      * @param id 学生错题记录ID
      * @return 学生错题记录
      */
-    @Cacheable
     public YunStuMistakeVo selectYunStuMistakeById(Long id);
 
     /**
@@ -32,7 +27,6 @@ public interface IYunStuMistakeService
      * @param yunStuMistake 学生错题记录
      * @return 学生错题记录集合
      */
-    @Cacheable
     public List<YunStuMistakeVo> selectYunStuMistakeList(YunStuMistakeVo yunStuMistake);
 
     /**
@@ -57,7 +51,6 @@ public interface IYunStuMistakeService
      * @param ids 需要删除的学生错题记录ID
      * @return 结果
      */
-    @CacheEvict
     public int deleteYunStuMistakeByIds(Long[] ids);
 
     /**

@@ -1,9 +1,6 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreType;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -13,7 +10,6 @@ import java.util.List;
  * @author 梁少鹏
  * @date 2020-01-04
  */
-@CacheConfig(cacheNames = "yunStoreTypes")
 public interface IYunStoreTypeService 
 {
     /**
@@ -22,7 +18,6 @@ public interface IYunStoreTypeService
      * @param storeId 门店类型关联ID
      * @return 门店类型关联
      */
-    @Cacheable
     public List<YunStoreType> selectYunStoreTypeByStoreId(Long storeId);
 
     /**
@@ -31,7 +26,6 @@ public interface IYunStoreTypeService
      * @param yunStoreType 门店类型关联
      * @return 门店类型关联集合
      */
-    @Cacheable
     public List<YunStoreType> selectYunStoreTypeList(YunStoreType yunStoreType);
 
     /**
@@ -56,7 +50,6 @@ public interface IYunStoreTypeService
      * @param storeIds 需要删除的门店类型关联ID
      * @return 结果
      */
-    @CacheEvict
     public int deleteYunStoreTypeByIds(Long[] storeIds);
 
     /**

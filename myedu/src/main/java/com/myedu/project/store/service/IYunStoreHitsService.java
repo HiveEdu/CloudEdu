@@ -1,9 +1,6 @@
 package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreHits;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -13,7 +10,6 @@ import java.util.List;
  * @author LSP
  * @date 2020-04-18
  */
-@CacheConfig(cacheNames = "yunStoreHitss")
 public interface IYunStoreHitsService 
 {
     /**
@@ -22,7 +18,7 @@ public interface IYunStoreHitsService
      * @param id 门店日访问量统计ID
      * @return 门店日访问量统计
      */
-    @Cacheable
+
     public YunStoreHits selectYunStoreHitsById(Long id);
 
     /**
@@ -31,7 +27,6 @@ public interface IYunStoreHitsService
      * @param yunStoreHits 门店日访问量统计
      * @return 门店日访问量统计集合
      */
-    @Cacheable
     public List<YunStoreHits> selectYunStoreHitsList(YunStoreHits yunStoreHits);
 
     /**
@@ -56,7 +51,6 @@ public interface IYunStoreHitsService
      * @param ids 需要删除的门店日访问量统计ID
      * @return 结果
      */
-    @CacheEvict
     public int deleteYunStoreHitsByIds(Long[] ids);
 
     /**
@@ -71,6 +65,5 @@ public interface IYunStoreHitsService
 
     public void transHitsCountFromRedis2DB();
 
-    @Cacheable
     public int selectYunStoreHitsCountAll(Long storeId);
 }

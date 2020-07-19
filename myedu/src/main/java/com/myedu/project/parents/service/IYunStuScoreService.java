@@ -2,9 +2,6 @@ package com.myedu.project.parents.service;
 
 import com.myedu.project.parents.domain.YunStuScore;
 import com.myedu.project.parents.domain.vo.YunStuScoreVo;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -14,7 +11,6 @@ import java.util.List;
  * @author 梁龙飞
  * @date 2019-12-30
  */
-@CacheConfig(cacheNames = "yunStuScores")
 public interface IYunStuScoreService 
 {
     /**
@@ -23,7 +19,6 @@ public interface IYunStuScoreService
      * @param scoreId 学生成绩ID
      * @return 学生成绩
      */
-    @Cacheable
     public YunStuScoreVo selectYunStuScoreById(Long scoreId);
 
     /**
@@ -32,7 +27,6 @@ public interface IYunStuScoreService
      * @param yunStuScore 学生成绩
      * @return 学生成绩集合
      */
-    @Cacheable
     public List<YunStuScoreVo> selectYunStuScoreList(YunStuScoreVo yunStuScore);
 
     /**
@@ -57,7 +51,6 @@ public interface IYunStuScoreService
      * @param scoreIds 需要删除的学生成绩ID
      * @return 结果
      */
-    @CacheEvict
     public int deleteYunStuScoreByIds(Long[] scoreIds);
 
     /**

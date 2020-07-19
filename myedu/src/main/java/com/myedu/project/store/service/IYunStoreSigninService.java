@@ -2,9 +2,6 @@ package com.myedu.project.store.service;
 
 import com.myedu.project.store.domain.YunStoreSignin;
 import com.myedu.project.store.domain.vo.YunStoreSigninVo;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -14,7 +11,6 @@ import java.util.List;
  * @author 梁龙飞
  * @date 2020-02-29
  */
-@CacheConfig(cacheNames = "yunStoreSignins")
 public interface IYunStoreSigninService 
 {
     /**
@@ -23,7 +19,6 @@ public interface IYunStoreSigninService
      * @param id 点名签到ID
      * @return 点名签到
      */
-    @Cacheable
     public YunStoreSigninVo selectYunStoreSigninById(Long id);
 
     /**
@@ -32,7 +27,6 @@ public interface IYunStoreSigninService
      * @param yunStoreSignin 点名签到
      * @return 点名签到集合
      */
-    @Cacheable
     public List<YunStoreSigninVo> selectYunStoreSigninList(YunStoreSigninVo yunStoreSignin);
 
     /**
@@ -57,7 +51,6 @@ public interface IYunStoreSigninService
      * @param ids 需要删除的点名签到ID
      * @return 结果
      */
-    @CacheEvict
     public int deleteYunStoreSigninByIds(Long[] ids);
 
     /**
