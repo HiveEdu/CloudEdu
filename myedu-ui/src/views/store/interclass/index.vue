@@ -198,9 +198,16 @@
             >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="上课周期" prop="week">
+        <!-- <el-form-item label="上课周期" prop="week">
           <el-input v-model="form.week" placeholder="请输入上课周期" />
-        </el-form-item>
+        </el-form-item> -->
+         <el-form-item label="上课周期" prop="week">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+                  <el-checkbox-group v-model="checkedWeeks" @change="handleCheckedWeeksChange">
+                    <el-checkbox v-for="week in weeks" :label="week" :key="week">{{week}}</el-checkbox>
+                  </el-checkbox-group>
+                </el-checkbox>
+              </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -213,6 +220,7 @@
 <script>
 import { listInterclass, getInterclass, delInterclass, addInterclass, updateInterclass, exportInterclass } from "@/api/store/interclass";
 import { getToken } from '@/utils/auth'
+const weekOptions = ['周一', '周二', '周三', '周四','周五','周六','周日'];
 export default {
   data() {
     return {
@@ -232,6 +240,12 @@ export default {
       total: 0,
       // 门店兴趣班表格数据
       interclassList: [],
+      //周次选择开始
+      checkAll: false,
+      checkedWeeks: [],
+      weeks: weekOptions,
+      isIndeterminate: true,
+      //周次选择结束
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -333,6 +347,15 @@ export default {
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
+      handleCheckAllChange(val) {
+      this.checkedWeeks= val ? weekOptions : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedWeeksChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.weeks.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.weeks.length;
+    },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -350,6 +373,7 @@ export default {
       getInterclass(id).then(response => {
         this.stores=response.stores;
         this.form = response.data;
+        this.checkedWeeks=JSON.parse(this.form.week);
         this.open = true;
         this.title = "修改门店兴趣班";
       });
@@ -358,6 +382,7 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+           this.form.week=JSON.stringify(this.checkedWeeks);
           if (this.form.id != undefined) {
             updateInterclass(this.form).then(response => {
               if (response.code === 200) {

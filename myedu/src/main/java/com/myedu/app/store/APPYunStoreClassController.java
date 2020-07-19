@@ -30,7 +30,7 @@ import java.util.List;
  * @author 梁龙飞
  * @date 2020-04-18
  */
-@Api("门店分班管理")
+@Api("门店托管分班管理")
 @RestController
 @RequestMapping("/app/store/class")
 public class APPYunStoreClassController extends BaseController

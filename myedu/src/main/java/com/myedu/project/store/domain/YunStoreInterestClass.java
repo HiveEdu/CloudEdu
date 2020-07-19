@@ -2,6 +2,8 @@ package com.myedu.project.store.domain;
 
 import com.myedu.framework.aspectj.lang.annotation.Excel;
 import com.myedu.framework.web.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -13,46 +15,57 @@ import java.util.Date;
  * @author myedu
  * @date 2020-07-19
  */
+@ApiModel("门店兴趣班对象实体")
 public class YunStoreInterestClass extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键id */
+    @ApiModelProperty("主键id")
     private Long id;
 
     /** 班级图标 */
     @Excel(name = "班级图标")
+    @ApiModelProperty("班级图标")
     private String logo;
 
     /** 辅导内容 */
     @Excel(name = "辅导内容")
+    @ApiModelProperty("辅导内容")
     private String content;
 
     /** 班级名称 */
+    @ApiModelProperty("班级名称")
     @Excel(name = "班级名称")
     private String name;
 
     /** 开课日期 */
+    @ApiModelProperty("开课日期")
     @Excel(name = "开课日期", width = 30, dateFormat = "yyyy-MM-dd")
     private String openDate;
 
     /** 主教老师 */
+    @ApiModelProperty("主教老师")
     @Excel(name = "主教老师")
     private String masterTeacher;
 
     /** 助教老师 */
+    @ApiModelProperty("助教老师")
     @Excel(name = "助教老师")
     private String assistantTeacher;
 
     /** 上课时间 */
+    @ApiModelProperty("上课时间")
     @Excel(name = "上课时间", width = 30, dateFormat = "yyyy-MM-dd")
     private String classTime;
 
     /** 时长 */
+    @ApiModelProperty("时长")
     @Excel(name = "时长")
     private Long duration;
 
     /** 总课时 */
+    @ApiModelProperty("总课时")
     @Excel(name = "总课时")
     private Long totalCalssHour;
 
@@ -73,17 +86,21 @@ public class YunStoreInterestClass extends BaseEntity
     }
 
     /** 课程说明 */
+    @ApiModelProperty("课程说明")
     @Excel(name = "课程说明")
     private String courseDesc;
 
     /** 课程类型 */
+    @ApiModelProperty("课程类型")
     @Excel(name = "课程类型")
     private String classType;
 
     /** 删除标志 */
+    @ApiModelProperty("删除标志")
     private String delFlag;
 
     /** 创建人id */
+    @ApiModelProperty("创建人id")
     @Excel(name = "创建人id")
     private Long createById;
 
@@ -92,10 +109,12 @@ public class YunStoreInterestClass extends BaseEntity
     private Long updateById;
 
     /** 上课周期 */
+    @ApiModelProperty("上课周期")
     @Excel(name = "上课周期")
     private String week;
 
     /** 门店id */
+    @ApiModelProperty("门店id")
     @Excel(name = "门店id")
     private Long storeId;
 

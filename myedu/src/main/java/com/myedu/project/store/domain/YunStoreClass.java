@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author 梁龙飞
  * @date 2020-04-18
  */
-@ApiModel("分班管理对象实体")
+@ApiModel("托管分班管理对象实体")
 public class YunStoreClass extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
