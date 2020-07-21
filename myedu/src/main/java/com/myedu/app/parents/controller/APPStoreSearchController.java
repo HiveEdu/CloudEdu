@@ -84,7 +84,7 @@ public class APPStoreSearchController extends BaseController {
             Page<StoreSearchVo> page =
                     elasticsearchTemplate.queryForPage(
                             nativeSearchQueryBuilder.build(), StoreSearchVo.class);
-            Set<StoreSearchVo> storeSearchVosNew=new HashSet<>();
+            List<StoreSearchVo> storeSearchVosNew=new ArrayList<>();
             List<StoreSearchVo> storeSearchVos= page.getContent();
             for (StoreSearchVo storeSearchVo1:storeSearchVos){
                 double calculate = GeoDistance.ARC.calculate(storeSearchVo1.getLocation().getLat(), storeSearchVo1.getLocation().getLon(), lat, lon, DistanceUnit.KILOMETERS);
