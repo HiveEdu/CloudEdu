@@ -76,7 +76,7 @@
           <span>{{ parseTime(scope.row.stopTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="砍价产品名称" align="center" prop="storeName" />
+      <el-table-column label="砍价课程名称" align="center" prop="storeName" />
       <el-table-column label="砍价金额" align="center" prop="price" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -156,8 +156,8 @@
             placeholder="选择结束时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="砍价产品名称" prop="storeName">
-          <el-input v-model="form.storeName" placeholder="请输入砍价产品名称" />
+        <el-form-item label="砍价课程名称" prop="storeName">
+          <el-input v-model="form.storeName" placeholder="请输入砍价课程名称" />
         </el-form-item>
         <el-form-item label="砍价金额" prop="price">
           <el-input v-model="form.price" placeholder="请输入砍价金额" />
