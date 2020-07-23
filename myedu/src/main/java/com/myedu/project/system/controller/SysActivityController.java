@@ -1,5 +1,6 @@
 package com.myedu.project.system.controller;
 
+import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.poi.ExcelUtil;
 import com.myedu.framework.aspectj.lang.annotation.Log;
 import com.myedu.framework.aspectj.lang.enums.BusinessType;
@@ -70,6 +71,7 @@ public class SysActivityController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody SysActivity sysActivity)
     {
+        sysActivity.setCreateBy(SecurityUtils.getUsername());
         return toAjax(sysActivityService.insertSysActivity(sysActivity));
     }
 
@@ -81,6 +83,7 @@ public class SysActivityController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysActivity sysActivity)
     {
+        sysActivity.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(sysActivityService.updateSysActivity(sysActivity));
     }
 

@@ -70,7 +70,15 @@
     <el-table v-loading="loading" :data="activityList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="活动标题" align="center" prop="title" />
-      <el-table-column label="活动链接" align="center" prop="links" />
+      <!-- <el-table-column label="活动链接" align="center" prop="links" /> -->
+      <el-table-column label="活动链接"
+        min-width="55">
+        <template slot-scope="scope">
+          <a :href="'http://'+scope.row.links"
+            target="_blank"
+            class="buttonText">{{scope.row.links}}</a>
+        </template>
+      </el-table-column>
       <el-table-column label="开始时间" align="center" prop="startTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime) }}</span>
@@ -82,7 +90,7 @@
         </template>
       </el-table-column>
       <el-table-column label="活动状态" align="center" prop="status" :formatter="statusFormat" />
-      <el-table-column label="发起人" align="center" prop="createById" />
+      <el-table-column label="发起人" align="center" prop="createBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -221,8 +229,14 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        Title: [
+        title: [
           { required: true, message: "活动标题不能为空", trigger: "blur" }
+        ],
+        links: [
+          { required: true, message: "活动链接不能为空", trigger: "blur" }
+        ],
+        content: [
+          { required: true, message: "活动内容不能为空", trigger: "blur" }
         ]
       }
     };
