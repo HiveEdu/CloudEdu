@@ -7,12 +7,14 @@ import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.framework.websocket.WebSocketServer;
 import com.myedu.project.system.domain.SysActivity;
 import com.myedu.project.system.service.ISysActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -27,6 +29,8 @@ public class SysActivityController extends BaseController
 {
     @Autowired
     private ISysActivityService sysActivityService;
+    @Autowired
+    private WebSocketServer websocket;
 
     /**
      * 查询活动管理列表
@@ -69,11 +73,20 @@ public class SysActivityController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:activity:add')")
     @Log(title = "活动管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SysActivity sysActivity)
+    public AjaxResult add(@RequestBody SysActivity sysActivity)throws IOException
     {
         sysActivity.setCreateBy(SecurityUtils.getUsername());
+        //websocket.sendInfo(sysActivity.getContent(),"wupx");
+         websocket.sendMessage(sysActivity.getContent());
         return toAjax(sysActivityService.insertSysActivity(sysActivity));
+
     }
+
+//    @RequestMapping("/push/{toUserId}")
+//    public ResponseEntity<String> pushToWeb(String message, @PathVariable String toUserId) throws IOException {
+//        WebSocketServer.sendInfo(message,toUserId);
+//        return ResponseEntity.ok("MSG SEND SUCCESS");
+//    }
 
     /**
      * 修改活动管理
