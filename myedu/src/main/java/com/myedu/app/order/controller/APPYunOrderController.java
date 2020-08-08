@@ -257,6 +257,16 @@ public class APPYunOrderController extends BaseController
         return toAjax(yunOrderService.updateYunOrder(resources));
     }
 
+    @AutoIdempotent
+    @ApiOperation(value = "修改订单备注")
+    @PostMapping(value = "/storeOrder/remark")
+    public AjaxResult editOrderRemark(@RequestBody YunOrder resources) {
+        if (StrUtil.isBlank(resources.getRemark())) {
+            return AjaxResult.error("请输入备注");
+        }
+        return toAjax(yunOrderService.updateYunOrder(resources));
+    }
+
     /**
      * Sign签名生成
      *

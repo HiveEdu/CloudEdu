@@ -132,6 +132,21 @@ public class YunOrder extends BaseEntity
     @Excel(name = "核销码")
     private String  verifyCode;
 
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /** 订单备注 */
+    @ApiModelProperty("订单备注")
+    @Excel(name = "订单备注")
+    private String remark;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -346,6 +361,7 @@ public class YunOrder extends BaseEntity
             .append("orderType",getOrderType())
             .append("teacherId",getTeacherId())
             .append("verifyCode",getVerifyCode())
+            .append("remark",getRemark())
             .toString();
     }
 }
