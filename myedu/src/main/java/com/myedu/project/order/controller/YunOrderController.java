@@ -1,5 +1,6 @@
 package com.myedu.project.order.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.myedu.common.utils.DateUtils;
 import com.myedu.common.utils.SecurityUtils;
 import com.myedu.common.utils.StringUtils;
@@ -9,7 +10,6 @@ import com.myedu.framework.aspectj.lang.enums.BusinessType;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
-import com.myedu.project.account.domain.YunAlipayConfig;
 import com.myedu.project.dataBasic.domain.SysGrade;
 import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.order.domain.YunOrder;
@@ -25,11 +25,13 @@ import com.myedu.project.store.service.IYunStoreStuService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.Base64Utils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
+import java.security.MessageDigest;
 import java.util.List;
 
 /**
@@ -215,5 +217,87 @@ public class YunOrderController extends BaseController
     @PostMapping(value = "/getNotifyUrlInfo")
     public void alipayNotifyUrlInfo(HttpServletRequest request, HttpServletResponse response){
         yunOrderService.notify(request,response);
+    }
+
+
+    @ApiOperation(value = "订单核销")
+    @PutMapping(value = "/check")
+   // @PreAuthorize("@el.check('admin','STOREORDER_ALL','STOREORDER_EDIT')")
+    public AjaxResult check(@Validated @RequestBody YunOrder resources) {
+        if (StrUtil.isBlank(resources.getVerifyCode())) {
+            return AjaxResult.error("核销码不能为空");
+        }
+        if (StrUtil.isBlank(resources.getStatus())) {
+            return AjaxResult.error("订单状态码不能为空");
+        }
+        YunOrderVo storeOrderDTO = yunOrderService.selectYunOrderById(resources.getId());
+        if (!resources.getVerifyCode().equals(storeOrderDTO.getVerifyCode())) {
+            //throw new BadRequestException("核销码不对");
+            return AjaxResult.error("核销码不对");
+        }
+        if (OrderStatus.TOBEPAID.getCode().equals(resources.getStatus())) {
+            //throw new BadRequestException("订单未支付");
+            return AjaxResult.error("订单未支付");
+        }
+        if (Integer.valueOf(resources.getStatus())>0) {
+           // throw new BadRequestException("订单已核销");
+            return AjaxResult.error("订单已核销");
+        }
+
+//        if (storeOrderDTO.getCombinationId() > 0 && storeOrderDTO.getPinkId() > 0) {
+//            StorePinkDTO storePinkDTO = storePinkService.findById(storeOrderDTO.getPinkId());
+//            if (!OrderInfoEnum.PINK_STATUS_2.getValue().equals(storePinkDTO.getStatus())) {
+//                throw new BadRequestException("拼团订单暂未成功无法核销");
+//            }
+//        }
+
+//        订单核销
+        resources.setStatus(OrderStatus.COMPLETED.getCode());
+        return toAjax(yunOrderService.updateYunOrder(resources));
+    }
+
+    /**
+     * Sign签名生成
+     *
+     * @param content 内容
+     * @param keyValue Appkey
+     * @param charset 编码方式
+     * @return DataSign签名
+     */
+    private String encrypt(String content, String keyValue, String charset) {
+        if (keyValue != null) {
+            content = content + keyValue;
+        }
+        byte[] src;
+        try {
+            src = MD5(content, charset).getBytes(charset);
+            return Base64Utils.encodeToString(src);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    /**
+     * MD5加密
+     *
+     * @param str 内容
+     * @param charset 编码方式
+     * @throws Exception
+     */
+    private String MD5(String str, String charset) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(str.getBytes(charset));
+        byte[] result = md.digest();
+        StringBuilder sb = new StringBuilder(32);
+        for (int i = 0; i < result.length; i++) {
+            int val = result[i] & 0xff;
+            if (val <= 0xf) {
+                sb.append("0");
+            }
+            sb.append(Integer.toHexString(val));
+        }
+        return sb.toString().toLowerCase();
     }
 }

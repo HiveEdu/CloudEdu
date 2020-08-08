@@ -113,10 +113,24 @@ public class YunOrder extends BaseEntity
     @ApiModelProperty("订单类型")
     private String   orderType;
 
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
+
     /** 关联家教老师id */
     @ApiModelProperty("关联家教老师id")
     @Excel(name = "关联家教老师id")
+
     private Long teacherId;
+
+    /** 核销码 */
+    @ApiModelProperty("核销码")
+    @Excel(name = "核销码")
+    private String  verifyCode;
 
     public void setId(Long id) 
     {
@@ -331,6 +345,7 @@ public class YunOrder extends BaseEntity
             .append("tradeNo",getTradeNo())
             .append("orderType",getOrderType())
             .append("teacherId",getTeacherId())
+            .append("verifyCode",getVerifyCode())
             .toString();
     }
 }

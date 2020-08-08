@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="refundReason"    column="refund_reason"    />
         <result property="tradeNo"    column="trade_no"    />
         <result property="orderType"    column="order_type"    />
+        <result property="verifyCode"    column="verify_code"    />
         <result property="teacherId"    column="teacher_id"    />
     </resultMap>
 
@@ -54,7 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="num != null  and num != ''"> and yo.num = #{num}</if>
             <if test="studentId != null "> and yo.student_id = #{studentId}</if>
             <if test="storeId != null "> and yo.store_id = #{storeId}</if>
-            <if test="courseId != null "> and yo.course_id = #{courseId}</if>
+            <if test="courseId != null "> and yo.verify_code = #{courseId}</if>
+            <if test="verifyCode != null "> and yo.course_id = #{verifyCode}</if>
             <if test="greadId != null "> and yo.gread_id = #{greadId}</if>
             <if test="managTime != null "> and yo.manag_time = #{managTime}</if>
             <if test="isMeal != null  and isMeal != ''"> and yo.is_meal = #{isMeal}</if>
@@ -109,6 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
             <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="verifyCode != null  and verifyCode != ''">verify_code,</if>
             <if test="createById != null ">create_by_id,</if>
             <if test="refundReason != null ">refund_reason,</if>
             <if test="tradeNo != null ">trade_no,</if>
@@ -136,6 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="verifyCode != null  and verifyCode != ''">#{verifyCode},</if>
             <if test="createById != null ">#{createById},</if>
             <if test="refundReason != null ">#{refundReason},</if>
             <if test="tradeNo != null ">#{tradeNo},</if>
@@ -166,6 +170,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="verifyCode != null  and verifyCode != ''">verify_code = #{verifyCode},</if>
             <if test="createById != null ">create_by_id = #{createById},</if>
             <if test="refundReason != null ">refund_reason = #{refundReason},</if>
             <if test="tradeNo != null ">trade_no = #{tradeNo},</if>
