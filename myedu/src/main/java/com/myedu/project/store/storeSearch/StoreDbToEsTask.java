@@ -48,6 +48,7 @@ public class StoreDbToEsTask {
                 GeoPoint location=new GeoPoint(yun.getMapY(),yun.getMapX());
                 storeSearchVo.setLocation(location);
                 storeSearchVo.setAddress(yun.getAddress());
+                storeSearchVo.setAddressNum(yun.getAddressNum());
                 storeSearchVo.setArea(yun.getArea());
                 storeSearchVo.setBeginExperienceTime(yun.getBeginExperienceTime());
                 storeSearchVo.setEndExperienceTime(yun.getEndExperienceTime());

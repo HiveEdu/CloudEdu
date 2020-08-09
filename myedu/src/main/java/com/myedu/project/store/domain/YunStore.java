@@ -85,12 +85,26 @@ public class YunStore extends BaseEntity
     @Excel(name = "门店详细地址")
     private String address;
 
+    /** 门牌号 */
+    @ApiModelProperty("门牌号")
+    @Excel(name = "门牌号")
+    private String addressNum;
+
     /** 门店地图坐标经纬度详情x */
     @ApiModelProperty("门店地图坐标经纬度详情x")
     private Double mapX;
 
+    public String getAddressNum() {
+        return addressNum;
+    }
+
+    public void setAddressNum(String addressNum) {
+        this.addressNum = addressNum;
+    }
+
     /** 门店地图坐标经纬度详情y */
     @ApiModelProperty("门店地图坐标经纬度详情y")
+
     private Double mapY;
 
     /** 删除标志（0代表存在 1代表删除） */
@@ -310,6 +324,16 @@ public class YunStore extends BaseEntity
         this.introduction = introduction;
     }
 
+
+    public void setMapY(Double mapY)
+    {
+        this.mapY = mapY;
+    }
+
+    public Long[] getStoreLabelIds() {
+        return storeLabelIds;
+    }
+
     @Override
     public String toString() {
         return "YunStore{" +
@@ -326,6 +350,7 @@ public class YunStore extends BaseEntity
                 ", city='" + city + '\'' +
                 ", area='" + area + '\'' +
                 ", address='" + address + '\'' +
+                ", addressNum='" + addressNum + '\'' +
                 ", mapX=" + mapX +
                 ", mapY=" + mapY +
                 ", delFlag='" + delFlag + '\'' +
@@ -334,20 +359,11 @@ public class YunStore extends BaseEntity
                 ", storeLabelIds=" + Arrays.toString(storeLabelIds) +
                 ", status='" + status + '\'' +
                 ", rejectResion='" + rejectResion + '\'' +
+                ", beginExperienceTime=" + beginExperienceTime +
+                ", endExperienceTime=" + endExperienceTime +
+                ", vipLevelId=" + vipLevelId +
                 ", introduction='" + introduction + '\'' +
-                ", beginExperienceTime='" + beginExperienceTime + '\'' +
-                ", endExperienceTime='" + endExperienceTime + '\'' +
-                ", vipLevelId='" + vipLevelId + '\'' +
                 '}';
-    }
-
-    public void setMapY(Double mapY)
-    {
-        this.mapY = mapY;
-    }
-
-    public Long[] getStoreLabelIds() {
-        return storeLabelIds;
     }
 
     public void setStoreLabelIds(Long[] storeLabelIds) {

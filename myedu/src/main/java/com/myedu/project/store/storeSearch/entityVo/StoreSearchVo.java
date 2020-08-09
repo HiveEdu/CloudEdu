@@ -90,6 +90,9 @@ public class StoreSearchVo {
     /** 门店详细地址 */
     private String address;
 
+    /** 门牌号 */
+    private String addressNum;
+
 
     /** 删除标志（0代表存在 1代表删除） */
     private String delFlag;
@@ -322,6 +325,14 @@ public class StoreSearchVo {
         return delFlag;
     }
 
+    public String getAddressNum() {
+        return addressNum;
+    }
+
+    public void setAddressNum(String addressNum) {
+        this.addressNum = addressNum;
+    }
+
     public String getKeywords() {
         return keywords;
     }
@@ -367,7 +378,7 @@ public class StoreSearchVo {
                          GeoPoint location, String logo, String manager, String managerPhone, String photos, String healths, String video, String license,
                          String province, String city, String area, String address, String delFlag, Long createById,
                          String status, String rejectResion, Date beginExperienceTime, Date endExperienceTime,
-                         Long vipLevelId, int hitsAll, String introduction,String keywords) {
+                         Long vipLevelId, int hitsAll, String introduction,String keywords,String addressNum) {
         this.id = id;
         this.typeIds = typeIds;
         this.coureseNames = coureseNames;
@@ -397,6 +408,7 @@ public class StoreSearchVo {
         this.hitsAll = hitsAll;
         this.introduction = introduction;
         this.keywords = keywords;
+        this.addressNum = addressNum;
     }
 
 
@@ -422,6 +434,7 @@ public class StoreSearchVo {
                 ", city='" + city + '\'' +
                 ", area='" + area + '\'' +
                 ", address='" + address + '\'' +
+                ", addressNum='" + addressNum + '\'' +
                 ", delFlag='" + delFlag + '\'' +
                 ", createById=" + createById +
                 ", status='" + status + '\'' +
