@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="city"    column="city"    />
         <result property="area"    column="area"    />
         <result property="address"    column="address"    />
+        <result property="addressNum"    column="address_num"    />
         <result property="introduction"    column="introduction"   />
         <result property="mapX"    column="map_x"    />
         <result property="mapY"    column="map_y"    />
@@ -65,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectYunStoreVo">
-         select ys.id, ys.name,ys.introduction, ys.reject_resion,ys.logo, ys.status,ys.manager, ys.manager_phone, ys.photos, ys.healths,ys.video, ys.license, ys.province, ys.city, ys.area, ys.address, ys.map_x, ys.map_y, ys.create_by, ys.create_time, ys.update_by, ys.update_time, ys.del_flag, ys.create_by_id,
+         select ys.id, ys.address_num,ys.name,ys.introduction, ys.reject_resion,ys.logo, ys.status,ys.manager, ys.manager_phone, ys.photos, ys.healths,ys.video, ys.license, ys.province, ys.city, ys.area, ys.address, ys.map_x, ys.map_y, ys.create_by, ys.create_time, ys.update_by, ys.update_time, ys.del_flag, ys.create_by_id,
          ys.begin_experience_time,ys.end_experience_time,ys.vip_level_id,sml.grade as level,
          yc.name as courseName,yc.classify,yc.reclassify_coll,yc.is_one_to_one,yc.stu_count,
          yc.grade_id,yc.c_starttime,yc.c_endtime,yc.course_cost,yc.meals,yc.introduce,yc.picture,
@@ -107,6 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="city != null  and city != ''">city,</if>
             <if test="area != null  and area != ''">area,</if>
             <if test="address != null  and address != ''">address,</if>
+            <if test="addressNum != null  and addressNum != ''">address_num,</if>
             <if test="mapX != null ">map_x,</if>
             <if test="mapY != null ">map_y,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
@@ -133,6 +135,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="city != null  and city != ''">#{city},</if>
             <if test="area != null  and area != ''">#{area},</if>
             <if test="address != null  and address != ''">#{address},</if>
+            <if test="addressNum != null  and addressNum != ''">#{addressNum},</if>
             <if test="mapX != null ">#{mapX},</if>
             <if test="mapY != null ">#{mapY},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
@@ -163,6 +166,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="city != null  and city != ''">city = #{city},</if>
             <if test="area != null  and area != ''">area = #{area},</if>
             <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="addressNum != null  and addressNum != ''">address_num = #{addressNum},</if>
             <if test="status != null  and status != ''">status = #{status},</if>
             <if test="mapX != null ">map_x = #{mapX},</if>
             <if test="mapY != null ">map_y = #{mapY},</if>
