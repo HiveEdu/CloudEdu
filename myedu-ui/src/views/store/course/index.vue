@@ -10,6 +10,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+       <el-form-item label="所属门店" prop="storeId">
+        <el-input
+          v-model="queryParams.storeId"
+          placeholder="所属门店"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
         <el-form-item label="类型" prop="classify">
           <el-select v-model="queryParams.classify" placeholder="请选择课程类型" clearable size="small">
             <el-option
@@ -240,12 +249,12 @@
             <el-col :span="24">
               <el-form-item label="课程内容" prop="content">
                 <el-select v-model="form.content" multiple placeholder="请选择课程内容">
-                <el-option
-                  v-for="dict in classContentOptions"
-                  :key="dict.id"
-                  :label="dict.name"
-                  :value="dict.id"
-                ></el-option>
+               <el-option
+                    v-for="item in sysCourses"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
               </el-select>
 
               </el-form-item>
@@ -473,6 +482,8 @@ export default {
       currentData:null,
       // 招生对象选择
       sysGrades: [],
+       //课程内容选择
+      sysCourses: [],
       //周次选择开始
       checkAll: false,
       checkedWeeks: [],
@@ -709,6 +720,7 @@ export default {
       this.photosListNew=[];
       getCourse().then(response => {
         this.sysGrades = response.sysGrades;
+        this.sysCourses = response.sysCourses;
         this.stores=response.stores;
         this.open = true;
         this.title = "添加课程";
@@ -720,6 +732,7 @@ export default {
       const id = row.id || this.ids
       getCourse(id).then(response => {
         this.sysGrades = response.sysGrades;
+        this.sysCourses = response.sysCourses;
         this.stores=response.stores;
         this.form = response.data;
         if(this.form.photos!=null){

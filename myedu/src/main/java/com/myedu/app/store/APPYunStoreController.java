@@ -80,7 +80,7 @@ public class APPYunStoreController extends BaseController
     @ApiImplicitParam(name = "yunStoreVo", value = "查询当前用户下的门店列表",
             dataType = "YunStoreVo")
     @GetMapping("/getMyStores")
-    public TableDataInfo  getMyStudent(YunStoreVo yunStoreVo)
+    public TableDataInfo  getMyStoreList(YunStoreVo yunStoreVo)
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         if (loginUser!=null){

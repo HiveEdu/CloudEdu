@@ -11,7 +11,9 @@ import com.myedu.framework.security.service.TokenService;
 import com.myedu.framework.web.controller.BaseController;
 import com.myedu.framework.web.domain.AjaxResult;
 import com.myedu.framework.web.page.TableDataInfo;
+import com.myedu.project.dataBasic.domain.SysCourse;
 import com.myedu.project.dataBasic.domain.SysGrade;
+import com.myedu.project.dataBasic.service.ISysCourseService;
 import com.myedu.project.dataBasic.service.ISysGradeService;
 import com.myedu.project.store.domain.YunCourse;
 import com.myedu.project.store.domain.vo.YunCourseVo;
@@ -43,6 +45,10 @@ public class APPYunCourseController extends BaseController
     private IYunCourseService yunCourseService;
     @Autowired
     private ISysGradeService sysGradeService;
+
+    @Autowired
+    private ISysCourseService sysCourseService;
+
     @Autowired
     private IYunStoreService yunStoreService;
     @Autowired
@@ -78,6 +84,10 @@ public class APPYunCourseController extends BaseController
         AjaxResult ajax = AjaxResult.success();
         SysGrade sysGrade = new SysGrade();
         ajax.put("sysGrades", sysGradeService.selectSysGradeList(sysGrade));
+
+        SysCourse sysCourse=new  SysCourse();
+        ajax.put("sysCourses", sysCourseService.selectSysCourseList(sysCourse));
+
         YunStoreVo yunStore = new YunStoreVo();
         yunStore.setCreateById(loginUser.getUser().getUserId());
         List<YunStoreVo> stores = yunStoreService.selectYunStoreList(yunStore);
